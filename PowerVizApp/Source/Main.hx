@@ -8,10 +8,10 @@ import DataVBarDisplay;
 import SwipeMill;
 import HWUtils;
 
-
+//Main class which extends a sprite(sprite as in a display object) 
 class Main extends Sprite {
 	
-	
+	//constructor - instantiates new SwipeMill object. 
 	public function new () {
 		
 		super ();
@@ -22,7 +22,7 @@ class Main extends Sprite {
 		prepareSwipeTest();
 	}
 	
-	
+	//prepares the swipetest, we add images to the swipemill
 	public function prepareSwipeTest() {
 		addImageToSwipeTest("assets/testimg/01.png");
 		addImageToSwipeTest("assets/testimg/02.png");
@@ -31,16 +31,16 @@ class Main extends Sprite {
 		addImageToSwipeTest("assets/testimg/05.png");
 		SwipeMill.screenPos = 1.6;
 	}
-	
+	//the actual adding of the images, we get image, we get 
+	//add image to swipemill  
 	private function addImageToSwipeTest(img:String) {
 		var image = new Bitmap(Assets.getBitmapData(img));
-		var data = Assets.getBitmapData(img);
-		trace(data.rect);
 		image.width = HWUtils.screenWidth;
 		image.height = HWUtils.screenHeight;
 		this.addChild(image);
 		SwipeMill.add(image);
 	}
+	
 	
 	private function onScreenChange(newIndex:Int) {
 		trace("onScreenChange(" + newIndex + ")");
