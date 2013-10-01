@@ -26,9 +26,9 @@ class Main extends Sprite {
 	//prepares the swipetest, we add images to the swipemill
 	public function prepareSwipeTest() {
 		//test
-		var screenSaver = new ScreenSaver();
-		SwipeMill.add(screenSaver);
-
+		//var screenSaver = new ScreenSaver();
+		//SwipeMill.add(screenSaver);
+		addImageToSwipeTest("assets/bulb.png");
 		addImageToSwipeTest("assets/testimg/01.png");
 		addImageToSwipeTest("assets/testimg/02.png");
 		addImageToSwipeTest("assets/testimg/03.png");

@@ -15,10 +15,10 @@ class ScreenSaver extends Sprite
 		super();
 
 		var bitmap = new Bitmap (Assets.getBitmapData ("assets/bulb.png"));
+		bitmap.width = HWUtils.screenWidth;
+		bitmap.height = HWUtils.screenHeight;
 		addChild (bitmap);
-		
-		bitmap.x = (stage.stageWidth - bitmap.width) / 2;
-		bitmap.y = (stage.stageHeight - bitmap.height) / 2;
+
 
 
 	}
