@@ -35,7 +35,7 @@ class Main extends Sprite {
 		addImageToSwipeTest("assets/testimg/03.png");
 		addImageToSwipeTest("assets/testimg/04.png");
 		addImageToSwipeTest("assets/testimg/05.png");
-		SwipeMill.screenPos = 1.6;
+		SwipeMill.screenPos = 1.0;
 	}
 	//the actual adding of the images, we get image, we get 
 	//add image to swipemill  
