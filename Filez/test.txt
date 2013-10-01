@@ -1,6 +1,0 @@
-Dette er en testfil. Skrive noget her hvis du vil prøve at comitte.
-
-
-Dette er en ny linje.
-
-
