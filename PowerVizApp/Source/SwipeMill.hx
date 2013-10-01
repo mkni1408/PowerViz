@@ -13,12 +13,18 @@ import HWUtils;
 
 
 /*
-Sipe mill, used for swipe between screens.
+Swipe mill, used for swipe between screens.
+
+This is basically a DisplayObject container that receives input events, and then cycles through the
+elements contained.
+
+To get a notice when a new DisplayElement is on focus, replace the onScreenChange() function from outside this class.
+
 */
 
 class SwipeMill {
 
-	public dynamic static function onScreenChange(newIndex:Int) {} //Override this to get screen change. 
+	public dynamic static function onScreenChange(newIndex:Int) {} //Replace/override/substute this to get screen change. 
 
 	private static var mSwipeDeltaMin:Int = 200;
 
@@ -36,6 +42,7 @@ class SwipeMill {
 	private static var mDeltaX:Int;
 	
 
+	/*Initializes the SwipeMill. Call this ONCE, preferebly in the main sprite constuctor.*/
 	public static function init(parent:Sprite) {
 		mObjects = new Array<DisplayObject>();
 		createVisualElements(parent);
@@ -44,13 +51,14 @@ class SwipeMill {
 		mScreenPos = 0.0;
 	}
 	
+	/*Add a single display element to the SwipeMill.*/
 	public static function add(obj:DisplayObject) {
 		mObjects.push(obj);
 		positionObjects();
 	}	
 	
 	
-	
+	//Internal function. Create the sprite elements used for receiving touch/mouse events.
 	private static function createVisualElements(parent:Sprite) {
 		mTouchReceiver = new Sprite();
 		mTouchReceiver.graphics.beginFill(0xFF00FF);
@@ -63,6 +71,7 @@ class SwipeMill {
 		parent.addChild(mTouchReceiver);
 	}
 	
+	/*Registers all events that the SwipeMill is listening for.*/
 	private static function registerEvents() {
 		#if desktop
 			mTouchReceiver.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
@@ -79,9 +88,12 @@ class SwipeMill {
 		#end
 	}
 	
+	/*Returns the current position. Position 1 is screen, 2 screen two etc.
+	Therefore, when position is 1.5, the position is in the midle between screen one and two.*/
 	static function get_screenPos() : Float {
 		return mScreenPos;
 	}
+	/*Sets the screen position. See comment above.*/
 	static function set_screenPos(f:Float) : Float {
 		mScreenPos = f;
 		if(mScreenPos<0) {
@@ -91,6 +103,7 @@ class SwipeMill {
 		return mScreenPos;
 	}
 	
+	/*Internal function. Positions all the DisplayObjects.*/
 	private static function positionObjects() {
 		
 		if(mScreenPos>=mObjects.length) {
@@ -113,6 +126,8 @@ class SwipeMill {
 		
 	}
 	
+	/*Internal function. Makes the DisplayObjects "move" to the correct position.
+	Uses the Actuate tweening library.*/
 	private static function makeScreenFit() {
 		var newScreen : Int = 0; //TODO - for sending events.
 		var to:Float=0;
@@ -132,26 +147,29 @@ class SwipeMill {
 		}
 	}
 	
+	/*Called when the tween effect ends. Purpose unknown.*/
 	private static function onMakeScreenFitDone() {
-		trace("Done tweening");
+		//trace("Done tweening");
 	}
 	
-	
+	//Listener for the mouse down event.
 	private static function onMouseDown(event:MouseEvent) {
 		onTMDown(event.stageX);
 	}
 	
+	//Listener for the touch down event.
 	private static function onTouchDown(event:TouchEvent) {
 		onTMDown(event.stageX);
 	}
 	
+	//Actual functionality for mouse/touch down events.
 	private static function onTMDown(x:Float) {
-		mFingerDown = true;
-		mStartX = Std.int(x);
+		mFingerDown = true; //Set the finger to currently down.
+		mStartX = Std.int(x); 
 		mStartScreenPos = mScreenPos;
-		mStartScreenPosi = (mStartScreenPos % 1 > 0.5 ? Math.ceil(mStartScreenPos) : Math.ceil(mStartScreenPos));
+		mStartScreenPosi = (mStartScreenPos % 1 > 0.5 ? Math.ceil(mStartScreenPos) : Math.ceil(mStartScreenPos)); //Start screen position in integers.
 		mDeltaX = 0;
-		Actuate.stop(SwipeMill);
+		Actuate.stop(SwipeMill); //Stop any tweening that might be going on.
 	}
 	
 	private static function onMouseUp(event:MouseEvent) {
@@ -192,7 +210,7 @@ class SwipeMill {
 	
 	private static function onTMLeave() {
 		mFingerDown = false;
-		makeScreenFit();
+		makeScreenFit(); //When the finger leaves the screen, make the screen tween into correct position.
 	}
 
 }

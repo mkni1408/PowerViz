@@ -8,6 +8,7 @@ import DataVBarDisplay;
 import SwipeMill;
 import HWUtils;
 import ScreenSaver;
+import DataInterface;
 
 //Main class which extends a sprite(sprite as in a display object) 
 class Main extends Sprite {
