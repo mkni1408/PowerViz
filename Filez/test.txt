@@ -1,6 +1,6 @@
 Dette er en testfil. Skrive noget her hvis du vil prøve at comitte.
-<<<<<<< HEAD
+
 
 Dette er en ny linje.
 
->>>>>>> ddc147efb3f078c03a62395d63f469b6d06a516c
+
