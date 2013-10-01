@@ -26,14 +26,18 @@ class DataInterface {
 		return 576.4; //A random number.
 	}
 	
-	/*Returns the current load on a specific switch.*/
+	/*Returns the current load in watts on a specific switch.*/
 	public function getCurrentLoadOutlet(houseId:Int, outletId:Int) {
+	
+		var values = [122, 89, 56, 245, 189,111, 78, 411, 211, 88, 12, 128];
+		return values[outletId];
 	}
 	
 	/*Returns an array of all switch in the house.*/
 	public function getAllOutlets(houseId:Int) : Array<Int> {
-		return [1,2,3,4,5,6,7,8];
+		return [0,1,2,3,4,5,6,7,8];
 	}
 	
-
+	
+	
 }

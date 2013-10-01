@@ -1,8 +1,9 @@
-==== The EcoViz framework ====
+==== The PowerViz application. ====
 
-A framework for Eco-Visualization systems.
+An application for displaying power consumption data.
 
-EcoViz contains functionality for displaying information on a situated screen. 
-The framework contains:
+PowerViz contains functionality for displaying information on a situated screen. 
+The application contains, appart from individual screens:
 	* Functionality for displaying vertical and horisontal bars based on arrays of values.
 	* Functionality for displaying curves, based on an array of values.
+	* Functionality for displaying area diagrams, based on a simple set of arrays.
