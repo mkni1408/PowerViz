@@ -29,7 +29,7 @@ class DataInterface {
 	/*Returns the current load in watts on a specific switch.*/
 	public function getCurrentLoadOutlet(houseId:Int, outletId:Int) {
 	
-		var values = [122, 89, 56, 245, 189,111, 78, 411, 211, 88, 12, 128];
+		var values = [122, 89, 56, 245, 189,111, 78, 411, 211];
 		return values[outletId];
 	}
 	
@@ -38,7 +38,17 @@ class DataInterface {
 		return [0,1,2,3,4,5,6,7,8];
 	}
 	
-	
+	/*Returns all names for all outlets.*/
+	public function getAllOutletNames(houseId:Int) : Array<String> {
+		return ["TV1", "TV2", "PS3", "XBox", "Kogekande", "Fryser", "MedieCenter Stuen", "Massagestol", "Løbebånd"];
+	}
+		
+	/*Returns a specific outlet name, based on the outlet ID.*/
+	public function getOutletName(houseId:Int, outletId:Int) : String{
+		return getAllOutletNames(houseId)[outletId];
+	}
 	
 	
 }
+
+
