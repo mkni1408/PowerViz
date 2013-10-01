@@ -7,6 +7,7 @@ import flash.display.Bitmap;
 import DataVBarDisplay;	
 import SwipeMill;
 import HWUtils;
+import ScreenSaver;
 
 //Main class which extends a sprite(sprite as in a display object) 
 class Main extends Sprite {
@@ -24,6 +25,10 @@ class Main extends Sprite {
 	
 	//prepares the swipetest, we add images to the swipemill
 	public function prepareSwipeTest() {
+		//test
+		var screenSaver = new ScreenSaver();
+		SwipeMill.add(screenSaver);
+
 		addImageToSwipeTest("assets/testimg/01.png");
 		addImageToSwipeTest("assets/testimg/02.png");
 		addImageToSwipeTest("assets/testimg/03.png");
