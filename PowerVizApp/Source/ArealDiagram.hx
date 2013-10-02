@@ -67,8 +67,6 @@ class ArealDiagram extends Sprite {
 		gfx.endFill(); //Done drawing.
 		
 		topLine.reverse();
-		trace(bottoms);
-		trace(topLine);
 		return topLine;
 		
 	}

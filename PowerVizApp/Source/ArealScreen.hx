@@ -2,10 +2,12 @@ package;
 
 import flash.display.Sprite;
 import flash.text.TextField;
+import flash.Lib;
 
 import DataInterface;
 import ArealDiagram;
 import FontSupply;
+import TimeChangeButton;
 
 /*
 Screen displaying the Areal diagram.
@@ -19,13 +21,14 @@ class ArealScreen extends Sprite {
 	private var mBack : Sprite;
 	private var mDiagram : ArealDiagram;
 	private var mTitle : TextField;
+	private var mTimeButton : TimeChangeButton;
 
 	public function new() {
 		super();
 		
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF);
-		mBack.graphics.drawRect(0,0, HWUtils.screenWidth, HWUtils.screenHeight);
+		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
 		mBack.graphics.endFill();
 		this.addChild(mBack);
 		
@@ -33,38 +36,61 @@ class ArealScreen extends Sprite {
 		mDiagram.mouseEnabled=false;
 		mBack.addChild(mDiagram);
 		
+		
 		testGenerate(); //TODO: Remove when working properly.
 		//this.width = HWUtils.screenWidth;
 		//this.height = HWUtils.screenHeight;
 		
 		mTitle = new TextField();
+		mTitle.mouseEnabled=false;
 		mTitle.text = "Forbrug i dag ";
 		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 		mTitle.selectable = false;
 		mBack.addChild(mTitle);
+		
+		
+		mTimeButton = new TimeChangeButton([Time.HOUR, Time.WEEK]); //Day, week, month.
+		mBack.addChild(mTimeButton);
 		
 		layout();
 	}
 	
 	private function layout() {
 	
-		//TODO: Fix the layout problems with this arealDiagram. Something is very strange. 
-	
-		mDiagram.width = mBack.width / 1.5;
-		mDiagram.height = mBack.height / 1.5;
-		mDiagram.x = (mBack.width - mDiagram.width) / 2;
-		mDiagram.y = mBack.height - ((mBack.height - mDiagram.height)/1.1);
-		//mDiagram.y = mBack.height;	
-	
 		mTitle.width = mTitle.textWidth;	
-		mTitle.x = (mBack.width - mTitle.textWidth) / 2;
+		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
 		mTitle.y = 50;
+	
+	
+		mDiagram.width = Lib.stage.stageWidth / 1.15;
+		mDiagram.height = Lib.stage.stageHeight / 1.25;
+		mDiagram.x = (Lib.stage.stageWidth - mDiagram.width) / 2;
+		mDiagram.y = Lib.stage.stageHeight - ((Lib.stage.stageHeight - mDiagram.height)/2);	
+		
+		
+		mTimeButton.x = mBack.width - mTimeButton.width;
+		mTimeButton.y = mBack.height - mTimeButton.height;
 	}
+	
+	/*Gets data through DataInterface, then creates the diagram.*/
+	private function fillWithData() {
+	
+		var houseId:Int = 0; //TODO: Change this to the real HouseID:
+		var outlets = DataInterface.instance.getAllOutlets(houseId);
+		var colors = new Array<Int>();
+		var usageAA =  new Array< Array<Float> >();
+		for(t in outlets) {
+			usageAA.push(DataInterface.instance.getOutletLastDayUsage(houseId, t));
+			colors.push(DataInterface.instance.getOutletColor(houseId, t));
+		}
+		
+		mDiagram.generate(usageAA, colors, 100,100);
+		
+	}	
 	
 	
 	private function testGenerate() { 
-	
-		mDiagram.generate( [[2,3,4,5,6],[5,2,1,3,6],[6,1,3,2,1]] , [0xFF0000, 0x00FF00, 0x0000FF], 100, 100 );
+		fillWithData();
 	
 	}
 	

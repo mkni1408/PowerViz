@@ -62,6 +62,52 @@ class DataInterface {
 		return getAllOutletNames(houseId)[outletId];
 	}
 	
+	/*
+	Returns an array of 96 floats, representing the useage data from the last 24 hours,
+	based on HouseID and outletId.
+	*/
+	public function getOutletLastDayUsage(houseId:Int, outletId:Int) : Array<Float> {
+		
+		
+		var values = new Array<Float>();
+		var cycles:Int = Std.random(12) + 1;
+		var section:Int = Std.int(96 / cycles);
+		
+		while(cycles < 1 || cycles * section < 96)
+			cycles += 1;
+			
+		
+		var i:Int = 0;
+		var j:Int = 0;
+		var s:Int = 0;
+		var a:Int = 0;
+		while(i < cycles) {
+			j = 0;
+			s = Std.random(4) + 1;
+			a = Std.random(30);
+			while(j < section) {
+				values.push((Math.random()*s)+a);
+				j += 1;
+			}
+			i += 1;
+		}
+		
+		
+		var returns = new Array<Float>();
+		var r:Int=0;
+		while(r < 96) {
+			returns.push(values[r]);
+			r += 1;
+		}
+		
+		
+		return returns;
+	}
+	
+	public function getOutletColor(houseId:Int, outletId:Int) : Int {
+		var colors = [0x005B96, 0x6497B1, 0xB1DAFB, 0x741d0d, 0xc72a00, 0xff7f24, 0x669900, 0x7acf00, 0xc5e26d];
+		return colors[outletId];
+	}
 	
 }
 
