@@ -27,12 +27,17 @@ class Main extends Sprite {
 	//prepares the swipetest, we add images to the swipemill
 	public function prepareSwipeTest() {
 		//test
-		//var screenSaver = new ScreenSaver();
-		//SwipeMill.add(screenSaver);
-		addImageToSwipeTest("assets/bulb.png");
+		
+		//addImageToSwipeTest("assets/bulb.png");
 		addImageToSwipeTest("assets/testimg/01.png");
 		addImageToSwipeTest("assets/testimg/02.png");
 		addImageToSwipeTest("assets/testimg/03.png");
+		
+		
+		var screenSaver = new ScreenSaver();
+		//this.addChild(screenSaver);
+		SwipeMill.add(screenSaver);
+		
 		addImageToSwipeTest("assets/testimg/04.png");
 		addImageToSwipeTest("assets/testimg/05.png");
 		SwipeMill.screenPos = 1.0;
@@ -43,7 +48,7 @@ class Main extends Sprite {
 		var image = new Bitmap(Assets.getBitmapData(img));
 		image.width = HWUtils.screenWidth;
 		image.height = HWUtils.screenHeight;
-		this.addChild(image);
+		//this.addChild(image);
 		SwipeMill.add(image);
 	}
 	

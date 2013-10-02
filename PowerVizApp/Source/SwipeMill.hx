@@ -53,6 +53,7 @@ class SwipeMill {
 	
 	/*Add a single display element to the SwipeMill.*/
 	public static function add(obj:DisplayObject) {
+		mTouchReceiver.addChild(obj);
 		mObjects.push(obj);
 		positionObjects();
 	}	
@@ -62,11 +63,11 @@ class SwipeMill {
 	private static function createVisualElements(parent:Sprite) {
 		mTouchReceiver = new Sprite();
 		mTouchReceiver.graphics.beginFill(0xFF00FF);
-		mTouchReceiver.graphics.drawRect(0,0, 100, 100);
+		mTouchReceiver.graphics.drawRect(0,0, HWUtils.screenWidth, HWUtils.screenHeight);
 		mTouchReceiver.graphics.endFill();
 		
-		mTouchReceiver.width = HWUtils.screenWidth;
-		mTouchReceiver.height = HWUtils.screenHeight;
+		//mTouchReceiver.width = HWUtils.screenWidth;
+		//mTouchReceiver.height = HWUtils.screenHeight;
 		
 		parent.addChild(mTouchReceiver);
 	}
