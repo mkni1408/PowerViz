@@ -12,6 +12,9 @@ import DataInterface;
 
 //Main class which extends a sprite(sprite as in a display object) 
 class Main extends Sprite {
+
+	private var mScreenSaver : ScreenSaver = null;
+	private var mArealScreen : ArealScreen = null;
 	
 	//constructor - instantiates new SwipeMill object. 
 	public function new () {
@@ -34,13 +37,16 @@ class Main extends Sprite {
 		addImageToSwipeTest("assets/testimg/03.png");
 		
 		
-		var screenSaver = new ScreenSaver();
-		//this.addChild(screenSaver);
-		SwipeMill.add(screenSaver);
+		mScreenSaver = new ScreenSaver();
+		SwipeMill.add(mScreenSaver);
 		
 		addImageToSwipeTest("assets/testimg/04.png");
 		addImageToSwipeTest("assets/testimg/05.png");
-		SwipeMill.screenPos = 1.0;
+		
+		mArealScreen = new ArealScreen();
+		SwipeMill.add(mArealScreen);
+		
+		SwipeMill.screenPos = 6.0; //Set to the first screen.
 	}
 	//the actual adding of the images, we get image, we get 
 	//add image to swipemill  

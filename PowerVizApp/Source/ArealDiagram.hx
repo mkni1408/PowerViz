@@ -3,6 +3,8 @@ import flash.display.Sprite;
 
 class ArealDiagram extends Sprite {
 
+	private var mMaxValue : Float;
+
 	public function new() {
 		super();
 	}
@@ -24,10 +26,15 @@ class ArealDiagram extends Sprite {
 		var i:Int=0;
 		for(a in values) {
 		
-			bottoms = drawArea(bottoms, a, this.graphics, colors[i], 10, 1); //Draw each area, getting the new bottom line.
+			bottoms = drawArea(bottoms, a, this.graphics, colors[i], width/values[0].length, 1); //Draw each area, getting the new bottom line.
 			i += 1;
 		}
 	
+		//this.width = width;
+		//this.height = height;
+		
+		mMaxValue = highestAccumValue(values);
+		
 	}
 	
 	//Draws a single area. Returns the top edge of the area.
@@ -46,7 +53,7 @@ class ArealDiagram extends Sprite {
 		i=0;
 		for(b in bottoms) {
 			gfx.lineTo(x, b); //Draw the bottom part
-			topLine.push(b + (values[i]*vmult)); //Prepare the top line.
+			topLine.push(b - (values[i]*vmult)); //Prepare the top line.
 			x += hspace; //Next position.
 			i+=1; //Increment index.
 		}
@@ -59,6 +66,29 @@ class ArealDiagram extends Sprite {
 		
 		gfx.endFill(); //Done drawing.
 		
+		topLine.reverse();
+		trace(bottoms);
+		trace(topLine);
+		return topLine;
+		
+	}
+	
+	/*Returns the highest accumulated value of all arrays passed.
+	Used for calculating the max in the diagram.*/
+	private function highestAccumValue(values:Array< Array<Float> >) : Float {
+		
+		var highest : Float = 0;
+	
+		var i:Int=0;
+		var accum:Float=0;
+		while(i<values[0].length) {
+			accum=0;
+			for(v in values) {
+				accum += v[i];		
+			}	
+			i += 1;
+		}
+		return highest;
 	}
 	
 }
