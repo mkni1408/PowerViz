@@ -20,6 +20,20 @@ class DataInterface {
 	public function new() {
 	}
 	
+	/*Gets all data. Should only be called on app startup.
+	Basically forces the server to send all data on the specified house.*/
+	public function fetchAll(houseId:Int) {
+	}
+	
+	/*Returns true if the data has changed, otherwise false.
+	If an outlet ids array is passed, then there is only checked for changes on the specified outlets.
+	To check on a single outlet, just do DataInterface.instance.dataChange(myHouseId, [myOutlet]); 
+	If just a single outlet has changed, it will return true.
+	*/
+	public function dataChanged(houseId:Int, ?outletIds:Array<Int>) : Bool {
+		return true;
+	}
+
 	
 	/*Returns the current total load in watts.*/
 	public function getTotalCurrentLoad(houseId:Int) : Float {
