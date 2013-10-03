@@ -25,6 +25,7 @@ class Main extends Sprite {
 		SwipeMill.onScreenChange = this.onScreenChange;
 		
 		prepareSwipeTest();
+		
 	}
 	
 	//prepares the swipetest, we add images to the swipemill

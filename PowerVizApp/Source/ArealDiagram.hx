@@ -17,28 +17,33 @@ class ArealDiagram extends Sprite {
 	*/
 	public function generate(values:Array< Array<Float> >, colors:Array<Int>, width:Float, height:Float) {
 	
+		if(values.length<1 || values[0].length<1)
+			return;
+	
 		var bottoms = new Array<Float>(); //Bottom values of the previous row.
 		
+		bottoms[values[0].length-1] = 0;
+		/*
 		for(i in values[0]) 
 			bottoms.push(0); //Start out by setting the bottom line to the bottom.
+		*/
 			
 		//For each array, draw a polygon, where the bottom line is the bottoms line, and the top line is bottom+value.
 		var i:Int=0;
 		for(a in values) {
 		
-			bottoms = drawArea(bottoms, a, this.graphics, colors[i], width/values[0].length, 1); //Draw each area, getting the new bottom line.
+			//bottoms = drawArea(bottoms, a, this.graphics, colors[i], width/values[0].length, 1); //Draw each area, getting the new bottom line.
+			bottoms = drawArea2(bottoms, a, this.graphics, colors[i], width/values[0].length, 1);
 			i += 1;
 		}
-	
-		//this.width = width;
-		//this.height = height;
 		
 		mMaxValue = highestAccumValue(values);
 		
 	}
 	
 	//Draws a single area. Returns the top edge of the area.
-	private function drawArea(bottoms:Array<Float>, values:Array<Float>, gfx:flash.display.Graphics, color:Int, hspace:Float, vmult:Float) : Array<Float> {
+	private function drawArea(bottoms:Array<Float>, values:Array<Float>, 
+								gfx:flash.display.Graphics, color:Int, hspace:Float, vmult:Float) : Array<Float> {
 	
 		var topLine = new Array<Float>(); //The new bottom line. The return value of this function.
 	
@@ -48,12 +53,14 @@ class ArealDiagram extends Sprite {
 	
 		gfx.beginFill(color); //Start filling with the specified color.
 		gfx.moveTo(0, bottoms[0]); //Move to the starting position.
-		
+			
 		x=0; //Start of the line.
 		i=0;
+		var v:Float=0;
 		for(b in bottoms) {
-			gfx.lineTo(x, b); //Draw the bottom part
-			topLine.push(b - (values[i]*vmult)); //Prepare the top line.
+			v = b==null ? 0 : b;
+			gfx.lineTo(x, v); //Draw the bottom part. Take into consideration, that something might be null.
+			topLine.push(v - (values[i]*vmult)); //Prepare the top line.
 			x += hspace; //Next position.
 			i+=1; //Increment index.
 		}
@@ -71,22 +78,86 @@ class ArealDiagram extends Sprite {
 		
 	}
 	
+	/*
+	Draws a single area. Returns the top edge of the area.
+	This is an alternate implementation of the drawing method. The original method above 
+	turned out to be slightly glitchy, so a new method is implemented here.
+	This function draws using triangles in stead of the complex polygons used above.
+	The result is perfect triangulation.
+	*/
+	private function drawArea2(bottoms:Array<Float>, values:Array<Float>, 
+								gfx:flash.display.Graphics, color:Int, hspace:Float, vmult:Float) : Array<Float> {
+								
+			var topLine = new Array<Float>();
+			
+			for(i in 0...bottoms.length) {
+				topLine[i] = (bottoms[i]==null ? 0 : bottoms[i]) - (values[i]*vmult);
+			}
+			
+			var triangles = new Array<Float>();
+			var indices = new Array<Int>();
+			var first:Int = 0; //First index used inside the loop.
+			
+			var x:Float = 0;
+			for(j in 0...topLine.length-1) { //Generate points and indices:
+				triangles.push(x);
+				triangles.push(topLine[j]);
+				
+				triangles.push(x+hspace);
+				triangles.push(topLine[j+1]);
+				
+				triangles.push(x+hspace);
+				triangles.push(bottoms[j+1]);
+				
+				triangles.push(x);
+				triangles.push(bottoms[j]);
+				
+				first = j*4; //First index for the two triangles.
+				
+				indices.push(first); //Push indices for the two triangles.
+				indices.push(first+1);
+				indices.push(first+2);
+				indices.push(first);
+				indices.push(first+3);
+				indices.push(first+2);
+				
+				x += hspace; //Move to next drawing position.
+			}
+			
+			gfx.beginFill(color);
+			gfx.drawTriangles(triangles, indices); //Draw generated triangles.
+			gfx.endFill();
+			
+			return topLine;
+	}
+	
 	/*Returns the highest accumulated value of all arrays passed.
-	Used for calculating the max in the diagram.*/
+	Used for calculating the max in the diagram.
+	Very usefull for determining the scaling of the coordinates.
+	*/
 	private function highestAccumValue(values:Array< Array<Float> >) : Float {
 		
-		var highest : Float = 0;
-	
-		var i:Int=0;
-		var accum:Float=0;
-		while(i<values[0].length) {
-			accum=0;
-			for(v in values) {
-				accum += v[i];		
-			}	
-			i += 1;
+		var totals = new Array<Float>(); //All values accumulated.
+		
+		var i:Int = 0;
+		for(a in values) { //Accumulate the values.
+			i = 0;
+			for(v in a) {
+				totals[i] = (totals[i]==null ? v : totals[i] + v); //The heart of the accumulation.
+				i += 1;
+			}
 		}
+		
+		trace("--");
+		
+		var highest:Float = 0;
+		for(t in totals) { //Find the highest among the accumulated values.
+			if(t > highest)
+				highest = t;
+		}
+		
 		return highest;
+		
 	}
 	
 }

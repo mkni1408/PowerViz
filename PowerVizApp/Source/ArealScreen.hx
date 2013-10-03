@@ -68,8 +68,8 @@ class ArealScreen extends Sprite {
 		mDiagram.y = Lib.stage.stageHeight - ((Lib.stage.stageHeight - mDiagram.height)/2);	
 		
 		
-		mTimeButton.x = mBack.width - mTimeButton.width;
-		mTimeButton.y = mBack.height - mTimeButton.height;
+		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
+		mTimeButton.y = Lib.stage.stageHeight - mTimeButton.height;
 	}
 	
 	/*Gets data through DataInterface, then creates the diagram.*/

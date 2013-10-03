@@ -19,6 +19,12 @@ class ColorUtils {
 		out.B = min.B + ((max.B - min.B) * value);
 		return out;
 	}
+	
+	/*Returns an Int color based on a hex string.
+	the hex string should be in the form 0xFF00FF*/
+	public static function hexStringToInt(s:String) : Int {
+		return  Std.parseInt(s);
+	}
 
 }
 
@@ -49,6 +55,12 @@ class RGB {
 	public function toInt() : Int {
 		return (Math.round(R * 255) << 16) | (Math.round(G * 255) << 8) | Math.round(B * 255);
 	}
+	
+	public function toString() : String {
+		return "r:" + R + ", g:" + G + ", b:" + B;
+	
+	}
+	
 }
 
 
