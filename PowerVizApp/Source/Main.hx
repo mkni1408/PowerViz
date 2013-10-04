@@ -30,6 +30,7 @@ class Main extends Sprite {
 		mScreenSaver = new ScreenSaver();
 		addChild(mScreenSaver);
 
+		SwipeMill.onScreenTouch = mScreenSaver.onScreenTouch;
 
 		
 	}

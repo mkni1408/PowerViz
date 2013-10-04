@@ -37,6 +37,12 @@ class ScreenSaver extends Sprite {
 		sixthBulb = new Bulb();
 		seventhBulb = new Bulb();
 
+		//add background fill color
+		this.graphics.beginFill(0xFFFFFF);
+		this.graphics.drawRect(0,0,Lib.stage.stageWidth,Lib.stage.stageHeight);
+		this.graphics.endFill();
+
+
 		//add bulbobjects to main sprite
 		addChild(firstBulb);
 		addChild(secondBulb);
@@ -81,7 +87,7 @@ class ScreenSaver extends Sprite {
 			};
 
 
-			var yourScreensaverTimerTimer:haxe.Timer = new haxe.Timer(10000);
+			var yourScreensaverTimerTimer:haxe.Timer = new haxe.Timer(20000);
 
 			yourScreensaverTimerTimer.run = function():Void{
    			trace("Screen saver Timer running!!");
@@ -216,7 +222,9 @@ class ScreenSaver extends Sprite {
 
 	public function onScreenTouch():Void{
 
-		mHasRecievedTouchEvent = true;
+		this.alpha = 0;
+		mHasRecievedTouchEvent = false;
+		//trace("Mouseeven has been registered!!");
 
 	}
 
