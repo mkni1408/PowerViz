@@ -9,12 +9,14 @@ import SwipeMill;
 import HWUtils;
 import ScreenSaver;
 import DataInterface;
+import BarScreen;
 
 //Main class which extends a sprite(sprite as in a display object) 
 class Main extends Sprite {
 
 	private var mScreenSaver : ScreenSaver = null;
 	private var mArealScreen : ArealScreen = null;
+	private var mBarScreen : BarScreen = null;
 	
 	//constructor - instantiates new SwipeMill object. 
 	public function new () {
@@ -48,6 +50,9 @@ class Main extends Sprite {
 		
 		mArealScreen = new ArealScreen();
 		SwipeMill.add(mArealScreen);
+		
+		mBarScreen = new BarScreen();
+		SwipeMill.add(mBarScreen);
 		
 		SwipeMill.screenPos = 6.0; //Set to the first screen.
 	}
