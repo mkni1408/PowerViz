@@ -172,6 +172,7 @@ class SwipeMill {
 		mStartScreenPosi = (mStartScreenPos % 1 > 0.5 ? Math.ceil(mStartScreenPos) : Math.ceil(mStartScreenPos)); //Start screen position in integers.
 		mDeltaX = 0;
 		Actuate.stop(SwipeMill); //Stop any tweening that might be going on.
+		onScreenTouch();
 	}
 	
 	private static function onMouseUp(event:MouseEvent) {
@@ -201,7 +202,6 @@ class SwipeMill {
 			mDeltaX = Std.int(x - mStartX);
 			screenPos = mStartScreenPos - (mDeltaX / HWUtils.screenWidth);
 		}
-		onScreenTouch();
 	}
 	
 	private static function onTouchLeave(event:TouchEvent) {
