@@ -96,9 +96,6 @@ class ScreenSaver extends Sprite {
    				trace(mHasRecievedTouchEvent);
    				setScreenSaver();
    				
-   				
-
-
 			};
 
 	}
