@@ -64,15 +64,7 @@ class ScreenSaver extends Sprite {
 
 	}
 	
-//Testfunction: when we click the bulb it should either turn on or off
-	private function screen_onMouseDown (event:MouseEvent):Void {
 
-		
-		this.alpha = 0;
-		mHasRecievedTouchEvent = false;
-		trace("Mouseeven has been registered!!");
-
-	}
 	//starts timers that 1, updates bulbs and 2, checks if screen has been tuched.
 	public function setBulbAction(watt:Float):Void {
 			yourbulbTimer= new haxe.Timer(3000);
@@ -152,14 +144,7 @@ class ScreenSaver extends Sprite {
 
 
 	}
-	//set screensaverstate. If the screensaver is transparent and we have not recieved any Touchevents, 
-	//we make it visible. Else we make it invisible
-	public function setScreenSaver():Void{
-
-
-			this.alpha=1;
-
-	}
+	
 	//Place the bulbs
 	public function placeBulbs(){
 
@@ -202,9 +187,18 @@ class ScreenSaver extends Sprite {
 		seventhBulb.y = (Lib.stage.stageHeight/2);
 	}
 
+//set screensaverstate. If the screensaver is transparent and we have not recieved any Touchevents, 
+	//we make it visible. Else we make it invisible
+	public function setScreenSaver():Void{
+
+
+			this.visible = true;
+
+	}
+
 	public function onScreenTouch():Void{
 
-		this.alpha = 0;
+		this.visible = false;
 		restartTimer();
 		//trace("Mouseeven has been registered!!");
 
@@ -213,7 +207,7 @@ class ScreenSaver extends Sprite {
 	public function restartTimer(){
 
 		yourbulbTimer.stop();
-		yourbulbTimer.stop();
+		yourScreensaverTimerTimer.stop();
 
 		yourbulbTimer= new haxe.Timer(3000);
 
