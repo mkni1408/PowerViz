@@ -160,8 +160,6 @@ class ArealDiagram extends Sprite {
 			}
 		}
 		
-		trace("--");
-		
 		var highest:Float = 0;
 		for(t in totals) { //Find the highest among the accumulated values.
 			if(t > highest)
