@@ -8,6 +8,7 @@ import DataInterface;
 import ArealDiagram;
 import FontSupply;
 import TimeChangeButton;
+import CoordSystem;
 
 /*
 Screen displaying the Areal diagram.
@@ -18,13 +19,22 @@ This class obtains data from the DataInterface singleton class.
 
 class ArealScreen extends Sprite {
 
+	private static inline var VIEWMODE_DAY:Int = 0;
+	private static inline var VIEWMODE_WEEK:Int = 1;
+	private static inline var VIEWMODE_MONTH:Int = 2;
+
 	private var mBack : Sprite;
 	private var mDiagram : ArealDiagram;
+	private var mCoordSys : CoordSystem;
 	private var mTitle : TextField;
 	private var mTimeButton : TimeChangeButton;
+	
+	private var mViewMode:Int;
 
 	public function new() {
 		super();
+		
+		mViewMode = VIEWMODE_DAY; //Daymode by default.
 		
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF);
@@ -52,6 +62,9 @@ class ArealScreen extends Sprite {
 		mTimeButton = new TimeChangeButton([Time.HOUR, Time.WEEK]); //Day, week, month.
 		mBack.addChild(mTimeButton);
 		
+		mCoordSys = new CoordSystem();
+		mBack.addChild(mCoordSys);
+		
 		layout();
 	}
 	
@@ -59,7 +72,7 @@ class ArealScreen extends Sprite {
 	
 		mTitle.width = mTitle.textWidth;	
 		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
-		mTitle.y = 50;
+		mTitle.y = Lib.stage.stageHeight/30;
 	
 	
 		mDiagram.width = Lib.stage.stageWidth / 1.15;
@@ -70,6 +83,10 @@ class ArealScreen extends Sprite {
 		
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
 		mTimeButton.y = Lib.stage.stageHeight - mTimeButton.height;
+		
+		mCoordSys.generate(mDiagram.width, mDiagram.height, "X", "Y", mDiagram.width/24, mDiagram.height/10);
+		mCoordSys.x = mDiagram.x;
+		mCoordSys.y = mDiagram.y;
 	}
 	
 	/*Gets data through DataInterface, then creates the diagram.*/

@@ -58,7 +58,11 @@ class ArealDiagram extends Sprite {
 		i=0;
 		var v:Float=0;
 		for(b in bottoms) {
-			v = b==null ? 0 : b;
+			#if cpp
+				v = b;
+			#else
+				v = b==null ? 0 : b;
+			#end
 			gfx.lineTo(x, v); //Draw the bottom part. Take into consideration, that something might be null.
 			topLine.push(v - (values[i]*vmult)); //Prepare the top line.
 			x += hspace; //Next position.
@@ -91,7 +95,11 @@ class ArealDiagram extends Sprite {
 			var topLine = new Array<Float>();
 			
 			for(i in 0...bottoms.length) {
-				topLine[i] = (bottoms[i]==null ? 0 : bottoms[i]) - (values[i]*vmult);
+				#if cpp
+					topLine[i] = bottoms[i] - (values[i]*vmult);
+				#else
+					topLine[i] = (bottoms[i]==null ? 0 : bottoms[i]) - (values[i]*vmult);
+				#end
 			}
 			
 			var triangles = new Array<Float>();
@@ -143,7 +151,11 @@ class ArealDiagram extends Sprite {
 		for(a in values) { //Accumulate the values.
 			i = 0;
 			for(v in a) {
-				totals[i] = (totals[i]==null ? v : totals[i] + v); //The heart of the accumulation.
+				#if cpp
+					totals[i] = totals[i] + v;
+				#else
+					totals[i] = (totals[i]==null ? v : totals[i] + v); //The heart of the accumulation.
+				#end
 				i += 1;
 			}
 		}
