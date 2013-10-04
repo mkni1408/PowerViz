@@ -25,6 +25,7 @@ To get a notice when a new DisplayElement is on focus, replace the onScreenChang
 class SwipeMill {
 
 	public dynamic static function onScreenChange(newIndex:Int) {} //Replace/override/substute this to get screen change. 
+	public dynamic static function onScreenTouch() : Void {}
 
 	private static var mSwipeDeltaMin:Int = 200;
 
@@ -184,6 +185,7 @@ class SwipeMill {
 	private static function onTMUp(x:Float) {
 		mFingerDown = false;
 		makeScreenFit();
+		onScreenTouch();
 	}
 	
 	private static function onMouseMove(event:MouseEvent) {
@@ -199,6 +201,7 @@ class SwipeMill {
 			mDeltaX = Std.int(x - mStartX);
 			screenPos = mStartScreenPos - (mDeltaX / HWUtils.screenWidth);
 		}
+		onScreenTouch();
 	}
 	
 	private static function onTouchLeave(event:TouchEvent) {
