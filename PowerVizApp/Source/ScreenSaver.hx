@@ -46,11 +46,6 @@ class ScreenSaver extends Sprite {
 		addChild(fifthBulb);
 		addChild(sixthBulb);
 		addChild(seventhBulb);
-
-
-		
-
-
 		
 		//place the bulbs
 		placeBulbs();
@@ -58,7 +53,6 @@ class ScreenSaver extends Sprite {
 		setBulbAction(50);
 
 		this.mouseEnabled = false;
-		this.addEventListener (MouseEvent.MOUSE_DOWN, screen_onMouseDown);
 
 	}
 	
@@ -179,8 +173,7 @@ class ScreenSaver extends Sprite {
 
 	}
 	//Place the bulbs
-	public function placeBulbs()
-	{
+	public function placeBulbs(){
 
 
 		var positionHorisontal = (Lib.stage.stageWidth/10);
@@ -221,6 +214,11 @@ class ScreenSaver extends Sprite {
 		seventhBulb.y = (Lib.stage.stageHeight/2);
 	}
 
+	public function onScreenTouch():Void{
+
+		mHasRecievedTouchEvent = true;
+
+	}
 
 
 
