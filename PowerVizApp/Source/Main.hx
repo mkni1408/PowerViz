@@ -25,6 +25,13 @@ class Main extends Sprite {
 		SwipeMill.onScreenChange = this.onScreenChange;
 		
 		prepareSwipeTest();
+
+		//add screensaver to the main sprite
+		mScreenSaver = new ScreenSaver();
+		addChild(mScreenSaver);
+
+		SwipeMill.onScreenTouch = mScreenSaver.onScreenTouch;
+
 		
 	}
 	
@@ -36,11 +43,6 @@ class Main extends Sprite {
 		addImageToSwipeTest("assets/testimg/01.png");
 		addImageToSwipeTest("assets/testimg/02.png");
 		addImageToSwipeTest("assets/testimg/03.png");
-		
-		
-		mScreenSaver = new ScreenSaver();
-		SwipeMill.add(mScreenSaver);
-		
 		addImageToSwipeTest("assets/testimg/04.png");
 		addImageToSwipeTest("assets/testimg/05.png");
 		
