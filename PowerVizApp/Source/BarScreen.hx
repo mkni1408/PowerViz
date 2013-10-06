@@ -38,6 +38,8 @@ class BarScreen extends Sprite {
 		mTitle.selectable = false;
 		mBack.addChild(mTitle);
 		
+		fillWithData();
+		
 		mCoordSys = new CoordSystem();
 		mBack.addChild(mCoordSys);
 		
@@ -68,6 +70,20 @@ class BarScreen extends Sprite {
 		mCoordSys.y = mBarGraph.y;
 	}
 	
+	private function fillWithData() {
+	
+		var houseId:Int = 0; //TODO: Change this to the real HouseID:
+		var outlets = DataInterface.instance.getAllOutlets(houseId);
+		var colors = new Array<Int>();
+		var usageAA =  new Array<Float>();
+		for(t in outlets) {
+			usageAA.push(DataInterface.instance.getOutletLastDayTotal(houseId, t));
+			colors.push(DataInterface.instance.getOutletColor(houseId, t));
+		}
+		
+		mBarGraph.drawBar(colors, usageAA);
+		
+	}
 
 }
 

@@ -1,31 +1,28 @@
-	import flash.display.Sprite;
+import flash.display.Sprite;
 import flash.display.Graphics;
+import flash.Lib;
 
 class BarGraph extends Sprite {
 
 	public function new() {
 		super();
 		
-		drawBar([0x005B96, 0x6497B1, 0xB1DAFB, 0x741d0d, 0xc72a00, 0xff7f24, 0x669900, 0x7acf00, 0xc5e26d], 
-				[100, 50, 200, 120, 15, 170, 10, 150, 80]);
-		
 	}	
 	
-	private function drawBar(colors:Array<Int>, height:Array<Int>) {
+	public function drawBar(colors:Array<Int>, height:Array<Float>) {
 	
-		//xCoord is used to create the first graph 5 pixels from the y-axis
+		//This variable was used to set the starting point of the first graph to 5px from y-axis
 		var xCoord:Float = 0;
 		
-		//rectWidth is used to make use that every rectangle has a width of 10pixels.
-		var rectWidth:Int = 2;
+		//barWidth is used to ensure that every bar has the same width.
+		var barWidth:Float = Lib.stage.stageWidth/colors.length;
 		
 		var i:Int = 0;
 		for(c in colors) {
-			
 			this.graphics.beginFill(colors[i]);
-			this.graphics.drawRect(xCoord, 0, rectWidth, -height[i]);			
+			this.graphics.drawRect(xCoord, 0, barWidth, -height[i]);			
 			
-			xCoord += 2.2; //Makes a space of 0.2 pixel between each Bar
+			xCoord += barWidth; 
 			
 			i += 1; //Increment by one
 		}

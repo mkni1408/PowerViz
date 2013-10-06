@@ -109,6 +109,12 @@ class DataInterface {
 		return colors[outletId];
 	}
 	
+	public function getOutletLastDayTotal(houseId:Int, outletId:Int) : Float {
+		var value:Float = 0;
+		value = Std.random(201);
+		return value;
+	}
+	
 }
 
 
