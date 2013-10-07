@@ -1,4 +1,4 @@
-import Math;
+
 /*
 Class that handles all data comming from the server.
 This class works mainly as a dummy during the development.
@@ -119,7 +119,7 @@ class DataInterface {
 		var value:Float = 0;
 		var s:Float = 0;
 		value = Std.random(50) + 1;
-		s = Std.random(Math.floor(1));
+		s = Std.random(1);
 		
 		if(s > 0 && s < 0.25) {
 			value *= 1;
