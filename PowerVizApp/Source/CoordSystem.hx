@@ -13,7 +13,8 @@ class CoordSystem extends Sprite {
 		super();
 	}
 	
-	public function generate(width:Float, height:Float, xLabel:String, yLabel:String, xSpace:Float, ySpace:Float) {
+	public function generate(width:Float, height:Float, xLabel:String, yLabel:String, xSpace:Float, ySpace:Float,
+							?xLabelStrings:Array<String>) {
 	
 		this.graphics.lineStyle(3, 0x000000);
 		this.graphics.moveTo(0,0);

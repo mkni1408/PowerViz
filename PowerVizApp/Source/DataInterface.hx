@@ -104,6 +104,17 @@ class DataInterface {
 		return returns;
 	}
 	
+	public function getOutletLastDayTotal(houseId:Int, outletId:Int) : Float {
+	
+		var total:Float=0;
+		var values = getOutletLastDayUsage(houseId, outletId);
+		for(v in values) {
+			total += v;
+		}
+		total *= (24/values.length);
+		return total;
+	}
+	
 	public function getOutletColor(houseId:Int, outletId:Int) : Int {
 		var colors = [0x005B96, 0x6497B1, 0xB1DAFB, 0x741d0d, 0xc72a00, 0xff7f24, 0x669900, 0x7acf00, 0xc5e26d];
 		return colors[outletId];
