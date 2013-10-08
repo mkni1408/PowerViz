@@ -10,6 +10,7 @@ import HWUtils;
 import ScreenSaver;
 import DataInterface;
 import BarScreen;
+import CurrentUsage;
 
 //Main class which extends a sprite(sprite as in a display object) 
 class Main extends Sprite {
@@ -17,6 +18,7 @@ class Main extends Sprite {
 	private var mScreenSaver : ScreenSaver = null;
 	private var mArealScreen : ArealScreen = null;
 	private var mBarScreen : BarScreen = null;
+	private var mCurrentUsage : CurrentUsage = null;
 	
 	//constructor - instantiates new SwipeMill object. 
 	public function new () {
@@ -53,7 +55,11 @@ class Main extends Sprite {
 		
 		mBarScreen = new BarScreen();
 		SwipeMill.add(mBarScreen);
-		
+
+
+		mCurrentUsage = new CurrentUsage();
+		SwipeMill.add(mCurrentUsage);
+
 		SwipeMill.screenPos = 6.0; //Set to the first screen.
 	}
 	//the actual adding of the images, we get image, we get 

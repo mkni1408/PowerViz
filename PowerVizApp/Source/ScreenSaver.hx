@@ -6,10 +6,17 @@ import flash.events.MouseEvent;
 import flash.Lib;
 import Bulb;
 import Math;
+import DataInterface;
 
 
 class ScreenSaver extends Sprite {
 	
+
+	//variables needs to be set for the timers
+	private var bulbTimerAction:Int = 3000;
+	private var screenSaverTimerAction:Int = 20000;
+
+
 	private var firstBulb:Bulb;
 	private var secondBulb:Bulb;
 	private var thirdBulb:Bulb;
@@ -21,11 +28,15 @@ class ScreenSaver extends Sprite {
 	private var mHasRecievedTouchEvent: Bool;
 	private var yourbulbTimer:haxe.Timer;
 	private var yourScreensaverTimerTimer:haxe.Timer;
+	private var dataInterface:DataInterface;
 
 
 	public function new(){
 
 		super();
+
+
+		dataInterface = new DataInterface();
 
 		mIsTransparant = true;
 		mHasRecievedTouchEvent = false;
@@ -65,34 +76,7 @@ class ScreenSaver extends Sprite {
 	}
 	
 
-	//starts timers that 1, updates bulbs and 2, checks if screen has been tuched.
-	public function setBulbAction(watt:Float):Void {
-			yourbulbTimer= new haxe.Timer(3000);
-
-			yourbulbTimer.run = function():Void{
-   			trace("BulbTimer running!!");
-   				
-
-   				var f  = Math.random();
-
-   				trace(f);
-
-   				changeBulbStates(f);
-			};
-
-
-			yourScreensaverTimerTimer= new haxe.Timer(20000);
-
-			yourScreensaverTimerTimer.run = function():Void{
-   			trace("Screen saver Timer running!!");
-   				
-   				trace(mIsTransparant);
-   				trace(mHasRecievedTouchEvent);
-   				setScreenSaver();
-   				
-			};
-
-	}
+	
 	//change the bulbstates man
 	public function changeBulbStates(f:Float):Void{
 				
@@ -139,6 +123,17 @@ class ScreenSaver extends Sprite {
 					fourthBulb.bulb_changeStateToOn();
 					fifthBulb.bulb_changeStateToOn();
    					trace("first, second, third, fourth and fifth bulb is on");
+   				}
+   				else{
+
+   					firstBulb.bulb_changeStateToOn();
+   					secondBulb.bulb_changeStateToOn();
+					thirdBulb.bulb_changeStateToOn();
+					fourthBulb.bulb_changeStateToOn();
+					fifthBulb.bulb_changeStateToOn();
+					sixthBulb.bulb_changeStateToOn();
+					seventhBulb.bulb_changeStateToOn();
+   					trace("All is on!");
    				}
 
 
@@ -193,29 +188,65 @@ class ScreenSaver extends Sprite {
 
 
 			this.visible = true;
+			startBulbActionTimer();
 
 	}
 
 	public function onScreenTouch():Void{
 
 		this.visible = false;
-		restartTimer();
+		restartScreenSaverTimer();
+		stopBulbActionTimer();
 		//trace("Mouseeven has been registered!!");
 
 	}
 
-	public function restartTimer(){
+	/*
+	//
+	//Timer Methods
+	//
+	*/
 
-		yourbulbTimer.stop();
+
+
+	//restarts the  screensavertimer when a touchevent is recieved
+	public function restartScreenSaverTimer(){
+
 		yourScreensaverTimerTimer.stop();
 
-		yourbulbTimer= new haxe.Timer(3000);
+			yourScreensaverTimerTimer= new haxe.Timer(screenSaverTimerAction);
+
+			yourScreensaverTimerTimer.run = function():Void{
+   			trace("Screen saver Timer running!!");
+   				
+   				trace(mIsTransparant);
+   				trace(mHasRecievedTouchEvent);
+   				setScreenSaver();
+
+			};
+
+
+	}
+	//stop bulbactiontimer when view is not visible
+	public function stopBulbActionTimer(){
+		
+		yourbulbTimer.stop();
+
+
+	}
+
+	//start bulbactiontimer when view is visible
+	public function startBulbActionTimer(){
+		
+		yourbulbTimer.stop();
+
+		yourbulbTimer= new haxe.Timer(bulbTimerAction);
 
 			yourbulbTimer.run = function():Void{
    			trace("BulbTimer running!!");
-   				
-
-   				var f  = Math.random();
+   				//get current load from dataInterface
+   				var f  = dataInterface.getTotalCurrentLoad(1);
+   				//var f  = Math.random();
 
    				trace(f);
 
@@ -223,7 +254,27 @@ class ScreenSaver extends Sprite {
 			};
 
 
-			yourScreensaverTimerTimer= new haxe.Timer(20000);
+	}
+
+
+//starts timers that 1, updates bulbs and 2, checks if screen has been tuched.
+	public function setBulbAction(watt:Float):Void {
+			yourbulbTimer= new haxe.Timer(bulbTimerAction);
+
+			yourbulbTimer.run = function():Void{
+   			trace("BulbTimer running!!");
+   				//get current load from dataInterface
+   				var f  = dataInterface.getTotalCurrentLoad(1);
+
+   				//var f  = Math.random();
+
+   				trace(f);
+
+   				changeBulbStates(f);
+			};
+
+
+			yourScreensaverTimerTimer= new haxe.Timer(screenSaverTimerAction);
 
 			yourScreensaverTimerTimer.run = function():Void{
    			trace("Screen saver Timer running!!");
@@ -232,14 +283,9 @@ class ScreenSaver extends Sprite {
    				trace(mHasRecievedTouchEvent);
    				setScreenSaver();
    				
-   				
-
-
 			};
 
-
 	}
-
 
 
 
