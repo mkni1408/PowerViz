@@ -37,7 +37,7 @@ class DataInterface {
 	
 	/*Returns the current total load in watts.*/
 	public function getTotalCurrentLoad(houseId:Int) : Float {
-		return 576.4; //A random number.
+		return Math.random(); //A random number.
 	}
 	
 	/*Returns the current load in watts on a specific switch.*/

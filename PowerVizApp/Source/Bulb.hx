@@ -100,21 +100,21 @@ class Bulb extends Sprite
 		trace("Mouseeven has been registered!!");
 
 	}
-	//the bulb should turn on
-	public function bulb_changeStateToOn ():Void{
+	//the bulb should turn on=true or off=false, we just set the sprite to visible or invisible
+	public function bulb_changeState(onoff:Bool):Void{
 		
- 			
+ 			if(onoff)
+ 			{
  			mBulbOn.visible = true;
  			mBulbOff.visible = false;
-
-
-	}
-	//the bulb should turn off
-	public function bulb_changeStateToOff ():Void{
-		
+			}
+			else
+			{
 			mBulbOn.visible = false;
  			mBulbOff.visible = true;
-		
+
+			}
 
 	}
+	
 }

@@ -57,8 +57,8 @@ class Main extends Sprite {
 		SwipeMill.add(mBarScreen);
 
 
-		//mCurrentUsage = new CurrentUsage();
-		//SwipeMill.add(mCurrentUsage);
+		mCurrentUsage = new CurrentUsage();
+		SwipeMill.add(mCurrentUsage);
 
 		SwipeMill.screenPos = 6.0; //Set to the first screen.
 	}

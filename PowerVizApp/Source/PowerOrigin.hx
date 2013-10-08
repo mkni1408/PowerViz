@@ -3,6 +3,10 @@ import flash.Lib;
 import flash.display.Bitmap;
 import openfl.Assets;
 import Std;
+/*
+Defines the powerorigin interface. In short it just shifts between a few pictures
+*/
+
 
 class PowerOrigin extends Sprite{
 	

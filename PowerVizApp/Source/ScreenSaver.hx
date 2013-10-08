@@ -24,6 +24,8 @@ class ScreenSaver extends Sprite {
 	private var fifthBulb:Bulb;
 	private var sixthBulb:Bulb;
 	private var seventhBulb:Bulb;
+	private var eightBulb:Bulb;
+	private var ninthBulb:Bulb;
 	private var mIsTransparant: Bool;
 	private var mHasRecievedTouchEvent: Bool;
 	private var yourbulbTimer:haxe.Timer;
@@ -49,6 +51,8 @@ class ScreenSaver extends Sprite {
 		fifthBulb = new Bulb();
 		sixthBulb = new Bulb();
 		seventhBulb = new Bulb();
+		eightBulb = new Bulb();
+		ninthBulb = new Bulb();
 
 		//add background fill color
 		this.graphics.beginFill(0xFFFFFF);
@@ -65,6 +69,8 @@ class ScreenSaver extends Sprite {
 		addChild(fifthBulb);
 		addChild(sixthBulb);
 		addChild(seventhBulb);
+		addChild(eightBulb);
+		addChild(ninthBulb);
 		
 		//place the bulbs
 		placeBulbs();
@@ -78,62 +84,47 @@ class ScreenSaver extends Sprite {
 
 	
 	//change the bulbstates man
-	public function changeBulbStates(f:Float):Void{
+	public function calculatBulbStates(f:Float):Void{
 				
-				if(f < 0.2){
+				if(f < 0.1){
 
-   					firstBulb.bulb_changeStateToOn();
-   					secondBulb.bulb_changeStateToOff();
-					thirdBulb.bulb_changeStateToOff();
-					fourthBulb.bulb_changeStateToOff();
-					fifthBulb.bulb_changeStateToOff();
+					changeBulbStates(true,false,false,false,false,false,false,false,false);
 
-   					trace("first bulb is on");
 
    				}	
-   				else if(f > 0.2 && f < 0.4){
-   					firstBulb.bulb_changeStateToOn();
-   					secondBulb.bulb_changeStateToOn();
-					thirdBulb.bulb_changeStateToOff();
-					fourthBulb.bulb_changeStateToOff();
-					fifthBulb.bulb_changeStateToOff();
+   				else if(f > 0.1 && f < 0.2){
 
-   					trace("first and second bulb is on");
-   				}
-   				else if(f > 0.4 && f < 0.6){
-   					firstBulb.bulb_changeStateToOn();
-   					secondBulb.bulb_changeStateToOn();
-					thirdBulb.bulb_changeStateToOn();
-					fourthBulb.bulb_changeStateToOff();
-					fifthBulb.bulb_changeStateToOff();
-   					trace("first, second and third bulb is on");
-   				}
-   				else if(f > 0.6 && f < 0.8){
-   					firstBulb.bulb_changeStateToOn();
-   					secondBulb.bulb_changeStateToOn();
-					thirdBulb.bulb_changeStateToOn();
-					fourthBulb.bulb_changeStateToOn();
-					fifthBulb.bulb_changeStateToOff();
-   					trace("first, second, third and fourth bulb is on");
-   				}
-   				else if(f > 0.8 && f <= 1){
-   					firstBulb.bulb_changeStateToOn();
-   					secondBulb.bulb_changeStateToOn();
-					thirdBulb.bulb_changeStateToOn();
-					fourthBulb.bulb_changeStateToOn();
-					fifthBulb.bulb_changeStateToOn();
-   					trace("first, second, third, fourth and fifth bulb is on");
-   				}
-   				else{
 
-   					firstBulb.bulb_changeStateToOn();
-   					secondBulb.bulb_changeStateToOn();
-					thirdBulb.bulb_changeStateToOn();
-					fourthBulb.bulb_changeStateToOn();
-					fifthBulb.bulb_changeStateToOn();
-					sixthBulb.bulb_changeStateToOn();
-					seventhBulb.bulb_changeStateToOn();
-   					trace("All is on!");
+					changeBulbStates(true,true,false,false,false,false,false,false,false);
+
+   				}
+   				else if(f > 0.2 && f < 0.3){
+
+					changeBulbStates(true,true,true,false,false,false,false,false,false);
+   				}
+   				else if(f > 0.3 && f < 0.4){
+
+					changeBulbStates(true,true,true,true,false,false,false,false,false);
+   				}
+   				else if(f > 0.4 && f < 0.5){
+
+					changeBulbStates(true,true,true,true,true,false,false,false,false);
+   				}
+   				else if(f > 0.5 && f < 0.6){
+
+					changeBulbStates(true,true,true,true,true,true,false,false,false);
+   				}
+   				else if(f > 0.6 && f < 0.7){
+
+					changeBulbStates(true,true,true,true,true,true,true,false,false);
+   				}
+   				else if(f > 0.7 && f < 0.8){
+
+					changeBulbStates(true,true,true,true,true,true,true,true,false);
+   				}
+   				else if(f > 0.9 && f <= 1.0){
+
+					changeBulbStates(true,true,true,true,true,true,true,true,true);
    				}
 
 
@@ -149,37 +140,39 @@ class ScreenSaver extends Sprite {
 		var positionVerticaloffset = 65;
 
 		//position the bulbs
-		firstBulb.x = positionHorisontal;
+		firstBulb.x = (positionHorisontal)-30;
 		firstBulb.y = positionVertical+45;
 
 
-		secondBulb.x = positionHorisontal*3;
+		secondBulb.x = (positionHorisontal*3)-30;
 		secondBulb.y = positionVertical+20;
 
 
-
-		thirdBulb.x = positionHorisontal*5;
+		thirdBulb.x = (positionHorisontal*5)-30;
 		thirdBulb.y = positionVertical+5;
 
 
-		fourthBulb.x = positionHorisontal*7;
+		fourthBulb.x = (positionHorisontal*7)-30;
 		fourthBulb.y = positionVertical+25;
 
 
-
-		fifthBulb.x = positionHorisontal+positionVerticaloffset;
+		fifthBulb.x = (positionHorisontal+positionVerticaloffset)-10;
 		fifthBulb.y = (Lib.stage.stageHeight/2)+30;
 
 
-
-		sixthBulb.x = (positionHorisontal*3)+positionVerticaloffset;
+		sixthBulb.x = ((positionHorisontal*3)+positionVerticaloffset)-30;
 		sixthBulb.y = (Lib.stage.stageHeight/2);
 
-
-
-
-		seventhBulb.x = (positionHorisontal*5)+positionVerticaloffset;
+		seventhBulb.x = ((positionHorisontal*5)+positionVerticaloffset)-30;
 		seventhBulb.y = (Lib.stage.stageHeight/2);
+
+		eightBulb.x = (positionHorisontal*9)-30;
+		eightBulb.y = positionVertical+35;
+
+		ninthBulb.x = ((positionHorisontal*7)+positionVerticaloffset)-30;
+		ninthBulb.y = (Lib.stage.stageHeight/2);
+
+
 	}
 
 //set screensaverstate. If the screensaver is transparent and we have not recieved any Touchevents, 
@@ -250,7 +243,7 @@ class ScreenSaver extends Sprite {
 
    				trace(f);
 
-   				changeBulbStates(f);
+   				calculatBulbStates(f);
 			};
 
 
@@ -270,7 +263,7 @@ class ScreenSaver extends Sprite {
 
    				trace(f);
 
-   				changeBulbStates(f);
+   				calculatBulbStates(f);
 			};
 
 
@@ -284,6 +277,20 @@ class ScreenSaver extends Sprite {
    				setScreenSaver();
    				
 			};
+
+	}
+
+	//changes the state of the bulbs to on=true or off=false
+	private function changeBulbStates(firstbulb:Bool, secondbulb:Bool, thirdbulb:Bool, fourthbulb:Bool, fifthbulb:Bool, sixthbulb:Bool, seventhbulb:Bool, eightbulb:Bool, ninthbulb:Bool):Void
+	{
+
+					firstBulb.bulb_changeState(firstbulb);
+   					secondBulb.bulb_changeState(secondbulb);
+					thirdBulb.bulb_changeState(thirdbulb);
+					fourthBulb.bulb_changeState(fourthbulb);
+					fifthBulb.bulb_changeState(fifthbulb);
+					sixthBulb.bulb_changeState(sixthbulb);
+					seventhBulb.bulb_changeState(seventhbulb);
 
 	}
 
