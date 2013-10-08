@@ -23,6 +23,7 @@ class SpeedometerArrow extends Sprite
 			mSpeedometerArrow.height /= 3.5;
 
 			this.addChild(mSpeedometerArrow);
+			mSpeedometerArrow.mouseEnabled = false;
 
 		}
 

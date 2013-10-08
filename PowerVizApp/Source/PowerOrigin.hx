@@ -27,7 +27,6 @@ class PowerOrigin extends Sprite{
 		mPowerOriginNuclear.addChild (bitMapOrigin);
 		mPowerOriginGreen.addChild (bitMapOriginGreen);
 		mPowerOriginCoal.addChild (bitMapOriginCoal);
-
 		
 
 		centerGraphics(mPowerOriginNuclear,bitMapOrigin);
@@ -50,10 +49,7 @@ class PowerOrigin extends Sprite{
 
 			yourPowerOrigin.run = function():Void{
    			trace("PowerOrigin timer running!!");
-   				
-
-   				
-
+   
    				changePowerOrigin();
 			};
 		

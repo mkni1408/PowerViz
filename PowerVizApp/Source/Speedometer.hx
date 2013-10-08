@@ -27,7 +27,6 @@ class Speedometer extends Sprite{
 
 		//speedometerArrow.addChild(arrow);
 
-		
 
 		centerGraphics();
 
@@ -38,6 +37,9 @@ class Speedometer extends Sprite{
 
 		this.addChild(mSpeedometer);
 		this.addChild(arrow);
+		
+		mSpeedometer.mouseEnabled = false;
+		arrow.mouseEnabled = false;
 
 
 		var yourSeismoGraphTimer:haxe.Timer = new haxe.Timer(mTimerSetting);

@@ -31,9 +31,6 @@ private var seismoGraph:SeismoGraph;
 			powerOrigin = new PowerOrigin();
 			seismoGraph = new SeismoGraph();
 
-		
-
-
 
 			addChild(speedometer);
 			addChild(powerOrigin);
@@ -42,7 +39,8 @@ private var seismoGraph:SeismoGraph;
 			graphics.beginFill(0xFFFFFF,0.0);
 			graphics.drawRect(0,0,Lib.stage.stageWidth,Lib.stage.stageHeight);
 			graphics.endFill();
-			this.mouseEnabled = true;
+			this.mouseEnabled = false;
+			this.mouseChildren = false;
 
 
 	}
