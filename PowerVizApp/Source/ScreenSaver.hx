@@ -5,6 +5,7 @@ import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.Lib;
 import Bulb;
+import motion.Actuate;
 import Math;
 import DataInterface;
 
@@ -12,7 +13,9 @@ import DataInterface;
 class ScreenSaver extends Sprite {
 	
 
-	//variables needs to be set for the timers
+	//variables needs to be set for the timers 
+	//bulbTimerAction: the timer for the update frequency of the bulbs
+	//screenSaverTimerAction: The time until the screensaver becomes visible again
 	private var bulbTimerAction:Int = 3000;
 	private var screenSaverTimerAction:Int = 20000;
 
@@ -179,8 +182,15 @@ class ScreenSaver extends Sprite {
 	//we make it visible. Else we make it invisible
 	public function setScreenSaver():Void{
 
-
+			if(this.visible){
 			this.visible = true;
+			}
+			else{
+
+				this.alpha = 0.0;
+			this.visible = true;
+			Actuate.tween (this, 5, { alpha: 1 } );
+			}
 			startBulbActionTimer();
 
 	}
