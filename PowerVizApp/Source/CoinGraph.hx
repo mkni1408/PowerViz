@@ -12,7 +12,7 @@ class CoinGraph extends Sprite {
 		
 	}	
 	
-	public function drawBar(colors:Array<Int>, height:Array<Float>) {
+	public function drawBar(colors:Array<Int>, heightBars:Array<Float>, heightCoins:Array<Float>) {
 	
 		//This is a hack:
 		this.graphics.beginFill(0x000000,0.0);
@@ -28,12 +28,12 @@ class CoinGraph extends Sprite {
 		var i:Int = 0;
 		for(c in colors) {
 			this.graphics.beginFill(colors[i]);
-			this.graphics.drawRect(xCoord, 0, barWidth*0.40, -height[i]);			
+			this.graphics.drawRect(xCoord, 0, barWidth*0.40, -heightBars[i]);			
 			this.graphics.endFill();
 			
 			xCoord += barWidth*0.45;
 			
-			drawCoinBar(xCoord, barWidth, height[i]);
+			drawCoinBar(xCoord, barWidth, heightCoins[i]);
 			
 			xCoord += barWidth*0.55; 
 			
@@ -42,6 +42,9 @@ class CoinGraph extends Sprite {
 	}
 	
 	public function drawCoinBar(xCoord:Float, barWidth:Float, height:Float) {
+		
+		
+		
 		var mCoinStack : Sprite = new Sprite();
 		//var mCoinStackTop : Sprite = new Sprite();
 		
