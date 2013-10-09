@@ -8,8 +8,9 @@ import Bulb;
 import motion.Actuate;
 import Math;
 import DataInterface;
-
-
+/*
+// Sprite that defines a Screensaver
+*/
 class ScreenSaver extends Sprite {
 	
 
@@ -179,7 +180,7 @@ class ScreenSaver extends Sprite {
 	}
 
 //set screensaverstate. If the screensaver is transparent and we have not recieved any Touchevents, 
-	//we make it visible. Else we make it invisible
+	//we make it visible. if it is invisible we tween it 
 	public function setScreenSaver():Void{
 
 			if(this.visible){
@@ -187,7 +188,7 @@ class ScreenSaver extends Sprite {
 			}
 			else{
 
-				this.alpha = 0.0;
+			this.alpha = 0.0;
 			this.visible = true;
 			Actuate.tween (this, 5, { alpha: 1 } );
 			}
