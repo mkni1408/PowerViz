@@ -2,7 +2,9 @@ import flash.display.Sprite;
 import flash.display.Graphics;
 import flash.Lib;
 import flash.display.Bitmap;
+import flash.geom.Rectangle;
 import openfl.Assets;
+import openfl.display.Tilesheet;
 import Math;
 
 class CoinGraph extends Sprite {
@@ -12,6 +14,7 @@ class CoinGraph extends Sprite {
 		
 	}	
 	
+	//Draws all bars.
 	public function drawBar(colors:Array<Int>, heightBars:Array<Float>, heightCoins:Array<Float>) {
 	
 		//This is a hack:
@@ -33,7 +36,7 @@ class CoinGraph extends Sprite {
 			
 			xCoord += barWidth*0.45;
 			
-			drawCoinBar(xCoord, barWidth, heightCoins[i]);
+			drawCoinBar(xCoord, -100, barWidth, heightCoins[i]);
 			
 			xCoord += barWidth*0.55; 
 			
@@ -41,9 +44,31 @@ class CoinGraph extends Sprite {
 		}
 	}
 	
-	public function drawCoinBar(xCoord:Float, barWidth:Float, height:Float) {
+	public function drawCoinBar(xCoord:Float, yCoord:Float,  barWidth:Float, height:Float) {
+	
+		var coinBitmap = Assets.getBitmapData("assets/enkrone_tilemap.png");
+		var tileSheet = new Tilesheet(coinBitmap);
+		tileSheet.addTileRect(new Rectangle(0,0, 150,81)); //0
+		tileSheet.addTileRect(new Rectangle(0,82, 150,81)); //1
+		tileSheet.addTileRect(new Rectangle(0,82*2, 150,81)); //2
+		
+		var coinStack = new Sprite();
+		
+		var vspace = 12;
+		var count=0;
+		var y:Float = yCoord;
+		var randX:Float;
+		while(count < height/20) {
+			randX = xCoord + ((Math.random()-0.5) * 10);
+			tileSheet.drawTiles(coinStack.graphics, [randX, y, 0, 0.5], Tilesheet.TILE_SCALE);
+			y -= vspace;
+			count += 1;
+		}
+		
+		this.addChild(coinStack);
 		
 		
+	/*
 		
 		var mCoinStack : Sprite = new Sprite();
 		//var mCoinStackTop : Sprite = new Sprite();
@@ -102,6 +127,8 @@ class CoinGraph extends Sprite {
 		mCoinStack.addChild(bitmapCoinStack);
 		
 		this.addChild(mCoinStack);
+		
+		*/
 		
 	}
 	

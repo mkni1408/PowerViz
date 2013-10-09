@@ -28,11 +28,12 @@ class CoinScreen extends Sprite {
 		this.addChild(mBack);
 		
 		mCoinGraph = new CoinGraph();
-		mCoinGraph.mouseEnabled=false;
 		mBack.addChild(mCoinGraph);
+		mCoinGraph.mouseChildren = false;
+		mCoinGraph.mouseEnabled = false;
 				
 		mTitle = new TextField();
-		mTitle.mouseEnabled=false;
+		mTitle.mouseEnabled = false;
 		mTitle.text = "Forbrug i dag ";
 		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 		mTitle.selectable = false;
@@ -42,11 +43,14 @@ class CoinScreen extends Sprite {
 		
 		mCoordSys = new CoordSystem();
 		mBack.addChild(mCoordSys);
+		mCoordSys.mouseChildren = false;
+		mCoordSys.mouseEnabled = false;
 		
 		mTimeButton = new TimeChangeButton([Time.HOUR, Time.WEEK]); //Day, week, month.
 		mBack.addChild(mTimeButton);
 		
 		layout();
+		
 	}
 	
 	private function layout() {
@@ -81,7 +85,7 @@ class CoinScreen extends Sprite {
 			colors.push(DataInterface.instance.getOutletColor(houseId, t));
 		}
 		
-		mCoinGraph.drawBar(colors, usageAA);
+		mCoinGraph.drawBar(colors, usageAA, usageAA);
 		
 	}
 
