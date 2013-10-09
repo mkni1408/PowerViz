@@ -131,7 +131,7 @@ class ScreenSaver extends Sprite {
 
 	}
 	
-	//Place the bulbs
+	//Place the bulbs(Calculated from the middle and is ofsetted)
 	public function placeBulbs(){
 
 

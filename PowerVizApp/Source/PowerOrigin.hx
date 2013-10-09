@@ -2,6 +2,7 @@ import flash.display.Sprite;
 import flash.Lib;
 import flash.display.Bitmap;
 import openfl.Assets;
+import motion.Actuate;
 import Std;
 /*
 Defines the powerorigin interface. In short it just shifts between a few pictures
@@ -10,7 +11,6 @@ Defines the powerorigin interface. In short it just shifts between a few picture
 
 class PowerOrigin extends Sprite{
 	
-	private var mPowerOriginNuclear : Sprite;
 	private var mPowerOriginGreen : Sprite;
 	private var mPowerOriginCoal: Sprite;
 	private var mTimerSetting:Int = 10000;
@@ -19,34 +19,27 @@ class PowerOrigin extends Sprite{
 
 		super();
 
-		var bitMapOrigin = new Bitmap (Assets.getBitmapData ("assets/nuclear.png"));
-		var bitMapOriginGreen = new Bitmap (Assets.getBitmapData ("assets/green.png"));
+		
+		var bitMapOriginGreen = new Bitmap (Assets.getBitmapData ("assets/windmill.png"));
 		var bitMapOriginCoal = new Bitmap (Assets.getBitmapData ("assets/coal.png"));
 
-		mPowerOriginNuclear = new Sprite();
 		mPowerOriginGreen = new Sprite();
 		mPowerOriginCoal = new Sprite();
 
 
-		mPowerOriginNuclear.addChild (bitMapOrigin);
 		mPowerOriginGreen.addChild (bitMapOriginGreen);
 		mPowerOriginCoal.addChild (bitMapOriginCoal);
 		
 
-		centerGraphics(mPowerOriginNuclear,bitMapOrigin);
 		centerGraphics(mPowerOriginGreen,bitMapOriginGreen);
 		centerGraphics(mPowerOriginCoal,bitMapOriginCoal);
 
-		graphics.lineStyle(4,0x000000);
+		drawFrame();
 
-		graphics.drawRect(Lib.stage.stageWidth/2, 0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
-
-		this.addChild(mPowerOriginNuclear);
 		this.addChild(mPowerOriginGreen);
 		this.addChild(mPowerOriginCoal);
 
-		mPowerOriginNuclear.visible = true;
-		mPowerOriginGreen.visible = false;
+		mPowerOriginGreen.visible = true;
 		mPowerOriginCoal.visible = false;
 
 		var yourPowerOrigin:haxe.Timer = new haxe.Timer(mTimerSetting);
@@ -63,8 +56,8 @@ class PowerOrigin extends Sprite{
 	private function centerGraphics(origin:Sprite, bitmap:Bitmap){
 
 
-		origin.width = bitmap.width/2;
-		origin.height = bitmap.height/2;
+		origin.width = Lib.stage.stageWidth/2;
+		origin.height = Lib.stage.stageHeight/2;
 
 			var centerBitmapX = origin.width/2;
 			var centerBitmapY = origin.height/2;
@@ -82,32 +75,43 @@ class PowerOrigin extends Sprite{
 	public function changePowerOrigin():Void{
 
 
-		var changenumber = Std.random(3);
-		trace(changenumber);
+		var changenumber = Std.random(2);
 
 		//pull powerorigin and change which sprite is visible
 
 		if(changenumber == 0)
 		{
 
-		mPowerOriginGreen.visible = true;
-		mPowerOriginNuclear.visible = false;
-		mPowerOriginCoal.visible = false;
+		changeOrigin(true,false);
+
 		}
 		else if(changenumber == 1)
 		{
-		mPowerOriginGreen.visible = false;
-		mPowerOriginNuclear.visible = true;
-		mPowerOriginCoal.visible = false;
+		changeOrigin(false,true);
 
 		}
-		else if(changenumber == 2)
-		{
-		mPowerOriginGreen.visible = false;
-		mPowerOriginNuclear.visible = false;
-		mPowerOriginCoal.visible = true;
+	}
 
+	private function changeOrigin(first:Bool,second:Bool):Void{
+
+		if(first){
+		Actuate.tween (mPowerOriginCoal, 2, { alpha: 0 } );
+		Actuate.tween (mPowerOriginGreen, 2, { alpha: 1 } );
 		}
+		else{
+		Actuate.tween (mPowerOriginGreen, 2, { alpha: 0 } );
+		Actuate.tween (mPowerOriginCoal, 2, { alpha: 1 } );
+	}
+
+
+	}
+	//draws the frame around the Sprite
+	private function drawFrame():Void{
+
+		graphics.lineStyle(4,0x000000);
+
+		graphics.drawRect(Lib.stage.stageWidth/2, 0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
+
 	}
 
 }

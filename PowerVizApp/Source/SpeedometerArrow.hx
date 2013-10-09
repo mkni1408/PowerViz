@@ -2,6 +2,7 @@ import flash.display.Sprite;
 import flash.Lib;
 import flash.display.Bitmap;
 import openfl.Assets;
+import motion.Actuate;
 
 class SpeedometerArrow extends Sprite
 {
@@ -29,7 +30,9 @@ class SpeedometerArrow extends Sprite
 
 		public function setValue(v:Float) {
 
-			this.rotation = (v * 237)-30;
+			Actuate.tween (this, 2, { rotation: (v * 237)-30 } );
+			//this.rotation = (v * 237)-30;
+
 
 		}
 

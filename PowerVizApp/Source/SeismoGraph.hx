@@ -27,9 +27,7 @@ class SeismoGraph extends Sprite{
 
 		
 
-		graphics.lineStyle(4,0x000000);
-
-		graphics.drawRect(0, Lib.stage.stageHeight/2, Lib.stage.stageWidth, (Lib.stage.stageHeight/2)-4);
+		redrawFrame();
 
 		addChild(mSeismoGraph);
 		
@@ -105,10 +103,7 @@ class SeismoGraph extends Sprite{
 		//clear graphics to redraw seismograph
 		graphics.clear();
 
-		graphics.lineStyle(4,0x000000);
-
-		//redraw frame
-		graphics.drawRect(0, Lib.stage.stageHeight/2, Lib.stage.stageWidth, (Lib.stage.stageHeight/2)-2);
+		redrawFrame();
 
 		//draw horizontal line
 		graphics.lineStyle(2,0x000000);
@@ -181,5 +176,16 @@ class SeismoGraph extends Sprite{
 
 
 	}
+
+	//draws the frame around the Sprite
+	private function redrawFrame():Void{
+
+		graphics.lineStyle(4,0x000000);
+
+		//redraw frame
+		graphics.drawRect(0, Lib.stage.stageHeight/2, Lib.stage.stageWidth, (Lib.stage.stageHeight/2)-2);
+
+	}
+
 
 }

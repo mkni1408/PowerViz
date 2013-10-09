@@ -30,9 +30,7 @@ class Speedometer extends Sprite{
 
 		centerGraphics();
 
-		graphics.lineStyle(4,0x000000);
-
-		graphics.drawRect(0, 0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
+		drawFrame();
 		//graphics.drawRect(0,0, speedometerArrow.width, speedometerArrow.height);
 
 		this.addChild(mSpeedometer);
@@ -101,6 +99,15 @@ class Speedometer extends Sprite{
 
 
 		return Math.random();
+	}
+
+	//draws the frame around the Sprite
+	private function drawFrame():Void{
+
+		graphics.lineStyle(4,0x000000);
+
+		graphics.drawRect(0, 0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
+
 	}
 
 }
