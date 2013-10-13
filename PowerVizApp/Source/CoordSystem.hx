@@ -48,7 +48,8 @@ class CoordSystem extends Sprite {
 			if(yLabelStrings!=null) { //y labels exist.
 				labelText = (yLabelStrings.length<=labelIndex ? "" : yLabelStrings[labelIndex]);
 				if(labelText!="")
-					addTextField(0, (betweenY ? y + (ySpace/2) : y), labelText, true);
+					addTextField(0, (betweenY ? y + (ySpace/2) : y), haxe.Utf8.decode(labelText), true);
+				trace(labelText);
 			}
 			labelIndex+=1;
 		}
@@ -64,7 +65,8 @@ class CoordSystem extends Sprite {
 			if(xLabelStrings!=null) { //Oh, we've got strings.
 				labelText = (xLabelStrings.length<=labelIndex ? "" : xLabelStrings[labelIndex]);
 				if(labelText!="")
-					addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false);
+					addTextField((betweenX ? x - (xSpace/2) : x), 0, haxe.Utf8.decode(labelText), false);
+				trace(labelText);
 			}
 			
 			labelIndex += 1;
