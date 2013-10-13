@@ -69,7 +69,7 @@ class DataInterface {
 		var f = function(v:Dynamic) {
 			callback(v);
 		};
-		mCnx.Api.getOutletTotal([houseId, outletId, timeSpan]);
+		mCnx.Api.getOutletTotal.call([houseId, outletId, timeSpan], f);
 	}
 	
 	

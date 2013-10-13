@@ -1,5 +1,8 @@
 
 import flash.display.Sprite;
+import flash.text.TextField;
+
+import FontSupply;
 
 /*
 Coordinate System class.
@@ -13,8 +16,15 @@ class CoordSystem extends Sprite {
 		super();
 	}
 	
+	/**
+	Generates the coordinate system sprite.
+	width and height are the width and height of the coordninate system.
+	xSpace and ySpace is the space between measuring lines horizontally and vertically.
+	The optional labelStrings arrays are the labels for each element on the different axis.
+	xLabelsBetween and yLabelsBetween indicate if the labels on the axes should be on the lines or between then.
+	**/
 	public function generate(width:Float, height:Float, xLabel:String, yLabel:String, xSpace:Float, ySpace:Float,
-							?xLabelStrings:Array<String>) {
+							?xLabelStrings:Array<String>, ?yLabelStrings:Array<String>, ?xLabelsBetween:Bool, ?yLabelsBetween:Bool) {
 	
 		this.graphics.lineStyle(3, 0x000000);
 		this.graphics.moveTo(0,0);
@@ -22,22 +32,50 @@ class CoordSystem extends Sprite {
 		this.graphics.moveTo(0,0);
 		this.graphics.lineTo(width, 0);
 		
+		var betweenX:Bool = (xLabelsBetween==null ? false : xLabelsBetween);
+		var betweenY:Bool = (yLabelsBetween==null ? false : yLabelsBetween);
+		
 		var numLinesY:Int = Std.int(height/ySpace);
 		var y:Float=0;
-		for(i in 0...numLinesY) {
+		var labelIndex:Int=0;
+		for(i in 0...numLinesY) { //Draw the Y axis.
 			y -= ySpace;
 			this.graphics.moveTo(-5, y);
 			this.graphics.lineTo(5, y);
+			addTextField(0, (betweenY ? y + (ySpace/2) : y), "YY", true);
 		}
 		
 		var numLinesX:Int = Std.int(width/xSpace);
 		var x:Float=0;
-		for(j in 0...numLinesX) {
+		labelIndex=0;
+		for(j in 0...numLinesX) { //Draw the X axis.
 			x += xSpace;
 			this.graphics.moveTo(x, -5);
 			this.graphics.lineTo(x, 5);
+			addTextField((betweenX ? x - (xSpace/2) : x), 0, "XX", false);
 		}
 	
+	}
+	
+	private function addTextField(x:Float, y:Float, text:String, vertical:Bool) {
+		
+		var tf = new TextField();
+		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
+		tf.mouseEnabled = false;
+		tf.selectable = false;
+		tf.text = text;
+		this.addChild(tf);
+		tf.width = tf.textWidth*1.1;
+		tf.height = tf.textHeight * 1.1;
+		
+		if(vertical) {
+			tf.x = x - (tf.width + 3);
+			tf.y = y - (tf.height/2);
+		}
+		else{
+			tf.x = x - (tf.width/2);
+			tf.y = y + 3;
+		}
 	}
 	
 
