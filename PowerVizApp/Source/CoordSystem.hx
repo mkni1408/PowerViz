@@ -45,7 +45,7 @@ class CoordSystem extends Sprite {
 			this.graphics.moveTo(-5, y);
 			this.graphics.lineTo(5, y);
 			
-			if(yLabelStrings!=null) {
+			if(yLabelStrings!=null) { //y labels exist.
 				labelText = (yLabelStrings.length<=labelIndex ? "" : yLabelStrings[labelIndex]);
 				if(labelText!="")
 					addTextField(0, (betweenY ? y + (ySpace/2) : y), labelText, true);
@@ -61,7 +61,7 @@ class CoordSystem extends Sprite {
 			this.graphics.moveTo(x, -5);
 			this.graphics.lineTo(x, 5);
 			
-			if(xLabelStrings!=null) {
+			if(xLabelStrings!=null) { //Oh, we've got strings.
 				labelText = (xLabelStrings.length<=labelIndex ? "" : xLabelStrings[labelIndex]);
 				if(labelText!="")
 					addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false);
