@@ -35,14 +35,22 @@ class CoordSystem extends Sprite {
 		var betweenX:Bool = (xLabelsBetween==null ? false : xLabelsBetween);
 		var betweenY:Bool = (yLabelsBetween==null ? false : yLabelsBetween);
 		
+		
 		var numLinesY:Int = Std.int(height/ySpace);
 		var y:Float=0;
 		var labelIndex:Int=0;
+		var labelText = "";
 		for(i in 0...numLinesY) { //Draw the Y axis.
 			y -= ySpace;
 			this.graphics.moveTo(-5, y);
 			this.graphics.lineTo(5, y);
-			addTextField(0, (betweenY ? y + (ySpace/2) : y), "YY", true);
+			
+			if(yLabelStrings!=null) {
+				labelText = (yLabelStrings.length<=labelIndex ? "" : yLabelStrings[labelIndex]);
+				if(labelText!="")
+					addTextField(0, (betweenY ? y + (ySpace/2) : y), labelText, true);
+			}
+			labelIndex+=1;
 		}
 		
 		var numLinesX:Int = Std.int(width/xSpace);
@@ -52,7 +60,14 @@ class CoordSystem extends Sprite {
 			x += xSpace;
 			this.graphics.moveTo(x, -5);
 			this.graphics.lineTo(x, 5);
-			addTextField((betweenX ? x - (xSpace/2) : x), 0, "XX", false);
+			
+			if(xLabelStrings!=null) {
+				labelText = (xLabelStrings.length<=labelIndex ? "" : xLabelStrings[labelIndex]);
+				if(labelText!="")
+					addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false);
+			}
+			
+			labelIndex += 1;
 		}
 	
 	}
@@ -60,13 +75,13 @@ class CoordSystem extends Sprite {
 	private function addTextField(x:Float, y:Float, text:String, vertical:Bool) {
 		
 		var tf = new TextField();
-		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
 		tf.mouseEnabled = false;
 		tf.selectable = false;
 		tf.text = text;
+		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
 		this.addChild(tf);
-		tf.width = tf.textWidth*1.1;
-		tf.height = tf.textHeight * 1.1;
+		tf.width = (tf.textWidth*1.1) + 5;
+		tf.height = (tf.textHeight * 1.1) + 5;
 		
 		if(vertical) {
 			tf.x = x - (tf.width + 3);
