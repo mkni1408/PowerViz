@@ -69,7 +69,7 @@ class CoinScreen extends Sprite {
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
 		mTimeButton.y = Lib.stage.stageHeight - mTimeButton.height;
 		
-		mCoordSys.generate(mCoinGraph.width, mCoinGraph.height, "X", "Y", mCoinGraph.width/9, mCoinGraph.height/5);
+		mCoordSys.generate(mCoinGraph.width, mCoinGraph.height, "X", "Y", mCoinGraph.width/8, mCoinGraph.height/5);
 		mCoordSys.x = mCoinGraph.x;
 		mCoordSys.y = mCoinGraph.y;
 	}
