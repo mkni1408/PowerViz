@@ -85,7 +85,7 @@ class CoinScreen extends Sprite {
 			colors.push(DataInterface.instance.getOutletColor(houseId, t));
 		}
 		
-		mCoinGraph.drawBar(colors, usageAA, usageAA);
+		mCoinGraph.drawBarScreen(colors, usageAA, usageAA);
 		
 	}
 
