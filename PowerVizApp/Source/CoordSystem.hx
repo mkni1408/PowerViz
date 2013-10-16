@@ -237,17 +237,19 @@ class CoordSystem extends Sprite {
 			var legendWidth = legendSpace/10;
 			var legendHeight = legendSpace/10;
 			var xCor = 0.0;
-			var yCor = 0.0;
+			var yCor = 50.0;
 
 
 			var legendSprite = new Sprite();
 
 			for(i in 0...numberOfentries){
-
+			//handle the boxes
 			legendSprite.graphics.lineStyle(1, 0x000000);
 			legendSprite.graphics.beginFill(arrayOfColors[i]);
-			legendSprite.graphics.drawRect(xCor,yCor+50, legendWidth, legendHeight);
+			legendSprite.graphics.drawRect(xCor,yCor, -legendWidth, legendHeight);
 			legendSprite.graphics.endFill();
+
+			//add the textfield
 			var tf = new TextField();
 			tf.mouseEnabled = false;
 			tf.selectable = false;
@@ -255,9 +257,9 @@ class CoordSystem extends Sprite {
 			tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
 			legendSprite.addChild(tf);
 			tf.width = (tf.textWidth*1.1) + 5;
-			tf.height = (tf.textHeight * 1.1) + 5;
+			tf.height = tf.textHeight;
 			tf.x = xCor+10;
-			tf.y = ((yCor+50)-legendHeight)+5;
+			tf.y = yCor-5;
 
 
 

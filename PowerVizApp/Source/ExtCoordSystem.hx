@@ -2,9 +2,11 @@
 import flash.display.Sprite;
 
 /*
-Coordinate System class.
+ExtCoordinate System class.
 This class makes it simple to create a coordinate system.
 All it takes to work is a size, spacings and sets of labels.
+
+Also it does nothing, so it should be erased - MKN
 */
 
 class CoordSystem extends Sprite {

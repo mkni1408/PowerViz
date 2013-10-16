@@ -6,6 +6,7 @@ import flash.Lib;
 import OnOffBar;
 import Outlet;
 import ColorGenerator;
+import DataInterface;
 
 /*
 
@@ -180,7 +181,7 @@ class OnOffDiagram extends Sprite{
 	private function fetchCategoryData():Void{
 		
 		//fetch the outlets
-		var tempOutlet= test_makeData();
+		var tempOutlet= DataInterface.instance.getOnOffData();
 
 		//mNewOutletArray = test_makeData();
 
@@ -260,29 +261,7 @@ class OnOffDiagram extends Sprite{
 		
 	}
 
-	private function test_makeData():Array<Outlet>{
-
-		var onOffData = new Array<Outlet>();
-		var intData = [0,1,2,3,4,5,6,7,8,9];
-		var idData = ["1","2","3","4","5","6","7","8","9"];
-		var catData = ["tv","opvask","lampe","ovn","frys","køl","vaskemaskine","komfur","funky","elpisker"];
-		var roomData=["Stue","Køkken","Toilet","Køkken","Bad","Gang","Gang","Køkken","Køkken","sm-rum"];
-		var data = [[8.20,10.15,10.45,13.30],[9.50,11.56,12.15,13.90],[8.40,14.15,15.45,19.30],[2.20,8.15,8.45,22.30],[9.50,11.56,12.15,13.90],[8.40,14.15,15.45,19.30],[2.20,8.15,8.45,22.30],[2.20,8.15,8.45,22.30],[2.20,8.15,8.45,22.30],[-2.20,8.15,8.45,24.45]];
-
-		
-
-		for(i in 0...intData.length){
-
-			onOffData.push(new Outlet(i,idData[i],catData[i],data[i],roomData[i]));
-			
-		}
-
-		
-
-		return onOffData;
-
-
-	}
+	
 	//rearrange data so that it can be used in the coordinate systemß
 	private function rearrangeData(outletArray:Array<Outlet>):Array<Array<Int>>{
 
