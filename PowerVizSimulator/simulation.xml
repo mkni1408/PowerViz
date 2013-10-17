@@ -1,0 +1,94 @@
+<simulation house="42" >
+
+	<!--
+	::::::How to write a simulation:::::
+	
+	Simulations are divided into timeblocks. Each timeblock can be run once or multiple times.
+	Timeblocks look like this:
+	<time at="00:00:00" >
+	</time>
+	
+	Timeblocks that will run once should use the 'at' argument. The timecode MUST have the format "hh:mm:ss".
+	Omitting a single digit will crash the system.
+	
+	If a timeblock should be repeated, it should use the following form:
+	<time every="00:01:00" offset="00:00:20" repeat="10">
+	</time>
+	
+	The above timeblock will be run every minute, with a 20 second offset. The timeblock will run 10 times.
+	Repeat and offset can be omitted.
+	
+	Timeblock has another argument that will limit repeats.
+	until="hh:mm:ss" will stop the repeating of a timeblock after the specified simulation time.
+	
+	Inside timeblocks, two different types os instructions are possible:
+	Load and supply.
+	
+	These either set, add to or subtract from the outlet 0 load:
+	<load outlet="0" set="100" /> or
+	<load outlet="0" add="400" />
+	<load outlet="0" sub="100" />
+	
+	To set the power source to coal:
+	<supply source="coal" />
+	Possible strings are coal, wind, water, sun and nuclear.
+	
+	All instructions have an optional comment argument, to display comments on screen during the simulation run.
+	
+	-->
+
+	<!--
+	This simulation is of a standard home.
+	
+	
+	The outlets available are:
+	
+	Kitchen:
+	0: Kitches table. Used for boiler and other kitchen machines.
+	1: Stove. Used for cooking.
+	2: Freezer.
+	3: Fridge.
+	
+	Living room:
+	4: TV, Playstation and MediaCenter.
+	5: Lamp over cofee table.
+	6: Lamp over dinner table. Dimmable.
+	
+	
+	-->
+	
+	<time at="00:00:05" >
+		<load outlet="0" set="0" comment="Sets 0 to 0" />
+		<supply source="coal" />
+	</time>
+
+	
+	<!-- Simulate a freezer that turns on and off very 15 minutes:-->
+	<time every="00:15:00">
+		<load outlet="1" add="300" comment="Freezer on"/>
+	</time>
+	<time every="00:15:00" offset="00:03:00">
+		<load outlet="1" sub="300" comment="Freezer off"/>
+	</time>
+	
+	<!-- Dad comes home, turns on the TV and the boiler.-->
+	
+	<time at="00:20:00" >
+		<load outlet="2" add="120" comment="TV on."/>
+		<load outlet="5" add="1700" comment="Boiler turned on"/> 
+	</time>
+	
+	<time at="00:22:00" >
+		<load outlet="5" sub="1700" comment="Boiler turned off"/> 
+	</time>
+	
+	<!-- The TV will run untill mid -->
+	
+	<!-- From 00:01:00 to 00:10:00 this timeblock will run every minute-->
+	<time every="00:01:00" offset="00:01:00" until="00:10:00">
+		<load outlet="0" add="0" comment="Running thing in timeblock until 00:10:00" />
+	</time>
+	
+
+</simulation>
+
