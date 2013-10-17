@@ -20,6 +20,7 @@ class BarScreen extends Sprite {
 	private var mNewIDArray : Array<String>;
 	private var mKwhArray : Array<String>;
 	private var mRoomArray : Array<String>;
+	private var mColorArray : Array <Int>;
 
 	public function new() {
 		super();
@@ -27,10 +28,10 @@ class BarScreen extends Sprite {
 		mNewIDArray = new Array<String>();
 		mKwhArray = new Array<String>();
 		mRoomArray = new Array<String>();
+		mColorArray = new Array<Int>();
 		
 		mNewIDArray = DataInterface.instance.getAllOutletNames(1);
 		mKwhArray = ["2kWh", "4kWh", "6kWh", "8kWh", "10kWh"];
-		
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF);
 		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
@@ -78,7 +79,7 @@ class BarScreen extends Sprite {
 		mCoordSys.generate(mBarGraph.width, mBarGraph.height, "X", "Y", mBarGraph.width/9, mBarGraph.height/5, mNewIDArray, mKwhArray, true, false);
 		mCoordSys.x = mBarGraph.x;
 		mCoordSys.y = mBarGraph.y;
-		mCoordSys.createLegend(mRoomArray.length, mRoomArray, [0xFF0000, 0x00FF00, 0x0000FF]);
+		//mCoordSys.createLegend(mNewIDArray.length, mNewIDArray, [0x005B96, 0x6497B1, 0xB1DAFB, 0x741d0d, 0xc72a00, 0xff7f24, 0x669900, 0x7acf00, 0xc5e26d]);
 	}
 	
 	private function fillWithData() {
