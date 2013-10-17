@@ -7,6 +7,8 @@ import OnOffBar;
 import Outlet;
 import ColorGenerator;
 import DataInterface;
+import flash.text.TextField;
+import FontSupply;
 
 /*
 
@@ -30,6 +32,7 @@ class OnOffDiagram extends Sprite{
 	//array holding map from a room to categories in outletarray
 	private var mMapArray:Array<Array<Int>>;
 	private var mColorArray:Array<Int>;
+	private var mTitle : TextField;
 
 
 
@@ -37,11 +40,6 @@ class OnOffDiagram extends Sprite{
 
 		super();
 
-		//mcategoryIDArray = new Array<String>();
-		//moutletCategoryArray = new Array<Array<String>>();
-		//moutletArray = new Array<String>();
-		//mRoomArray = new Array<String>();
-		//mTestArray = fetchOnOffDate("lampe");
 
 		mNewIDArray = new Array<String>();
 		mNewRoomArray = new Array<String>();
@@ -50,19 +48,24 @@ class OnOffDiagram extends Sprite{
 		mMapArray = new Array<Array<Int>>();
 		mColorArray = new Array<Int>();
 
-		mtimeArray = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"];
+		mtimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00","","14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
 
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF);
 		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageHeight);
 		mBack.graphics.endFill();
 		
-
+		mTitle = new TextField();
+		mTitle.mouseEnabled=false;
+		mTitle.text = "Forbrug i dag";
+		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
+		mTitle.selectable = false;
+		mBack.addChild(mTitle);
 		
 
 
 		mCoordSystem = new CoordSystem();
-		//fetches category date
+		//fetches room date
 		fetchCategoryData();//done
 
 		//calculates the coordinate system size
@@ -72,7 +75,9 @@ class OnOffDiagram extends Sprite{
 
 		
 
-
+		mTitle.width = mTitle.textWidth+2;	
+		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
+		mTitle.y = 20;
 		//mBack.addChild(mMainSprite);
 
 
@@ -81,21 +86,24 @@ class OnOffDiagram extends Sprite{
 
 		//add the bars
 		var outletCounter = 0;
+
 		for(i in 0...mMapArray.length){
+			
 			var outArray = mMapArray[i];
-			for(count in 0...outArray.length)
-			{
+			
+			for(count in 0...outArray.length){
 				fetchOnOffData(mNewOutletArray[outArray[count]],mColorArray[i]);
 				
 			}
 
 
 		}
+
 		//add legend
 		mCoordSystem.createLegend(mColorArray.length,mNewRoomArray,mColorArray);
 
 
-			
+		//add to parent sprite	
 		testSprite.addChild(mCoordSystem);
 
 		mBack.addChild(testSprite);
@@ -112,11 +120,11 @@ class OnOffDiagram extends Sprite{
 	private function calculateandDrawCoordSystem():Void{
 
 
-		mCoordSystem.generate(mBack.width/1.25, mBack.height/1.25, "X", "Y", (mBack.width/1.25)/mtimeArray.length,(mBack.height/1.25)/mNewIDArray.length,mtimeArray,mNewIDArray,false,true);
+		mCoordSystem.generate(mBack.width/1.25, mBack.height/1.35, "X", "Y", (mBack.width/1.25)/mtimeArray.length,(mBack.height/1.35)/mNewIDArray.length,mtimeArray,mNewIDArray,false,true);
 
 
 		mCoordSystem.x = (mBack.width- mCoordSystem.width);
-		mCoordSystem.y = (mCoordSystem.height);
+		mCoordSystem.y = (mBack.height-75);
 
 
 		
@@ -142,10 +150,11 @@ class OnOffDiagram extends Sprite{
 			
 			
 			mCoordSystem.generateSeperatorLines(counter,counterArray[beforeCounter],mNewRoomArray[i]);
+			
 			if(counterArray.length == 1){
-			//mCoordSystem.generateSeperatorTextFields(counter,counterArray[beforeCounter],mNewRoomArray[i]);
-			counterArray.push(counter);
-			beforeCounter ++;
+				//mCoordSystem.generateSeperatorTextFields(counter,counterArray[beforeCounter],mNewRoomArray[i]);
+				counterArray.push(counter);
+				beforeCounter ++;
 			}
 			else{
 
@@ -178,26 +187,27 @@ class OnOffDiagram extends Sprite{
 
 	//fetch the categories along with how many contacts in each room
 	//(should be called in init so that we can calculate size of graph)
+	//shoukld be called room
 	private function fetchCategoryData():Void{
 		
-		//fetch the outlets
-		var tempOutlet= DataInterface.instance.getOnOffData();
+		
+		var tempOutlet= DataInterface.instance.getOnOffData();//fetch the outlets
 
-		//mNewOutletArray = test_makeData();
-
-		//rearrange the data
-		mMapArray=rearrangeData(tempOutlet);
+		
+		mMapArray=rearrangeData(tempOutlet);//rearrange the data
 
 		var colorGenerator = new ColorGenerator();
 
-		//generate colors for legend and bars
-		mColorArray = colorGenerator.generateColors(mMapArray.length);
+		
+		mColorArray = colorGenerator.generateColors(mMapArray.length);//generate colors for legend and bars
 
 		for(i in 0...mMapArray.length){
+			
 			var tmpAr = mMapArray[i];
+			
 			for(count in 0...tmpAr.length){
 				mNewOutletArray.push(tempOutlet[tmpAr[count]]);
-				mNewIDArray.push(tempOutlet[tmpAr[count]].getcategory());
+				mNewIDArray.push(tempOutlet[tmpAr[count]].getname());
 
 
 			}
@@ -210,7 +220,6 @@ class OnOffDiagram extends Sprite{
 		for(i in 0...mNewOutletArray.length){
 
 			mNewOutletArray[i].setArrayID(i);
-			//trace(mNewOutletArray[i].getArrayid());
 		}
 
 		
@@ -220,12 +229,11 @@ class OnOffDiagram extends Sprite{
 
         	for(outlet in 0...mTempOutletArray.length){
         		
-        		//moutletArray.push(mTempOutletArray[outlet]);
 				
         	}
-        	//trace(moutletArray[i]);
         	
     	}
+
     	updateMap(mNewOutletArray);
 
 
@@ -253,7 +261,6 @@ class OnOffDiagram extends Sprite{
 
 
 	private function fetchOnOffData(outlet:Outlet,color:Int):Void{
-		//trace(outlet);
 
 		
 			  drawOnOffData(outlet.getOnOffData(),outlet.getArrayid(),color);
@@ -309,6 +316,7 @@ class OnOffDiagram extends Sprite{
 		for(i in 0...mNewRoomArray.length){
 
 			var isPresent = false;
+
 			var tempMap = new Array<Int>();
 
 			for(count in 0...outletArray.length){
@@ -349,6 +357,7 @@ class OnOffDiagram extends Sprite{
 		for(i in 0...mNewRoomArray.length){
 
 			var isPresent = false;
+			
 			var tempMap = new Array<Int>();
 
 			for(count in 0...outletArray.length){
