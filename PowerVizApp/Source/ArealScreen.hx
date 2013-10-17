@@ -10,12 +10,12 @@ import FontSupply;
 import TimeChangeButton;
 import CoordSystem;
 
-/*
+/**
 Screen displaying the Areal diagram.
 Uses the ArealDiagram class for drawing the special diagram.
 
 This class obtains data from the DataInterface singleton class.
-*/
+**/
 
 class ArealScreen extends Sprite {
 
@@ -68,6 +68,9 @@ class ArealScreen extends Sprite {
 		layout();
 	}
 	
+	/**
+	Places the graphical elements on the screen.
+	**/
 	private function layout() {
 	
 		mTitle.width = mTitle.textWidth;	
@@ -106,7 +109,7 @@ class ArealScreen extends Sprite {
 		
 	}	
 	
-	
+	/**Some test function.**/
 	private function testGenerate() { 
 		fillWithData();
 	
