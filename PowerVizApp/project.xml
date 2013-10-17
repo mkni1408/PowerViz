@@ -5,6 +5,7 @@
 	<app main="Main" path="Export" file="PowerViz" />
 	
 	<source path="Source" />
+	<source path="../PowerVizCommon" />
 	
 	<haxelib name="openfl" />
 	<haxelib name="actuate" />

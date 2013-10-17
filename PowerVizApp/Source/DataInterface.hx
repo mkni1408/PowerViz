@@ -15,6 +15,21 @@ but the app is not yet ready to handle the data.
 This is why the DataInterface should be developed further.
 */
 
+/*
+The DataInterface class consists of two major parts:
+
+ 1. The functions that get data from the server, and
+ 2. The functions that the screens call to get the data.
+ 
+ The functions getting the data from the server are run automatically by a timer.
+ The function getting the current outlet states should be called frequently (once a second), 
+ while the function getting history data should only run once a minute or similar.
+ 
+ Each screen must implement its own updating mechanism to call the DataInterface for getting data.
+ Screens using current data should obtain once a second max.
+ 
+*/
+
 class DataInterface {
 
 	static private var __instance : DataInterface = null;
@@ -26,6 +41,8 @@ class DataInterface {
 	}
 	
 	private var mCnx : HttpAsyncConnection; //Remoting connection used for communicating with the server. 
+	
+	private var mHouseDescriptor : HouseDescriptor; //All data describing the house and its outlets.
 	
 	public function new() {
 	}
@@ -41,19 +58,6 @@ class DataInterface {
 		trace("Connection error: " + e);
 	}
 	
-	//Returns the servers current timestamp.
-	public function fetchTimestamp(callback:Float->Void) {
-		var f = function(v:Dynamic) {callback(v);};
-		mCnx.Api.getTimestamp.call([], f);
-	}
-	
-	//Returns the current time as a Date. Usefull for running stuff in server time.
-	public function fetchCurrentTime(callback:Date->Void) {
-		var f = function(v:Dynamic) {
-			callback(Date.fromTime(v));
-		};
-		mCnx.Api.getTimestamp.call([], f);
-	}
 	
 	/** Fetches all outlet names. 
 	Result is returned to the supplied callback function, which must be of the form function (Map<Int, String>) : Void {} **/

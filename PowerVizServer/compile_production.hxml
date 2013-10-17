@@ -1,0 +1,7 @@
+-main PowerVizServer
+-cp Source
+-php pvs
+-Dproduction
+
+
+

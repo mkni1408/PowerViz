@@ -12,7 +12,7 @@ class Outlet{
 
 	private var room:String;//room id -> should be set, defaults to default
 
-	private var wattUsageToday:Float;//total watt usage today
+	private var wattUsageToday:Float;//total watt usage today 
 
 	//an array of on off data. odd numbers signals that a contact has been connected
 	//even numbers that it has been shut off
