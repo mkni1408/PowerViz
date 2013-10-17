@@ -17,19 +17,9 @@ class BarScreen extends Sprite {
 	private var mTitle : TextField;
 	private var mTimeButton : TimeChangeButton;
 	private var mCoordSys : CoordSystem;
-	private var mNewIDArray : Array<String>;
-	private var mKwhArray : Array<String>;
-	private var mRoomArray : Array<String>;
 
 	public function new() {
 		super();
-				
-		mNewIDArray = new Array<String>();
-		mKwhArray = new Array<String>();
-		mRoomArray = new Array<String>();
-		
-		mNewIDArray = DataInterface.instance.getAllOutletNames(1);
-		mKwhArray = ["2kWh", "4kWh", "6kWh", "8kWh", "10kWh"];
 		
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF);
@@ -75,10 +65,9 @@ class BarScreen extends Sprite {
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
 		mTimeButton.y = Lib.stage.stageHeight - mTimeButton.height;
 		
-		mCoordSys.generate(mBarGraph.width, mBarGraph.height, "X", "Y", mBarGraph.width/9, mBarGraph.height/5, mNewIDArray, mKwhArray, true, false);
+		mCoordSys.generate(mBarGraph.width, mBarGraph.height, "X", "Y", mBarGraph.width/9, mBarGraph.height/5);
 		mCoordSys.x = mBarGraph.x;
 		mCoordSys.y = mBarGraph.y;
-		mCoordSys.createLegend(mRoomArray.length, mRoomArray, [0xFF0000, 0x00FF00, 0x0000FF]);
 	}
 	
 	private function fillWithData() {
