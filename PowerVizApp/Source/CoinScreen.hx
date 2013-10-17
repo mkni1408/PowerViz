@@ -10,6 +10,11 @@ import FontSupply;
 import TimeChangeButton;
 import CoordSystem;
 
+/*
+Screen displaying the Coin Graph.
+Uses the CoinGraph class for drawing the special diagram.
+*/
+
 class CoinScreen extends Sprite {
 
 	private var mBack : Sprite;
@@ -74,6 +79,7 @@ class CoinScreen extends Sprite {
 		mCoordSys.y = mCoinGraph.y;
 	}
 	
+	/*Gets data through DataInterface, then creates the diagram.*/
 	private function fillWithData() {
 	
 		var houseId:Int = 0; //TODO: Change this to the real HouseID:
@@ -85,7 +91,7 @@ class CoinScreen extends Sprite {
 			colors.push(DataInterface.instance.getOutletColor(houseId, t));
 		}
 		
-		mCoinGraph.drawBar(colors, usageAA, usageAA);
+		mCoinGraph.drawCoinScreen(colors, usageAA, usageAA);
 		
 	}
 

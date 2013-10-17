@@ -12,6 +12,7 @@ import DataInterface;
 import BarScreen;
 import CurrentUsage;
 import CoinScreen;
+import OnOffDiagram;
 
 //Main class which extends a sprite(sprite as in a display object) 
 class Main extends Sprite {
@@ -21,6 +22,7 @@ class Main extends Sprite {
 	private var mBarScreen : BarScreen = null;
 	private var mCurrentUsage : CurrentUsage = null;
 	private var mCoinScreen : CoinScreen = null;
+	private var mOnOff: OnOffDiagram = null;
 	
 	//constructor - instantiates new SwipeMill object. 
 	public function new () {
@@ -56,6 +58,9 @@ class Main extends Sprite {
 		
 		mCoinScreen = new CoinScreen();
 		SwipeMill.add(mCoinScreen);
+
+		mOnOff = new OnOffDiagram();
+		SwipeMill.add(mOnOff);
 
 		SwipeMill.screenPos = 6.0; //Set to the first screen.
 	}
