@@ -114,6 +114,11 @@ class DataInterface {
 	public function getAllOutletNames(houseId:Int) : Array<String> {
 		return ["TV1", "TV2", "PS3", "XBox", "Kogekande", "Fryser", "MedieCenter Stuen", "Massagestol", "Løbebånd"];
 	}
+	
+	/*Returns all names for all rooms*/
+	public function getAllRoomNames (houseId:Int) : Array<String> {
+		return ["Stue", "Køkken", "Bad", "Gang", "Toilet", "Kælder", "Garage", "Soveværelse", "Spisestue"];
+	}
 		
 	/*Returns a specific outlet name, based on the outlet ID.*/
 	public function getOutletName(houseId:Int, outletId:Int) : String{
