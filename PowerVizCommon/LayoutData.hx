@@ -9,7 +9,12 @@ class LayoutData {
 	public var room:String;
 	public var floor:String;
 	
-	public function new() {}
+	public function new(?_id:String, ?_name:String, ?_room:String, ?_floor:String) {
+		outletId = _id==null ? "0" : _id;
+		name = _name==null ? "" : _name;
+		room = _room==null ? "" : _room;
+		floor = _floor==null ? "" : _floor;
+	}
 	
 	public function toString() : String {
 		return "outletId: " + outletId + " - name: " + name + " - room: " + room + " - floor: " + floor;

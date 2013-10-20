@@ -1,4 +1,4 @@
-<simulation house="42" >
+<simulation houseId="42">
 
 	<!--
 	::::::How to write a simulation:::::
@@ -54,41 +54,114 @@
 	5: Lamp over cofee table.
 	6: Lamp over dinner table. Dimmable.
 	
-	
 	-->
 	
-	<time at="00:00:05" >
-		<load outlet="0" set="0" comment="Sets 0 to 0" />
-		<supply source="coal" />
-	</time>
+	<!-- Start out by specifying the layout of outlets in the house: -->
+	<layout >
+		<room name="Stue" floor="1.floor">
+			<outlet id="1001" name="TV og PS3" /> <!-- TV 120 watt, ps3 150 watt -->
+			<outlet id="1002" name="TV-lampe" />
+			<outlet id="1003" name="Læselampe" /> 
+			<outlet id="1004" name="Mobiloplader" />
+			<outlet id="1005" name="Laptop" />
+			<outlet id="1006" name="Loftslys" /> <!-- 40 watt -->
+		</room>
+		<room name="Køkken" floor="1.floor" >
+			<outlet id="2001" name="Fryser" /> <!-- 200 watt -->
+			<outlet id="2002" name="Køleskab" /> 
+			<outlet id="2003" name="Køkkenmaskine" /> <!--randon watt -->
+			<outlet id="2004" name="Microovn" /> <!--500 watt -->
+			<outlet id="2005" name="Emhætte" /> <!-- 100 watt -->
+			<outlet id="2006" name="Loftslys" /> <!-- 50 watt -->
+			<outlet id="2007" name="Kaffemaskine" /> <!--700/300 watt-->
+		</room>
+		<room name="Soveværelse" floor="1.floor" >
+			<outlet id="3001" name="Sengelampe" /> <!-- 20 watt -->
+			<outlet id="3002" name="TV" /> <!-- 95 watt -->
+			<outlet id="3003" name="Mobiloplader" /> <!--10 watt -->
+			<outlet id="3004" name="Loftslys" /> <!-- 40 watt -->
+		</room>
+		<room name="Badeværelse" floor="1.floor" >
+			<outlet id="4001" name="Loftslys" />
+			<outlet id="4002" name="Hårtører" />
+			<outlet id="4003" name="Gulvvarme" />
+		</room>
+	</layout>
+	
+	<!-- 
+		This simulation should be started at 00:00:00 to give realistic times for activities. 
+		It uses repeated daily activities, and should therefore run for "24 hours" before giving complete usefull output.
+	-->
+	
+	<!-- vågner -->
+	<time every="24:00:00" offset="06:00:00" comment="Vågner op." >
+		<load outlet="3001" set="20" comment="Turn on light in bedroom" /> <!-- turn on light -->
+		<load outlet="3003" set="0" /><!-- unplug mobiloplader -->
+		<load outlet="3004" set="40" /> <!-- turn on big light bedroom -->
+	</time> 
+	
+	<time every="24:00:00" offset="06:10:00" comment="Tænder lys i stue og køkken." > <!-- going to the living room, start making breakfast. -->
+		<load outlet="1006" set="40" comment="Goint to the living room" />
+		<load outlet="1005" add="60" /> <!-- turn on computer -->	
 
-	
-	<!-- Simulate a freezer that turns on and off very 15 minutes:-->
-	<time every="00:15:00">
-		<load outlet="1" add="300" comment="Freezer on"/>
-	</time>
-	<time every="00:15:00" offset="00:03:00">
-		<load outlet="1" sub="300" comment="Freezer off"/>
+		<load outlet="2006" set="50" /> <!-- turn on light in kitchen -->
 	</time>
 	
-	<!-- Dad comes home, turns on the TV and the boiler.-->
-	
-	<time at="00:20:00" >
-		<load outlet="2" add="120" comment="TV on."/>
-		<load outlet="5" add="1700" comment="Boiler turned on"/> 
+	<time every="24:00:00" offset="06:20:00" comment="Begynder at lave morgenmad." >
+		<load outlet="2007" set="700" /> <!-- Tænder kaffemaskine på fuld skrald -->
+		<load outlet="2003" set="400" /> <!-- Bruger køkkenmaskine -->
 	</time>
 	
-	<time at="00:22:00" >
-		<load outlet="5" sub="1700" comment="Boiler turned off"/> 
+	<time every="24:00:00" offset="06:25:00" >
+		<load outlet="2003" set="0" /> <!-- Slukker køkkenmaskine -->
+	</time>	
+	
+	<time every="24:00:00" offset="06:30:00" >
+		<load outlet="2007" set="300" /> <!-- Kaffemaskine holder kaffen varm. Slukkes først når tager hjemmefra -->
+		<load outlet="1001" add="120" /> <!-- tænder tv i stuen -->
 	</time>
 	
-	<!-- The TV will run untill mid -->
 	
-	<!-- From 00:01:00 to 00:10:00 this timeblock will run every minute-->
-	<time every="00:01:00" offset="00:01:00" until="00:10:00">
-		<load outlet="0" add="0" comment="Running thing in timeblock until 00:10:00" />
+	
+	<time every="24:00:00" offset="06:50:00" comment="Tager afsted hjemmefra" >
+		<load outlet="1001" sub="120" />
+		<load outlet="1005" sub="60" />
+		<load outlet="1006" set="0" />
+		<load outlet="2007" set="0" />
+		
 	</time>
 	
+	
+
+	<!-- _________________________________ -->	
+	<!-- ##### StandBy power usage: ##### -->
+	<time at="00:00:01" >
+		<load outlet="1001" set="30" /> <!-- TV & PS3 i stuen -->
+		<load outlet="3002" set="15" /><!-- TV på soveværelse -->
+		<load outlet="1005" set="10" /> <!--computer i stuen -->
+	</time>
+	
+	
+		
+	<!-- ##################################### -->
+	<!-- Base load machinery - Stuff that runs always. -->
+	
+	
+	<!-- Fryser -->
+	<time every="00:15:00" comment="Fryser ON">
+		<load outlet="2001" set="200" />
+	</time>
+	<time every="00:15:00" offset="00:02:00" comment="Fryser OFF">
+		<load outlet="2001" set="0" />
+	</time>
+	
+	<!-- Køleskab -->
+	<time every="00:20:00" comment="Køleskab ON">
+		<load outlet="2002" set="150" />
+	</time>
+	<time every="00:20:00" offset="00:04:00" comment="Køleskab OFF">
+		<load outlet="2002" set="0" />
+	</time>
 
 </simulation>
 

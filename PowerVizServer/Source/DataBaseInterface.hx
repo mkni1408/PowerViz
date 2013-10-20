@@ -86,16 +86,6 @@ class DataBaseInterface {
 	}
 	
 	
-	//Returns the time interval that the time t is within.
-	//The interval is 15 minutes by default.
-	private static function timeToInterval(t:Date, ?interval:Null<Int>) : {from:Date, to:Date} {
-		var i:Int = interval == null ? 15 : interval;
-		var from = new Date(t.getFullYear(), t.getMonth(), t.getDate(), t.getHours(), Math.floor(t.getMinutes()/i)*i, 0);
-		var to = Date.fromTime(from.getTime() + 900*1000);
-		return {from:from, to:to};
-	}	
-	
-	
 	/**Sets the power source on a specific point in time.**/
 	public static function setPowerSource(source:String, time:Date) {
 	
@@ -195,6 +185,10 @@ class DataBaseInterface {
 		
 		for(room in allRooms) {
 			house.addRoom(new RoomDescriptor(houseId, room.roomId));
+		}
+		
+		for(outlet in allOutlets) {
+			house.getRoom(outlet.roomId).addOutlet(new OutletDesriptor(outlet.outletId .. )); //TODO: Finish this function.
 		}
 	
 	}

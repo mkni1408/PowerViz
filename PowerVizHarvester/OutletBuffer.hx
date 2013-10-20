@@ -1,6 +1,8 @@
 
 import haxe.remoting.HttpAsyncConnection;
 
+import DateUtil;
+
 /**
 The OutletBuffer.
 Buffers data for a single outlet.
@@ -35,8 +37,8 @@ class OutletBuffer {
 		mTimeAccum += Std.int(delta); //Add time delta.
 		mWattAccum += load * delta;
 		
-		if(isInSameInterval(mLastUpdate, now, mInterval)==false) { //Time to send history data:
-			sendHistoryData(mCnx, mWattAccum/mTimeAccum, intervalStart(now, mInterval));
+		if(DateUtil.isInSameInterval(mLastUpdate, now, mInterval)==false) { //Time to send history data:
+			sendHistoryData(mCnx, mWattAccum/mTimeAccum, DateUtil.intervalStart(now, mInterval));
 			mTimeAccum = 0;
 			mWattAccum = 0;
 		}
@@ -44,20 +46,6 @@ class OutletBuffer {
 		mLastUpdate = now;
 	}
 	
-	//Returns true if the two time objects are in the same time interval.
-	private function isInSameInterval(one:Date, two:Date, intervalMinutes:Int) {
-		var from:Date = intervalStart(one, intervalMinutes);
-		var to:Date =  Date.fromTime(from.getTime() + (intervalMinutes*60*1000));
-		if(two.getTime()>= from.getTime() && two.getTime() < to.getTime())
-			return true;
-		return false;
-	}
-	
-	//Returns the start of the interval that 'time' is in.
-	private function intervalStart(time:Date, interval:Int) : Date {
-		return new Date(time.getFullYear(), time.getMonth(), time.getDate(), time.getHours(), 
-										Math.floor(time.getMinutes()/interval)*interval, 0);
-	}
 	
 	//Sends the data to the server.
 	private function sendHistoryData(cnx:HttpAsyncConnection, load:Float, sendTime:Date) {	

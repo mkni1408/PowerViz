@@ -1,103 +1,71 @@
 
-import neko.vm.Thread;
-import neko.vm.Mutex;
-
-import TimeBlock;
-import LoadInstruction;
-import DataInterface;
+import BoxModel;
+import DateUtil;
+import XmlParser;
+import Player;
+import Instruction;
 
 /**
-PowerVizPlayback main application file.
 **/
 class PowerVizSimulator {
 
-	private static var pauseSim:Bool;
-	private static var inputMutex = new Mutex();
+	static var mFileName:String;
+	static var mSpeed:Float;
+	static var mStartTime:Date;
 	
-	public static function main() {
-		var fileName:String = "";
-		var timeMult:Float = 1.0;
-		var startTime:Date = Date.now();
-		
-		if(Sys.args().length!=2 && Sys.args().length!=3) {
-			Sys.println("This program takes 2 or 3 arguments: Filename timefactor <starttime>");
-			return;
-		}
-		Sys.println("Initializing simulator...");
-		DataInterface.connect();
-		
-		fileName = Sys.args()[0];
-		timeMult = Std.parseFloat(Sys.args()[1]);
-		if(Sys.args().length == 3)
-			startTime = Date.fromString(Sys.args()[2]);
-	
-		if(!parseFile(fileName)) {
-			Sys.println("Error parsing file");
-			return;
-		}
-		Sys.println("Done parsing script");
-		
-		Sys.println("Running simulation - starting at " + startTime.toString());
-		runSimulation(timeMult, startTime);
-		Sys.println("Done running simulation");
-	}
+	static var mBoxTimer : SimTimer;
 
+	public static function main() {
+		if(handleArguments()==false)
+			return;
+		runSimulation();
+	}
 	
-	private static function parseFile(file:String) : Bool {
+	public static function handleArguments() : Bool{
 	
-		var data = sys.io.File.getContent(file);
-		if(data.length==0) {
-			Sys.println("Could not read " + file);
+		var argLengths = [2, 3];
+		if(Lambda.has(argLengths, Sys.args().length)==false) {
+			Sys.println("Takes 2 or 3 arguments: filename speed [starttime]");
 			return false;
 		}
-	
-		var sim = Xml.parse(data).firstElement();
-		var house:Int = 0;
-		if(sim.nodeType == Xml.Element && sim.nodeName=="simulation") {
-			house = Std.parseInt(sim.get("house"));
-		}
 		
-		for(e in sim) {
-			if(e.nodeType == Xml.Element && e.nodeName=="time") {
-				if(TimeBlock.parse(house, e)==false)
-					return false;
-			}
-		}
+		mFileName = Sys.args()[0];
+		mSpeed = Std.parseFloat(Sys.args()[1]);
+		
+		mStartTime = Sys.args().length==3 ? Date.fromString(Sys.args()[2]) : Date.now();
+		
+		Sys.println("Parsing simulation file...");
+		return XmlParser.parse(mFileName);
 	
-		return true;
 	}
 	
-
+	public static function runSimulation() {
 	
-	private static function runSimulation(multiply:Float=1, startTime:Date) {
+		mBoxTimer = new SimTimer((Config.instance.sleepTime * mSpeed ), 0, 0, onBoxTimer); //Timer running the BoxModel. 
+		BoxModel.instance.sendOutletLayout(ServerInterface.instance.sendLayoutData); //Start by sending the layout data.
 	
-		var it = Thread.create(inputThread);
-		pauseSim = false;
-		
-		TimeBlock.startTimer();
-		while(TimeBlock.isDone()==false && pauseSim==false) {
-			TimeBlock.updateTimer(multiply, startTime);
+		Sys.println("Running simulation...");
+	
+		Player.instance.run(mStartTime, mSpeed);
+		SimTimer.startDate = mStartTime;
+		while(true) {
+			SimTimer.update(mSpeed);
 			Sys.sleep(0.01);
 		}
-		
+	
 	}
 	
-	private static function inputThread() {
-	
-		//inputMutex.acquire();
-		
-		var input:String="";
-		
-		while(true) {
-			trace("---");
-			//Sys.sleep(5);
-			input = Std.string(Sys.getChar(false));
-			trace(input);
-		}
-		
+	static private function onBoxTimer(count:Int, time:Date) : Void {
+		BoxModel.instance.update(time, sendLoadData, sendHistData, Config.instance.historyInterval);
 	}
 	
+	static private function sendLoadData(outletId:Int, watts:Int) {
+		ServerInterface.instance.sendLoadData(BoxModel.instance.houseId, outletId, watts);
+	}
 	
+	static private function sendHistData(outletId:Int, time:Date, watts:Int) {
+		ServerInterface.instance.sendHistData(BoxModel.instance.houseId, outletId, time, watts);
+	}
+	
+
 }
-
-

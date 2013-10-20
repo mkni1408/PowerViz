@@ -208,13 +208,8 @@ class Harvester {
 	private function getOutletProperty(id:String, property:String) : String {
 	
 		//Check that the supplied property is valid:
-		var propOk:Bool = false;
 		var availableProps = ["Type", "Name", "Room", "Floor"];
-		for(prop in availableProps) {
-			if(prop == property)
-				propOk = true;
-		}
-		if(propOk==false) {
+		if(Lambda.has(availableProps, property)==false) {
 			sendLogData("Property not ok: " + property);
 			return "";
 		}
