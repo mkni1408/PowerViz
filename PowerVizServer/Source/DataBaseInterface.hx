@@ -29,9 +29,9 @@ class DataBaseInterface {
 		mConnection = sys.db.Mysql.connect({ //Connect to the MySQL database.
 			host : "localhost",
 			port : null,
-			user : SensitiveData.dbUser, //Get the connection info from another file...
-			pass : SensitiveData.dbPass,
-			database : SensitiveData.dataBase,
+			user : SensitiveData.instance.dbUser, //Get the connection info from another file...
+			pass : SensitiveData.instance.dbPass,
+			database : SensitiveData.instance.dataBase,
 			socket : null //Use default socket.
 		});
 		

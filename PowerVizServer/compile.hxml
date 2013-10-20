@@ -2,6 +2,7 @@
 -cp Source
 -cp ../PowerVizCommon
 -cp ../PowerVizApp/Source
+-resource linf.json@linf.json
 -php pvsdev
 -debug
 
