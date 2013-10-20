@@ -177,6 +177,8 @@ class DataBaseInterface {
 	
 	public function getHouseDescriptor(houseId:Int) : HouseDescriptor {
 	
+		return null;
+	
 		var house = new HouseDescriptor();
 		house.houseId = houseId;
 		
@@ -188,7 +190,8 @@ class DataBaseInterface {
 		}
 		
 		for(outlet in allOutlets) {
-			house.getRoom(outlet.roomId).addOutlet(new OutletDesriptor(outlet.outletId .. )); //TODO: Finish this function.
+			//TODO...
+			//house.getRoom(outlet.roomId).addOutlet(new OutletDesriptor(outlet.outletId .. )); //TODO: Finish this function.
 		}
 	
 	}
