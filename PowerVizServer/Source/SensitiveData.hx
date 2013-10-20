@@ -9,13 +9,10 @@ class SensitiveData {
 	}
 	
 	
-	public var dbUser(default,null):String = "www";
-	public var dbPass(default,null):String = "79131913";
-	#if production
-		public var dataBase(default,null):String = "PowerVizProduction";
-	#else
-		public var dataBase:String = "PowerVizDevelopment";
-	#end
+	public var dbUser(default,null):String = "";
+	public var dbPass(default,null):String = "";
+
+	public var dataBase(default,null):String = "";
 
 
 	
