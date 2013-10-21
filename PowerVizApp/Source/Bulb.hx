@@ -11,6 +11,7 @@ import flash.display.Sprite;
 import flash.display.DisplayObject;
 import flash.events.MouseEvent;
 import openfl.Assets;
+import motion.Actuate;
 
 class Bulb extends Sprite
 {
@@ -20,7 +21,7 @@ class Bulb extends Sprite
 	private var mBulbOn : Sprite;
 	private var mBulbOff : Sprite;
 
-	private var mOn : Bool;
+	private var mState : Bool;
 
 	public function new()
 	{
@@ -59,7 +60,7 @@ class Bulb extends Sprite
 		this.addChild(mBulbOn);
 		this.addChild(mBulbOff);
 
-		mOn = false;
+		//mOn = false;
 		
 
 
@@ -78,7 +79,7 @@ class Bulb extends Sprite
 
 
 
-	//Testfunction: when we click the bulb it should either turn on or off
+	/*Testfunction: when we click the bulb it should either turn on or off
 	private function bulb_onMouseDown (event:MouseEvent):Void {
 
 		mOn = !mOn;
@@ -99,21 +100,38 @@ class Bulb extends Sprite
 
 		trace("Mouseeven has been registered!!");
 
-	}
+	}*/
 	//the bulb should turn on=true or off=false, we just set the sprite to visible or invisible
 	public function bulb_changeState(onoff:Bool):Void{
 		
  			if(onoff)
  			{
+ 			mState = true;
  			mBulbOn.visible = true;
  			mBulbOff.visible = false;
+ 			Actuate.tween (this, 4, { alpha: 1 } );
 			}
 			else
 			{
+			mState = false;
 			mBulbOn.visible = false;
  			mBulbOff.visible = true;
 
 			}
+
+
+	}
+
+	public function bulbFade():Void{
+
+		if(mState)
+		{
+			Actuate.tween (this, 4, { alpha: 1 } );
+		}
+		else{
+
+			Actuate.tween (this, 4, { alpha: 0 } );
+		}
 
 	}
 	
