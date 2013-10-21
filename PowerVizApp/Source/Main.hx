@@ -3,10 +3,10 @@ package;
 import openfl.Assets;
 import flash.display.Sprite;
 import flash.display.Bitmap;
+import flash.Lib;
 
 import DataVBarDisplay;	
 import SwipeMill;
-import HWUtils;
 import ScreenSaver;
 import DataInterface;
 import BarScreen;
@@ -68,8 +68,8 @@ class Main extends Sprite {
 	//add image to swipemill  
 	private function addImageToSwipeTest(img:String) {
 		var image = new Bitmap(Assets.getBitmapData(img));
-		image.width = HWUtils.screenWidth;
-		image.height = HWUtils.screenHeight;
+		image.width = Lib.stage.stageWidth;
+		image.height = Lib.stage.stageHeight;
 		//this.addChild(image);
 		SwipeMill.add(image);
 	}

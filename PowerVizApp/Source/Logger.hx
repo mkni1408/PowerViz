@@ -12,10 +12,10 @@ The logger class transfers data to the log server asynchronously.
 
 class Logger {
 
-	#if development
-		public static inline var log_server_url:String = "http://www.productionserver.com/logserver/index.php"; //URL of the PHP production logging server.
+	#if production
+		public static inline var log_server_url:String = "http://78.47.92.222/pvs/"; //URL of the production server.
 	#else
-		public static inline var log_server_url:String = "http://www.developmentserver.com/logserver/index.php"; //URL of the PHP development logging server.
+		public static inline var log_server_url:String = "http://78.47.92.222/pvsdev/"; //URL of the development server.
 	#end
 
 

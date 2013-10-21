@@ -32,12 +32,11 @@ The DataInterface class consists of two major parts:
 
 class DataInterface {
 
-	static private var __instance : DataInterface = null;
-	public static var instance(get, never) : DataInterface;
+	public static var instance(get, null) : DataInterface;
 	static function get_instance() : DataInterface {
-		if(__instance == null)
-			__instance = new DataInterface();
-		return __instance;
+		if(instance == null)
+			instance = new DataInterface();
+		return instance;
 	}
 	
 	private var mCnx : HttpAsyncConnection; //Remoting connection used for communicating with the server. 
@@ -45,6 +44,11 @@ class DataInterface {
 	private var mHouseDescriptor : HouseDescriptor; //All data describing the house and its outlets.
 	
 	public function new() {
+		#if production
+			this.connect("http://78.47.92.222/pvs/"); //Connect to production version.
+		#else
+			this.connect("http://78.47.92.222/pvsdev/"); //Connect to development version.
+		#end 
 	}
 	
 	//Connects to the server, setting up the remoting system.
@@ -181,16 +185,14 @@ class DataInterface {
 	}
 	*/
 	
-	public function getOnOffData():Array<Outlet>{
+	public function getOnOffData_OLD():Array<Outlet>{
 		var onOffData = new Array<Outlet>();
 		var intData = [0,1,2,3,4,5,6,7,8,9];
 		var idData = ["1","2","3","4","5","6","7","8","9"];
 		var catData = ["tv","opvask","lampe","ovn","frys","køl","vaskemaskine","komfur","funky","elpisker"];
 		var wattData = [10.4,10.4,2.4,5.3,10.4,10.4,2.4,5.3,5.2,8.2];
 		var roomData=["Stue","Køkken","Toilet","Køkken","Bad","Gang","Gang","Køkken","Køkken","sm-rum"];
-		var data = [[8.20,10.15,10.45,13.30],[9.50,11.56,12.15,13.90],[8.40,14.15,15.45,19.30],[2.20,8.15,8.45,22.30],[9.50,11.56,12.15,13.90],[8.40,14.15,15.45,19.30],[2.20,8.15,8.45,22.30],[2.20,8.15,8.45,22.30],[2.20,8.15,8.45,22.30],[-2.20,8.15,8.45,24.45]];
-
-		
+		var data = [[8.20,10.15,10.45,13.30],[9.50,11.56,12.15,13.90],[8.40,14.15,15.45,19.30],[2.20,8.15,8.45,22.30],[9.50,11.56,12.15,13.90],[8.40,14.15,15.45,19.30],[2.20,8.15,8.45,22.30],[2.20,8.15,8.45,22.30],[2.20,8.15,8.45,22.30],[-2.20,8.15,8.45,24.45]];		
 
 		for(i in 0...intData.length){
 
@@ -198,10 +200,73 @@ class DataInterface {
 			
 		}
 
-		
-
 		return onOffData;
 
+	}
+	
+	public function getOnOffData():Array<Outlet> {
+	
+		var houseId=42;
+		var hD:HouseDescriptor;
+	
+		var done=false;
+		mCnx.Api.getHouseDescriptor.call([houseId], 
+			function(v:Dynamic) {
+			hD = v;
+			done=true;
+		});
+		while(done==false)
+			Sys.sleep(0.1);
+	
+		trace(hD);
+		
+	
+		return new Array<Outlet>();
+	
+		/*
+		var houseId = 42; //TODO: Get this from config.
+	
+		//Get the data through mCnx.Api.getAllRoomOutlets():
+		
+		var done=false;
+		var roomOutletMap:Map<Int, Array<Int> >;
+		
+		mCnx.Api.getAllRoomOutlets.call([houseId], 
+			function(r:Dynamic) {
+				roomOutletMap = r;				
+				done = true;
+		});
+		while(done==false) 
+			Sys.sleep(0.1);
+			
+			
+		
+		var roomNameMap:Map<Int, String>;
+		
+		done = false;
+		mCnx.Api.getRoomNameMap.call([houseId], 
+			function(s:Dynamic) {
+				roomNameMap = s;
+				done = true;
+		});
+		while(done==false)
+			Sys.sleep(0.1);
+		
+		
+		var outlets = new Array<Int>();
+		var rooms = new Array<String>();
+		
+		for(r in roomOutletMap) { 
+			for(i in r) {
+				outlets.push(i);
+				rooms.push(roomNameMap.get(r.roomId));
+			}
+		}
+			
+		
+		return new Array<Outlet>();
+		*/
+	
 	}
 
 	public function getOutletColor(houseId:Int, outletId:Int) : Int {
