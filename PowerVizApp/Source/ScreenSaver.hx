@@ -17,8 +17,9 @@ class ScreenSaver extends Sprite {
 	//variables needs to be set for the timers 
 	//bulbTimerAction: the timer for the update frequency of the bulbs
 	//screenSaverTimerAction: The time until the screensaver becomes visible again
-	private var bulbTimerAction:Int = 3000;
+	private var bulbTimerAction:Int = 5000;
 	private var screenSaverTimerAction:Int = 20000;
+	private var yourBulbFaderTimerAction:Int = 8000;
 
 
 	private var firstBulb:Bulb;
@@ -34,7 +35,10 @@ class ScreenSaver extends Sprite {
 	private var mHasRecievedTouchEvent: Bool;
 	private var yourbulbTimer:haxe.Timer;
 	private var yourScreensaverTimerTimer:haxe.Timer;
+	private var yourBulbFaderTimer:haxe.Timer;
 	private var dataInterface:DataInterface;
+
+	private var mBulbArray:Array<Bulb>;
 
 
 	public function new(){
@@ -58,6 +62,9 @@ class ScreenSaver extends Sprite {
 		eightBulb = new Bulb();
 		ninthBulb = new Bulb();
 
+
+		
+
 		//add background fill color
 		this.graphics.beginFill(0xFFFFFF);
 		this.graphics.drawRect(0,0,Lib.stage.stageWidth,Lib.stage.stageHeight);
@@ -75,6 +82,10 @@ class ScreenSaver extends Sprite {
 		addChild(seventhBulb);
 		addChild(eightBulb);
 		addChild(ninthBulb);
+
+		mBulbArray = [firstBulb,secondBulb,thirdBulb,fourthBulb,fifthBulb,sixthBulb,seventhBulb,eightBulb,ninthBulb];	
+
+		fadeBulbsWhenInactive();
 		
 		//place the bulbs
 		placeBulbs();
@@ -235,6 +246,7 @@ class ScreenSaver extends Sprite {
 	public function stopBulbActionTimer(){
 		
 		yourbulbTimer.stop();
+		yourBulbFaderTimer.stop();
 
 
 	}
@@ -255,6 +267,16 @@ class ScreenSaver extends Sprite {
    				trace(f);
 
    				calculatBulbStates(f);
+			};
+
+		yourBulbFaderTimer.stop();
+			yourBulbFaderTimer= new haxe.Timer(yourBulbFaderTimerAction);
+
+			yourBulbFaderTimer.run = function():Void{
+   			trace("Screen saver Timer running!!");
+   				
+   				fadeBulbsWhenInactive();
+   				
 			};
 
 
@@ -289,6 +311,15 @@ class ScreenSaver extends Sprite {
    				
 			};
 
+			yourBulbFaderTimer= new haxe.Timer(yourBulbFaderTimerAction);
+
+			yourBulbFaderTimer.run = function():Void{
+   			trace("Screen saver Timer running!!");
+   				
+   				fadeBulbsWhenInactive();
+   				
+			};
+
 	}
 
 	//changes the state of the bulbs to on=true or off=false
@@ -302,6 +333,16 @@ class ScreenSaver extends Sprite {
 					fifthBulb.bulb_changeState(fifthbulb);
 					sixthBulb.bulb_changeState(sixthbulb);
 					seventhBulb.bulb_changeState(seventhbulb);
+
+	}
+
+	private function fadeBulbsWhenInactive():Void{
+
+		for(i in 0...mBulbArray.length){
+
+			mBulbArray[i].bulbFade();
+
+		}
 
 	}
 
