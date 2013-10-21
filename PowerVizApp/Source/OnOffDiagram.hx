@@ -9,7 +9,7 @@ import ColorGenerator;
 import DataInterface;
 import flash.text.TextField;
 import FontSupply;
-
+import OnOffData;
 /*
 
 Class that defines an on off bargraph
@@ -239,20 +239,20 @@ class OnOffDiagram extends Sprite{
 
 	}
 
-	private function drawOnOffData(outletData:Array<Float>,id:Int,color:Int):Void{
+	private function drawOnOffData(outletData:Array<OnOffData>,id:Int,color:Int):Void{
 
 		var count = 0;
 		var count2 = 1;
-		var lengthofArray =Math.floor((outletData.length/2));
+		var lengthofArray =outletData.length;
 		var incId = id;
 		
 		for(i in 0...lengthofArray){
 
-			mCoordSystem.drawBar(outletData[count], outletData[count2], mCoordSystem.getYcoordinate(incId+1),mCoordSystem.getYcoordinate(incId+1),color);
+			mCoordSystem.drawBar(outletData[i], mCoordSystem.getYcoordinate(incId+1),mCoordSystem.getYcoordinate(incId+1),color);
 
 
-			count=count+2;
-			count2=count2+2;
+			//count=count+2;
+			//count2=count2+2;
 
 
 		}

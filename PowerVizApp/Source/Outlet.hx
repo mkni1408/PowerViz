@@ -1,3 +1,4 @@
+import OnOffData;
 //
 //Class that defines an outlet
 //
@@ -16,9 +17,9 @@ class Outlet{
 
 	//an array of on off data. odd numbers signals that a contact has been connected
 	//even numbers that it has been shut off
-	private var onOffArray:Array<Float>;
+	private var onOffArray:Array<OnOffData>;
 
-	public function new(_arrayID:Int,_id:String, _name:String, _onOffArray:Array<Float>, _room:String,_wattUsage:Float){
+	public function new(_arrayID:Int,_id:String, _name:String, _onOffArray:Array<OnOffData>, _room:String,_wattUsage:Float){
 		this.arrayID = _arrayID;
 		this.id=_id;
 		this.name=_name;
@@ -51,7 +52,7 @@ class Outlet{
 
 		return name;
 	}
-	public function getOnOffData():Array<Float>{
+	public function getOnOffData():Array<OnOffData>{
 
 		return onOffArray;
 	}

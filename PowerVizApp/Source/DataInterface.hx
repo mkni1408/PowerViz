@@ -1,7 +1,7 @@
 
 import haxe.remoting.HttpAsyncConnection;
 import Outlet;
-
+import OnOffData;
 /*
 Class that handles all data comming from the server.
 This class works mainly as a dummy during the development.
@@ -182,25 +182,34 @@ class DataInterface {
 	*/
 	
 	public function getOnOffData():Array<Outlet>{
-		var onOffData = new Array<Outlet>();
+		var outletData = new Array<Outlet>();
 		var intData = [0,1,2,3,4,5,6,7,8,9];
 		var idData = ["1","2","3","4","5","6","7","8","9"];
 		var catData = ["tv","opvask","lampe","ovn","frys","køl","vaskemaskine","komfur","funky","elpisker"];
 		var wattData = [10.4,10.4,2.4,5.3,10.4,10.4,2.4,5.3,5.2,8.2];
 		var roomData=["Stue","Køkken","Toilet","Køkken","Bad","Gang","Gang","Køkken","Køkken","sm-rum"];
-		var data = [[8.20,10.15,10.45,13.30],[9.50,11.56,12.15,13.90],[8.40,14.15,15.45,19.30],[2.20,8.15,8.45,22.30],[9.50,11.56,12.15,13.90],[8.40,14.15,15.45,19.30],[2.20,8.15,8.45,22.30],[2.20,8.15,8.45,22.30],[2.20,8.15,8.45,22.30],[-2.20,8.15,8.45,24.45]];
+
+		var onOffData = new OnOffData(Date.fromString("2013-10-21 10:15:00"),Date.fromString("2013-10-21 10:45:00"));
+		var onOffData2 = new OnOffData(Date.fromString("2013-10-21 12:15:00"),Date.fromString("2013-10-21 16:46:00"));
+		
+		var OnOffDataArray = [onOffData,onOffData2];
+
+
+		var data = [OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray];
+
+
 
 		
 
 		for(i in 0...intData.length){
 
-			onOffData.push(new Outlet(i,idData[i],catData[i],data[i],roomData[i],wattData[i]));
+			outletData.push(new Outlet(i,idData[i],catData[i],OnOffDataArray,roomData[i],wattData[i]));
 			
 		}
 
 		
 
-		return onOffData;
+		return outletData;
 
 	}
 

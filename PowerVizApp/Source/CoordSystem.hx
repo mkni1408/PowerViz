@@ -2,6 +2,7 @@
 import flash.display.Sprite;
 import flash.text.TextField;
 import FontSupply;
+import OnOffData;
 
 /*
 Coordinate System class.
@@ -148,9 +149,10 @@ class CoordSystem extends Sprite {
 		//draws an onoffbar given a from and to X coordinate and an Y coordinate 
 		//pointXfrom is the time that the contact went on converted to a float pointXto is 
 		//the time the contact was shut off
-		public function drawBar(pointXfrom:Float,pointXto:Float, pointYfrom:Float,pointYto:Float,color:Int){
+		public function drawBar(pointXfrom:OnOffData, pointYfrom:Float,pointYto:Float,color:Int){
 
 			//just sanitising the input
+			/*
 			if(pointXfrom>=24.0 )
 			{
 				pointXfrom = 23.99;
@@ -170,12 +172,14 @@ class CoordSystem extends Sprite {
 			{
 				pointXto = 0.01;
 
-			}
-
+			}*/
+			//var date =Date.fromString("2013-10-21 10:15:00");
 
 			this.graphics.lineStyle(1, 0x000000);
 			this.graphics.beginFill(color);
-			this.graphics.drawRect(convertTime(pointXfrom),pointYfrom+5.0, convertTime(pointXto)-convertTime(pointXfrom), yHeight-10.0);
+			//this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), yHeight-10.0);
+			this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), yHeight-10.0);
+
 			this.graphics.endFill();
 
 
@@ -209,23 +213,24 @@ class CoordSystem extends Sprite {
 
 		}
 
-		private function convertTime(time:Float):Float{
+		private function convertTime(time:Date):Float{
 			//trace("...........");
-			//trace(time);
+			trace(convertTimeHour(time)+convertTimeMinute(time));
 			return (convertTimeHour(time)+convertTimeMinute(time));
 
 		}
 		//return the time position
-		private function convertTimeHour(time:Float):Float{
+		private function convertTimeHour(time:Date):Float{
 
-			//trace("time:",getXcoordinate(Math.floor(time)));
+			trace("HOURS",time.getHours());
 			//- 1 because of array starting at 0
-			return getXcoordinate(Math.floor(time));
+			return getXcoordinate(time.getHours());
 
 		}
 		//returns the positionoffset 
-		private function convertTimeMinute(time:Float):Float{
-			var minutes = (time - Math.floor(time));
+		private function convertTimeMinute(time:Date):Float{
+			trace("MINUTES",time.getMinutes());
+			var minutes = time.getMinutes()/100;
 			//trace("minut:",xHeight * minutes);
 			//trace((xHeight/100) * minutes);
 			return (xHeight * minutes);
