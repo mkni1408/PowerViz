@@ -40,7 +40,11 @@ class Api {
 		return DataBaseInterface.getOutletIdNameMap(houseId);
 	}
 	
+	public function getRoomNameMap(houseId:Int) : Map<Int, String> {
+		return DataBaseInterface.getRoomNameMap(houseId);
+	}
 	
+	/**Returns a map of all rooms and the outlets in each room Map<RoomId, Array<OutletId> >**/
 	public function getAllRoomOutlets(houseId:Int) : Map<Int, Array<Int> > {
 		return DataBaseInterface.getRoomOutletsMap(houseId);
 	}
@@ -52,11 +56,9 @@ class Api {
 	
 	/**Returns a HouseDescriptor object. See the OutletDescriptor.hx file.**/
 	public function getHouseDescriptor(houseId:Int) : HouseDescriptor {
-	
-			return null;
-	
+			return DataBaseInterface.getHouseDescriptor(houseId);
 	}
-	
+		
 	///////////////////////////////////////////////////////
 	//Functions for setting the current data state.
 	///////////////////////////////////////////////////////
@@ -114,6 +116,7 @@ class Api {
 	//Functions for the simulator:
 	//**********************************************
 	
+	/*
 	public function simulator_addToCurrentLoad(houseId:Int, outletId:Int, add:Float, time:Date) {
 		var load:Float = DataBaseInterface.getCurrentLoad(houseId, outletId);
 		load += add;
@@ -128,11 +131,11 @@ class Api {
 	public function simulator_setPowerSource(time:Date, source:String) {
 		DataBaseInterface.setPowerSource(source, time);
 	}
+	*/
 	
 	
 	
-	
-	//CONFIGURATION FUNCTIONS::::::::::::::::::::::::::::::::::::
+	//CONFIGURATION FUNCTIONS FOR THE BOX ::::::::::::::::::::::::::::::::::::
 	
 	public function getBoxConfig(houseId:Int) : {boxIP:String, boxID:String, boxPort:Int, sleepTime:Int, historyTime:Int} {
 		return DataBaseInterface.getBoxConfig(houseId);

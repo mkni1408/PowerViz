@@ -11,7 +11,7 @@ import HouseDescriptor;
 
 /**
 Interface the the database.
-This class supplies data reading/writing functions to the rest of the server.
+This class supplies data reading/writing functions to the rest of theadmin server.
 
 To make things simpler/prettier in code, DataBaseInterface uses the magnificent SPOD macros!!!
 
@@ -49,8 +49,6 @@ class DataBaseInterface {
 	be used by the simulator.
 	**/
 	public static function setCurrentLoad(houseId:Int, outletId:Int, load:Float, ?_time:Date) {
-	
-		//FUNCTION CURRENTLY IN REWRITE STATE.
 
 		var now = _time==null ? Date.now() : _time;
 		
@@ -133,10 +131,19 @@ class DataBaseInterface {
 		
 			a = new Array<Int>();
 						
-			for(outlet in HouseOutlets.manager.search($roomId==room.roomId)) {
+			for(outlet in HouseOutlets.manager.search($houseId==houseId && $roomId==room.roomId)) {
 				a.push(outlet.outletId);
 			}
 			r.set(room.roomId, a);
+		}
+		return r;
+	}
+	
+	public static function getRoomNameMap(houseId:Int) : Map<Int, String> {
+	
+		var r = new Map<Int, String>();
+		for(room in HouseRooms.manager.search($houseId == houseId)) {
+			r.set(room.roomId, room.roomName);
 		}
 		return r;
 	}
@@ -175,9 +182,7 @@ class DataBaseInterface {
 	}
 	
 	
-	public function getHouseDescriptor(houseId:Int) : HouseDescriptor {
-	
-		return null;
+	public static function getHouseDescriptor(houseId:Int) : HouseDescriptor {
 	
 		var house = new HouseDescriptor();
 		house.houseId = houseId;
@@ -186,13 +191,17 @@ class DataBaseInterface {
 		var allOutlets = HouseOutlets.manager.search($houseId == houseId);
 		
 		for(room in allRooms) {
-			house.addRoom(new RoomDescriptor(houseId, room.roomId));
+			house.addRoom(new RoomDescriptor(houseId, room.roomId, room.roomName, room.roomColor));
 		}
 		
 		for(outlet in allOutlets) {
-			//TODO...
-			//house.getRoom(outlet.roomId).addOutlet(new OutletDesriptor(outlet.outletId .. )); //TODO: Finish this function.
+
+			house.getRoom(outlet.roomId).addOutlet(new OutletDescriptor(outlet.outletId, outlet.outletId, outlet.outletName,
+																		outlet.outletZenseName, outlet.outletZenseRoom,
+																		outlet.outletZenseFloor, outlet.color)); 
 		}
+		
+		return house;
 	
 	}
 	

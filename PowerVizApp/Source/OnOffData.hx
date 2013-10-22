@@ -3,8 +3,8 @@
 class OnOffData{
 	
 	
-	private var mStart: Date;
-	private var mStop: Date;
+	public var mStart(default,null): Date;
+	public var mStop(default,null): Date;
 
 
 	public function new(start:Date,stop:Date):Void{

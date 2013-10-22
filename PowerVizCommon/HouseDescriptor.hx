@@ -8,10 +8,29 @@ class OutletDescriptor {
 	public var houseId(default,default):Int; //Identifying the house that this outlet is installed in.
 	public var outletId(default,default):Int; //The ID of the outlet.
 	public var name(default,default):String; //Name of the outlet, as displayed on the screen.
-	public var zenseName(default,default):Int; //Name from the zense box.
+	public var zenseName(default,default):String; //Name from the zense box.
 	public var zenseRoom(default,default):String; //Room name from the zense box.
 	public var zenseFloor(default, default):String; //Floor name from the zense box.
 	public var outletColor(default,default):Int; //Color, translated to OpenFL color format.
+	
+	public function new(?_houseId:Int, ?_outletId:Int, ?_name:String, ?_zenseName:String, ?_zenseRoom:String, ?_zenseFloor:String, ?_color:String) {
+		houseId = _houseId!=null ? _houseId : -1;
+		outletId = _outletId!=null ? _outletId : -1;
+		name = _name!=null ? _name : "";
+		zenseName = _zenseName!=null ? _zenseName : "";
+		zenseRoom = _zenseRoom!=null ? _zenseRoom : "";
+		zenseFloor = _zenseFloor!=null ? _zenseFloor : "";
+		var colorString = _color!=null ? _color : "0x000000";
+		outletColor = Std.parseInt(colorString);
+	}
+	
+	public function toString():String {
+		var str = "houseId: " + houseId + "\n";
+		str += "outletId: " + outletId + "\n";
+		str += "outletName: " + name + "\n";
+		//TODO... the last lines...
+		return str;
+	}
 
 }
 
@@ -20,13 +39,17 @@ class RoomDescriptor {
 
 	public var houseId(default,default):Int; //Identifying the house.
 	public var roomId(default,default):Int; //ID of the room, which should match the outlets.
-	public var color(default,default):Int; //Color of the room.
+	public var roomName(default,default):String;
+	public var roomColor(default,default):Int; //Color of the room.
 	
 	private var mOutlets:Map<Int, OutletDescriptor>;
 	
-	public function new(?_houseId:Int, ?_roomId:Int) {
+	public function new(?_houseId:Int, ?_roomId:Int, ?_name:String, ?_color:String) {
 		houseId = _houseId!=null ? _houseId : -1;
 		roomId = _roomId!=null ? _roomId : -1;
+		roomName = _name!=null ? _name : "Default";
+		var colorString = _color!=null ? _color : "0xFFFFFF";
+		roomColor =  Std.parseInt(colorString);
 		mOutlets = new Map<Int, OutletDescriptor>();
 	}
 	
@@ -40,6 +63,20 @@ class RoomDescriptor {
 	
 	public function getAllOutlets() : Array<OutletDescriptor> {	
 		return Lambda.array(mOutlets);
+	}
+	
+	public function toString():String {
+		var str="{ houseId: " + houseId + "\n";
+		str += "roomId: " + roomId + "\n";
+		str += "roomName: " + roomName + "\n";
+		str += "roomColor: " + roomColor + "\n";
+		str += "outlets: {\n";
+		for(outlet in getAllOutlets()) {
+			str += Std.string(outlet) + "\n";
+		}
+		str += "}";
+		return str;
+		
 	}
 	
 }
@@ -76,6 +113,16 @@ class HouseDescriptor {
 			result.concat(r.getAllOutlets());
 		}
 		return result;
+	}
+	
+	public function toString():String {
+		var str = "houseId = " + houseId + "\n";
+		str += "rooms: { \n";
+		for(room in getRoomArray()){
+			str += Std.string(room) + "\n";
+		}
+		str += "}";
+		return str;
 	}
 
 }

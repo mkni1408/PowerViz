@@ -8,7 +8,8 @@ import flash.events.Event;
 import flash.events.TouchEvent;
 import flash.events.MouseEvent;
 
-import HWUtils;
+import flash.Lib;
+
 
 
 
@@ -64,11 +65,9 @@ class SwipeMill {
 	private static function createVisualElements(parent:Sprite) {
 		mTouchReceiver = new Sprite();
 		mTouchReceiver.graphics.beginFill(0xFF00FF);
-		mTouchReceiver.graphics.drawRect(0,0, HWUtils.screenWidth, HWUtils.screenHeight);
+		mTouchReceiver.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
 		mTouchReceiver.graphics.endFill();
 		
-		//mTouchReceiver.width = HWUtils.screenWidth;
-		//mTouchReceiver.height = HWUtils.screenHeight;
 		
 		parent.addChild(mTouchReceiver);
 	}
@@ -200,7 +199,7 @@ class SwipeMill {
 	private static function onTMMove(x:Float) {
 		if(mFingerDown) {
 			mDeltaX = Std.int(x - mStartX);
-			screenPos = mStartScreenPos - (mDeltaX / HWUtils.screenWidth);
+			screenPos = mStartScreenPos - (mDeltaX / Lib.stage.stageWidth);
 		}
 	}
 	
