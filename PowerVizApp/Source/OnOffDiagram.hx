@@ -205,10 +205,11 @@ class OnOffDiagram extends Sprite{
 		
 		mMapArray=rearrangeData(tempOutlet);//rearrange the data
 
-		var colorGenerator = new ColorGenerator();
+		//var colorGenerator = new ColorGenerator();
 
 		
-		mColorArray = colorGenerator.generateColors(mMapArray.length);//generate colors for legend and bars
+
+		//mColorArray = colorGenerator.generateColors(mMapArray.length);//generate colors for legend and bars
 
 		for(i in 0...mMapArray.length){
 			
@@ -223,7 +224,7 @@ class OnOffDiagram extends Sprite{
 			
 			
 		}
-
+		
 		
 		//set the ArrayId to match the new place in the array
 		for(i in 0...mNewOutletArray.length){
@@ -244,6 +245,11 @@ class OnOffDiagram extends Sprite{
     	}
 
     	updateMap(mNewOutletArray);
+    	//update colors
+    	//for(outlet in 0...mNewOutletArray.length){
+
+		//	mColorArray.push(mNewOutletArray.roomColor);
+		//}
 
 
 	}
@@ -310,6 +316,7 @@ class OnOffDiagram extends Sprite{
 			else{
 				//the category was not present -> add to array
 				mNewRoomArray.push(outletArray[i].getRoom());
+				mColorArray.push(outletArray[i].roomColor);
 
 			}
 
