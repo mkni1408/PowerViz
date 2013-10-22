@@ -262,22 +262,33 @@ class DataInterface {
 		var start:Date=null;
 		var stop:Date=null;
 		for(key in usageToday.keys()) {
+
 			onOffMap.set(key, new Array<OnOffData>());
 			start = null;
 			stop = null;
+			
 			for(u in usageToday.get(key)) {
+				
 				if(u.watts>0) {
 					if(start==null)
-						start = u.time;
+						start = Date.fromTime(u.time.getTime() - (15*60*1000));
 					stop = u.time;
 				}
-				else {
-					if(start!=null && stop!=null)
+				else {	
+					if(start!=null && stop!=null) {
 						onOffMap.get(key).push(new OnOffData(start, stop));
+						start = null;
+						stop = null;
+					}
 				}
+								
 			}
+			
+			if(start!=null && stop!=null) { //End of data, so close the block if open.
+				onOffMap.get(key).push(new OnOffData(start, stop));
+			}
+
 		}	
-		
 			
 		var result = new Array<Outlet>();
 		for(room in hD.getRoomArray()) {

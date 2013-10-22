@@ -252,11 +252,13 @@ class DataBaseInterface {
 		
 		var from:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0);
 		var to:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate(),23,59,59);
-		for(oh in LoadHistory.manager.search($houseId==houseId && $time>=from && $time<=to, {orderBy:time})) {
+		var qr = LoadHistory.manager.search($houseId == houseId && $time>from && $time<to, {orderBy : time});
+		for(oh in qr) {
 			if(result.exists(oh.outletId)==false) {
 				result.set(oh.outletId, new Array<{time:Date, watts:Float}>());
 			}
 			result.get(oh.outletId).push({time:oh.time, watts:oh.load});
+			
 		}
 		return result;
 	}

@@ -202,10 +202,6 @@ class OnOffDiagram extends Sprite{
 		
 		var tempOutlet= DataInterface.instance.getOnOffData();//fetch the outlets
 
-
-		trace(tempOutlet);
-
-
 		
 		mMapArray=rearrangeData(tempOutlet);//rearrange the data
 

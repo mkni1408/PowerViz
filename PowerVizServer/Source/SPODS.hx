@@ -30,13 +30,21 @@ class CurrentLoad extends sys.db.Object {
 }
 
 
-@:id(houseId)
-@:index(outletId)
+@:id(houseId, outletId, time)
 class LoadHistory extends sys.db.Object {
 	public var houseId : SInt;
 	public var outletId : SInt;
 	public var time : SDateTime;
 	public var load : SFloat;
+	
+	override public function toString() {
+		var str = "LoadHistory: {\n";
+		str += "houseId: " + houseId + "\n";
+		str += "outletId: " + outletId + "\n";
+		str += "time: " + time + "\n";
+		str += "load: " + load + "\n }";
+		return str;
+	}
 }
 
 
