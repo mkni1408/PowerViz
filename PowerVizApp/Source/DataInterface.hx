@@ -185,7 +185,6 @@ class DataInterface {
 	}
 	*/
 	
-
 	public function getOnOffData_OLD():Array<Outlet>{
 		var outletData = new Array<Outlet>();
 		var intData = [0,1,2,3,4,5,6,7,8,9];
