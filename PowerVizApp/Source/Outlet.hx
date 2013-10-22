@@ -26,7 +26,8 @@ class Outlet{
 								?_roomName:String, ?_wattUsage:Float, ?_roomColor:Int, ?_outletColor:Int){
 		this.arrayID = _arrayID;
 		this.id=_id;
-		this.name=_name;
+		this.name=_name==null ? "Default" : _name;
+		this.name=_name=="" ? "Default" : _name;
 		//default value:
 		this.room = _roomName==null ? "Default" : _roomName;
 

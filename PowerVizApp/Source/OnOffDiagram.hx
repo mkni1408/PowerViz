@@ -123,15 +123,15 @@ class OnOffDiagram extends Sprite{
 	private function calculateandDrawCoordSystem():Void{
 
 
-		legend = legend.drawLegend(mBack.width/1.25,mBack.height/1.35,mColorArray.length,mNewRoomArray,mColorArray);
+		legend = legend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mNewRoomArray,mColorArray);
 
 		mBack.addChild(legend);
 
-		mCoordSystem.generate(mBack.width/1.25, (mBack.height/1.35)-legend.height, "X", "Y", (mBack.width/1.25)/mtimeArray.length,((mBack.height/1.35)-legend.height)/mNewIDArray.length,mtimeArray,mNewIDArray,false,true);
+		mCoordSystem.generate(mBack.width/1.25, (mBack.height/1.25)-legend.height, "X", "Y", (mBack.width/1.25)/mtimeArray.length,((mBack.height/1.25)-legend.height)/mNewIDArray.length,mtimeArray,mNewIDArray,false,true);
 
 		trace("mCoordSystem", mCoordSystem.height);
 		mCoordSystem.x = (mBack.width- mCoordSystem.width);
-		mCoordSystem.y = (mBack.height/1.35)+50;
+		mCoordSystem.y = (mBack.height/1.25)+50;
 		legend.x =mCoordSystem.x;
 		legend.y = mCoordSystem.y + legend.height;
 
@@ -200,7 +200,11 @@ class OnOffDiagram extends Sprite{
 	private function fetchCategoryData():Void{
 		
 		
-		var tempOutlet= DataInterface.instance.getOnOffData_OLD();//fetch the outlets
+		var tempOutlet= DataInterface.instance.getOnOffData();//fetch the outlets
+
+
+		trace(tempOutlet);
+
 
 		
 		mMapArray=rearrangeData(tempOutlet);//rearrange the data
