@@ -103,7 +103,7 @@ class OnOffDiagram extends Sprite{
 		}
 
 		//add legend
-		mCoordSystem.createLegend(mColorArray.length,mNewRoomArray,mColorArray);
+		//mCoordSystem.createLegend(mColorArray.length,mNewRoomArray,mColorArray);
 
 
 		//add to parent sprite	
@@ -127,11 +127,13 @@ class OnOffDiagram extends Sprite{
 
 		mBack.addChild(legend);
 
-		mCoordSystem.generate(mBack.width/1.25, mBack.height/1.35, "X", "Y", (mBack.width/1.25)/mtimeArray.length,(mBack.height/1.35)/mNewIDArray.length,mtimeArray,mNewIDArray,false,true);
+		mCoordSystem.generate(mBack.width/1.25, (mBack.height/1.35)-legend.height, "X", "Y", (mBack.width/1.25)/mtimeArray.length,((mBack.height/1.35)-legend.height)/mNewIDArray.length,mtimeArray,mNewIDArray,false,true);
 
-
+		trace("mCoordSystem", mCoordSystem.height);
 		mCoordSystem.x = (mBack.width- mCoordSystem.width);
 		mCoordSystem.y = (mBack.height-75);
+		legend.x =mCoordSystem.x;
+		legend.y = mCoordSystem.y + legend.height;
 
 
 		

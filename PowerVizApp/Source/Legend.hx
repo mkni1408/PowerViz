@@ -19,10 +19,10 @@ class Legend extends Sprite{
 
 		var rowHeight = 15;
 
-		var numOfRows = numberOfentries/6;
+		var numOfRows = Math.ceil(numberOfentries/6);
 
 		//calculate number of rows
-		numOfRows = Math.ceil(numOfRows);
+		//numOfRows = Math.ceil(numOfRows);
 
 		this.height = rowHeight * numOfRows;
 
@@ -38,14 +38,19 @@ class Legend extends Sprite{
 		//x and y coordinates
 		var xCor = 0.0;
 		var yCor = 0.0;
+		var counter = 0;
 
 
 		var legendSprite = new Sprite();
+		for(row in 0...numOfRows){
+
+
 
 			for(i in 0...numberOfentries){
 			//handle the boxes
+
 			legendSprite.graphics.lineStyle(1, 0x000000);
-			legendSprite.graphics.beginFill(arrayOfColors[i]);
+			legendSprite.graphics.beginFill(arrayOfColors[counter]);
 			legendSprite.graphics.drawRect(xCor,yCor, -legendWidth, legendHeight);
 			legendSprite.graphics.endFill();
 
@@ -53,7 +58,7 @@ class Legend extends Sprite{
 			var tf = new TextField();
 			tf.mouseEnabled = false;
 			tf.selectable = false;
-			tf.text = arrayOfLabelStrings[i];
+			tf.text = arrayOfLabelStrings[counter];
 			tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
 			legendSprite.addChild(tf);
 			tf.width = (tf.textWidth*1.1) + 5;
@@ -62,13 +67,20 @@ class Legend extends Sprite{
 			tf.y = yCor-5;
 
 
-
+			trace("Drawing Legend", xCor);
 
 
 			xCor=(xCor+legendSpace)-legendWidth;
-
+			counter ++;
+			//break if the number of entries is beyond 6 
+			if(counter%6 == 0){
+				xCor = 0.0;
+				yCor = yCor +rowHeight;
+				break;
 			}
 
+			}
+		}
 			this.addChild(legendSprite);
 
 			legendSprite.x = (xWidth - legendSprite.width)/2;

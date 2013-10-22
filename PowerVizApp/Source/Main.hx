@@ -46,7 +46,9 @@ class Main extends Sprite {
 	//prepares the swipetest, we add images to the swipemill
 	public function prepareSwipeTest() {
 		
-		
+		mOnOff = new OnOffDiagram();
+		SwipeMill.add(mOnOff);
+
 		mArealScreen = new ArealScreen();
 		SwipeMill.add(mArealScreen);
 		
@@ -59,10 +61,9 @@ class Main extends Sprite {
 		mCoinScreen = new CoinScreen();
 		SwipeMill.add(mCoinScreen);
 
-		mOnOff = new OnOffDiagram();
-		SwipeMill.add(mOnOff);
+		
 
-		SwipeMill.screenPos = 6.0; //Set to the first screen.
+		SwipeMill.screenPos = 0.0; //Set to the first screen.
 	}
 	//the actual adding of the images, we get image, we get 
 	//add image to swipemill  
