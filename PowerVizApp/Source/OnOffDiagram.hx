@@ -10,6 +10,7 @@ import DataInterface;
 import flash.text.TextField;
 import FontSupply;
 import OnOffData;
+import Legend;
 /*
 
 Class that defines an on off bargraph
@@ -33,6 +34,7 @@ class OnOffDiagram extends Sprite{
 	private var mMapArray:Array<Array<Int>>;
 	private var mColorArray:Array<Int>;
 	private var mTitle : TextField;
+	private var legend:Legend;
 
 
 
@@ -47,6 +49,7 @@ class OnOffDiagram extends Sprite{
 		mNewOutletArray = new Array<Outlet>();
 		mMapArray = new Array<Array<Int>>();
 		mColorArray = new Array<Int>();
+		legend = new Legend();
 
 		mtimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00","","14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
 
@@ -120,6 +123,10 @@ class OnOffDiagram extends Sprite{
 	private function calculateandDrawCoordSystem():Void{
 
 
+		legend = legend.drawLegend(mBack.width/1.25,mBack.height/1.35,mColorArray.length,mNewRoomArray,mColorArray);
+
+		mBack.addChild(legend);
+
 		mCoordSystem.generate(mBack.width/1.25, mBack.height/1.35, "X", "Y", (mBack.width/1.25)/mtimeArray.length,(mBack.height/1.35)/mNewIDArray.length,mtimeArray,mNewIDArray,false,true);
 
 
@@ -191,7 +198,7 @@ class OnOffDiagram extends Sprite{
 	private function fetchCategoryData():Void{
 		
 		
-		var tempOutlet= DataInterface.instance.getOnOffData();//fetch the outlets
+		var tempOutlet= DataInterface.instance.getOnOffData_OLD();//fetch the outlets
 
 		
 		mMapArray=rearrangeData(tempOutlet);//rearrange the data

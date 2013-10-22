@@ -1,4 +1,5 @@
 import flash.display.Sprite;
+import flash.text.TextField;
 
 class Legend extends Sprite{
 
@@ -14,25 +15,32 @@ class Legend extends Sprite{
 	}
 
 
-	public function drawLegend(xWidth:Float, yWidth:Float, numberOfentries:Int,arrayOfLabelStrings:Array<String>,arrayOfColors:Array<Int>):Void{
+	public function drawLegend(xWidth:Float, yHeight:Float, numberOfentries:Int,arrayOfLabelStrings:Array<String>,arrayOfColors:Array<Int>):Legend{
 
 		var rowHeight = 15;
 
-		var numOfRows = numOfItems/6;
+		var numOfRows = numberOfentries/6;
 
-		
+		//calculate number of rows
 		numOfRows = Math.ceil(numOfRows);
 
 		this.height = rowHeight * numOfRows;
 
+
 		var legendSpace = xWidth/6;
+
+
+
 			var legendWidth = legendSpace/10;
 			var legendHeight = legendSpace/10;
-			var xCor = 0.0;
-			var yCor = 50.0;
+		
+
+		//x and y coordinates
+		var xCor = 0.0;
+		var yCor = 0.0;
 
 
-			var legendSprite = new Sprite();
+		var legendSprite = new Sprite();
 
 			for(i in 0...numberOfentries){
 			//handle the boxes
@@ -58,6 +66,7 @@ class Legend extends Sprite{
 
 
 			xCor=(xCor+legendSpace)-legendWidth;
+
 			}
 
 			this.addChild(legendSprite);
@@ -65,7 +74,7 @@ class Legend extends Sprite{
 			legendSprite.x = (xWidth - legendSprite.width)/2;
 
 
-			return legendHeight;
+			return this;
 
 
 	}
