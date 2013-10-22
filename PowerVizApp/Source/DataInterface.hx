@@ -187,11 +187,11 @@ class DataInterface {
 	
 	public function getOnOffData_OLD():Array<Outlet>{
 		var outletData = new Array<Outlet>();
-		var intData = [0,1,2,3,4,5,6,7,8,9];
-		var idData = ["1","2","3","4","5","6","7","8","9"];
-		var catData = ["tv","opvask","lampe","ovn","frys","køl","vaskemaskine","komfur","funky","elpisker"];
-		var wattData = [10.4,10.4,2.4,5.3,10.4,10.4,2.4,5.3,5.2,8.2];
-		var roomData=["Stue","Køkken","Toilet","Køkken","Bad","Gang","Gang","Køkken","Køkken","sm-rum"];
+		var intData = [0,1,2,3,4,5,6,7,8,9,10];
+		var idData = ["1","2","3","4","5","6","7","8","9","10"];
+		var catData = ["tv","opvask","lampe","ovn","frys","køl","vaskemaskine","komfur","funky","elpisker","Tues funky"];
+		var wattData = [10.4,10.4,2.4,5.3,10.4,10.4,2.4,5.3,5.2,8.2,1.1];
+		var roomData=["Stue","Køkken","Toilet","Køkken","Bad","Gang","Gang","Køkken","Køkken","sm-rum","pool rum"];
 
 		var onOffData = new OnOffData(Date.fromString("2013-10-21 10:15:00"),Date.fromString("2013-10-21 10:45:00"));
 		var onOffData2 = new OnOffData(Date.fromString("2013-10-21 12:15:00"),Date.fromString("2013-10-21 16:46:00"));
@@ -199,7 +199,7 @@ class DataInterface {
 		var OnOffDataArray = [onOffData,onOffData2];
 
 
-		var data = [OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray];
+		var data = [OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray];
 
 
 

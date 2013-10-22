@@ -39,7 +39,7 @@ class Legend extends Sprite{
 		var xCor = 0.0;
 		var yCor = 0.0;
 		var counter = 0;
-
+		trace("numberOfentries",numberOfentries);
 
 		var legendSprite = new Sprite();
 		for(row in 0...numOfRows){
@@ -67,18 +67,26 @@ class Legend extends Sprite{
 			tf.y = yCor-5;
 
 
-			trace("Drawing Legend", xCor);
 
 
 			xCor=(xCor+legendSpace)-legendWidth;
 			counter ++;
+
+
 			//break if the number of entries is beyond 6 
-			if(counter%6 == 0){
+			if(counter%6 == 0 || counter == numberOfentries){
 				xCor = 0.0;
-				yCor = yCor +rowHeight;
+				yCor = yCor +rowHeight+ 3.0;
 				break;
 			}
 
+			
+
+			}
+
+			if(counter == numberOfentries){
+
+				break;
 			}
 		}
 			this.addChild(legendSprite);
