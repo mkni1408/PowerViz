@@ -216,11 +216,27 @@ class DataInterface {
 		return outletData;
 
 	}
+
 	
-	public function getOnOffData():Array<Outlet> {
+	public function getUsageToday() : Map<Int, Array<{time:Date, watts:Float}>> {
+		
+		var houseId = 42;
+		var usageToday:Map<Int, Array<{time:Date, watts:Float}> > = null;
+		var done=false;
+		mCnx.Api.getOutletHistoryAllToday.call([houseId, Date.now()], function(x:Dynamic) {
+			usageToday = x;
+			done=true;
+		});
+		while(done==false)
+			Sys.sleep(0.1);
+			
+		return usageToday;
+	}
+	
+	public function getHouseDescriptor() : HouseDescriptor {
 	
 		var houseId=42;
-		var hD:HouseDescriptor;
+		var hD:HouseDescriptor = null;
 	
 		var done=false;
 		mCnx.Api.getHouseDescriptor.call([houseId], 
@@ -230,55 +246,50 @@ class DataInterface {
 		});
 		while(done==false)
 			Sys.sleep(0.1);
-	
-		trace(hD);
-		
-	
-		return new Array<Outlet>();
-	
-		/*
-		var houseId = 42; //TODO: Get this from config.
-	
-		//Get the data through mCnx.Api.getAllRoomOutlets():
-		
-		var done=false;
-		var roomOutletMap:Map<Int, Array<Int> >;
-		
-		mCnx.Api.getAllRoomOutlets.call([houseId], 
-			function(r:Dynamic) {
-				roomOutletMap = r;				
-				done = true;
-		});
-		while(done==false) 
-			Sys.sleep(0.1);
 			
+		return hD;
+	}
+	
+	
+	public function getOnOffData():Array<Outlet> {
+	
+		var houseId=42;
+		var hD:HouseDescriptor = getHouseDescriptor();
+		
+		var usageToday:Map<Int, Array<{time:Date, watts:Float}> > = getUsageToday();
+		
+		var onOffMap = new Map<Int, Array<OnOffData> >();
+		var start:Date=null;
+		var stop:Date=null;
+		for(key in usageToday.keys()) {
+			onOffMap.set(key, new Array<OnOffData>());
+			start = null;
+			stop = null;
+			for(u in usageToday.get(key)) {
+				if(u.watts>0) {
+					if(start==null)
+						start = u.time;
+					stop = u.time;
+				}
+				else {
+					if(start!=null && stop!=null)
+						onOffMap.get(key).push(new OnOffData(start, stop));
+				}
+			}
+		}	
+		
 			
-		
-		var roomNameMap:Map<Int, String>;
-		
-		done = false;
-		mCnx.Api.getRoomNameMap.call([houseId], 
-			function(s:Dynamic) {
-				roomNameMap = s;
-				done = true;
-		});
-		while(done==false)
-			Sys.sleep(0.1);
-		
-		
-		var outlets = new Array<Int>();
-		var rooms = new Array<String>();
-		
-		for(r in roomOutletMap) { 
-			for(i in r) {
-				outlets.push(i);
-				rooms.push(roomNameMap.get(r.roomId));
+		var result = new Array<Outlet>();
+		for(room in hD.getRoomArray()) {
+			for(outlet in room.getOutletsArray()) {
+				result.push(new Outlet(0, Std.string(outlet.outletId), outlet.name, 
+								onOffMap.get(outlet.outletId), room.roomName, 0,
+								outlet.outletColor, room.roomColor));
 			}
 		}
-			
 		
-		return new Array<Outlet>();
-		*/
+	
+		return result;
 	
 	}
 

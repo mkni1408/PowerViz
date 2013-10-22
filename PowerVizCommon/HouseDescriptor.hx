@@ -61,7 +61,7 @@ class RoomDescriptor {
 		return mOutlets.get(id);
 	}
 	
-	public function getAllOutlets() : Array<OutletDescriptor> {	
+	public function getOutletsArray() : Array<OutletDescriptor> {	
 		return Lambda.array(mOutlets);
 	}
 	
@@ -71,7 +71,7 @@ class RoomDescriptor {
 		str += "roomName: " + roomName + "\n";
 		str += "roomColor: " + roomColor + "\n";
 		str += "outlets: {\n";
-		for(outlet in getAllOutlets()) {
+		for(outlet in getOutletsArray()) {
 			str += Std.string(outlet) + "\n";
 		}
 		str += "}";
@@ -110,7 +110,7 @@ class HouseDescriptor {
 	public function getAllOutlets() : Array<OutletDescriptor> {
 		var result = new Array<OutletDescriptor>();
 		for(r in mRooms) {
-			result.concat(r.getAllOutlets());
+			result.concat(r.getOutletsArray());
 		}
 		return result;
 	}

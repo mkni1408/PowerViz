@@ -14,24 +14,27 @@ class Outlet{
 	private var room:String;//room id -> should be set, defaults to default
 
 	private var wattUsageToday:Float;//total watt usage today 
+	
+	public var outletColor(default,null):Int; //Color of the outlet.
+	public var roomColor(default,null):Int; //Color of the room.
 
 	//an array of on off data. odd numbers signals that a contact has been connected
 	//even numbers that it has been shut off
 	private var onOffArray:Array<OnOffData>;
 
-	public function new(_arrayID:Int,_id:String, _name:String, _onOffArray:Array<OnOffData>, _room:String,_wattUsage:Float){
+	public function new(_arrayID:Int,_id:String, _name:String, ?_onOffArray:Array<OnOffData>, 
+								?_roomName:String, ?_wattUsage:Float, ?_roomColor:Int, ?_outletColor:Int){
 		this.arrayID = _arrayID;
 		this.id=_id;
 		this.name=_name;
-		//default value
-		if(_room == ""){
-			this.room = "Default";
-		}
-		else{
-		this.room = _room;
-		}
+		//default value:
+		this.room = _roomName==null ? "Default" : _roomName;
 
-		this.onOffArray=_onOffArray;
+		this.onOffArray = _onOffArray==null ? new Array<OnOffData>() : _onOffArray;
+		this.wattUsageToday = _wattUsage==null ? 0 : _wattUsage; 
+		
+		this.outletColor = _outletColor!=null ? _outletColor :  0xFF00FF;
+		this.roomColor = _roomColor!=null ? _roomColor : 0xFF00FF;
 	}
 
 
@@ -55,6 +58,10 @@ class Outlet{
 	public function getOnOffData():Array<OnOffData>{
 
 		return onOffArray;
+	}
+	public function setOnOffData(data:Array<OnOffData>) {
+	
+		onOffArray = data;
 	}
 	public function getRoom():String{
 

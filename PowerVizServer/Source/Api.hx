@@ -110,6 +110,9 @@ class Api {
 	}
 	
 
+	public static function getOutletHistoryAllToday(houseId:Int, now:Date) : Map<Int, Array<{time:Date, watts:Float}> > {
+		return DataBaseInterface.getOutletHistoryAllToday(houseId, now);
+	}
 	
 	
 	//*********************************************
