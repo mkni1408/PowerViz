@@ -31,7 +31,7 @@ class FontSupply {
 	public function new() {
 	
 		mTitleFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 30, 0x000000);
-		mCoordAxisFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 15, 0x000000);
+		mCoordAxisFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 14, 0x000000);
 	}
 	
 	public function getTitleFormat():TextFormat {

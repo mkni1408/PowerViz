@@ -261,7 +261,7 @@ class CoordSystem extends Sprite {
 			tf.text = arrayOfLabelStrings[i];
 			tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
 			legendSprite.addChild(tf);
-			tf.width = (tf.textWidth*1.1) + 5;
+			tf.width = (tf.textWidth*1.0) + 5;
 			tf.height = tf.textHeight+3;
 			tf.x = xCor+10;
 			tf.y = yCor-5;
