@@ -222,14 +222,14 @@ class CoordSystem extends Sprite {
 		//return the time position
 		private function convertTimeHour(time:Date):Float{
 
-			trace("HOURS",time.getHours());
+			//trace("HOURS",time.getHours());
 			//- 1 because of array starting at 0
 			return getXcoordinate(time.getHours());
 
 		}
 		//returns the positionoffset 
 		private function convertTimeMinute(time:Date):Float{
-			trace("MINUTES",time.getMinutes());
+			//trace("MINUTES",time.getMinutes());
 			var minutes = time.getMinutes()/100;
 			//trace("minut:",xHeight * minutes);
 			//trace((xHeight/100) * minutes);
