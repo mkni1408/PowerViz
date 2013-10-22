@@ -131,7 +131,7 @@ class OnOffDiagram extends Sprite{
 
 		trace("mCoordSystem", mCoordSystem.height);
 		mCoordSystem.x = (mBack.width- mCoordSystem.width);
-		mCoordSystem.y = (mBack.height-75);
+		mCoordSystem.y = (mBack.height/1.35)+50;
 		legend.x =mCoordSystem.x;
 		legend.y = mCoordSystem.y + legend.height;
 
