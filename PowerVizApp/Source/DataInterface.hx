@@ -334,6 +334,56 @@ class DataInterface {
 		return value;
 	}
 	
+	public function getOutletLastWeekTotal(houseId:Int, outletId:Int) : Float {
+		/*
+			var value:Float = 0;
+			value = Std.random(201);
+			return value;
+		*/
+		
+		var value:Float = 0;
+		var s:Float = 0;
+		value = Std.random(50) + 1;
+		s = Std.random(1);
+		
+		if(s > 0 && s < 0.25) {
+			value *= 1;
+		} else if(s >= 0.25 && s < 0.50) {
+			value *= 2;
+		} else if(s >= 0.50 && s < 0.75) {
+			value *= 3;
+		} else {
+			value *= 4;
+		}
+			
+		return value;
+	}
+
+	public function getOutletLastMonthTotal(houseId:Int, outletId:Int) : Float {
+		/*
+			var value:Float = 0;
+			value = Std.random(201);
+			return value;
+		*/
+		
+		var value:Float = 0;
+		var s:Float = 0;
+		value = Std.random(50) + 1;
+		s = Std.random(1);
+		
+		if(s > 0 && s < 0.25) {
+			value *= 1;
+		} else if(s >= 0.25 && s < 0.50) {
+			value *= 2;
+		} else if(s >= 0.50 && s < 0.75) {
+			value *= 3;
+		} else {
+			value *= 4;
+		}
+			
+		return value;
+	}
+
 }
 
 

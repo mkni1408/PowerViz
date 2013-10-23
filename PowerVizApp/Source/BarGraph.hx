@@ -9,7 +9,9 @@ class BarGraph extends Sprite {
 		
 	}	
 	
-	public function drawBar(colors:Array<Int>, height:Array<Float>) {
+	public function drawBar(colors:Array<Int>, height:Array<Float> ) {
+
+		this.graphics.clear();
 	
 		//This is a hack, which draws a transparent rectangle of 1x1 pixel
 		this.graphics.beginFill(0x000000,0.0);

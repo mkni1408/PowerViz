@@ -24,7 +24,7 @@ class Time {
 	public static inline var QUARTER:Int = 4;
 	public static inline var YEAR:Int = 5;
 	
-	public static var NAMES:Array<String> = ["Dag", "Dag", "Uge", "Måned", "Kvartal", "År"];
+	public static var NAMES:Array<String> = ["Time", "Dag", "Uge", "Måned", "Kvartal", "År"];
 	public static var COLORS = [0xFF0000, 0x00FF00, 0x0000FF, 0x00FFFF, 0xFFFF00, 0x000000];
 
 }
@@ -63,12 +63,7 @@ class TimeChangeButton extends Sprite {
 			this.addChild(but);
 		}
 		//set the current button as transparent
-		for(button in mButtons){
-			if(button.mButtonID == currentButtonId){
-				button.alpha = 0;
-
-			}
-		}
+		changeButtonState(currentButtonId);
 		
 		positionElements();
 	}
@@ -89,9 +84,18 @@ class TimeChangeButton extends Sprite {
 
 		return mButton;
 	}
+	//control if the button is visible - should be grayed out
+	public function changeButtonState(newButtonID:Int){
 
-	public function changeButtonState(newButtonID:Int,oldButtonId){
+		for(button in mButtons){
 
+			if(button.mButtonID == newButtonID){
+				button.chageState(true);
+			}
+			else{
+				button.chageState(false);
+			}
+		}
 
 
 

@@ -98,11 +98,33 @@ class BarScreen extends Sprite {
 		var outlets = DataInterface.instance.getAllOutlets(houseId);
 		var colors = new Array<Int>();
 		var usageAA =  new Array<Float>();
-		for(t in outlets) {
+
+		switch(mViewMode){
+    		case 0:
+    		for(t in outlets) {
 			usageAA.push(DataInterface.instance.getOutletLastDayTotal(houseId, t));
 			colors.push(DataInterface.instance.getOutletColor(houseId, t));
 		}
+    		case 1:
+    		for(t in outlets) {
+			usageAA.push(DataInterface.instance.getOutletLastWeekTotal(houseId, t));
+			colors.push(DataInterface.instance.getOutletColor(houseId, t));
+		}
+    		case 2:
+    		for(t in outlets) {
+			usageAA.push(DataInterface.instance.getOutletLastMonthTotal(houseId, t));
+			colors.push(DataInterface.instance.getOutletColor(houseId, t));
+		}
+			default:
+			for(t in outlets) {
+			usageAA.push(DataInterface.instance.getOutletLastDayTotal(houseId, t));
+			colors.push(DataInterface.instance.getOutletColor(houseId, t));
+		}
+	}
+
 		
+		
+
 		mBarGraph.drawBar(colors, usageAA);
 		
 	}
@@ -154,10 +176,11 @@ class BarScreen extends Sprite {
 			mTitle.text = "Forbrug denne måned";
 
 		}
-
+		mTimeButton.changeButtonState(mViewMode);
 		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 
 		layout();
+		fillWithData();
 	}
 
 }
