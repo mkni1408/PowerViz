@@ -17,11 +17,16 @@ Uses the CoinGraph class for drawing the special diagram.
 
 class CoinScreen extends Sprite {
 
+	private static inline var VIEWMODE_DAY:Int = 0;
+	private static inline var VIEWMODE_WEEK:Int = 1;
+	private static inline var VIEWMODE_MONTH:Int = 2;
 	private var mBack : Sprite;
 	private var mCoinGraph : CoinGraph;
 	private var mTitle : TextField;
 	private var mTimeButton : TimeChangeButton;
 	private var mCoordSys : CoordSystem;
+	private var mViewMode:Int;
+	
 
 	public function new() {
 		super();
@@ -31,6 +36,7 @@ class CoinScreen extends Sprite {
 		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
 		mBack.graphics.endFill();
 		this.addChild(mBack);
+		mViewMode = VIEWMODE_DAY;
 		
 		mCoinGraph = new CoinGraph();
 		mBack.addChild(mCoinGraph);
@@ -51,7 +57,7 @@ class CoinScreen extends Sprite {
 		mCoordSys.mouseChildren = false;
 		mCoordSys.mouseEnabled = false;
 		
-		mTimeButton = new TimeChangeButton([Time.HOUR, Time.WEEK]); //Day, week, month.
+		mTimeButton = new TimeChangeButton([Time.HOUR, Time.WEEK],mViewMode,redrawCoordSystem); //Day, week, month.
 		mBack.addChild(mTimeButton);
 		
 		layout();
@@ -93,6 +99,11 @@ class CoinScreen extends Sprite {
 		
 		mCoinGraph.drawCoinScreen(colors, usageAA, usageAA);
 		
+	}
+
+	private function redrawCoordSystem(coordSystemType:Int):Void{
+
+		mCoordSys.graphics.clear();
 	}
 
 }

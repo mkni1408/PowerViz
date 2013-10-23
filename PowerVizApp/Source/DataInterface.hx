@@ -294,8 +294,8 @@ class DataInterface {
 		for(room in hD.getRoomArray()) {
 			for(outlet in room.getOutletsArray()) {
 				result.push(new Outlet(0, Std.string(outlet.outletId), outlet.name, 
-								onOffMap.get(outlet.outletId), room.roomName, 0,
-								outlet.outletColor, room.roomColor));
+								onOffMap.get(outlet.outletId), room.roomName, 0,room.roomColor,
+								outlet.outletColor));
 			}
 		}
 		

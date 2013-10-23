@@ -1,5 +1,8 @@
 
 import flash.display.Sprite;
+import flash.text.TextField;
+import Button;
+
 
 /*
 TimeChangeButton - component for displaying buttons that allows change in time layout on a screen.
@@ -21,7 +24,7 @@ class Time {
 	public static inline var QUARTER:Int = 4;
 	public static inline var YEAR:Int = 5;
 	
-	public static var NAMES:Array<String> = ["Time", "Dag", "Uge", "Måned", "Kvartal", "År"];
+	public static var NAMES:Array<String> = ["Dag", "Dag", "Uge", "Måned", "Kvartal", "År"];
 	public static var COLORS = [0xFF0000, 0x00FF00, 0x0000FF, 0x00FFFF, 0xFFFF00, 0x000000];
 
 }
@@ -36,23 +39,35 @@ class TimeChangeButton extends Sprite {
 	public dynamic function onChangeQuarter() {}
 	public dynamic function onChangeYear() {}
 	
-	private var mButtons : Array<Sprite>;
+	private var mButtons : Array<Button>;
+	private var currentButton :Int;
+
 
 	/*
 	Constructor. Takes an array of integers, where each integer represents a time interval as defined in the Time class.
 	Example:
 	new TimeChangeButton([Time.HOUR, Time.YEAR])	
 	*/
-	public function new(times:Array<Int>) {
+	public function new(times:Array<Int>,currentButtonId:Int, f:Int->Void) {
 		super();
-		
-		mButtons = new Array<Sprite>();
-		var but:Sprite;
+		//so we know which button is currently active
+		currentButton = currentButtonId;
+
+		mButtons = new Array<Button>();
+		var but:Button;
+
 		
 		for(t in times) {
-			but = createSingleButton(Time.NAMES[t], Time.COLORS[t]);
+			but = createSingleButton(Time.NAMES[t], Time.COLORS[t],t, f);
 			mButtons.push(but);
 			this.addChild(but);
+		}
+		//set the current button as transparent
+		for(button in mButtons){
+			if(button.mButtonID == currentButtonId){
+				button.alpha = 0;
+
+			}
 		}
 		
 		positionElements();
@@ -67,12 +82,19 @@ class TimeChangeButton extends Sprite {
 		}
 	}
 	
-	private function createSingleButton(name:String, color:Int) : Sprite {
-		var s = new Sprite();
-		s.graphics.beginFill(color);
-		s.graphics.drawRect(0,0, 50,50);
-		s.graphics.endFill();
-		return s;
+	private function createSingleButton(name:String, color:Int, time:Int ,f:Int->Void) : Button {
+		
+		trace(time);
+		 var mButton = new Button(name,color,time,f);
+
+		return mButton;
+	}
+
+	public function changeButtonState(newButtonID:Int,oldButtonId){
+
+
+
+
 	}
 
 }

@@ -34,6 +34,13 @@ class CoordSystem extends Sprite {
 	public function generate(width:Float, height:Float, xLabel:String, yLabel:String, xSpace:Float, ySpace:Float,
 							?xLabelStrings:Array<String>, ?yLabelStrings:Array<String>, ?xLabelsBetween:Bool, ?yLabelsBetween:Bool) {
 	
+		//ensure that there is no children 
+		while(this.numChildren > 0){
+
+			this.removeChildAt(0);
+		}
+
+
 		this.graphics.lineStyle(3, 0x000000);
 		this.graphics.moveTo(0,0);
 		this.graphics.lineTo(0, -height);

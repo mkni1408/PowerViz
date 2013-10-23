@@ -26,16 +26,22 @@ class FontSupply {
 	
 	private var mTitleFont : TextFormat;
 	private var mCoordAxisFont : TextFormat;
+	private var mButtonFont : TextFormat;
 	
 	
 	public function new() {
 	
 		mTitleFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 30, 0x000000);
 		mCoordAxisFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 14, 0x000000);
+		mButtonFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 10, 0x000000);
 	}
 	
 	public function getTitleFormat():TextFormat {
 		return mTitleFont;
+	}
+
+	public function getButtonFormat():TextFormat {
+		return mButtonFont;
 	}
 	
 	public function getCoordAxisLabelFormat():TextFormat {

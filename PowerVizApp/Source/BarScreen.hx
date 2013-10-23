@@ -12,6 +12,10 @@ import CoordSystem;
 
 class BarScreen extends Sprite {
 
+	private static inline var VIEWMODE_DAY:Int = 0;
+	private static inline var VIEWMODE_WEEK:Int = 1;
+	private static inline var VIEWMODE_MONTH:Int = 2;
+
 	private var mBack : Sprite;
 	private var mBarGraph : BarGraph;
 	private var mTitle : TextField;
@@ -21,14 +25,20 @@ class BarScreen extends Sprite {
 	private var mKwhArray : Array<String>;
 	private var mRoomArray : Array<String>;
 	private var mColorArray : Array <Int>;
+	//is used to determine which coordinate system type it is e.g week, day, month
+	private var mViewMode:Int;
+	private var mViewModes:Array<Int>;
 
 	public function new() {
 		super();
-				
+		
+
+		mViewMode = VIEWMODE_DAY;
 		mNewIDArray = new Array<String>();
 		mKwhArray = new Array<String>();
 		mRoomArray = new Array<String>();
 		mColorArray = new Array<Int>();
+		mViewModes = [VIEWMODE_DAY,VIEWMODE_WEEK,VIEWMODE_MONTH];
 		
 		mNewIDArray = DataInterface.instance.getAllOutletNames(1);
 		mKwhArray = ["2kWh", "4kWh", "6kWh", "8kWh", "10kWh"];
@@ -54,7 +64,7 @@ class BarScreen extends Sprite {
 		mCoordSys = new CoordSystem();
 		mBack.addChild(mCoordSys);
 		
-		mTimeButton = new TimeChangeButton([Time.HOUR, Time.WEEK]); //Day, week, month.
+		mTimeButton = new TimeChangeButton(mViewModes,mViewMode,onButtonPush); //Day, week, month.
 		mBack.addChild(mTimeButton);
 		
 		layout();
@@ -74,7 +84,7 @@ class BarScreen extends Sprite {
 		
 		
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
-		mTimeButton.y = Lib.stage.stageHeight - mTimeButton.height;
+		mTimeButton.y = 0;
 		
 		mCoordSys.generate(mBarGraph.width, mBarGraph.height, "X", "Y", mBarGraph.width/9, mBarGraph.height/5, mNewIDArray, mKwhArray, true, false);
 		mCoordSys.x = mBarGraph.x;
@@ -95,6 +105,59 @@ class BarScreen extends Sprite {
 		
 		mBarGraph.drawBar(colors, usageAA);
 		
+	}
+	//is Called when a button is pushed
+	private function onButtonPush(coordSystemType:Int):Void{
+
+		trace("Button", coordSystemType, " Clicked");
+
+
+
+		switch( coordSystemType ) {
+    		case 0:
+        	mViewMode = VIEWMODE_DAY;
+    		case 1:
+        	mViewMode = VIEWMODE_WEEK;
+        	case 2:
+        	mViewMode = VIEWMODE_MONTH;
+    		default:
+        	mViewMode = VIEWMODE_DAY;
+    	}
+
+		
+		redrawEverything();
+
+
+	}
+
+	private function redrawEverything():Void{
+
+		
+
+		
+
+		if(mViewMode == 0){
+			trace(0);
+			mKwhArray = ["2kWh", "4kWh", "6kWh", "8kWh", "10kWh"];
+			mTitle.text = "Forbrug i dag";
+
+		}
+		if(mViewMode == 1){
+			trace(1);
+			mKwhArray = ["4kWh", "8kWh", "12kWh", "16kWh", "20kWh"];
+			mTitle.text = "Forbrug denne uge";
+
+		}
+		if(mViewMode == 2){
+			trace(2);
+			mKwhArray = ["10kWh", "20kWh", "30kWh", "40kWh", "50kWh"];
+			mTitle.text = "Forbrug denne måned";
+
+		}
+
+		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
+
+		layout();
 	}
 
 }
