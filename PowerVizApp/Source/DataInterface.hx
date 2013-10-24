@@ -307,6 +307,7 @@ class DataInterface {
 			var onOffMap = new Map<Int, Array<OnOffData> >();
 			var start:Date=null;
 			var stop:Date=null;
+			trace(usageToday);
 			for(key in usageToday.keys()) {
 
 				onOffMap.set(key, new Array<OnOffData>());
@@ -316,12 +317,17 @@ class DataInterface {
 				for(u in usageToday.get(key)) {
 				
 					if(u.watts>0) {
-						if(start==null)
-							start = Date.fromTime(u.time.getTime() - (15*60*1000));
+						if(start==null) {
+							start = u.time; //Date.fromTime(u.time.getTime() - (15*60*1000));
+						}
 						stop = u.time;
 					}
 					else {	
 						if(start!=null && stop!=null) {
+							if(stop.getDate()!=start.getDate())
+								stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
+							if(stop.getTime() == start.getTime())
+								stop = DateTools.delta(start, DateTools.minutes(15));
 							onOffMap.get(key).push(new OnOffData(start, stop));
 							start = null;
 							stop = null;
@@ -331,6 +337,8 @@ class DataInterface {
 				}
 			
 				if(start!=null && stop!=null) { //End of data, so close the block if open.
+					if(stop.getDate()!=start.getDate())
+						stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
 					onOffMap.get(key).push(new OnOffData(start, stop));
 				}
 
@@ -346,7 +354,7 @@ class DataInterface {
 				}
 			}
 			
-		
+			trace(result);
 			callback(result); //Return the result in the callback.
 		});
 		

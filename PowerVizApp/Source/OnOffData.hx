@@ -11,20 +11,19 @@ class OnOffData{
 
 		mStart = start;
 		mStop = stop;
-
 	}
 
 
 	public function getStart():Date{
-
-
 		return mStart;
 	}
 
 
 	public function getStop():Date{
-
-
 		return mStop;
+	}
+	
+	public function toString() : String {	
+		return "start: " + Std.string(mStart) + " - stop: " + Std.string(mStop);
 	}
 }

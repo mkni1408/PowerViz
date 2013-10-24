@@ -69,13 +69,14 @@ class OnOffDiagram extends Sprite{
 		mTitle.selectable = false;
 		mBack.addChild(mTitle);
 
+		/*
 		mTimer = new Timer(5*1000); //Should be run every 5 minutes.		
 		mTimer.addEventListener(TimerEvent.TIMER, onTime);
 		mTimer.start();
-
+*/
 		mCoordSystem = new CoordSystem();
 		
-		//DataInterface.instance.requestOnOffData(onDataReturnedFromDataInterface);
+		DataInterface.instance.requestOnOffData(onDataReturnedFromDataInterface);
 				
 	}
 	

@@ -37,6 +37,10 @@ class Outlet{
 		this.outletColor = _outletColor!=null ? _outletColor :  0xFF00FF;
 		this.roomColor = _roomColor!=null ? _roomColor : 0xFF00FF;
 	}
+	
+	public function toString() : String {
+		return "Outlet " + id + " - onOffData: " + Std.string(onOffArray);
+	}
 
 
 	public function getArrayid():Int{
