@@ -68,21 +68,21 @@ class OnOffDiagram extends Sprite{
 
 
 		mCoordSystem = new CoordSystem();
-		//fetches room date
-		fetchCategoryData();//done
+		//fetch data  
+		fetchCategoryData();
 
 		//calculates the coordinate system size
 		
+		//Draw coordinatesystem, legend and lines
 		calculateandDrawCoordSystem();
 		calculateandDrawLines();
 
 		
-
+		//set textlabel position
 		mTitle.width = mTitle.textWidth+2;	
 		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
 		mTitle.y = 20;
-		//mBack.addChild(mMainSprite);
-
+		
 
 		var testSprite = new Sprite();
 		monOffBar = new OnOffBar();
@@ -102,9 +102,7 @@ class OnOffDiagram extends Sprite{
 
 		}
 
-		//add legend
-		//mCoordSystem.createLegend(mColorArray.length,mNewRoomArray,mColorArray);
-
+		
 
 		//add to parent sprite	
 		testSprite.addChild(mCoordSystem);
@@ -182,7 +180,7 @@ class OnOffDiagram extends Sprite{
 	}
 
 
-	//redraw the bars
+	//NOT USED YET: Should redraw the bars everytime the timer asks for data
 	private function redrawBars():Void{
 
 		//should fetch the data
@@ -205,12 +203,8 @@ class OnOffDiagram extends Sprite{
 		
 		mMapArray=rearrangeData(tempOutlet);//rearrange the data
 
-		var colorGenerator = new ColorGenerator();
 
-		
-		mColorArray = colorGenerator.generateColors(mMapArray.length);//generate colors for legend and bars
-
-		for(i in 0...mMapArray.length){
+		for(i in 0...mMapArray.length){	//add sorted data to outletarray and name array
 			
 			var tmpAr = mMapArray[i];
 			
@@ -223,12 +217,12 @@ class OnOffDiagram extends Sprite{
 			
 			
 		}
-
+		
 		
 		//set the ArrayId to match the new place in the array
 		for(i in 0...mNewOutletArray.length){
 
-			mNewOutletArray[i].setArrayID(i);
+			mNewOutletArray[i].setArrayID(i);	
 		}
 
 		
@@ -242,12 +236,12 @@ class OnOffDiagram extends Sprite{
         	}
         	
     	}
-
+    	//update map to match the new id's
     	updateMap(mNewOutletArray);
 
 
 	}
-
+	//draws bars in the coordinate system
 	private function drawOnOffData(outletData:Array<OnOffData>,id:Int,color:Int):Void{
 
 		var count = 0;
@@ -260,15 +254,12 @@ class OnOffDiagram extends Sprite{
 			mCoordSystem.drawBar(outletData[i], mCoordSystem.getYcoordinate(incId+1),mCoordSystem.getYcoordinate(incId+1),color);
 
 
-			//count=count+2;
-			//count2=count2+2;
-
 
 		}
 
 	}
 
-
+	//no point to this function except overhead - calls the draw data function
 	private function fetchOnOffData(outlet:Outlet,color:Int):Void{
 
 		
@@ -310,10 +301,10 @@ class OnOffDiagram extends Sprite{
 			else{
 				//the category was not present -> add to array
 				mNewRoomArray.push(outletArray[i].getRoom());
+				mColorArray.push(outletArray[i].roomColor);
 
 			}
 
-			//moutletArray.push(mOutletArray[i]);
 		}
 
 
@@ -355,7 +346,7 @@ class OnOffDiagram extends Sprite{
 
 
 	}
-
+	
 	private function updateMap(outletArray:Array<Outlet>):Void{
 
 		var mapArray = new Array<Array<Int>>();

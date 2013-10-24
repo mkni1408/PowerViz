@@ -282,8 +282,10 @@ class DataInterface {
 		for(room in hD.getRoomArray()) {
 			for(outlet in room.getOutletsArray()) {
 				result.push(new Outlet(0, Std.string(outlet.outletId), outlet.name, 
-								onOffMap.get(outlet.outletId), room.roomName, 0,
-								room.roomColor, outlet.outletColor));
+
+							onOffMap.get(outlet.outletId), room.roomName, 0,room.roomColor,
+							outlet.outletColor));
+
 			}
 		}
 		
@@ -403,6 +405,56 @@ class DataInterface {
 		return value;
 	}
 	
+	public function getOutletLastWeekTotal(outletId:Int) : Float {
+		/*
+			var value:Float = 0;
+			value = Std.random(201);
+			return value;
+		*/
+		
+		var value:Float = 0;
+		var s:Float = 0;
+		value = Std.random(50) + 1;
+		s = Std.random(1);
+		
+		if(s > 0 && s < 0.25) {
+			value *= 1;
+		} else if(s >= 0.25 && s < 0.50) {
+			value *= 2;
+		} else if(s >= 0.50 && s < 0.75) {
+			value *= 3;
+		} else {
+			value *= 4;
+		}
+			
+		return value;
+	}
+
+	public function getOutletLastMonthTotal(outletId:Int) : Float {
+		/*
+			var value:Float = 0;
+			value = Std.random(201);
+			return value;
+		*/
+		
+		var value:Float = 0;
+		var s:Float = 0;
+		value = Std.random(50) + 1;
+		s = Std.random(1);
+		
+		if(s > 0 && s < 0.25) {
+			value *= 1;
+		} else if(s >= 0.25 && s < 0.50) {
+			value *= 2;
+		} else if(s >= 0.50 && s < 0.75) {
+			value *= 3;
+		} else {
+			value *= 4;
+		}
+			
+		return value;
+	}
+
 }
 
 

@@ -59,7 +59,7 @@ class ArealScreen extends Sprite {
 		mBack.addChild(mTitle);
 		
 		
-		mTimeButton = new TimeChangeButton([Time.HOUR, Time.WEEK]); //Day, week, month.
+		mTimeButton = new TimeChangeButton([Time.HOUR, Time.WEEK],mViewMode,redrawCoordSystem); //Day, week, month.
 		mBack.addChild(mTimeButton);
 		
 		mCoordSys = new CoordSystem();
@@ -137,7 +137,10 @@ class ArealScreen extends Sprite {
 		fillWithData();
 	}
 	
+	private function redrawCoordSystem(coordSystemType:Int):Void{
 
+		mCoordSys.graphics.clear();
+	}
 }
 
 
