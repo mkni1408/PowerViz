@@ -261,7 +261,7 @@ class ScreenSaver extends Sprite {
 			yourbulbTimer.run = function():Void{
    			trace("BulbTimer running!!");
    				//get current load from dataInterface
-   				var f  = dataInterface.getTotalCurrentLoad(1);
+   				var f  = dataInterface.getTotalCurrentLoad();
    				//var f  = Math.random();
 
    				trace(f);
@@ -290,7 +290,7 @@ class ScreenSaver extends Sprite {
 			yourbulbTimer.run = function():Void{
    			trace("BulbTimer running!!");
    				//get current load from dataInterface
-   				var f  = dataInterface.getTotalCurrentLoad(1);
+   				var f  = dataInterface.getTotalCurrentLoad();
 
    				//var f  = Math.random();
 

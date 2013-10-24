@@ -68,6 +68,7 @@ class CoordSystem extends Sprite {
 			labelIndex+=1;
 		}
 		
+		
 		var numLinesX:Int = Std.int(width/xSpace);
 		xWidth = width;
 		xHeight = xSpace;
@@ -78,9 +79,10 @@ class CoordSystem extends Sprite {
 			x += xSpace;
 			this.graphics.moveTo(x, -5);
 			this.graphics.lineTo(x, 5);
-			
+		
 			if(xLabelStrings!=null) {
 				labelText = (xLabelStrings.length<=labelIndex ? "" : xLabelStrings[labelIndex]);
+		
 				if(labelText!="")
 					addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false);
 					//add the xcoordinate
@@ -89,27 +91,29 @@ class CoordSystem extends Sprite {
 			
 			labelIndex += 1;
 		}
+		
 	
 	}
 	
 	private function addTextField(x:Float, y:Float, text:String, vertical:Bool) {
 		
 		var tf = new TextField();
+		var txt = haxe.Utf8.encode(text); //Encode into utf8, since that is the only format that the textFormat accepts in C++.
 		tf.mouseEnabled = false;
 		tf.selectable = false;
-		//maximizing input to 5 chars
-		if(text.length <= 7){
-		tf.text = text;
+		//maximizing input to 7 chars
+		if(txt.length <= 7){
+		tf.text = txt;
 		}
-		else{
-
-			tf.text = text.substr(0,7);
+		else{	
+			tf.text = txt.substr(0,7);
 		}
+		
 		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
+
 		this.addChild(tf);
 		tf.width = (tf.textWidth*1.1) + 5;
 		tf.height = (tf.textHeight * 1.1) + 5;
-		
 		if(vertical) {
 			tf.x = x - (tf.width + 3);
 			tf.y = y - (tf.height/2);
@@ -124,7 +128,6 @@ class CoordSystem extends Sprite {
 
 		xCoordinates.push(x);
 		//trace("pushing x coordinate",x);
-
 	} 
 
 	public function getXcoordinate(x:Int):Float{
@@ -206,16 +209,13 @@ class CoordSystem extends Sprite {
 
 			var half = (yPoint - yPointbef)/2;
 
-			
-				addTextField(xWidth+100, yPointbef+half, roomLabel, true);
-			
-
+			addTextField(xWidth+100, yPointbef+half, roomLabel, true);
 
 		}
 
 		private function convertTime(time:Date):Float{
 			//trace("...........");
-			trace(convertTimeHour(time)+convertTimeMinute(time));
+			//trace(convertTimeHour(time)+convertTimeMinute(time));
 			return (convertTimeHour(time)+convertTimeMinute(time));
 
 		}

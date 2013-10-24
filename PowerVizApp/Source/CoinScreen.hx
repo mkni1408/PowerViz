@@ -82,13 +82,12 @@ class CoinScreen extends Sprite {
 	/*Gets data through DataInterface, then creates the diagram.*/
 	private function fillWithData() {
 	
-		var houseId:Int = 0; //TODO: Change this to the real HouseID:
-		var outlets = DataInterface.instance.getAllOutlets(houseId);
+		var outlets = DataInterface.instance.getAllOutlets();
 		var colors = new Array<Int>();
 		var usageAA =  new Array<Float>();
 		for(t in outlets) {
-			usageAA.push(DataInterface.instance.getOutletLastDayTotal(houseId, t));
-			colors.push(DataInterface.instance.getOutletColor(houseId, t));
+			usageAA.push(DataInterface.instance.getOutletLastDayTotal(t));
+			colors.push(DataInterface.instance.getOutletColor(t));
 		}
 		
 		mCoinGraph.drawCoinScreen(colors, usageAA, usageAA);

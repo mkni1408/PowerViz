@@ -24,13 +24,15 @@ class BarScreen extends Sprite {
 
 	public function new() {
 		super();
+		
+		trace("--");
 				
 		mNewIDArray = new Array<String>();
 		mKwhArray = new Array<String>();
 		mRoomArray = new Array<String>();
 		mColorArray = new Array<Int>();
 		
-		mNewIDArray = DataInterface.instance.getAllOutletNames(1);
+		mNewIDArray = DataInterface.instance.getAllOutletNames();
 		mKwhArray = ["2kWh", "4kWh", "6kWh", "8kWh", "10kWh"];
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF);
@@ -57,7 +59,11 @@ class BarScreen extends Sprite {
 		mTimeButton = new TimeChangeButton([Time.HOUR, Time.WEEK]); //Day, week, month.
 		mBack.addChild(mTimeButton);
 		
+		trace("--");
+		
 		layout();
+		
+		trace("--");
 	}
 	
 	private function layout() {
@@ -72,25 +78,28 @@ class BarScreen extends Sprite {
 		mBarGraph.x = (Lib.stage.stageWidth - mBarGraph.width) / 2;
 		mBarGraph.y = Lib.stage.stageHeight - ((Lib.stage.stageHeight - mBarGraph.height)/2);	
 		
+		trace("--");
 		
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
 		mTimeButton.y = Lib.stage.stageHeight - mTimeButton.height;
+	
+		trace("--");
 		
 		mCoordSys.generate(mBarGraph.width, mBarGraph.height, "X", "Y", mBarGraph.width/9, mBarGraph.height/5, mNewIDArray, mKwhArray, true, false);
 		mCoordSys.x = mBarGraph.x;
 		mCoordSys.y = mBarGraph.y;
+		trace("--");
 		//mCoordSys.createLegend(mNewIDArray.length, mNewIDArray, [0x005B96, 0x6497B1, 0xB1DAFB, 0x741d0d, 0xc72a00, 0xff7f24, 0x669900, 0x7acf00, 0xc5e26d]);
 	}
 	
 	private function fillWithData() {
 	
-		var houseId:Int = 0; //TODO: Change this to the real HouseID:
-		var outlets = DataInterface.instance.getAllOutlets(houseId);
+		var outlets = DataInterface.instance.getAllOutlets();
 		var colors = new Array<Int>();
 		var usageAA =  new Array<Float>();
 		for(t in outlets) {
-			usageAA.push(DataInterface.instance.getOutletLastDayTotal(houseId, t));
-			colors.push(DataInterface.instance.getOutletColor(houseId, t));
+			usageAA.push(DataInterface.instance.getOutletLastDayTotal(t));
+			colors.push(DataInterface.instance.getOutletColor(t));
 		}
 		
 		mBarGraph.drawBar(colors, usageAA);

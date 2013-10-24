@@ -96,23 +96,45 @@ class ArealScreen extends Sprite {
 	/*Gets data through DataInterface, then creates the diagram.*/
 	private function fillWithData() {
 	
-		var houseId:Int = 0; //TODO: Change this to the real HouseID:
-		var outlets = DataInterface.instance.getAllOutlets(houseId);
+		DataInterface.instance.requestArealDataToday(onDataReceivedDay);
+		return;
+		
+		var outlets = DataInterface.instance.getAllOutlets();
 		var colors = new Array<Int>();
 		var usageAA =  new Array< Array<Float> >();
 		for(t in outlets) {
-			usageAA.push(DataInterface.instance.getOutletLastDayUsage(houseId, t));
-			colors.push(DataInterface.instance.getOutletColor(houseId, t));
+			usageAA.push(DataInterface.instance.getOutletLastDayUsage(t));
+			colors.push(DataInterface.instance.getOutletColor(t));
 		}
-		
 		mDiagram.generate(usageAA, colors, 100,100);
 		
 	}	
 	
+	private function onDataReceivedDay(outletIds:Array<Int>, usage:Map<Int, Array<Float>>, colors:Map<Int, Int>) : Void {
+		
+		var _usage = new Array< Array<Float> >();
+		var _colors = new Array<Int>();
+		var _ta:Array<Float>;
+		
+		for(id in outletIds) {
+			_ta = usage.get(id);
+			while(_ta.length<96)
+				_ta.push(0);
+			if(_ta.length>96)
+				_ta = _ta.slice(0,96);
+				
+			_usage.push(_ta);
+			
+			_colors.push(colors.get(id));
+		}
+		
+		mDiagram.generate(_usage, _colors, 100,100);
+		
+	}
+	
 	/**Some test function.**/
 	private function testGenerate() { 
 		fillWithData();
-	
 	}
 	
 

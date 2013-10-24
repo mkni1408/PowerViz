@@ -21,9 +21,9 @@ class Api {
 		DataBaseInterface.connect();		
 	}
 	
-	//General purpose function to get the current timestamp on the server.
-	public function getTimestamp() : Float {
-		return Date.now().getTime();
+	//General purpose function to get the current suerver time.
+	public function getTime() : Date {
+		return Date.now();
 	}
 	
 	////////////////////////////////////////////////////////
@@ -86,8 +86,15 @@ class Api {
 	/**Returns the current usage on all outlets for the specified house.
 	Returns an array of anonymous structures, with loads of all outlets.
 	**/
-	public function getCurrentLoad(houseId:Int) : Array<{outletId:Int, load:Float}> {
+	public function getCurrentLoadAll(houseId:Int) : Map<Int, Float> {
 		return DataBaseInterface.getCurrentLoadAll(houseId);
+	}
+	
+	/**
+	Returns the current usage on a single outlet in the specified house.
+	**/
+	public function getCurrentLoad(houseId:Int, outletId:Int) : Float {
+		return DataBaseInterface.getCurrentLoad(houseId, outletId);
 	}
 	
 	/**

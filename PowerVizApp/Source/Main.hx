@@ -61,8 +61,6 @@ class Main extends Sprite {
 		mCoinScreen = new CoinScreen();
 		SwipeMill.add(mCoinScreen);
 
-		
-
 		SwipeMill.screenPos = 0.0; //Set to the first screen.
 	}
 	//the actual adding of the images, we get image, we get 
