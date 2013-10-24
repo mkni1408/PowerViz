@@ -345,6 +345,7 @@ class DataInterface {
 									room.roomColor, outlet.outletColor));
 				}
 			}
+			
 		
 			callback(result); //Return the result in the callback.
 		});
