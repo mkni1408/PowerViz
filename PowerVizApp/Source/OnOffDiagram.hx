@@ -38,7 +38,7 @@ class OnOffDiagram extends Sprite{
 	private var mMapArray:Array<Array<Int>>;
 	private var mColorArray:Array<Int>;
 	private var mTitle : TextField;
-	private var legend:Legend;
+	private var mLegend:Legend;
 
 	private var mTimer:Timer;
 
@@ -53,7 +53,7 @@ class OnOffDiagram extends Sprite{
 		mNewOutletArray = new Array<Outlet>();
 		mMapArray = new Array<Array<Int>>();
 		mColorArray = new Array<Int>();
-		legend = new Legend();
+		mLegend = new Legend();
 
 		mtimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00","","14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
 
@@ -69,7 +69,7 @@ class OnOffDiagram extends Sprite{
 		mTitle.selectable = false;
 		mBack.addChild(mTitle);
 
-		mTimer = new Timer(10*1000); //Should be run every 5 minutes.		
+		mTimer = new Timer(5*1000); //Should be run every 5 minutes.		
 		mTimer.addEventListener(TimerEvent.TIMER, onTime);
 		mTimer.start();
 
@@ -100,6 +100,9 @@ class OnOffDiagram extends Sprite{
 		//NOT necessary, as its called from the callback. //fetchCategoryData();
 
 		//calculates the coordinate system size
+		
+		while(mBack.numChildren > 0)
+			mBack.removeChildAt(0);
 		
 		//Draw coordinatesystem, legend and lines
 		calculateandDrawCoordSystem();
@@ -139,16 +142,20 @@ class OnOffDiagram extends Sprite{
 	//should Calculate how large the diagram should be
 	private function calculateandDrawCoordSystem():Void{
 		
-		legend = legend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mNewRoomArray,mColorArray);
+		//legend = legend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mNewRoomArray,mColorArray);
+		mLegend = new Legend();
+		mLegend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mNewRoomArray,mColorArray);
 
-		mBack.addChild(legend);
+		mBack.addChild(mLegend);
 
-		mCoordSystem.generate(mBack.width/1.25, (mBack.height/1.25)-legend.height, "X", "Y", (mBack.width/1.25)/mtimeArray.length,((mBack.height/1.25)-legend.height)/mNewIDArray.length,mtimeArray,mNewIDArray,false,true);
+		mCoordSystem.generate(mBack.width/1.25, (mBack.height/1.25)-mLegend.height, "X", "Y", 
+								(mBack.width/1.25)/mtimeArray.length,((mBack.height/1.25)-mLegend.height)/mNewIDArray.length,
+								mtimeArray,mNewIDArray,false,true);
 
 		mCoordSystem.x = (mBack.width- mCoordSystem.width);
 		mCoordSystem.y = (mBack.height/1.25)+50;
-		legend.x =mCoordSystem.x;
-		legend.y = mCoordSystem.y + legend.height;
+		mLegend.x =mCoordSystem.x;
+		mLegend.y = mCoordSystem.y + mLegend.height;
 		
 	}
 	
@@ -165,25 +172,14 @@ class OnOffDiagram extends Sprite{
 
 		for(i in 0...mMapArray.length){
 
-			
 			var tmpMap = mMapArray[i];
 			var arrayTail = tmpMap.length;
 			counter=(counter+mMapArray[i].length);
 			
 			mCoordSystem.generateSeperatorLines(counter,counterArray[beforeCounter],mNewRoomArray[i]);
 			
-			if(counterArray.length == 1){
-				//mCoordSystem.generateSeperatorTextFields(counter,counterArray[beforeCounter],mNewRoomArray[i]);
-				counterArray.push(counter);
-				beforeCounter ++;
-			}
-			else{
-
-				//mCoordSystem.generateSeperatorTextFields(counter,counterArray[beforeCounter],mNewRoomArray[i]);
-				counterArray.push(counter);
-				beforeCounter ++;
-				
-			}
+			counterArray.push(counter);
+			beforeCounter += 1;
 			
 		}
 
@@ -206,7 +202,14 @@ class OnOffDiagram extends Sprite{
 	//(should be called in init so that we can calculate size of graph)
 	//shoukld be called room
 	private function handleCategoryData(data:Array<Outlet>):Void{
-		
+	
+		mNewIDArray = new Array<String>();
+		mNewRoomArray = new Array<String>();
+		mNewDataArray = new Array<Float>();
+		mNewOutletArray = new Array<Outlet>();
+		mColorArray = new Array<Int>();
+
+		mMapArray = new Array<Array<Int>>();
 		
 		var tempOutlet = data; //DataInterface.instance.getOnOffData();//fetch the outlets
 
