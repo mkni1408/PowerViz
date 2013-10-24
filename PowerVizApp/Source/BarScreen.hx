@@ -70,7 +70,6 @@ class BarScreen extends Sprite {
 		fillWithData();
 
 		this.addChild(mBack);
-		
 	}
 	
 	private function layout() {
@@ -93,7 +92,7 @@ class BarScreen extends Sprite {
 		mCoordSys.x = (Lib.stage.stageWidth- mCoordSys.width);
 		mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
 
-	
+
 		//mCoordSys.createLegend(mNewIDArray.length, mNewIDArray, [0x005B96, 0x6497B1, 0xB1DAFB, 0x741d0d, 0xc72a00, 0xff7f24, 0x669900, 0x7acf00, 0xc5e26d]);
 	}
 	
@@ -131,7 +130,11 @@ class BarScreen extends Sprite {
 
 		mCoordSys.drawVerticalBar(colors, usageAA);
 		
+	
+
 	}
+		
+
 	//is Called when a button is pushed
 	private function onButtonPush(coordSystemType:Int):Void{
 
