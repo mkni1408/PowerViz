@@ -2,6 +2,7 @@
 import haxe.remoting.HttpAsyncConnection;
 
 import DateUtil;
+import Harvester;
 
 /**
 The OutletBuffer.
@@ -23,7 +24,7 @@ class OutletBuffer {
 	public function new(houseId:Int, outletId:Int, cnx:HttpAsyncConnection, interval:Int) {
 		mWattAccum = 0;
 		mTimeAccum = 0;
-		mLastUpdate = Date.now();
+		mLastUpdate = Harvester.instance.getServerTime();
 		mHouseId = houseId;
 		mOutletId = outletId;
 		mCnx = cnx;
@@ -54,3 +55,5 @@ class OutletBuffer {
 	}
 
 }
+
+

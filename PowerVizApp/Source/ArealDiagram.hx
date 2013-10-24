@@ -3,7 +3,7 @@ import flash.display.Sprite;
 
 class ArealDiagram extends Sprite {
 
-	private var mMaxValue : Float;
+	public var maxValue(default,null) : Float;
 
 	public function new() {
 		super();
@@ -19,6 +19,9 @@ class ArealDiagram extends Sprite {
 	
 		if(values.length<1 || values[0].length<1)
 			return;
+			
+		//Clear before drawing:
+		this.graphics.clear();
 	
 		var bottoms = new Array<Float>(); //Bottom values of the previous row.
 		
@@ -37,7 +40,7 @@ class ArealDiagram extends Sprite {
 			i += 1;
 		}
 		
-		mMaxValue = highestAccumValue(values);
+		maxValue = highestAccumValue(values);
 		
 	}
 	

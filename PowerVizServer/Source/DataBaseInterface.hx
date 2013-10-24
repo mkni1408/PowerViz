@@ -211,11 +211,11 @@ class DataBaseInterface {
 	
 	
 	//Returns the current load on all outlets in the house.
-	public static function getCurrentLoadAll(houseId:Int) : Array<{outletId:Int, load:Float}> {
+	public static function getCurrentLoadAll(houseId:Int) : Map<Int, Float> {
 		
-		var r = new Array<{outletId:Int, load:Float}>();
-		for(cl in LoadHistory.manager.search($houseId == houseId)) {
-			r.push({outletId:cl.outletId, load:cl.load});
+		var r = new Map<Int, Float>();
+		for(cl in CurrentLoad.manager.search($houseId == houseId)) {
+			r.set(cl.outletId, cl.load);
 		}
 		return r;
 	}
@@ -241,18 +241,11 @@ class DataBaseInterface {
 	}
 	
 	
-	public static function getOutletHistoryAll(houseId:Int, from:Date, to:Date) : Map<Int, Array<{time:Date, load:Float}> > {
-		return null;
-	}
+	public static function getOutletHistoryAll(houseId:Int, from:Date, to:Date) : Map<Int, Array<{time:Date, watts:Float}> > {
 	
-	//Returns the usage data of all outlets today.
-	public static function getOutletHistoryAllToday(houseId:Int, now:Date) : Map<Int, Array<{time:Date, watts:Float}> > {
-		
 		var result = new Map<Int, Array<{time:Date, watts:Float}> >();
-		
-		var from:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0);
-		var to:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate(),23,59,59);
-		var qr = LoadHistory.manager.search($houseId == houseId && $time>from && $time<to, {orderBy : time});
+
+		var qr = LoadHistory.manager.search($houseId == houseId && $time>=from && $time<=to, {orderBy : time});
 		for(oh in qr) {
 			if(result.exists(oh.outletId)==false) {
 				result.set(oh.outletId, new Array<{time:Date, watts:Float}>());
@@ -261,6 +254,14 @@ class DataBaseInterface {
 			
 		}
 		return result;
+	}
+	
+	//Returns the usage data of all outlets today.
+	public static function getOutletHistoryAllToday(houseId:Int, now:Date) : Map<Int, Array<{time:Date, watts:Float}> > {
+		
+		var from:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0);
+		var to:Date = Date.fromTime(from.getTime() + 24*60*60*1000); 
+		return getOutletHistoryAll(houseId, from, to);
 	}
 	
 	

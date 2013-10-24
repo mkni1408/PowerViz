@@ -29,75 +29,65 @@ class Legend extends Sprite{
 
 		var legendSpace = xWidth/6;
 
-
-
-			var legendWidth = legendSpace/10;
-			var legendHeight = legendSpace/10;
+		var legendWidth = legendSpace/10;
+		var legendHeight = legendSpace/10;
 		
 
 		//x and y coordinates
 		var xCor = 0.0;
 		var yCor = 0.0;
 		var counter = 0;
-		trace("numberOfentries",numberOfentries);
 
 		var legendSprite = new Sprite();
 		for(row in 0...numOfRows){
 
-
-
 			for(i in 0...numberOfentries){
-			//handle the boxes
+				//handle the boxes
 
-			legendSprite.graphics.lineStyle(1, 0x000000);
-			legendSprite.graphics.beginFill(arrayOfColors[counter]);
-			legendSprite.graphics.drawRect(xCor,yCor, -legendWidth, legendHeight);
-			legendSprite.graphics.endFill();
+				legendSprite.graphics.lineStyle(1, 0x000000);
+				legendSprite.graphics.beginFill(arrayOfColors[counter]);
+				legendSprite.graphics.drawRect(xCor,yCor, -legendWidth, legendHeight);
+				legendSprite.graphics.endFill();
 
-			//add the textfield
-			var tf = new TextField();
-			tf.mouseEnabled = false;
-			tf.selectable = false;
-			tf.text = arrayOfLabelStrings[counter];
-			tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
-			legendSprite.addChild(tf);
-			tf.width = (tf.textWidth*1.1) + 5;
-			tf.height = tf.textHeight+3;
-			tf.x = xCor+10;
-			tf.y = yCor-5;
+				//add the textfield
+				var tf = new TextField();
+				tf.mouseEnabled = false;
+				tf.selectable = false;
+				tf.text = haxe.Utf8.encode(arrayOfLabelStrings[counter]);
+				trace(tf.text);
+				tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
+				legendSprite.addChild(tf);
+				tf.width = (tf.textWidth*1.1) + 5;
+				tf.height = tf.textHeight+3;
+				tf.x = xCor+10;
+				tf.y = yCor-5;
 
+				xCor=(xCor+legendSpace)-legendWidth;
+				counter ++;
 
-
-
-			xCor=(xCor+legendSpace)-legendWidth;
-			counter ++;
-
-
-			//break if the number of entries is beyond 6 
-			if(counter%6 == 0 || counter == numberOfentries){
-				xCor = 0.0;
-				yCor = yCor +rowHeight+ 3.0;
-				break;
-			}
-
-			
+				//break if the number of entries is beyond 6 
+				if(counter%6 == 0 || counter == numberOfentries){
+					xCor = 0.0;
+					yCor = yCor +rowHeight+ 3.0;
+					break;
+				}
 
 			}
 
 			if(counter == numberOfentries){
-
 				break;
 			}
 		}
-			this.addChild(legendSprite);
 
-			legendSprite.x = (xWidth - legendSprite.width)/2;
+		this.addChild(legendSprite);
 
+		legendSprite.x = (xWidth - legendSprite.width)/2;
 
-			return this;
-
+		return this;
 
 	}
+	
+	
 
 	public function getHeight():Float{
 

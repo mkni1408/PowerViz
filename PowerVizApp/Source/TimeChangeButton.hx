@@ -79,7 +79,7 @@ class TimeChangeButton extends Sprite {
 	
 	private function createSingleButton(name:String, color:Int, time:Int ,f:Int->Void) : Button {
 		
-		trace(time);
+		//trace(time);
 		 var mButton = new Button(name,color,time,f);
 
 		return mButton;

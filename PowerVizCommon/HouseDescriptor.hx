@@ -110,9 +110,19 @@ class HouseDescriptor {
 	public function getAllOutlets() : Array<OutletDescriptor> {
 		var result = new Array<OutletDescriptor>();
 		for(r in mRooms) {
-			result.concat(r.getOutletsArray());
+			result = result.concat(r.getOutletsArray());
 		}
 		return result;
+	}
+	
+	public function getOutlet(id:Int) : OutletDescriptor {
+		var outlet:OutletDescriptor;
+		for(r in mRooms) {
+			outlet = r.getOutlet(id);
+			if(outlet!=null)
+				return outlet;
+		}
+		return null;
 	}
 	
 	public function toString():String {

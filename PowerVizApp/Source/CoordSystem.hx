@@ -17,11 +17,14 @@ class CoordSystem extends Sprite {
 	private var yHeight : Float;
 	private var xHeight : Float;
 	private var xWidth : Float;
+	private var VerticalBars: Sprite;
 
 	public function new() {
 		super();
 		xCoordinates = new Array<Float>();
 		yCoordinates = new Array<Float>();
+		VerticalBars = new Sprite();
+		this.addChild(VerticalBars);
 	}
 	
 	/**
@@ -34,6 +37,7 @@ class CoordSystem extends Sprite {
 	public function generate(width:Float, height:Float, xLabel:String, yLabel:String, xSpace:Float, ySpace:Float,
 							?xLabelStrings:Array<String>, ?yLabelStrings:Array<String>, ?xLabelsBetween:Bool, ?yLabelsBetween:Bool) {
 	
+		this.graphics.clear();
 		//ensure that there is no children 
 		while(this.numChildren > 0){
 
@@ -75,6 +79,7 @@ class CoordSystem extends Sprite {
 			labelIndex+=1;
 		}
 		
+		
 		var numLinesX:Int = Std.int(width/xSpace);
 		xWidth = width;
 		xHeight = xSpace;
@@ -85,9 +90,10 @@ class CoordSystem extends Sprite {
 			x += xSpace;
 			this.graphics.moveTo(x, -5);
 			this.graphics.lineTo(x, 5);
-			
+		
 			if(xLabelStrings!=null) {
 				labelText = (xLabelStrings.length<=labelIndex ? "" : xLabelStrings[labelIndex]);
+		
 				if(labelText!="")
 					addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false);
 					//add the xcoordinate
@@ -96,27 +102,29 @@ class CoordSystem extends Sprite {
 			
 			labelIndex += 1;
 		}
+		
 	
 	}
 	
 	private function addTextField(x:Float, y:Float, text:String, vertical:Bool) {
 		
 		var tf = new TextField();
+		var txt = haxe.Utf8.encode(text); //Encode into utf8, since that is the only format that the textFormat accepts in C++.
 		tf.mouseEnabled = false;
 		tf.selectable = false;
-		//maximizing input to 5 chars
-		if(text.length <= 7){
-		tf.text = text;
+		//maximizing input to 7 chars
+		if(txt.length <= 7){
+		tf.text = txt;
 		}
-		else{
-
-			tf.text = text.substr(0,7);
+		else{	
+			tf.text = txt.substr(0,7);
 		}
+		
 		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
+
 		this.addChild(tf);
 		tf.width = (tf.textWidth*1.1) + 5;
 		tf.height = (tf.textHeight * 1.1) + 5;
-		
 		if(vertical) {
 			tf.x = x - (tf.width + 3);
 			tf.y = y - (tf.height/2);
@@ -131,7 +139,6 @@ class CoordSystem extends Sprite {
 
 		xCoordinates.push(x);
 		//trace("pushing x coordinate",x);
-
 	} 
 
 	public function getXcoordinate(x:Int):Float{
@@ -213,16 +220,13 @@ class CoordSystem extends Sprite {
 
 			var half = (yPoint - yPointbef)/2;
 
-			
-				addTextField(xWidth+100, yPointbef+half, roomLabel, true);
-			
-
+			addTextField(xWidth+100, yPointbef+half, roomLabel, true);
 
 		}
 
 		private function convertTime(time:Date):Float{
 			//trace("...........");
-			trace(convertTimeHour(time)+convertTimeMinute(time));
+			//trace(convertTimeHour(time)+convertTimeMinute(time));
 			return (convertTimeHour(time)+convertTimeMinute(time));
 
 		}
@@ -286,5 +290,32 @@ class CoordSystem extends Sprite {
 
 
 		}
+
+		public function drawVerticalBar(colors:Array<Int>, height:Array<Float> ) {
+
+		//HorizontalBars.graphics.clear();
+		//This is a hack, which draws a transparent rectangle of 1x1 pixel
+		//this.graphics.beginFill(0xFFFFFF);
+		//this.graphics.drawRect(0,0, this.width, this.height);
+		//this.graphics.endFill();
+		
+		//barWidth is used to ensure that every bar has the same width.
+		var barWidth:Float = xHeight;
+		
+		
+		
+		var i:Int = 0;
+		for(i in 0...height.length) {
+			// For every c in colors a rectangle will be drawn and colored.
+			this.graphics.lineStyle(1, 0x000000);
+			this.graphics.beginFill(colors[i]);
+			this.graphics.drawRect(xCoordinates[i]+((barWidth/2)-((barWidth*0.90)/2)), 0, barWidth*0.90, -height[i]);			
+			this.graphics.endFill();
+			
+			//Increment with barWidth and not barWidth*0.90 (as in drawRect()) is to make a space between each bar.
+			
+		}
+
+	}
 
 }

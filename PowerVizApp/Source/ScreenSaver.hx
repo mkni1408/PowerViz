@@ -232,10 +232,10 @@ class ScreenSaver extends Sprite {
 			yourScreensaverTimerTimer= new haxe.Timer(screenSaverTimerAction);
 
 			yourScreensaverTimerTimer.run = function():Void{
-   			trace("Screen saver Timer running!!");
+   			//trace("Screen saver Timer running!!");
    				
-   				trace(mIsTransparant);
-   				trace(mHasRecievedTouchEvent);
+   				//trace(mIsTransparant);
+   				//trace(mHasRecievedTouchEvent);
    				setScreenSaver();
 
 			};
@@ -259,12 +259,12 @@ class ScreenSaver extends Sprite {
 		yourbulbTimer= new haxe.Timer(bulbTimerAction);
 
 			yourbulbTimer.run = function():Void{
-   			trace("BulbTimer running!!");
+   			//trace("BulbTimer running!!");
    				//get current load from dataInterface
-   				var f  = dataInterface.getTotalCurrentLoad(1);
+   				var f  = dataInterface.getTotalCurrentLoad();
    				//var f  = Math.random();
 
-   				trace(f);
+   				//trace(f);
 
    				calculatBulbStates(f);
 			};
@@ -273,7 +273,7 @@ class ScreenSaver extends Sprite {
 			yourBulbFaderTimer= new haxe.Timer(yourBulbFaderTimerAction);
 
 			yourBulbFaderTimer.run = function():Void{
-   			trace("Screen saver Timer running!!");
+   			//trace("Screen saver Timer running!!");
    				
    				fadeBulbsWhenInactive();
    				
@@ -290,11 +290,11 @@ class ScreenSaver extends Sprite {
 			yourbulbTimer.run = function():Void{
    			trace("BulbTimer running!!");
    				//get current load from dataInterface
-   				var f  = dataInterface.getTotalCurrentLoad(1);
+   				var f  = dataInterface.getTotalCurrentLoad();
 
    				//var f  = Math.random();
 
-   				trace(f);
+   				//trace(f);
 
    				calculatBulbStates(f);
 			};
@@ -305,8 +305,8 @@ class ScreenSaver extends Sprite {
 			yourScreensaverTimerTimer.run = function():Void{
    			trace("Screen saver Timer running!!");
    				
-   				trace(mIsTransparant);
-   				trace(mHasRecievedTouchEvent);
+   				//trace(mIsTransparant);
+   				//trace(mHasRecievedTouchEvent);
    				setScreenSaver();
    				
 			};
@@ -314,7 +314,7 @@ class ScreenSaver extends Sprite {
 			yourBulbFaderTimer= new haxe.Timer(yourBulbFaderTimerAction);
 
 			yourBulbFaderTimer.run = function():Void{
-   			trace("Screen saver Timer running!!");
+   			//trace("Screen saver Timer running!!");
    				
    				fadeBulbsWhenInactive();
    				

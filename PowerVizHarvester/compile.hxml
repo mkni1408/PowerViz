@@ -2,6 +2,6 @@
 -java Harvester
 -cp ../PowerVizCommon
 #-cmd java -jar Harvester/Harvester.jar
--cmd scp Harvester/Harvester.jar pi@172.25.26.233:Harvester.jar
+-cmd scp Harvester/Harvester.jar pi@172.25.26.39:Harvester.jar
 
 

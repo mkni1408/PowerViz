@@ -11,11 +11,18 @@ class Harvester {
 
 	public static function main() {
 		Sys.println("Harvester is running!");
-		var inst = new Harvester();
-		inst.runMain();
+		Harvester.instance.runMain();
 	}
 	
 	//----------------------------------
+	
+	public static var instance(get,null) : Harvester = null;
+	static function get_instance() : Harvester {
+		if(instance==null)
+			instance = new Harvester();
+		return instance;
+	}
+	
 	
 	private var mConfig:Configuration;
 	
@@ -57,7 +64,7 @@ class Harvester {
 			for(outlet in layoutData) {
 				load = getOutletWNow(outlet.outletId);
 				sendLoad(Std.parseInt(outlet.outletId), load);
-				mBuffers.get(outlet.outletId).update(Date.now(), load);
+				mBuffers.get(outlet.outletId).update(getServerTime(), load);
 			}
 			
 		}
@@ -96,7 +103,21 @@ class Harvester {
 		var str = Std.string(pi.fileName) + " - " + Std.string(pi.lineNumber) +": " + msg;
 		Sys.println(str);
 		var f = function(v:Dynamic) {};
-		mRemote.Api.logBox.call([mConfig.houseId, Date.now(), str]);
+		mRemote.Api.logBox.call([mConfig.houseId, getServerTime(), str]);
+	}
+	
+	//Gets and returns the current time on the server.
+	public function getServerTime() : Date {
+		var time:Date=null;
+		var done=false;
+		mRemote.Api.getTime.call([], function(d:Dynamic) {
+			time = d;
+			done = true;
+		});
+		while(done==false)
+			Sys.sleep(0.05);
+			
+		return time;
 	}
 
 
