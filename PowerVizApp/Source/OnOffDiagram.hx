@@ -1,8 +1,11 @@
 package;
 
 import flash.display.Sprite;
-import CoordSystem;
+import flash.utils.Timer;
 import flash.Lib;
+import flash.events.TimerEvent;
+
+import CoordSystem;
 import OnOffBar;
 import Outlet;
 import ColorGenerator;
@@ -11,6 +14,7 @@ import flash.text.TextField;
 import FontSupply;
 import OnOffData;
 import Legend;
+
 /*
 
 Class that defines an on off bargraph
@@ -36,7 +40,7 @@ class OnOffDiagram extends Sprite{
 	private var mTitle : TextField;
 	private var legend:Legend;
 
-
+	private var mTimer:Timer;
 
 	public function new(){
 
@@ -64,61 +68,19 @@ class OnOffDiagram extends Sprite{
 		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 		mTitle.selectable = false;
 		mBack.addChild(mTitle);
-		
 
+		mTimer = new Timer(10*1000); //Should be run every 5 minutes.		
+		mTimer.addEventListener(TimerEvent.TIMER, onTime);
+		mTimer.start();
 
 		mCoordSystem = new CoordSystem();
 		
-		DataInterface.instance.requestOnOffData(onDataReturnedFromDataInterface);
-		
-		//drawDiagram();	
-	
-	/*
-		//fetch data  
-		fetchCategoryData();
-
-		//calculates the coordinate system size
-		
-		//Draw coordinatesystem, legend and lines
-		calculateandDrawCoordSystem();
-		calculateandDrawLines();
-
-		
-		//set textlabel position
-		mTitle.width = mTitle.textWidth+2;	
-		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
-		mTitle.y = 20;
-		
-
-		var testSprite = new Sprite();
-		monOffBar = new OnOffBar();
-
-		//add the bars
-		var outletCounter = 0;
-
-		for(i in 0...mMapArray.length){
-			
-			var outArray = mMapArray[i];
-			
-			for(count in 0...outArray.length){
-				fetchOnOffData(mNewOutletArray[outArray[count]],mColorArray[i]);
+		//DataInterface.instance.requestOnOffData(onDataReturnedFromDataInterface);
 				
-			}
-
-
-		}
-		
-
-		//add to parent sprite	
-		testSprite.addChild(mCoordSystem);
-
-		mBack.addChild(testSprite);
-		
-		*/
-
-		
-		
-
+	}
+	
+	private function onTime(event:TimerEvent) {
+		DataInterface.instance.requestOnOffData(onDataReturnedFromDataInterface);
 	}
 	
 	private function onDataReturnedFromDataInterface(data:Array<Outlet>) : Void {
