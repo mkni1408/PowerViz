@@ -26,6 +26,8 @@ class ArealScreen extends Sprite {
 	private var mBack : Sprite;
 	private var mDiagram : ArealDiagram;
 	private var mCoordSys : CoordSystem;
+	private var mtimeArray: Array<String>;
+	private var mUsageArray : Array<String>;
 	private var mTitle : TextField;
 	private var mTimeButton : TimeChangeButton;
 	
@@ -41,6 +43,12 @@ class ArealScreen extends Sprite {
 		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
 		mBack.graphics.endFill();
 		this.addChild(mBack);
+		mtimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00",""
+							,"14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
+
+		mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", 
+							"800Wt","900Wt","1000Wt"];
+
 		
 		mDiagram = new ArealDiagram();
 		mDiagram.mouseEnabled=false;
@@ -59,7 +67,7 @@ class ArealScreen extends Sprite {
 		mBack.addChild(mTitle);
 		
 		
-		mTimeButton = new TimeChangeButton([Time.HOUR, Time.WEEK],mViewMode,redrawCoordSystem); //Day, week, month.
+		mTimeButton = new TimeChangeButton([Time.HOUR,VIEWMODE_DAY, Time.WEEK],mViewMode,redrawCoordSystem); //Day, week, month.
 		mBack.addChild(mTimeButton);
 		
 		mCoordSys = new CoordSystem();
@@ -87,8 +95,8 @@ class ArealScreen extends Sprite {
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
 		mTimeButton.y = Lib.stage.stageHeight - mTimeButton.height;
 		
-		mCoordSys.generate(mDiagram.width, mDiagram.height, "X", "Y", mDiagram.width/24, mDiagram.height/10, 
-															["0", "1", "2", "træ"], ["10", "20", "30"], true, false);
+		mCoordSys.generate(mDiagram.width, mDiagram.height, "X", "Y", mDiagram.width/mtimeArray.length, mDiagram.height/mUsageArray.length, 
+															mtimeArray, mUsageArray, true, false);
 		mCoordSys.x = mDiagram.x;
 		mCoordSys.y = mDiagram.y;
 	}
