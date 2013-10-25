@@ -41,7 +41,7 @@ class BarScreen extends Sprite {
 		mViewModes = [VIEWMODE_DAY,VIEWMODE_WEEK,VIEWMODE_MONTH];
 		
 		mNewIDArray = DataInterface.instance.getAllOutletNames();
-		mKwhArray = ["100Wt", "200Wt", "400Wt", "600Wt", "800Wt","1000Wt"];
+		mKwhArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF);
 		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageHeight);
@@ -128,7 +128,7 @@ class BarScreen extends Sprite {
 			
 		
 
-		mCoordSys.drawVerticalBar(colors, usageAA);
+		mCoordSys.drawVerticalBar(colors, usageAA,mViewMode);
 		
 	
 
@@ -167,19 +167,19 @@ class BarScreen extends Sprite {
 
 		if(mViewMode == 0){
 			//hour
-			mKwhArray = ["100Wt", "200Wt", "400Wt", "600Wt", "800Wt","1000Wt"];
+			mKwhArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
 			mTitle.text = "Forbrug denne time";
 
 		}
 		if(mViewMode == 1){
 			//day
-			mKwhArray = ["1kWt", "2kWt", "4kWt", "6kWt", "8kWt","10kWt"];
+			mKwhArray = ["1kWt", "2kWt", "3kWt","4kWt","5kWt", "6kWt","7kWt", "8kWt","9kWt","10kWt"];
 			mTitle.text = "Forbrug i dag";
 
 		}
 		if(mViewMode == 2){
 			///week
-			mKwhArray = ["10kWh", "20kWh", "40kWh", "60kWh", "80kWh","100kWh"];
+			mKwhArray = ["10kWt", "20kWt", "30kWt","40kWt","50kWt", "60kWt","70kWt", "80kWt","90kWt","100kWt"];
 			mTitle.text = "Forbrug denne uge";
 
 		}

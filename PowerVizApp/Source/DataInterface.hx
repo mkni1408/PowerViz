@@ -428,80 +428,27 @@ class DataInterface {
 	}
 
 
-	
+	//returns the total wh from a device in the last hour
 	public function getOutletLastHourTotal(outletId:Int) : Float {
-		/*
-			var value:Float = 0;
-			value = Std.random(201);
-			return value;
-		*/
 		
-		var value:Float = 0;
-		var s:Float = 0;
-		value = Std.random(50) + 1;
-		s = Std.random(1);
 		
-		if(s > 0 && s < 0.25) {
-			value *= 1;
-		} else if(s >= 0.25 && s < 0.50) {
-			value *= 2;
-		} else if(s >= 0.50 && s < 0.75) {
-			value *= 3;
-		} else {
-			value *= 4;
-		}
-			
-		return value;
+		
+		return 1000.0;
 	}
-	
+	//returns the total wh from a device in the last day
 	public function getOutletLastDayTotal(outletId:Int) : Float {
-		/*
-			var value:Float = 0;
-			value = Std.random(201);
-			return value;
-		*/
+	
 		
-		var value:Float = 0;
-		var s:Float = 0;
-		value = Std.random(50) + 1;
-		s = Std.random(1);
 		
-		if(s > 0 && s < 0.25) {
-			value *= 1;
-		} else if(s >= 0.25 && s < 0.50) {
-			value *= 2;
-		} else if(s >= 0.50 && s < 0.75) {
-			value *= 3;
-		} else {
-			value *= 4;
-		}
 			
-		return value;
+		return 1000.0;
 	}
-
+	//returns the total wh from a device in the last week
 	public function getOutletLastWeekTotal(outletId:Int) : Float {
-		/*
-			var value:Float = 0;
-			value = Std.random(201);
-			return value;
-		*/
 		
-		var value:Float = 0;
-		var s:Float = 0;
-		value = Std.random(50) + 1;
-		s = Std.random(1);
 		
-		if(s > 0 && s < 0.25) {
-			value *= 1;
-		} else if(s >= 0.25 && s < 0.50) {
-			value *= 2;
-		} else if(s >= 0.50 && s < 0.75) {
-			value *= 3;
-		} else {
-			value *= 4;
-		}
-			
-		return value;
+		
+		return 1000.0;
 	}
 
 }
