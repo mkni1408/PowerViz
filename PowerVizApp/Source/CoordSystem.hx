@@ -35,8 +35,10 @@ class CoordSystem extends Sprite {
 	xLabelsBetween and yLabelsBetween indicate if the labels on the axes should be on the lines or between then.
 	**/
 	public function generate(width:Float, height:Float, xLabel:String, yLabel:String, xSpace:Float, ySpace:Float,
-							?xLabelStrings:Array<String>, ?yLabelStrings:Array<String>, ?xLabelsBetween:Bool, ?yLabelsBetween:Bool) {
+							?xLabelStrings:Array<String>, ?yLabelStrings:Array<String>, ?xLabelsBetween:Bool, ?yLabelsBetween:Bool, ?xLabelVertical:Bool) {
 	
+
+		var counterArray = new Array<Int>();
 		this.graphics.clear();
 		//ensure that there is no children 
 		while(this.numChildren > 0){
@@ -53,6 +55,7 @@ class CoordSystem extends Sprite {
 		
 		var betweenX:Bool = (xLabelsBetween==null ? false : xLabelsBetween);
 		var betweenY:Bool = (yLabelsBetween==null ? false : yLabelsBetween);
+		var xVertical:Bool = (xLabelVertical==null ? false : xLabelVertical);
 		
 		
 		var numLinesY:Int = Std.int(height/ySpace);
@@ -72,7 +75,7 @@ class CoordSystem extends Sprite {
 			if(yLabelStrings!=null) {
 				labelText = (yLabelStrings.length<=labelIndex ? "" : yLabelStrings[labelIndex]);
 				if(labelText!="")
-					addTextField(0, (betweenY ? y + (ySpace/2) : y), labelText, true);
+					addTextField(0, (betweenY ? y + (ySpace/2) : y), labelText, true,false);
 					//add the ycoordinate
 					
 			}
@@ -85,9 +88,11 @@ class CoordSystem extends Sprite {
 		xHeight = xSpace;
 		var x:Float=0;
 		labelIndex=0;
+		addXcoordinate(x);
 		for(j in 0...numLinesX) { //Draw the X axis.
-			addXcoordinate(x);
+			
 			x += xSpace;
+			addXcoordinate(x);
 			this.graphics.moveTo(x, -5);
 			this.graphics.lineTo(x, 5);
 		
@@ -95,10 +100,15 @@ class CoordSystem extends Sprite {
 				labelText = (xLabelStrings.length<=labelIndex ? "" : xLabelStrings[labelIndex]);
 		
 				if(labelText!="")
-					addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false);
+					if(xVertical){
+						trace("X ==",x);
+					addTextField(x-(xSpace/2),0, labelText, false,xVertical);
 					//add the xcoordinate
-					
-			}
+					}
+					else{
+						addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false,false);
+					}
+				}
 			
 			labelIndex += 1;
 		}
@@ -106,15 +116,16 @@ class CoordSystem extends Sprite {
 	
 	}
 	
-	private function addTextField(x:Float, y:Float, text:String, vertical:Bool) {
-		
+	private function addTextField(x:Float, y:Float, text:String, between:Bool, vertical:Bool) {
+
+			
 		var tf = new TextField();
 		var txt = haxe.Utf8.encode(text); //Encode into utf8, since that is the only format that the textFormat accepts in C++.
 		tf.mouseEnabled = false;
 		tf.selectable = false;
 		//maximizing input to 7 chars
 		if(txt.length <= 7){
-		tf.text = txt;
+			tf.text = txt;
 		}
 		else{	
 			tf.text = txt.substr(0,7);
@@ -124,15 +135,26 @@ class CoordSystem extends Sprite {
 
 		this.addChild(tf);
 		tf.width = (tf.textWidth*1.1) + 5;
-		tf.height = (tf.textHeight * 1.1) + 5;
-		if(vertical) {
+		tf.height = (tf.textHeight * 1.1);
+		if(between) {
 			tf.x = x - (tf.width + 3);
 			tf.y = y - (tf.height/2);
+			if(vertical)
+			{
+			//tf.rotation = 90;
+		}
 		}
 		else{
-			tf.x = x - (tf.width/2);
+			tf.x = (x - (tf.height/2))+(xHeight/2);
 			tf.y = y + 3;
+			if(vertical)
+			{
+				trace("new X==",x);
+			tf.rotation = 90;	
 		}
+
+		}
+		//trace("tf",tf.x);
 	}
 
 	private function addXcoordinate(x:Float):Void{
@@ -220,7 +242,7 @@ class CoordSystem extends Sprite {
 
 			var half = (yPoint - yPointbef)/2;
 
-			addTextField(xWidth+100, yPointbef+half, roomLabel, true);
+			addTextField(xWidth+100, yPointbef+half, roomLabel, true, false);
 
 		}
 
