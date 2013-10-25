@@ -1,5 +1,9 @@
 
 import haxe.remoting.HttpAsyncConnection;
+
+import flash.utils.Timer;
+import flash.events.TimerEvent;
+
 import Outlet;
 import OnOffData;
 import Config;
@@ -44,6 +48,12 @@ class DataInterface {
 	
 	private var mCnx : HttpAsyncConnection; //Remoting connection used for communicating with the server. 
 	
+	//Timers:
+	private var mTimerNow : Timer; //Timer used to get the "now" usage data. 
+	private var mTimerQuarter : Timer; //Timer used to get data every 15 minutes.
+	private var mTimerHour : Timer; //Timer to get data every hour.
+	private var mTimerDay : Timer; //Timer to get data once a day.
+	
 	public var houseDescriptor(default,null) : HouseDescriptor; //All data describing the house and its outlets.
 	
 	public function new() {
@@ -52,7 +62,7 @@ class DataInterface {
 		#else
 			this.connect("http://78.47.92.222/pvsdev/"); //Connect to development version.
 		#end 
-		houseDescriptor = getHouseDescriptor();
+		getDataOnCreation();
 	}
 	
 	//Connects to the server, setting up the remoting system.
@@ -66,6 +76,36 @@ class DataInterface {
 		trace("Connection error: " + e);
 	}
 	
+	//**************************************************
+	// Functions for fetching the data from the server:
+	//**************************************************
+	
+	//Initialize the timers that will get data from the server.
+	private function initTimers() {
+	
+		mTimerNow = new Timer(3*1000); //Every 3 secs.
+		mTimerNow.addEventListener(TimerEvent.TIMER, onTimerNow);
+	
+		mTimerQuarter = new Timer(15*60*1000); //Every 15 minutes.
+		
+		mTimerHour = new Timer(60*60*1000); //Every hour.
+		
+		mTimerDay = new Timer(24*60*60*1000); //Once a day.
+	}
+	
+	//Get data to start with.
+	private function getDataOnCreation() {
+		houseDescriptor = getHouseDescriptor(); //Get the house layout.
+	}
+	
+	
+	private function onTimerNow(event:Dynamic) : Void {
+	}
+	
+	
+	//************************************************
+	// Functions for delivering the supplied data:
+	//************************************************
 
 	
 	/*Returns the current total load in watts.*/
