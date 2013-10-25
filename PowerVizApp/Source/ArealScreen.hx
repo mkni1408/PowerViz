@@ -7,6 +7,7 @@ import flash.Lib;
 import DataInterface;
 import ArealDiagram;
 import FontSupply;
+import DataInterface;
 import TimeChangeButton;
 import CoordSystem;
 
@@ -30,12 +31,20 @@ class ArealScreen extends Sprite {
 	private var mUsageArray : Array<String>;
 	private var mTitle : TextField;
 	private var mTimeButton : TimeChangeButton;
+	private var mLegend:Legend;
+	private var mRoomArray:Array<String>;
+	private var mColorArray:Array<Int>;
 	
 	private var mViewMode:Int;
 
 	public function new() {
 		super();
 		
+		mRoomArray = new Array<String>();
+		mColorArray = new Array<Int>();
+
+		getColorAndRoomData();
+
 		mViewMode = VIEWMODE_DAY; //Daymode by default.
 		
 		mBack = new Sprite();
@@ -84,6 +93,11 @@ class ArealScreen extends Sprite {
 		mTitle.width = mTitle.textWidth;	
 		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
 		mTitle.y = Lib.stage.stageHeight/30;
+
+		mLegend = new Legend();
+		mLegend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mRoomArray,mColorArray);
+
+		mBack.addChild(mLegend);
 	
 	
 		mDiagram.width = Lib.stage.stageWidth / 1.15;
@@ -95,10 +109,13 @@ class ArealScreen extends Sprite {
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
 		mTimeButton.y = 0;
 		
-		mCoordSys.generate(mDiagram.width, mDiagram.height, "X", "Y", mDiagram.width/mtimeArray.length, mDiagram.height/mUsageArray.length, 
+		mCoordSys.generate(mBack.width/1.25, (mBack.height/1.25)--mLegend.height, "X", "Y", (mBack.width/1.25)/mtimeArray.length, (mBack.height/1.25)/mUsageArray.length, 
 															mtimeArray, mUsageArray, true, false);
-		mCoordSys.x = mDiagram.x;
-		mCoordSys.y = mDiagram.y;
+		mCoordSys.x = (mBack.width- mCoordSys.width);
+		mCoordSys.y = (mBack.height/1.25)+50;
+
+		mLegend.x =mCoordSys.x;
+		mLegend.y = mCoordSys.y + mLegend.height;
 	}
 	
 	/*Gets data through DataInterface, then creates the diagram.*/
@@ -149,6 +166,44 @@ class ArealScreen extends Sprite {
 
 		mCoordSys.graphics.clear();
 	}
+
+	private function getColorAndRoomData():Void{
+
+			var outletData = DataInterface.instance.requestOnOffData();
+
+			//add unique rooms to the room array
+		for(i in 0...outletData.length){
+
+			var isPresent = false;
+
+			for(count in 0...mNewRoomArray.length){
+				
+				if(mNewRoomArray[count]==outletArray[i].getRoom()){
+					//the category is present so we set the bool
+					isPresent = true;
+					break;
+				}
+				else{
+					//the category was not present
+					//TODO: HANDLE IT
+				}
+			}
+
+			if(isPresent){
+				//the category was preasent -> do not add
+			}
+			else{
+				//the category was not present -> add to array
+				mRoomArray.push(outletArray[i].getRoom());
+				mColorArray.push(outletArray[i].roomColor);
+
+			}
+
+		}
+
+
+	}
+
 }
 
 
