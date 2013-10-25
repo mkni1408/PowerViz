@@ -61,39 +61,67 @@ class Harvester {
 		var load:Int=0;
 		while(true) { //The neverending loop!!!!
 		
+			if(mAttemptRemotingReconnection==true) //If we should reconnect.
+				remoteReconnect();
+		
 			for(outlet in layoutData) {
 				load = getOutletWNow(outlet.outletId);
 				sendLoad(Std.parseInt(outlet.outletId), load);
 				mBuffers.get(outlet.outletId).update(getServerTime(), load);
+			
 			}
 			
 		}
 		
 	}
 	
+	private var mAttemptRemotingReconnection:Bool = false; //True if Harvester should try to reconnect the mRemote connection.
 	//Connects to the PowerVizServer using remoting.
 	private function remoteConnect() {
 		mRemote = HttpAsyncConnection.urlConnect(mConfig.serverUrl);
-		if(mRemote==null)
+		if(mRemote==null) {
+			sendLogData("Could not connect");
 			return;
-		var f = function(err) {sendLogData("Error: " + Std.string(err));};	
-		mRemote.setErrorHandler(f);
+		}
+		mAttemptRemotingReconnection = false; //We will not attempt connection, since we are connected already.
+		mRemote.setErrorHandler(remoteConnectionErrorHandler);
+	}
+	
+	private function remoteConnectionErrorHandler(err:Dynamic) {
+		sendLogData("Error: " + Std.string(err));
+		mAttemptRemotingReconnection = true;
 	}
 	
 	//Disconnects from the PowerVizServer.
-	private function remoteDisconnect() {
+	private function remoteReconnect() {
+	
+		if(mRemote!=null)
+			mRemote.setErrorHandler(null);
+			
+		mRemote = null;
+		mAttemptRemotingReconnection = false;
+		remoteConnect();
 	}
 	
 	private function sendLayoutData(data:Array<LayoutData>) {
 		if(data.length==0) //Don't send if we do not have data.
 			return; 
 			
+		if(mRemote==null) {
+			sendLogData("Could not send LayoutData - connection==null");
+			return;
+		}
+
 		var f = function(v:Dynamic) : Void {};
 		mRemote.Api.setZenseLayout.call([mConfig.houseId, data],f);
 	}
 
 	
 	private function sendLoad(outletId:Int, load:Int) {
+		if(mRemote==null) {
+			sendLogData("Could not send Load data - connection==null");
+			return;
+		}
 		var f = function(v:Dynamic) : Void {};
 		mRemote.Api.setOutletLoad.call([mConfig.houseId, outletId, load], f);
 	}
@@ -102,6 +130,10 @@ class Harvester {
 	private function sendLogData(msg:String, ?pi:haxe.PosInfos) {
 		var str = Std.string(pi.fileName) + " - " + Std.string(pi.lineNumber) +": " + msg;
 		Sys.println(str);
+		
+		if(mRemote==null)
+			return;
+		
 		var f = function(v:Dynamic) {};
 		mRemote.Api.logBox.call([mConfig.houseId, getServerTime(), str]);
 	}
