@@ -389,7 +389,7 @@ class DataInterface {
 
 
 	
-	public function getOutletLastDayTotal(outletId:Int) : Float {
+	public function getOutletLastHourTotal(outletId:Int) : Float {
 		/*
 			var value:Float = 0;
 			value = Std.random(201);
@@ -414,7 +414,7 @@ class DataInterface {
 		return value;
 	}
 	
-	public function getOutletLastWeekTotal(outletId:Int) : Float {
+	public function getOutletLastDayTotal(outletId:Int) : Float {
 		/*
 			var value:Float = 0;
 			value = Std.random(201);
@@ -439,7 +439,7 @@ class DataInterface {
 		return value;
 	}
 
-	public function getOutletLastMonthTotal(outletId:Int) : Float {
+	public function getOutletLastWeekTotal(outletId:Int) : Float {
 		/*
 			var value:Float = 0;
 			value = Std.random(201);

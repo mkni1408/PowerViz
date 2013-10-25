@@ -105,22 +105,22 @@ class BarScreen extends Sprite {
         switch(mViewMode) {
             case 0:
             	for(t in outlets) {
-            	    usageAA.push(DataInterface.instance.getOutletLastDayTotal(t));
+            	    usageAA.push(DataInterface.instance.getOutletLastHourTotal(t));
             	    colors.push(DataInterface.instance.getOutletColor(t));
         		}
             case 1:
             	for(t in outlets) {
-            	    usageAA.push(DataInterface.instance.getOutletLastWeekTotal(t));
+            	    usageAA.push(DataInterface.instance.getOutletLastDayTotal(t));
             	    colors.push(DataInterface.instance.getOutletColor(t));
         		}
             case 2:
             	for(t in outlets) {
-            	    usageAA.push(DataInterface.instance.getOutletLastMonthTotal(t));
+            	    usageAA.push(DataInterface.instance.getOutletLastWeekTotal(t));
             	    colors.push(DataInterface.instance.getOutletColor(t));
        			 }
             default:
 				for(t in outlets) {
-                	usageAA.push(DataInterface.instance.getOutletLastDayTotal(t));
+                	usageAA.push(DataInterface.instance.getOutletLastHourTotal(t));
                 	colors.push(DataInterface.instance.getOutletColor(t));
         		}
   	  	
@@ -167,19 +167,19 @@ class BarScreen extends Sprite {
 
 		if(mViewMode == 0){
 			//hour
-			mKwhArray = ["100Wt", "200Wt", "400Wt", "600Wt", "800Wt,"1000Wt""];
+			mKwhArray = ["100Wt", "200Wt", "400Wt", "600Wt", "800Wt","1000Wt"];
 			mTitle.text = "Forbrug denne time";
 
 		}
 		if(mViewMode == 1){
 			//day
-			mKwhArray = ["1kWh", "2kWh", "4kWh", "6kWh", "8kWh","10kWh"];
+			mKwhArray = ["1kWt", "2kWt", "4kWt", "6kWt", "8kWt","10kWt"];
 			mTitle.text = "Forbrug i dag";
 
 		}
 		if(mViewMode == 2){
 			///week
-			mKwhArray = ["7kWh", "14kWh", "21kWh", "28kWh", "35kWh"];
+			mKwhArray = ["10kWh", "20kWh", "40kWh", "60kWh", "80kWh","100kWh"];
 			mTitle.text = "Forbrug denne uge";
 
 		}
