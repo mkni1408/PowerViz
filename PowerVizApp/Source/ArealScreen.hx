@@ -10,6 +10,7 @@ import FontSupply;
 import DataInterface;
 import TimeChangeButton;
 import CoordSystem;
+import Outlet;
 
 /**
 Screen displaying the Areal diagram.
@@ -176,9 +177,9 @@ class ArealScreen extends Sprite {
 
 			var isPresent = false;
 
-			for(count in 0...mNewRoomArray.length){
+			for(count in 0...mRoomArray.length){
 				
-				if(mNewRoomArray[count]==outletArray[i].getRoom()){
+				if(mRoomArray[count]==outletData[i].getRoom()){
 					//the category is present so we set the bool
 					isPresent = true;
 					break;
@@ -194,8 +195,8 @@ class ArealScreen extends Sprite {
 			}
 			else{
 				//the category was not present -> add to array
-				mRoomArray.push(outletArray[i].getRoom());
-				mColorArray.push(outletArray[i].roomColor);
+				mRoomArray.push(outletData[i].getRoom());
+				mColorArray.push(outletData[i].roomColor);
 
 			}
 
