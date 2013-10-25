@@ -52,7 +52,6 @@ class PowerOrigin extends Sprite{
 		mPowerOriginSolar.visible = false;
 		mPowerOriginNuclear.visible = false;
 		
-
 		var yourPowerOrigin:haxe.Timer = new haxe.Timer(mTimerSetting);
 
 		yourPowerOrigin.run = function():Void{
@@ -60,7 +59,6 @@ class PowerOrigin extends Sprite{
 			changePowerOrigin();
 		};	
 	}
-
 
 	private function centerGraphics(origin:Sprite, bitmap:Bitmap){
 	
