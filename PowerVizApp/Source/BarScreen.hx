@@ -41,7 +41,7 @@ class BarScreen extends Sprite {
 		mViewModes = [VIEWMODE_DAY,VIEWMODE_WEEK,VIEWMODE_MONTH];
 		
 		mNewIDArray = DataInterface.instance.getAllOutletNames();
-		mKwhArray = ["2kWh", "4kWh", "6kWh", "8kWh", "10kWh"];
+		mKwhArray = ["100Wt", "200Wt", "400Wt", "600Wt", "800Wt","1000Wt"];
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF);
 		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageHeight);
@@ -54,7 +54,7 @@ class BarScreen extends Sprite {
 				
 		mTitle = new TextField();
 		mTitle.mouseEnabled=false;
-		mTitle.text = "Forbrug i dag ";
+		mTitle.text = "Forbrug denne time";
 		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 		mTitle.selectable = false;
 		mBack.addChild(mTitle);
@@ -79,7 +79,7 @@ class BarScreen extends Sprite {
 		mTitle.y = 20;
 	
 	
-		
+			
 		mBarGraph.y = Lib.stage.stageHeight - ((Lib.stage.stageHeight - mBarGraph.height)/2);	
 		
 
@@ -88,7 +88,7 @@ class BarScreen extends Sprite {
 
 		mTimeButton.y = 0;
 		
-		mCoordSys.generate(mBack.width/1.25, mBack.height/1.25, "X", "Y", (mBack.width/1.25)/mNewIDArray.length, (mBack.height/1.25)/mKwhArray.length, mNewIDArray, mKwhArray, true, false);
+		mCoordSys.generate(mBack.width/1.20, mBack.height/1.25, "X", "Y", (mBack.width/1.20)/mNewIDArray.length, (mBack.height/1.25)/mKwhArray.length, mNewIDArray, mKwhArray, true, false,true);
 		mCoordSys.x = (Lib.stage.stageWidth- mCoordSys.width);
 		mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
 
@@ -166,21 +166,21 @@ class BarScreen extends Sprite {
 		
 
 		if(mViewMode == 0){
-			//trace(0);
-			mKwhArray = ["2kWh", "4kWh", "6kWh", "8kWh", "10kWh"];
-			mTitle.text = "Forbrug i dag";
+			//hour
+			mKwhArray = ["100Wt", "200Wt", "400Wt", "600Wt", "800Wt,"1000Wt""];
+			mTitle.text = "Forbrug denne time";
 
 		}
 		if(mViewMode == 1){
-			//trace(1);
-			mKwhArray = ["4kWh", "8kWh", "12kWh", "16kWh", "20kWh"];
-			mTitle.text = "Forbrug denne uge";
+			//day
+			mKwhArray = ["1kWh", "2kWh", "4kWh", "6kWh", "8kWh","10kWh"];
+			mTitle.text = "Forbrug i dag";
 
 		}
 		if(mViewMode == 2){
-			///trace(2);
-			mKwhArray = ["10kWh", "20kWh", "30kWh", "40kWh", "50kWh"];
-			mTitle.text = "Forbrug denne måned";
+			///week
+			mKwhArray = ["7kWh", "14kWh", "21kWh", "28kWh", "35kWh"];
+			mTitle.text = "Forbrug denne uge";
 
 		}
 		mTimeButton.changeButtonState(mViewMode);
