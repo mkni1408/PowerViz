@@ -93,7 +93,7 @@ class ArealScreen extends Sprite {
 		
 		
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
-		mTimeButton.y = Lib.stage.stageHeight - mTimeButton.height;
+		mTimeButton.y = 0;
 		
 		mCoordSys.generate(mDiagram.width, mDiagram.height, "X", "Y", mDiagram.width/mtimeArray.length, mDiagram.height/mUsageArray.length, 
 															mtimeArray, mUsageArray, true, false);
