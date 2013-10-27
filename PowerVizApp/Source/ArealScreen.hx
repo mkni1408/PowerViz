@@ -77,7 +77,7 @@ class ArealScreen extends Sprite {
 		mBack.addChild(mTitle);
 		
 		
-		mTimeButton = new TimeChangeButton([Time.HOUR,VIEWMODE_DAY, Time.WEEK],mViewMode,redrawCoordSystem); //Day, week, month.
+		mTimeButton = new TimeChangeButton([Time.HOUR,VIEWMODE_DAY, Time.WEEK], mViewMode, redrawCoordSystem); //Day, week, month.
 		mBack.addChild(mTimeButton);
 		
 		mCoordSys = new CoordSystem();
@@ -96,7 +96,7 @@ class ArealScreen extends Sprite {
 		mTitle.y = Lib.stage.stageHeight/30;
 
 		mLegend = new Legend();
-		mLegend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mRoomArray,mColorArray);
+		mLegend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mRoomArray, mColorArray);
 
 		mBack.addChild(mLegend);
 	
@@ -110,12 +110,13 @@ class ArealScreen extends Sprite {
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
 		mTimeButton.y = 0;
 		
-		mCoordSys.generate(mBack.width/1.25, (mBack.height/1.25)-mLegend.height, "X", "Y", (mBack.width/1.25)/mtimeArray.length, (mBack.height/1.25)/mUsageArray.length, 
-															mtimeArray, mUsageArray, true, false);
+		mCoordSys.generate(mBack.width/1.25, (mBack.height/1.25)-mLegend.height, "X", "Y", (mBack.width/1.25)/mtimeArray.length, (mBack.height/1.25)/mUsageArray.length, mtimeArray, mUsageArray, true, false);
+	
+															
 		mCoordSys.x = (mBack.width- mCoordSys.width);
 		mCoordSys.y = (mBack.height/1.25)+50;
 
-		mLegend.x =mCoordSys.x;
+		mLegend.x = mCoordSys.x;
 		mLegend.y = mCoordSys.y + mLegend.height;
 	}
 	
