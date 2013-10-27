@@ -152,7 +152,7 @@ class OnOffDiagram extends Sprite{
 
 		mCoordSystem.generate(mBack.width/1.25, (mBack.height/1.25)-mLegend.height, "X", "Y", 
 								(mBack.width/1.25)/mtimeArray.length,((mBack.height/1.25)-mLegend.height)/mNewIDArray.length,
-								mtimeArray,mNewIDArray,false,true);
+								mtimeArray,mNewIDArray,true,true);
 
 		mCoordSystem.x = (mBack.width- mCoordSystem.width);
 		mCoordSystem.y = (mBack.height/1.25)+50;

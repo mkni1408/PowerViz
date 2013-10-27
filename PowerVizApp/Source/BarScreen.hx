@@ -94,7 +94,7 @@ class BarScreen extends Sprite {
 		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
 		mTitle.y = 0;
 
-		trace("Coordinate",(mCoordSys.y - mCoordSys.height));
+		//trace("Coordinate",(mCoordSys.y - mCoordSys.height));
 
 
 		//mCoordSys.createLegend(mNewIDArray.length, mNewIDArray, [0x005B96, 0x6497B1, 0xB1DAFB, 0x741d0d, 0xc72a00, 0xff7f24, 0x669900, 0x7acf00, 0xc5e26d]);

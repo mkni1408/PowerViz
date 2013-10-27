@@ -54,7 +54,7 @@ class Legend extends Sprite{
 				tf.mouseEnabled = false;
 				tf.selectable = false;
 				tf.text = haxe.Utf8.encode(arrayOfLabelStrings[counter]);
-				trace(tf.text);
+				//trace(tf.text);
 				tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
 				legendSprite.addChild(tf);
 				tf.width = (tf.textWidth*1.1) + 5;

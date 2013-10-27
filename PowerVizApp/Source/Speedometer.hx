@@ -43,7 +43,7 @@ class Speedometer extends Sprite{
 		var yourSeismoGraphTimer:haxe.Timer = new haxe.Timer(mTimerSetting);
 
 			yourSeismoGraphTimer.run = function():Void{
-   			trace("PowerOrigin timer running!!");
+   			//trace("PowerOrigin timer running!!");
    				
 
    				fetchWattConsumption();
