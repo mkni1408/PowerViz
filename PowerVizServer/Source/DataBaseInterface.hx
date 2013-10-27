@@ -7,6 +7,8 @@ import SPODS;
 import LayoutData; 
 import HouseDescriptor; 
 
+typedef TimeWatts = {time:Date, watts:Float}
+
 
 
 /**
@@ -231,24 +233,24 @@ class DataBaseInterface {
 	
 	//Returns the load data that was recorded in the specified timespan for the specified outlet.
 	//Returned as an array of anonymous structures.
-	public static function getOutletHistory(houseId:Int, outletId:Int, from:Date, to:Date) : Array<{time:Date, load:Float}> {
+	public static function getOutletHistory(houseId:Int, outletId:Int, from:Date, to:Date) : Array<TimeWatts> {
 		
-		var r = new Array<{time:Date, load:Float}>();
+		var r = new Array<TimeWatts>();
 		for(lh in LoadHistory.manager.search($houseId==houseId && $outletId==outletId && $time>=from && $time <= to, {orderBy : time})) {
-				r.push({time:lh.time, load:lh.load});
+				r.push({time:lh.time, watts:lh.load});
 		}
 		return r;
 	}
 	
 	
-	public static function getOutletHistoryAll(houseId:Int, from:Date, to:Date) : Map<Int, Array<{time:Date, watts:Float}> > {
+	public static function getOutletHistoryAll(houseId:Int, from:Date, to:Date) : Map<Int, Array<TimeWatts> > {
 	
-		var result = new Map<Int, Array<{time:Date, watts:Float}> >();
+		var result = new Map<Int, Array<TimeWatts> >();
 
 		var qr = LoadHistory.manager.search($houseId == houseId && $time>=from && $time<=to, {orderBy : time});
 		for(oh in qr) {
 			if(result.exists(oh.outletId)==false) {
-				result.set(oh.outletId, new Array<{time:Date, watts:Float}>());
+				result.set(oh.outletId, new Array<TimeWatts>());
 			}
 			result.get(oh.outletId).push({time:oh.time, watts:oh.load});
 			
@@ -257,11 +259,53 @@ class DataBaseInterface {
 	}
 	
 	//Returns the usage data of all outlets today.
-	public static function getOutletHistoryAllToday(houseId:Int, now:Date) : Map<Int, Array<{time:Date, watts:Float}> > {
+	public static function getOutletHistoryAllToday(houseId:Int, now:Date) : Map<Int, Array<TimeWatts> > {
 		
 		var from:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0);
 		var to:Date = Date.fromTime(from.getTime() + 24*60*60*1000); 
 		return getOutletHistoryAll(houseId, from, to);
+	}
+	
+	public static function getOutletHistoryAllHour(houseId:Int) : Map<Int, Array<TimeWatts> > {
+		var to:Date = Date.now();
+		var from = DateTools.delta(to, -DateTools.hours(1));
+		return getOutletHistoryAll(houseId, from, to);
+	}
+	
+	public static function getOutletHistoryAllDay(houseId:Int) : Map<Int, Array<TimeWatts> > {
+		var to:Date = Date.now();
+		var from = new Date(to.getFullYear(), to.getMonth(), to.getDate(), 0,0,0);
+		return getOutletHistoryAll(houseId, from, to);
+	}
+	
+	public static function getOutletHistoryAllWeek(houseId:Int) : Map<Int, Array<TimeWatts> >{
+		var to:Date = Date.now();
+		var from = DateTools.delta(to, -DateTools.days(7));
+		return getOutletHistoryAll(houseId, from, to);
+	}
+	
+	//Returns the last 15 minutes of usage for each outlet.
+	public static function getOutletHistoryLastQuarter(houseId:Int) : Map<Int, Float> {
+		
+		var r = new Map<Int, Float>();
+		var to = Date.now();
+		var from = DateTools.delta(to, -DateTools.minutes(15));
+		for(h in LoadHistory.manager.search($houseId==houseId && $time>from && $time<to, {orderBy:time}) ) {
+			r.set(h.outletId, h.load);
+		}
+		return r;
+	}
+	
+	
+	public static function getCurrentPowerSource() : String {
+		var now = Date.now();
+		var source:PowerSource = null;
+		for(s in PowerSource.manager.search($time<=now, {orderBy:time, limit:1}) ) {
+			source = s;
+		}
+		if(source==null)
+			return "coal";
+		return source.source;
 	}
 	
 	
