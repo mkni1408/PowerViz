@@ -7,8 +7,10 @@ import flash.Lib;
 import DataInterface;
 import ArealDiagram;
 import FontSupply;
+import DataInterface;
 import TimeChangeButton;
 import CoordSystem;
+import Outlet;
 
 /**
 Screen displaying the Areal diagram.
@@ -26,14 +28,24 @@ class ArealScreen extends Sprite {
 	private var mBack : Sprite;
 	private var mDiagram : ArealDiagram;
 	private var mCoordSys : CoordSystem;
+	private var mtimeArray: Array<String>;
+	private var mUsageArray : Array<String>;
 	private var mTitle : TextField;
 	private var mTimeButton : TimeChangeButton;
+	private var mLegend:Legend;
+	private var mRoomArray:Array<String>;
+	private var mColorArray:Array<Int>;
 	
 	private var mViewMode:Int;
 
 	public function new() {
 		super();
 		
+		mRoomArray = new Array<String>();
+		mColorArray = new Array<Int>();
+
+		getColorAndRoomData();
+
 		mViewMode = VIEWMODE_DAY; //Daymode by default.
 		
 		mBack = new Sprite();
@@ -41,6 +53,12 @@ class ArealScreen extends Sprite {
 		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
 		mBack.graphics.endFill();
 		this.addChild(mBack);
+		mtimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00",""
+							,"14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
+
+		mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", 
+							"800Wt","900Wt","1000Wt"];
+
 		
 		mDiagram = new ArealDiagram();
 		mDiagram.mouseEnabled=false;
@@ -59,7 +77,7 @@ class ArealScreen extends Sprite {
 		mBack.addChild(mTitle);
 		
 		
-		mTimeButton = new TimeChangeButton([Time.HOUR, Time.WEEK],mViewMode,redrawCoordSystem); //Day, week, month.
+		mTimeButton = new TimeChangeButton([Time.HOUR,VIEWMODE_DAY, Time.WEEK],mViewMode,redrawCoordSystem); //Day, week, month.
 		mBack.addChild(mTimeButton);
 		
 		mCoordSys = new CoordSystem();
@@ -76,6 +94,11 @@ class ArealScreen extends Sprite {
 		mTitle.width = mTitle.textWidth;	
 		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
 		mTitle.y = Lib.stage.stageHeight/30;
+
+		mLegend = new Legend();
+		mLegend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mRoomArray,mColorArray);
+
+		mBack.addChild(mLegend);
 	
 	
 		mDiagram.width = Lib.stage.stageWidth / 1.15;
@@ -85,12 +108,15 @@ class ArealScreen extends Sprite {
 		
 		
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
-		mTimeButton.y = Lib.stage.stageHeight - mTimeButton.height;
+		mTimeButton.y = 0;
 		
-		mCoordSys.generate(mDiagram.width, mDiagram.height, "X", "Y", mDiagram.width/24, mDiagram.height/10, 
-															["0", "1", "2", "træ"], ["10", "20", "30"], true, false);
-		mCoordSys.x = mDiagram.x;
-		mCoordSys.y = mDiagram.y;
+		mCoordSys.generate(mBack.width/1.25, (mBack.height/1.25)-mLegend.height, "X", "Y", (mBack.width/1.25)/mtimeArray.length, (mBack.height/1.25)/mUsageArray.length, 
+															mtimeArray, mUsageArray, true, false);
+		mCoordSys.x = (mBack.width- mCoordSys.width);
+		mCoordSys.y = (mBack.height/1.25)+50;
+
+		mLegend.x =mCoordSys.x;
+		mLegend.y = mCoordSys.y + mLegend.height;
 	}
 	
 	/*Gets data through DataInterface, then creates the diagram.*/
@@ -141,6 +167,44 @@ class ArealScreen extends Sprite {
 
 		mCoordSys.graphics.clear();
 	}
+
+	private function getColorAndRoomData():Void{
+
+			var outletData = DataInterface.instance.requestOnOffData();
+
+			//add unique rooms to the room array
+		for(i in 0...outletData.length){
+
+			var isPresent = false;
+
+			for(count in 0...mRoomArray.length){
+				
+				if(mRoomArray[count]==outletData[i].getRoom()){
+					//the category is present so we set the bool
+					isPresent = true;
+					break;
+				}
+				else{
+					//the category was not present
+					//TODO: HANDLE IT
+				}
+			}
+
+			if(isPresent){
+				//the category was preasent -> do not add
+			}
+			else{
+				//the category was not present -> add to array
+				mRoomArray.push(outletData[i].getRoom());
+				mColorArray.push(outletData[i].roomColor);
+
+			}
+
+		}
+
+
+	}
+
 }
 
 

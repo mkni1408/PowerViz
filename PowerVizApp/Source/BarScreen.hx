@@ -41,7 +41,7 @@ class BarScreen extends Sprite {
 		mViewModes = [VIEWMODE_DAY,VIEWMODE_WEEK,VIEWMODE_MONTH];
 		
 		mNewIDArray = DataInterface.instance.getAllOutletNames();
-		mKwhArray = ["100Wt", "200Wt", "400Wt", "600Wt", "800Wt","1000Wt"];
+		mKwhArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF);
 		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageHeight);
@@ -74,9 +74,7 @@ class BarScreen extends Sprite {
 	
 	private function layout() {
 	
-		mTitle.width = mTitle.textWidth;	
-		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
-		mTitle.y = 20;
+		
 	
 	
 			
@@ -91,6 +89,12 @@ class BarScreen extends Sprite {
 		mCoordSys.generate(mBack.width/1.20, mBack.height/1.25, "X", "Y", (mBack.width/1.20)/mNewIDArray.length, (mBack.height/1.25)/mKwhArray.length, mNewIDArray, mKwhArray, true, false,true);
 		mCoordSys.x = (Lib.stage.stageWidth- mCoordSys.width);
 		mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
+
+		mTitle.width = mTitle.textWidth+5;	
+		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
+		mTitle.y = 0;
+
+		trace("Coordinate",(mCoordSys.y - mCoordSys.height));
 
 
 		//mCoordSys.createLegend(mNewIDArray.length, mNewIDArray, [0x005B96, 0x6497B1, 0xB1DAFB, 0x741d0d, 0xc72a00, 0xff7f24, 0x669900, 0x7acf00, 0xc5e26d]);
@@ -128,7 +132,7 @@ class BarScreen extends Sprite {
 			
 		
 
-		mCoordSys.drawVerticalBar(colors, usageAA);
+		mCoordSys.drawVerticalBar(colors, usageAA,mViewMode);
 		
 	
 
@@ -167,19 +171,19 @@ class BarScreen extends Sprite {
 
 		if(mViewMode == 0){
 			//hour
-			mKwhArray = ["100Wt", "200Wt", "400Wt", "600Wt", "800Wt","1000Wt"];
+			mKwhArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
 			mTitle.text = "Forbrug denne time";
 
 		}
 		if(mViewMode == 1){
 			//day
-			mKwhArray = ["1kWt", "2kWt", "4kWt", "6kWt", "8kWt","10kWt"];
+			mKwhArray = ["1kWt  ", "2kWt  ", "3kWt  ","4kWt  ","5kWt  ", "6kWt  ","7kWt  ", "8kWt  ","9kWt  ","10kWt  "];
 			mTitle.text = "Forbrug i dag";
 
 		}
 		if(mViewMode == 2){
 			///week
-			mKwhArray = ["10kWh", "20kWh", "40kWh", "60kWh", "80kWh","100kWh"];
+			mKwhArray = ["10kWt ", "20kWt ", "30kWt ","40kWt ","50kWt ", "60kWt ","70kWt ", "80kWt ","90kWt ","100kWt "];
 			mTitle.text = "Forbrug denne uge";
 
 		}

@@ -100,8 +100,9 @@ class CoordSystem extends Sprite {
 				labelText = (xLabelStrings.length<=labelIndex ? "" : xLabelStrings[labelIndex]);
 		
 				if(labelText!="")
+
+					//condition to handle vertical textfields
 					if(xVertical){
-						trace("X ==",x);
 					addTextField(x-(xSpace/2),0, labelText, false,xVertical);
 					//add the xcoordinate
 					}
@@ -312,18 +313,25 @@ class CoordSystem extends Sprite {
 
 
 		}
+		//draws vertical bars
+		public function drawVerticalBar(colors:Array<Int>, height:Array<Float>,conversionType:Int) {
 
-		public function drawVerticalBar(colors:Array<Int>, height:Array<Float> ) {
-
-		//HorizontalBars.graphics.clear();
-		//This is a hack, which draws a transparent rectangle of 1x1 pixel
-		//this.graphics.beginFill(0xFFFFFF);
-		//this.graphics.drawRect(0,0, this.width, this.height);
-		//this.graphics.endFill();
 		
-		//barWidth is used to ensure that every bar has the same width.
 		var barWidth:Float = xHeight;
-		
+		var totalpoints = yHeight/100;
+
+		if(conversionType == 0){
+
+		 totalpoints = (yHeight/100);
+		}		
+		if(conversionType == 1){
+
+		 totalpoints = (yHeight/1000);
+		}
+		if(conversionType == 2){
+
+		 totalpoints = (yHeight/10000);
+		}
 		
 		
 		var i:Int = 0;
@@ -331,7 +339,7 @@ class CoordSystem extends Sprite {
 			// For every c in colors a rectangle will be drawn and colored.
 			this.graphics.lineStyle(1, 0x000000);
 			this.graphics.beginFill(colors[i]);
-			this.graphics.drawRect(xCoordinates[i]+((barWidth/2)-((barWidth*0.90)/2)), 0, barWidth*0.90, -height[i]);			
+			this.graphics.drawRect(xCoordinates[i]+((barWidth/2)-((barWidth*0.90)/2)), 0, barWidth*0.80, -height[i]*totalpoints);			
 			this.graphics.endFill();
 			
 			//Increment with barWidth and not barWidth*0.90 (as in drawRect()) is to make a space between each bar.

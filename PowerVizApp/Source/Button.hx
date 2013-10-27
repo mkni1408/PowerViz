@@ -62,7 +62,7 @@ public function buttonClicked(event:MouseEvent):Void{
 
 	mfunc(mButtonID);
 
-	//trace("button clicked!");
+	//haxelibvtrace("button clicked!");
 
 }
 
