@@ -150,7 +150,7 @@ class CoordSystem extends Sprite {
 			tf.y = y + 3;
 			if(vertical)
 			{
-				trace("new X==",x);
+				//trace("new X==",x);
 			tf.rotation = 90;	
 		}
 

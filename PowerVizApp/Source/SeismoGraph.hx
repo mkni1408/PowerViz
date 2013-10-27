@@ -43,7 +43,7 @@ class SeismoGraph extends Sprite{
 		var yourSeismoGraphTimer:haxe.Timer = new haxe.Timer(mTimerSetting);
 
 			yourSeismoGraphTimer.run = function():Void{
-   			trace("PowerOrigin timer running!!");
+   			//trace("PowerOrigin timer running!!");
    				
 
    				fetchWattConsumption();
@@ -67,7 +67,7 @@ class SeismoGraph extends Sprite{
 
 		
 
-		trace(mNumofFieldsWidthScreen);
+		//trace(mNumofFieldsWidthScreen);
 
 		//first we see if the array length is larger than the amount of slots on the screen
 		//if so we remove the first element of the array to make room for another
@@ -79,7 +79,7 @@ class SeismoGraph extends Sprite{
 			mwattMeasurementArray.pop();
 			mwhereIsThePowerFromArray.pop();
 
-			trace("Dequeing");
+			//trace("Dequeing");
 			mwattMeasurementArray.reverse();
 			mwhereIsThePowerFromArray.reverse();
 		}	
@@ -89,8 +89,8 @@ class SeismoGraph extends Sprite{
 
         mwattMeasurementArray.push(calculatePeakHeight(wattMeasure));
         mwhereIsThePowerFromArray.push(origin);
-    	trace("Pushing measure:",wattMeasure);
-    	trace("Pushing origin:",origin);
+    	//trace("Pushing measure:",wattMeasure);
+    	//trace("Pushing origin:",origin);
 
     	//redraw the curve
     	redrawSeismoGraphCurve();
@@ -118,7 +118,7 @@ class SeismoGraph extends Sprite{
 
 		for(i in 0...mwattMeasurementArray.length){
 
-			trace("Wattmeasure is:",mwhereIsThePowerFromArray[i]);
+			//trace("Wattmeasure is:",mwhereIsThePowerFromArray[i]);
 
 			if(mwhereIsThePowerFromArray[i] == 1)
 			{
@@ -133,7 +133,7 @@ class SeismoGraph extends Sprite{
 			xPosition=xPosition+mMeasurmenthalfFactor;
 			yPosition=yPosition+mwattMeasurementArray[i];
 			//trace(xPosition);
-			trace(yPosition);
+			//trace(yPosition);
 			//draw the line up
 			graphics.lineTo(xPosition,yPosition);
 
@@ -144,7 +144,7 @@ class SeismoGraph extends Sprite{
 		xPosition = xPosition+mMeasurmenthalfFactor;
 		yPosition = yPosition-(mwattMeasurementArray[i]*2);
 		//trace(xPosition);
-			trace(yPosition);
+			//trace(yPosition);
 			//draw line down
 		graphics.lineTo(xPosition,yPosition);
 

@@ -288,7 +288,7 @@ class ScreenSaver extends Sprite {
 			yourbulbTimer= new haxe.Timer(bulbTimerAction);
 
 			yourbulbTimer.run = function():Void{
-   			trace("BulbTimer running!!");
+   			//trace("BulbTimer running!!");
    				//get current load from dataInterface
    				var f  = dataInterface.getTotalCurrentLoad();
 
@@ -303,7 +303,7 @@ class ScreenSaver extends Sprite {
 			yourScreensaverTimerTimer= new haxe.Timer(screenSaverTimerAction);
 
 			yourScreensaverTimerTimer.run = function():Void{
-   			trace("Screen saver Timer running!!");
+   			//trace("Screen saver Timer running!!");
    				
    				//trace(mIsTransparant);
    				//trace(mHasRecievedTouchEvent);

@@ -55,7 +55,7 @@ class PowerOrigin extends Sprite{
 		var yourPowerOrigin:haxe.Timer = new haxe.Timer(mTimerSetting);
 
 		yourPowerOrigin.run = function():Void{
-			trace("PowerOrigin timer running!!");
+			//trace("PowerOrigin timer running!!");
 			changePowerOrigin();
 		};	
 	}

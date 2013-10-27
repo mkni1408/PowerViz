@@ -374,7 +374,7 @@ class DataInterface {
 	public function getOnOffData():Array<Outlet> {
 	
 		/*
-		var houseId=42;
+		var houseId=Config.instance.houseId;;
 		var hD:HouseDescriptor = houseDescriptor;
 		
 		var usageToday:Map<Int, Array<{time:Date, watts:Float}> > = getUsageToday();
