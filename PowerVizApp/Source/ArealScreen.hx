@@ -65,52 +65,49 @@ class ArealScreen extends Sprite {
 		
 		mDiagram = new ArealDiagram();
 		mDiagram.mouseEnabled=false;
-		mBack.addChild(mDiagram);
-		
-		
-		//testGenerate(); //TODO: Remove when working properly.
-		//this.width = HWUtils.screenWidth;
-		//this.height = HWUtils.screenHeight;
 		
 		mTitle = new TextField();
 		mTitle.mouseEnabled=false;
-		mTitle.text = "Forbrug i dag ";
+		mTitle.text = "Forbrug denne time ";
 		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 		mTitle.selectable = false;
 		
-		
-		
 		mTimeButton = new TimeChangeButton([VIEWMODE_DAY, VIEWMODE_WEEK,VIEWMODE_MONTH,],mViewMode,onButtonPush); //Day, week, month.
-		this.addChild(mTimeButton);//hack add on thisso that it will not dissapear when children removed
+		
 		
 		mCoordSys = new CoordSystem();
 		
+		addChildrenToBack();
 		
-		layout();
+		testFunctionToBeRemoveLater();
+		
+	}
+	
+	private function addChildrenToBack() {	
+		mBack.addChild(mDiagram);
+		mBack.addChild(mTimeButton);
+		mBack.addChild(mCoordSys);
+		mBack.addChild(mTitle);
 	}
 	
 	/**
 	Places the graphical elements on the screen.
 	**/
-	private function layout() {
-	
-		
-
-		while(mBack.numChildren > 0)
-			mBack.removeChildAt(0);
+	private function doLayout() {
 
 		mTitle.width = mTitle.textWidth;	
 		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
 		mTitle.y = Lib.stage.stageHeight/30;
 
-		mBack.addChild(mTitle);
+		//mBack.addChild(mTitle);
 
 		mLegend = new Legend();
 		mLegend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mRoomArray, mColorArray);
 
-		mBack.addChild(mLegend);
+		//mBack.addChild(mLegend);
 	
 	
+		mBack.addChild(mDiagram);
 		mDiagram.width = Lib.stage.stageWidth / 1.15;
 		mDiagram.height = Lib.stage.stageHeight / 1.25;
 		mDiagram.x = (Lib.stage.stageWidth - mDiagram.width) / 2;
@@ -119,19 +116,17 @@ class ArealScreen extends Sprite {
 		
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
 		mTimeButton.y = 0;
-		
-
 
 		mCoordSys.generate(Lib.stage.stageWidth/1.25, (Lib.stage.stageHeight/1.25)-mLegend.height, "X", "Y", (Lib.stage.stageWidth/1.25)/mTimeArray.length, ((Lib.stage.stageHeight/1.25)-mLegend.height)/mUsageArray.length, 
 															mTimeArray, mUsageArray, true, false);
-		mCoordSys.x = (Lib.stage.stageWidth- mCoordSys.width);
+		mCoordSys.x = (Lib.stage.stageWidth - mDiagram.width);
 		mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
 		
 
 		mLegend.x = mCoordSys.x;
 		mLegend.y = mCoordSys.y + mLegend.height;
 
-		mBack.addChild(mCoordSys);
+		//mBack.addChild(mCoordSys);
 
 	}
 	
@@ -175,8 +170,9 @@ class ArealScreen extends Sprite {
 	}
 	
 	/**Some test function.**/
-	private function testGenerate() { 
+	private function testFunctionToBeRemoveLater() { 
 		fillWithData();
+		doLayout();
 	}
 	
 	private function onButtonPush(coordSystemType:Int):Void{
@@ -191,9 +187,8 @@ class ArealScreen extends Sprite {
     		default:
         	mViewMode = VIEWMODE_DAY;
     	}
-
 		
-		redrawEverything();
+		redrawEverything(); 
 	}
 
 	private function redrawEverything():Void{
@@ -201,70 +196,40 @@ class ArealScreen extends Sprite {
 		if(mViewMode == 0){
 			//hour
 			mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
-			mTitle.text = "Forbrug denne time";
+			mTitle.text = "Forbrug denne time ";
 
 		}
 		if(mViewMode == 1){
 			//day
 			mUsageArray = ["1kWt  ", "2kWt  ", "3kWt  ","4kWt  ","5kWt  ", "6kWt  ","7kWt  ", "8kWt  ","9kWt  ","10kWt  "];
-			mTitle.text = "Forbrug i dag";
+			mTitle.text = "Forbrug i dag ";
 
 		}
 		if(mViewMode == 2){
 			///week
 			mUsageArray = ["10kWt ", "20kWt ", "30kWt ","40kWt ","50kWt ", "60kWt ","70kWt ", "80kWt ","90kWt ","100kWt "];
-			mTitle.text = "Forbrug denne uge";
+			mTitle.text = "Forbrug denne uge ";
 
 		}
+		
 		mTimeButton.changeButtonState(mViewMode);
 		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 
-		layout();
 		fillWithData();
+		doLayout();
 	}
 
 
 
 	private function getColorAndRoomData():Void{
-	
-		//NOTE: Use DataInterface.instance.houseDescriptor instead!!!!!
-
-
-			var outletData:Array<Outlet>;
-
-			 outletData = DataInterface.instance.getOnOffData();
-
-		for(i in 0...outletData.length){
-
-			var isPresent = false;
-
-			for(count in 0...mRoomArray.length){
-				
-				if(mRoomArray[count]==outletData[i].getRoom()){
-					//the category is present so we set the bool
-					isPresent = true;
-					break;
-				}
-				else{
-					//the category was not present
-					//TODO: HANDLE IT
-				}
-			}
-
-			if(isPresent){
-				//the category was preasent -> do not add
-			}
-			else{
-				//the category was not present -> add to array
-				mRoomArray.push(outletData[i].getRoom());
-				mColorArray.push(outletData[i].roomColor);
-
-			}
-
+			
+		mRoomArray = new Array<String>();
+		mColorArray = new Array<Int>();
+		for(r in DataInterface.instance.houseDescriptor.getRoomArray()) {
+			mRoomArray.push(r.roomName);
+			mColorArray.push(r.roomColor);
 		}
 		
-
-
 	}
 
 }

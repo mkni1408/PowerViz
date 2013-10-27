@@ -3,4 +3,4 @@
 -cp Source
 -cp ../PowerVizCommon
 -cp ../PowerVizHarvester
--cmd neko Simulator.n simulation.xml 100 "2013-10-21 00:00:00"
+-cmd neko Simulator.n simulation.xml 100 "2013-10-27 00:00:00"
