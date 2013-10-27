@@ -226,7 +226,6 @@ class ArealScreen extends Sprite {
 	
 		//NOTE: Use DataInterface.instance.houseDescriptor instead!!!!!
 
-		var outletData = DataInterface.instance.requestOnOffData();
 
 			var outletData:Array<Outlet>;
 
