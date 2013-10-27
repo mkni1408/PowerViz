@@ -111,14 +111,34 @@ class Api {
 			h = (e.time.getTime() - prevTime) / hour; //Find the difference in secons, then make that into hours.
 			accum += prevLoad*h;
 			prevTime = e.time.getTime();
-			prevLoad = e.load;
+			prevLoad = e.watts;
 		}
 		return accum;
 	}
 	
-
-	public static function getOutletHistoryAllToday(houseId:Int, now:Date) : Map<Int, Array<{time:Date, watts:Float}> > {
+	//Should not be used!
+	public function getOutletHistoryAllToday(houseId:Int, now:Date) : Map<Int, Array<TimeWatts> > {
 		return DataBaseInterface.getOutletHistoryAllToday(houseId, now);
+	}
+	
+	public function getOutletHistoryAllDay(houseId:Int) : Map<Int, Array<TimeWatts> > {
+		return DataBaseInterface.getOutletHistoryAllDay(houseId);
+	}
+	
+	public function getOutletHistoryAllHour(houseId:Int) : Map<Int, Array<TimeWatts> > {
+		return DataBaseInterface.getOutletHistoryAllHour(houseId);
+	}
+	
+	public function getOutletHistoryAllWeek(houseId:Int) : Map<Int, Array<TimeWatts> > {
+		return DataBaseInterface.getOutletHistoryAllWeek(houseId);
+	}
+	
+	public function getOutletHistoryLastQuarter(houseId:Int) : Map<Int, Float> {
+		return DataBaseInterface.getOutletHistoryLastQuarter(houseId);
+	}
+	
+	public function getCurrentPowerSource() : String {
+		return DataBaseInterface.getCurrentPowerSource();
 	}
 	
 	

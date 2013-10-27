@@ -8,6 +8,8 @@ import Outlet;
 import OnOffData;
 import Config;
 
+typedef TimeWatts = {time:Date, watts:Float}
+
 
 /*
 Class that handles all data comming from the server.
@@ -54,7 +56,34 @@ class DataInterface {
 	private var mTimerHour : Timer; //Timer to get data every hour.
 	private var mTimerDay : Timer; //Timer to get data once a day.
 	
+	//Layout data:
 	public var houseDescriptor(default,null) : HouseDescriptor; //All data describing the house and its outlets.
+	
+	//Usage data now:
+	private var mOutletDataNow : Map<Int, Float>; //Usage now for each outlet, measured in watts.
+	private var mOutletDataNowTotal : Float; //Total usage data now for all outlets, measured in watts.
+	private var mRelativeUsageNow : Float; //Relative usage. From 0.0 to 1.0.
+	
+	//Usage data quarter:
+	private var mOutletDataQuarter : Map<Int, Float>; //Usage data for the last 15 minutes, for each outlet, measured in watts/15min.
+	private var mOutletDataQuarterTotal : Float; //Total usage for last outlets in the last 15 minutes.
+	
+	//Usage data hour:
+	private var mOutletDataHour : Map<Int, Float>; //Total usage for each outlet in the last hour.
+	private var mOutletDataHourTotal : Float; //Total usage for all outlets in the last hour.
+	private var mOutletDataHourTimed : Map<Int, Array<TimeWatts> >; //Usage for the last hour, timed in 15 minute intervals.
+	
+	//Usage data day:
+	private var mOutletDataDay : Map<Int, Float>; //Total usage for each outlet this day.
+	private var mOutletDataDayTotal : Float; //Total usage for all outlets this day.
+	private var mOutletDataDayTimed : Map<Int, Array<TimeWatts> >; //Usage for today, timed in 15 minute intervals.
+	
+	//Usage data week:
+	private var mOutletDataWeek : Map<Int, Float>; //Total usage for each outlet this week.
+	private var mOutletDataWeekTotal : Float; //Total usage for all outlets this week.
+	private var mOutletDataWeekTimed : Map<Int, Array<TimeWatts> >; //Usage for this week, timed in 15 minute intervals.
+
+
 	
 	public function new() {
 		#if production
@@ -85,12 +114,19 @@ class DataInterface {
 	
 		mTimerNow = new Timer(3*1000); //Every 3 secs.
 		mTimerNow.addEventListener(TimerEvent.TIMER, onTimerNow);
+		mTimerNow.start();
 	
 		mTimerQuarter = new Timer(15*60*1000); //Every 15 minutes.
+		mTimerQuarter.addEventListener(TimerEvent.TIMER, onTimerQuarter);
+		mTimerQuarter.start();
 		
 		mTimerHour = new Timer(60*60*1000); //Every hour.
+		mTimerHour.addEventListener(TimerEvent.TIMER, onTimerHour);
+		mTimerHour.start();
 		
 		mTimerDay = new Timer(24*60*60*1000); //Once a day.
+		mTimerDay.addEventListener(TimerEvent.TIMER, onTimerDay);
+		mTimerDay.start();
 	}
 	
 	//Get data to start with.
@@ -99,45 +135,103 @@ class DataInterface {
 	}
 	
 	
-	private function onTimerNow(event:Dynamic) : Void {
+	private function onTimerNow(event:Dynamic) : Void {	
+		//TODO: Get total relative consumption right now.
+		
+		mCnx.Api.getCurrentLoadAll.call([Config.instance.houseId], onGetCurrentLoadAll);
 	}
 	
 	
+	private function onTimerQuarter(event:Dynamic) : Void {
+		mCnx.Api.getOutletHistoryLastQuarter.call([Config.instance.houseId], onGetOutletHistoryLastQuarter);
+	}
+	
+	private function onTimerHour(event:Dynamic) : Void {
+		mCnx.Api.getOutletHistoryAllHour.call([Config.instance.houseId], onGetOutletHistoryAllHour);
+	}
+	
+	private function onTimerDay(event:Dynamic) : Void {
+	}
+	
+	
+	//****************************************************
+	// Functions that gets the data, then stores it inside this class. Private functions only.
+	//****************************************************
+	
+	private function onGetCurrentLoadAll(data:Dynamic) : Void {
+		mOutletDataNow = data;
+		mOutletDataNowTotal = 0;
+		for(w in mOutletDataNow)
+			mOutletDataNowTotal += w;
+	}
+	
+	private function onGetOutletHistoryLastQuarter(data:Dynamic) : Void {
+		mOutletDataQuarter = data;
+		mOutletDataQuarterTotal = 0;
+		for(w in mOutletDataQuarter)
+			mOutletDataQuarterTotal += w;
+	}
+	
+	private function onGetOutletHistoryAllHour(data:Dynamic) : Void {
+		mOutletDataHourTimed = data;
+		
+		var count=0; //Counts number of measurements on the outlet.
+		var watts:Float=0;
+		mOutletDataHour = new Map<Int, Float>();
+		for(key in mOutletDataHourTimed.keys()) {
+			mOutletDataHour.set(key,0);
+			count = 0;
+			watts = 0;
+			for(tw in mOutletDataHourTimed.get(key)) {
+				watts += tw.watts;
+				count += 1;
+			}
+			watts /= count;
+			mOutletDataHour.set(key, watts);
+		}
+		
+		mOutletDataHourTotal = 0;
+		for(w in mOutletDataHour)
+			mOutletDataHourTotal += w;
+	}
+	
+	private function onGetOutletHistoryAllDay(data:Dynamic) : Void {
+		mOutletDataDayTimed = data;
+		
+		var count=0; //Counts number of measurements on the outlet.
+		var watts:Float=0;
+		mOutletDataDay = new Map<Int, Float>();
+		for(key in mOutletDataDayTimed.keys()) {
+			mOutletDataDay.set(key,0);
+			count = 0;
+			watts = 0;
+			for(tw in mOutletDataDayTimed.get(key)) {
+				watts += tw.watts;
+				count += 1;
+			}
+			watts /= count;
+			mOutletDataDay.set(key, watts);
+		}
+		
+		mOutletDataDayTotal = 0;
+		for(w in mOutletDataDay)
+			mOutletDataDayTotal += w;
+	}
+	
 	//************************************************
-	// Functions for delivering the supplied data:
+	// Functions for delivering the supplied data: (These are the functions that the screens should use).
 	//************************************************
 
 	
-	/*Returns the current total load in watts.*/
+	/**Returns the current total load in watts.**/
 	public function getTotalCurrentLoad() : Float {
-		return Math.random(); //A random number.
+		return mOutletDataNowTotal;
 	}
 	
-	/*Returns the current load in watts on a specific switch.*/
+	/**Returns the current load in watts on a specific switch.**/
 	public function getCurrentLoadOutlet(outletId:Int) {
-		
-		var values = [122, 89, 56, 245, 189,111, 78, 411, 211];
-		return values[outletId];
-	}
-	
-	
-	//Returns the outlet to the callback, which should have the form function(outletId, watts) : Void.
-	public function requestCurrentOutletLoad(outletId:Int, callback:Int->Float->Void) {
-		var load:Float;
-		mCnx.Api.getCurrentLoad.call([Config.instance.houseId, outletId], function(d:Dynamic) {
-			load = d;
-			callback(outletId, load);
-		});
-	}
-	
-	
-	//Returns all outlet data through a Map<outletId, watts>.
-	public function requestCurrentOutletLoadAll(callback:Map<Int, Float> -> Void) {
-		var r:Map<Int, Float>;
-		mCnx.Api.getCurrentLoadAll.call([Config.instance.houseId], function(d:Dynamic) {
-			r = d;
-			callback(r);
-		}); 
+		var w:Null<Float> = mOutletDataNow.get(outletId);
+		return w == null ? 0 : w;
 	}
 	
 	

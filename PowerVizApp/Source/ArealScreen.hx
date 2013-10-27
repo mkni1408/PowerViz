@@ -223,12 +223,15 @@ class ArealScreen extends Sprite {
 
 
 	private function getColorAndRoomData():Void{
+	
+		//NOTE: Use DataInterface.instance.houseDescriptor instead!!!!!
+
+		var outletData = DataInterface.instance.requestOnOffData();
 
 			var outletData:Array<Outlet>;
 
 			 outletData = DataInterface.instance.getOnOffData();
 
-			//add unique rooms to the room array
 		for(i in 0...outletData.length){
 
 			var isPresent = false;
@@ -257,6 +260,7 @@ class ArealScreen extends Sprite {
 			}
 
 		}
+		
 
 
 	}
