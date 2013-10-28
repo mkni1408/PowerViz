@@ -40,11 +40,10 @@ class CoordSystem extends Sprite {
 
 		var counterArray = new Array<Int>();
 		this.graphics.clear();
+		
 		//ensure that there is no children 
-		while(this.numChildren > 0){
-
+		while(this.numChildren > 0)
 			this.removeChildAt(0);
-		}
 
 
 		this.graphics.lineStyle(3, 0x000000);
@@ -113,7 +112,8 @@ class CoordSystem extends Sprite {
 			
 			labelIndex += 1;
 		}
-		
+	
+		this.mouseEnabled = false;	
 	
 	}
 	
@@ -310,6 +310,7 @@ class CoordSystem extends Sprite {
 			this.addChild(legendSprite);
 
 			legendSprite.x = (xWidth - legendSprite.width)/2;
+			legendSprite.mouseEnabled = false;
 
 
 		}

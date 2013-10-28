@@ -59,7 +59,7 @@ class DataBaseInterface {
 		var cl = CurrentLoad.manager.select($houseId == houseId && $outletId == outletId);
 		if(cl!=null) {
 			cl.time = now;
-			cl.load = load;
+			cl.load = load<0 ? 0 : load;
 			cl.update();
 		}
 		else {
@@ -67,7 +67,7 @@ class DataBaseInterface {
 			cl.houseId = houseId;
 			cl.outletId = outletId;
 			cl.time = now;
-			cl.load = load;
+			cl.load = load<0 ? 0 : load;
 			cl.insert();
 		}
 	
@@ -81,7 +81,7 @@ class DataBaseInterface {
 		data.houseId = houseId;
 		data.outletId = outletId;
 		data.time = time;
-		data.load = watts;
+		data.load = watts<0 ? 0 : watts;
 		data.insert();
 	}
 	
