@@ -86,6 +86,7 @@ class ArealScreen extends Sprite {
         private function addChildrenToBack() {        
                 mBack.addChild(mDiagram);
                 mBack.addChild(mTimeButton);
+
                 mBack.addChild(mCoordSys);
                 mBack.addChild(mTitle);
         }
@@ -103,7 +104,7 @@ class ArealScreen extends Sprite {
 
                 mLegend = new Legend();
                 mLegend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mRoomArray, mColorArray);
-
+                mBack.addChild(mLegend);
                 //mBack.addChild(mLegend);
         
         
