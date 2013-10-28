@@ -46,14 +46,14 @@ class Main extends Sprite {
 	//prepares the swipetest, we add images to the swipemill
 	public function prepareSwipeTest() {
 		
+		mArealScreen = new ArealScreen();
+		SwipeMill.add(mArealScreen);
+		
 		mBarScreen = new BarScreen();
 		SwipeMill.add(mBarScreen);
 		
 		mOnOff = new OnOffDiagram();
 		SwipeMill.add(mOnOff);
-
-		mArealScreen = new ArealScreen();
-		SwipeMill.add(mArealScreen);
 
 		mCurrentUsage = new CurrentUsage();
 		SwipeMill.add(mCurrentUsage);

@@ -65,10 +65,10 @@ class ArealScreen extends Sprite {
 		
 		mDiagram = new ArealDiagram();
 		mDiagram.mouseEnabled=false;
-		mBack.addChild(mDiagram);
 		
 		
-		//testGenerate(); //TODO: Remove when working properly.
+		
+		
 		//this.width = HWUtils.screenWidth;
 		//this.height = HWUtils.screenHeight;
 		
@@ -87,6 +87,8 @@ class ArealScreen extends Sprite {
 		
 		
 		layout();
+
+		testGenerate(); //TODO: Remove when working properly.
 	}
 	
 	/**
@@ -111,11 +113,8 @@ class ArealScreen extends Sprite {
 		mBack.addChild(mLegend);
 	
 	
-		mDiagram.width = Lib.stage.stageWidth / 1.15;
-		mDiagram.height = Lib.stage.stageHeight / 1.25;
-		mDiagram.x = (Lib.stage.stageWidth - mDiagram.width) / 2;
-		mDiagram.y = Lib.stage.stageHeight - ((Lib.stage.stageHeight - mDiagram.height)/2);	
 		
+			
 		
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
 		mTimeButton.y = 0;
@@ -128,7 +127,14 @@ class ArealScreen extends Sprite {
 		mLegend.x =mCoordSys.x;
 		mLegend.y = mCoordSys.y + mLegend.height;
 
+		mDiagram.width = Lib.stage.stageWidth/1.25;
+		mDiagram.height = (Lib.stage.stageHeight/1.25)-mLegend.height;
+
+		mDiagram.x = mCoordSys.x;
+		mDiagram.y = mCoordSys.y + mLegend.height;
+
 		mBack.addChild(mCoordSys);
+		mBack.addChild(mDiagram);
 
 	}
 	
@@ -166,7 +172,7 @@ class ArealScreen extends Sprite {
 			
 			_colors.push(colors.get(id));
 		}
-		
+		trace("To here", outletIds);
 		mDiagram.generate(_usage, _colors, 100,100);
 		
 	}
