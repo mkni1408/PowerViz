@@ -17,6 +17,8 @@ class ArealDiagram extends Sprite {
 	*/
 	public function generate(values:Array< Array<Float> >, colors:Array<Int>, width:Float, height:Float) {
 	
+		trace(values);
+
 		if(values.length<1 || values[0].length<1)
 			return;
 			
@@ -53,7 +55,7 @@ class ArealDiagram extends Sprite {
 		var x:Float = 0; //x drawing position.
 		var y:Float = 0; //y drawing position.
 		var i:Int = 0; //Index into values.
-	
+		
 		gfx.beginFill(color); //Start filling with the specified color.
 		gfx.moveTo(0, bottoms[0]); //Move to the starting position.
 			
@@ -66,6 +68,8 @@ class ArealDiagram extends Sprite {
 			#else
 				v = b==null ? 0 : b;
 			#end
+
+
 			gfx.lineTo(x, v); //Draw the bottom part. Take into consideration, that something might be null.
 			topLine.push(v - (values[i]*vmult)); //Prepare the top line.
 			x += hspace; //Next position.
@@ -97,6 +101,7 @@ class ArealDiagram extends Sprite {
 								
 			var topLine = new Array<Float>();
 			
+		
 			for(i in 0...bottoms.length) {
 				#if cpp
 					topLine[i] = bottoms[i] - (values[i]*vmult);
@@ -112,6 +117,7 @@ class ArealDiagram extends Sprite {
 			var x:Float = 0;
 			for(j in 0...topLine.length-1) { //Generate points and indices:
 				triangles.push(x);
+					trace(x);
 				triangles.push(topLine[j]);
 				
 				triangles.push(x+hspace);
