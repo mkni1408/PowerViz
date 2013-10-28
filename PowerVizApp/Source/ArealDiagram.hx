@@ -16,8 +16,8 @@ class ArealDiagram extends Sprite {
 	This function assumes, that all arrays in 'values' are of equal length.
 	*/
 	public function generate(values:Array< Array<Float> >, colors:Array<Int>, width:Float, height:Float) {
-	
-		trace(values);
+		//remove children
+		
 
 		if(values.length<1 || values[0].length<1)
 			return;

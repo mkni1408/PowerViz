@@ -541,32 +541,7 @@ class DataInterface {
 	}
 	*/
 	
-	//Returns data for the ArealScreen for todays usage.
-	//The callback: function(outletIds:Array<Int>, usage:Map<outletId, Array<Float>>, color:Map<outletId, Int>) : Void
-	public function requestArealDataHour(callback:Array<Int> -> Map<Int, Array<Float>> -> Map<Int, Int> -> Void) {
-		
-		var rvIds = new Array<Int>();
-		var rvUsage = new Map<Int, Array<Float>>();
-		var rvColors = new Map<Int, Int>();
-		
-		var usage = new Array<Float>();
-		
-		var histData : Map<Int, Array<{time:Date, watts:Float}> >;
-		mCnx.Api.getOutletHistoryAllToday.call([Config.instance.houseId, Date.now()], function(d:Dynamic){ 
-			histData = d;
-			for(key in histData.keys()) {
-				rvIds.push(key);
-				for(u in histData.get(key)) {
-					usage.push(u.watts);
-				}
-				rvUsage.set(key, usage);
-				usage = new Array<Float>(); //Clear.
-				rvColors.set(key, houseDescriptor.getOutlet(key).outletColor);
-			}
-			callback(rvIds, rvUsage, rvColors);
-		});		
-		
-	}
+	
 	
 
 		//Returns data for the ArealScreen for todays usage.
@@ -629,14 +604,14 @@ class DataInterface {
 			default:
 				return null;
 		}
-		
+		trace(source);
 		for(key in source.keys()) {	
 
 			rvIds.push(key);
 			for(reading in source.get(key)) {
 				usage.push(reading.watts);
 				}
-				trace(usage);
+
 				rvUsage.set(key, usage);
 				usage = new Array<Float>();
 				rvColors.set(key, houseDescriptor.getOutlet(key).outletColor);

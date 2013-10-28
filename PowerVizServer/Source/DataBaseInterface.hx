@@ -251,7 +251,9 @@ class DataBaseInterface {
 		for(oh in qr) {
 			if(result.exists(oh.outletId)==false) {
 				result.set(oh.outletId, new Array<TimeWatts>());
+				trace(false);
 			}
+			
 			result.get(oh.outletId).push({time:oh.time, watts:oh.load});
 			
 		}

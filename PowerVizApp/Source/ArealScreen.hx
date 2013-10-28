@@ -20,7 +20,7 @@ This class obtains data from the DataInterface singleton class.
 **/
 
 class ArealScreen extends Sprite {
-
+        //should be changed to Hour,day,month
         private static inline var VIEWMODE_DAY:Int = 0;
         private static inline var VIEWMODE_WEEK:Int = 1;
         private static inline var VIEWMODE_MONTH:Int = 2;
@@ -47,7 +47,7 @@ class ArealScreen extends Sprite {
 
                 getColorAndRoomData();
 
-                mViewMode = VIEWMODE_DAY; //Daymode by default.
+                mViewMode = VIEWMODE_WEEK; //Daymode by default.
                 
                 mBack = new Sprite();
 
@@ -58,6 +58,7 @@ class ArealScreen extends Sprite {
 
                 mTimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00",""
                                                         ,"14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
+
 
                 mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", 
                                                         "800Wt","900Wt","1000Wt"];
@@ -84,7 +85,7 @@ class ArealScreen extends Sprite {
         }
         
         private function addChildrenToBack() {        
-                mBack.addChild(mDiagram);
+                //mBack.addChild(mDiagram);
                 mBack.addChild(mTimeButton);
 
                 mBack.addChild(mCoordSys);
@@ -117,7 +118,7 @@ class ArealScreen extends Sprite {
                 mTimeButton.y = 0;
 
                 mCoordSys.generate(Lib.stage.stageWidth/1.25, (Lib.stage.stageHeight/1.25)-mLegend.height, "X", "Y", (Lib.stage.stageWidth/1.25)/mTimeArray.length, ((Lib.stage.stageHeight/1.25)-mLegend.height)/mUsageArray.length, 
-                                                                                                                        mTimeArray, mUsageArray, true, false);
+                                                                                                                        mTimeArray, mUsageArray, true, true);
                 mCoordSys.x = (Lib.stage.stageWidth - mDiagram.width);
                 mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
                 
@@ -140,6 +141,7 @@ class ArealScreen extends Sprite {
                 return;
                 */
                 //var outlets = DataInterface.instance.getAllOutlets();
+
                 var colors = new Array<Int>();
                 var usageAA =  new Array< Array<Float> >();
                 //for(t in outlets) {
@@ -148,7 +150,18 @@ class ArealScreen extends Sprite {
                 //}*/
                 var r:ArealDataStruct = {outletIds:new Array<Int>(), watts:new Map<Int, Array<Float>>(), colors:new Map<Int,Int>()};
         
-                r = DataInterface.instance.getArealUsageToday();
+
+                if(mViewMode==0){//hour
+                    r = DataInterface.instance.getArealUsageHour();
+                }
+                 if(mViewMode==1){//Day
+                    r = DataInterface.instance.getArealUsageToday();
+                }
+                 if(mViewMode==2){//Week
+                    r = DataInterface.instance.getArealUsageWeek();
+                }
+
+                
 
                 var rvIds = new Array<Int>();
                 var rvUsage = new Map<Int, Array<Float>>();
@@ -166,22 +179,36 @@ class ArealScreen extends Sprite {
                 var _usage = new Array< Array<Float> >();
                 var _colors = new Array<Int>();
                 var _ta:Array<Float>;
-                
-                for(id in outletIds) {
-                        _ta = usage.get(id);
-                        while(_ta.length<96)
+
+                if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden
+                    _ta = new Array<Float>();
+                        for(t in 0...96){
                                 _ta.push(0);
-                        if(_ta.length>96)
-                                _ta = _ta.slice(0,96);
+                            }
+
+                             _usage.push(_ta);
+
+                }
+                else{
+                
+                    for(id in outletIds) {
+                            _ta = usage.get(id);
+                            while(_ta.length<96)
+                                    _ta.push(0);
+                            if(_ta.length>96)
+                                    _ta = _ta.slice(0,96);
                                 
-                        _usage.push(_ta);
+                            _usage.push(_ta);
 
                                 
                         
-                        _colors.push(colors.get(id));
+                            _colors.push(colors.get(id));
 
-                }
+                    }
+            }
                 
+                mDiagram.graphics.clear();
+
                 mDiagram.generate(_usage, _colors, Lib.stage.stageWidth / 1.15,Lib.stage.stageHeight / 1.25);
                 
         }
@@ -213,8 +240,7 @@ class ArealScreen extends Sprite {
                 if(mViewMode == 0){
                         //hour
                         mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
-                        mTimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00",""
-                                                        ,"14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
+                        mTimeArray = [".15",".30",".45",""];
 
 
                         mTitle.text = "Forbrug denne time ";
@@ -223,7 +249,8 @@ class ArealScreen extends Sprite {
                 if(mViewMode == 1){
                         //day
                         mUsageArray = ["1kWt  ", "2kWt  ", "3kWt  ","4kWt  ","5kWt  ", "6kWt  ","7kWt  ", "8kWt  ","9kWt  ","10kWt  "];
-                        mTimeArray = ["Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"];
+                        mTimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00",""
+                                                        ,"14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
 
                         mTitle.text = "Forbrug i dag ";
 
@@ -231,7 +258,7 @@ class ArealScreen extends Sprite {
                 if(mViewMode == 2){
                         ///week
                         mUsageArray = ["10kWt ", "20kWt ", "30kWt ","40kWt ","50kWt ", "60kWt ","70kWt ", "80kWt ","90kWt ","100kWt "];
-                        mTimeArray = ["1    ", "2     ", "3     ","4     "];
+                        mTimeArray = ["Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"];
                         mTitle.text = "Forbrug denne uge ";
 
                 }
@@ -239,8 +266,20 @@ class ArealScreen extends Sprite {
                 mTimeButton.changeButtonState(mViewMode);
                 mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 
+                while(mBack.numChildren > 0)
+                    mBack.removeChildAt(0);
+
+
+
+                mDiagram = new ArealDiagram();
+                mLegend = new Legend();
+                mCoordSys = new CoordSystem();
+                
                 fillWithData();
+                addChildrenToBack();
                 doLayout();
+
+                
         }
 
 
