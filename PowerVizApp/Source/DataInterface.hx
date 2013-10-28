@@ -9,7 +9,7 @@ import OnOffData;
 import Config;
 
 typedef TimeWatts = {time:Date, watts:Float}
-
+typedef ArealDataStruct = {outletIds:Array<Int>, watts:Map<Int, Array<Float>>, colors:Map<Int,Int>}
 
 /*
 Class that handles all data comming from the server.
@@ -91,7 +91,28 @@ class DataInterface {
 		#else
 			this.connect("http://78.47.92.222/pvsdev/"); //Connect to development version.
 		#end 
+		constructUsageDataContainers();
 		getDataOnCreation();
+	}
+	
+	private function constructUsageDataContainers() {
+	
+		 mOutletDataNow = new Map<Int, Float>(); //Usage now for each outlet, measured in watts.
+	
+		//Usage data quarter= new 
+		 mOutletDataQuarter = new  Map<Int, Float>(); //Usage data for the last 15 minutes, for each outlet, measured in watts/15min.
+	
+		//Usage data hour= new 
+		 mOutletDataHour = new  Map<Int, Float>(); //Total usage for each outlet in the last hour.
+		 mOutletDataHourTimed = new  Map<Int, Array<TimeWatts> >(); //Usage for the last hour, timed in 15 minute intervals.
+	
+		//Usage data day= new 
+		 mOutletDataDay = new  Map<Int, Float>(); //Total usage for each outlet this day.
+		 mOutletDataDayTimed = new  Map<Int, Array<TimeWatts> >(); //Usage for today, timed in 15 minute intervals.
+	
+		//Usage data week= new 
+		 mOutletDataWeek = new  Map<Int, Float>(); //Total usage for each outlet this week.
+		 mOutletDataWeekTimed = new  Map<Int, Array<TimeWatts> >(); //Usage for this week, timed in 15 minute intervals.
 	}
 	
 	//Connects to the server, setting up the remoting system.
@@ -132,6 +153,11 @@ class DataInterface {
 	//Get data to start with.
 	private function getDataOnCreation() {
 		houseDescriptor = getHouseDescriptor(); //Get the house layout.
+		//Call the timers to get data to start with:
+		onTimerNow(null);
+		onTimerQuarter(null);
+		onTimerHour(null);
+		onTimerDay(null);
 	}
 	
 	
@@ -151,6 +177,7 @@ class DataInterface {
 	}
 	
 	private function onTimerDay(event:Dynamic) : Void {
+		mCnx.Api.getOutletHistoryAllDay.call([Config.instance.houseId], onGetOutletHistoryAllDay);
 	}
 	
 	
@@ -174,7 +201,6 @@ class DataInterface {
 	
 	private function onGetOutletHistoryAllHour(data:Dynamic) : Void {
 		mOutletDataHourTimed = data;
-		
 		var count=0; //Counts number of measurements on the outlet.
 		var watts:Float=0;
 		mOutletDataHour = new Map<Int, Float>();
@@ -197,7 +223,7 @@ class DataInterface {
 	
 	private function onGetOutletHistoryAllDay(data:Dynamic) : Void {
 		mOutletDataDayTimed = data;
-		
+		trace(data);
 		var count=0; //Counts number of measurements on the outlet.
 		var watts:Float=0;
 		mOutletDataDay = new Map<Int, Float>();
@@ -441,7 +467,7 @@ class DataInterface {
 			var onOffMap = new Map<Int, Array<OnOffData> >();
 			var start:Date=null;
 			var stop:Date=null;
-			trace(usageToday);
+			//trace(usageToday);
 			for(key in usageToday.keys()) {
 
 				onOffMap.set(key, new Array<OnOffData>());
@@ -488,8 +514,8 @@ class DataInterface {
 				}
 			}
 			
-			trace(result);
 			callback(result); //Return the result in the callback.
+
 		});
 		
 	}
@@ -520,29 +546,31 @@ class DataInterface {
 		});		
 		
 	}
+	
+	//typedef ArealDataStruct = {outletIds:Array<Int>, watts:Map<Int, Array<Float>>, colors:Map<Int,Int>}
+	public function getArealUsageToday() : ArealDataStruct {
+		var r:ArealDataStruct = {outletIds:new Array<Int>(), watts:new Map<Int, Array<Float>>(), colors:new Map<Int,Int>()};
+		return r;
+	}
 
 
 	//returns the total wh from a device in the last hour
 	public function getOutletLastHourTotal(outletId:Int) : Float {
-		
-		
-		
-		return 1000.0;
+		var u = mOutletDataHour.get(outletId);
+		return u==null ? 0 : u;
 	}
+	
 	//returns the total wh from a device in the last day
 	public function getOutletLastDayTotal(outletId:Int) : Float {
-	
-		
-		
-			
-		return 1000.0;
+		var u = mOutletDataDay.get(outletId);
+		return u==null ? 0 : u;
 	}
+	
 	//returns the total wh from a device in the last week
 	public function getOutletLastWeekTotal(outletId:Int) : Float {
-		
-		
-		
-		return 1000.0;
+		return 1000;
+		var u = mOutletDataWeek.get(outletId);
+		return u==null ? 0 : u;
 	}
 
 }
