@@ -24,6 +24,8 @@ class ArealDiagram extends Sprite {
 			
 		//Clear before drawing:
 		this.graphics.clear();
+
+		trace(colors);
 	
 		var bottoms = new Array<Float>(); //Bottom values of the previous row.
 		
@@ -117,7 +119,7 @@ class ArealDiagram extends Sprite {
 			var x:Float = 0;
 			for(j in 0...topLine.length-1) { //Generate points and indices:
 				triangles.push(x);
-					trace(x);
+					
 				triangles.push(topLine[j]);
 				
 				triangles.push(x+hspace);

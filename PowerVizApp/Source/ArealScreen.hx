@@ -135,19 +135,30 @@ class ArealScreen extends Sprite {
         
         /*Gets data through DataInterface, then creates the diagram.*/
         private function fillWithData() {
-        
+                /*
                 DataInterface.instance.requestArealDataToday(onDataReceivedDay);
                 return;
-                
-                var outlets = DataInterface.instance.getAllOutlets();
+                */
+                //var outlets = DataInterface.instance.getAllOutlets();
                 var colors = new Array<Int>();
                 var usageAA =  new Array< Array<Float> >();
-                for(t in outlets) {
-                        usageAA.push(DataInterface.instance.getOutletLastDayUsage(t));
-                        colors.push(DataInterface.instance.getOutletColor(t));
-                }
-                mDiagram.generate(usageAA, colors, 100,100);
-                
+                //for(t in outlets) {
+                //        usageAA.push(DataInterface.instance.getOutletLastDayUsage(t));
+                //        colors.push(DataInterface.instance.getOutletColor(t));
+                //}*/
+                var r:ArealDataStruct = {outletIds:new Array<Int>(), watts:new Map<Int, Array<Float>>(), colors:new Map<Int,Int>()};
+        
+                r = DataInterface.instance.getArealUsageToday();
+
+                var rvIds = new Array<Int>();
+                var rvUsage = new Map<Int, Array<Float>>();
+                var rvColors = new Map<Int, Int>();
+
+                rvIds = r.outletIds;
+                rvUsage = r.watts;
+                rvColors = r.colors;
+
+                onDataReceivedDay(rvIds,rvUsage,rvColors);
         }        
         
         private function onDataReceivedDay(outletIds:Array<Int>, usage:Map<Int, Array<Float>>, colors:Map<Int, Int>) : Void {
@@ -164,11 +175,14 @@ class ArealScreen extends Sprite {
                                 _ta = _ta.slice(0,96);
                                 
                         _usage.push(_ta);
+
+                                
                         
                         _colors.push(colors.get(id));
+
                 }
                 
-                mDiagram.generate(_usage, _colors, 100,100);
+                mDiagram.generate(_usage, _colors, Lib.stage.stageWidth / 1.15,Lib.stage.stageHeight / 1.25);
                 
         }
         
@@ -199,18 +213,25 @@ class ArealScreen extends Sprite {
                 if(mViewMode == 0){
                         //hour
                         mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
+                        mTimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00",""
+                                                        ,"14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
+
+
                         mTitle.text = "Forbrug denne time ";
 
                 }
                 if(mViewMode == 1){
                         //day
                         mUsageArray = ["1kWt  ", "2kWt  ", "3kWt  ","4kWt  ","5kWt  ", "6kWt  ","7kWt  ", "8kWt  ","9kWt  ","10kWt  "];
+                        mTimeArray = ["Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"];
+
                         mTitle.text = "Forbrug i dag ";
 
                 }
                 if(mViewMode == 2){
                         ///week
                         mUsageArray = ["10kWt ", "20kWt ", "30kWt ","40kWt ","50kWt ", "60kWt ","70kWt ", "80kWt ","90kWt ","100kWt "];
+                        mTimeArray = ["1    ", "2     ", "3     ","4     "];
                         mTitle.text = "Forbrug denne uge ";
 
                 }
