@@ -110,8 +110,6 @@ class ArealScreen extends Sprite {
                 mBack.addChild(mDiagram);
                 mDiagram.width = Lib.stage.stageWidth / 1.15;
                 mDiagram.height = Lib.stage.stageHeight / 1.25;
-                mDiagram.x = (Lib.stage.stageWidth - mDiagram.width) / 2;
-                mDiagram.y = Lib.stage.stageHeight - ((Lib.stage.stageHeight - mDiagram.height)/2);        
                 
                 
                 mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
@@ -125,6 +123,10 @@ class ArealScreen extends Sprite {
 
                 mLegend.x = mCoordSys.x;
                 mLegend.y = mCoordSys.y + mLegend.height;
+
+                mDiagram.x = mCoordSys.x;
+                mDiagram.y = mCoordSys.y;        
+                
 
                 //mBack.addChild(mCoordSys);
 
