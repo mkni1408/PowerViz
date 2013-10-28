@@ -77,25 +77,23 @@ class OnOffDiagram extends Sprite{
 */
 		mCoordSystem = new CoordSystem();
 		
-		DataInterface.instance.requestOnOffData(onDataReturnedFromDataInterface);
+		updateData();
 				
 	}
 	
 	private function onTime(event:TimerEvent) {
-		DataInterface.instance.requestOnOffData(onDataReturnedFromDataInterface);
+		updateData();
 	}
 	
-	private function onDataReturnedFromDataInterface(data:Array<Outlet>) : Void {
+	private function updateData() {
+		var data = DataInterface.instance.getOnOffData();
 		
 		handleCategoryData(data);
-
 		drawDiagram();
-		
 		mBack.addChild(monOffBar);
-
 		this.addChild(mBack);
-		
 	}
+	
 	
 	private function drawDiagram() {
 		//fetch data  

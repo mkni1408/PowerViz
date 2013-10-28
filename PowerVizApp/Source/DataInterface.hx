@@ -55,6 +55,7 @@ class DataInterface {
 	private var mTimerQuarter : Timer; //Timer used to get data every 15 minutes.
 	private var mTimerHour : Timer; //Timer to get data every hour.
 	private var mTimerDay : Timer; //Timer to get data once a day.
+	private var mTimerWeek : Timer;
 	
 	//Layout data:
 	public var houseDescriptor(default,null) : HouseDescriptor; //All data describing the house and its outlets.
@@ -123,7 +124,8 @@ class DataInterface {
 	
 	//Called when a connection or server error occurs.
 	private function onError(e:String) {
-		trace("Connection error: " + e);
+		Sys.println("Connection error: " + e);
+		//TODO: We should try to reconnect somehow...
 	}
 	
 	//**************************************************
@@ -148,6 +150,10 @@ class DataInterface {
 		mTimerDay = new Timer(24*60*60*1000); //Once a day.
 		mTimerDay.addEventListener(TimerEvent.TIMER, onTimerDay);
 		mTimerDay.start();
+		
+		mTimerWeek = new Timer(24*60*60*1000*7); //Once a week.
+		mTimerWeek.addEventListener(TimerEvent.TIMER, onTimerWeek);
+		mTimerWeek.start();
 	}
 	
 	//Get data to start with.
@@ -158,6 +164,7 @@ class DataInterface {
 		onTimerQuarter(null);
 		onTimerHour(null);
 		onTimerDay(null);
+		//onTimerWeek(null);
 	}
 	
 	
@@ -180,6 +187,10 @@ class DataInterface {
 		mCnx.Api.getOutletHistoryAllDay.call([Config.instance.houseId], onGetOutletHistoryAllDay);
 	}
 	
+	private function onTimerWeek(event:Dynamic) : Void {
+		mCnx.Api.getOutletHistoryAllWeek.call([Config.instance.houseId], onGetOutletHistoryAllWeek);
+	}
+	
 	
 	//****************************************************
 	// Functions that gets the data, then stores it inside this class. Private functions only.
@@ -200,48 +211,59 @@ class DataInterface {
 	}
 	
 	private function onGetOutletHistoryAllHour(data:Dynamic) : Void {
-		mOutletDataHourTimed = data;
-		var count=0; //Counts number of measurements on the outlet.
-		var watts:Float=0;
-		mOutletDataHour = new Map<Int, Float>();
-		for(key in mOutletDataHourTimed.keys()) {
-			mOutletDataHour.set(key,0);
-			count = 0;
-			watts = 0;
-			for(tw in mOutletDataHourTimed.get(key)) {
-				watts += tw.watts;
-				count += 1;
-			}
-			watts /= count;
-			mOutletDataHour.set(key, watts);
-		}
-		
-		mOutletDataHourTotal = 0;
-		for(w in mOutletDataHour)
-			mOutletDataHourTotal += w;
+		onGetOutletHistory(data, "hour");
 	}
 	
 	private function onGetOutletHistoryAllDay(data:Dynamic) : Void {
-		mOutletDataDayTimed = data;
-		trace(data);
+		onGetOutletHistory(data, "day");
+	}
+	
+	private function onGetOutletHistoryAllWeek(data:Dynamic) : Void {
+		onGetOutletHistory(data, "week");
+	}
+	
+	private function onGetOutletHistory(data:Dynamic, timespan:String) {
+	
+		var dest:Map<Int, Array<TimeWatts>> = data;
+		var accumOutlet:Map<Int, Float>;
+		var accum:Float=0;
+		
 		var count=0; //Counts number of measurements on the outlet.
 		var watts:Float=0;
-		mOutletDataDay = new Map<Int, Float>();
-		for(key in mOutletDataDayTimed.keys()) {
-			mOutletDataDay.set(key,0);
+		accumOutlet = new Map<Int, Float>();
+		for(key in dest.keys()) {
+			accumOutlet.set(key,0);
 			count = 0;
 			watts = 0;
-			for(tw in mOutletDataDayTimed.get(key)) {
+			for(tw in dest.get(key)) {
 				watts += tw.watts;
 				count += 1;
 			}
 			watts /= count;
-			mOutletDataDay.set(key, watts);
+			accumOutlet.set(key, watts);
 		}
 		
-		mOutletDataDayTotal = 0;
+		accum = 0;
 		for(w in mOutletDataDay)
-			mOutletDataDayTotal += w;
+			accum += w;
+			
+		switch(timespan) {
+			case "hour":
+				mOutletDataHourTimed = dest;
+				mOutletDataHour = accumOutlet;
+				mOutletDataHourTotal = accum;
+			case "day":
+				mOutletDataDayTimed = dest;
+				mOutletDataDay = accumOutlet;
+				mOutletDataDayTotal = accum;
+			case "week":
+				mOutletDataWeekTimed = dest;
+				mOutletDataWeek = accumOutlet;
+				mOutletDataWeekTotal = accum;
+			default: 
+				return;
+		}
+
 	}
 	
 	//************************************************
@@ -302,6 +324,7 @@ class DataInterface {
 	/*
 	Returns an array of 96 floats, representing the useage data from the last 24 hours,
 	based on HouseID and outletId.
+	TODO: Remove this function, despite its random beautiness!!!!
 	*/
 	public function getOutletLastDayUsage(outletId:Int) : Array<Float> {
 		
@@ -337,11 +360,10 @@ class DataInterface {
 			r += 1;
 		}
 		
-		
 		return returns;
 	}
 
-	
+	//Severely deprecated. Will be removed very soon.
 	public function getOnOffData_OLD():Array<Outlet>{
 		var outletData = new Array<Outlet>();
 		var intData = [0,1,2,3,4,5,6,7,8,9,10];
@@ -358,9 +380,7 @@ class DataInterface {
 		var data = [OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray];
 
 		for(i in 0...intData.length){
-
-			outletData.push(new Outlet(i,idData[i],catData[i],OnOffDataArray,roomData[i],wattData[i]));
-			
+			outletData.push(new Outlet(i,idData[i],catData[i],OnOffDataArray,roomData[i],wattData[i]));	
 		}		
 
 		return outletData;
@@ -396,14 +416,13 @@ class DataInterface {
 		return hD;
 	}
 	
-	
+	//Returns ON/OFF data for today.
 	public function getOnOffData():Array<Outlet> {
 	
-		/*
-		var houseId=Config.instance.houseId;;
-		var hD:HouseDescriptor = houseDescriptor;
+		var houseId=Config.instance.houseId;
 		
-		var usageToday:Map<Int, Array<{time:Date, watts:Float}> > = getUsageToday();
+		//var usageToday:Map<Int, Array<{time:Date, watts:Float}> > = getUsageToday();
+		var usageToday = mOutletDataDayTimed;
 		
 		var onOffMap = new Map<Int, Array<OnOffData> >();
 		var start:Date=null;
@@ -423,6 +442,10 @@ class DataInterface {
 				}
 				else {	
 					if(start!=null && stop!=null) {
+						if(stop.getDate()!=start.getDate())
+							stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
+						if(stop.getTime() == start.getTime())
+							stop = DateTools.delta(start, DateTools.minutes(15));
 						onOffMap.get(key).push(new OnOffData(start, stop));
 						start = null;
 						stop = null;
@@ -432,6 +455,8 @@ class DataInterface {
 			}
 			
 			if(start!=null && stop!=null) { //End of data, so close the block if open.
+				if(stop.getDate()!=start.getDate())
+					stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
 				onOffMap.get(key).push(new OnOffData(start, stop));
 			}
 
@@ -439,24 +464,19 @@ class DataInterface {
 			
 
 		var result = new Array<Outlet>();
-		for(room in hD.getRoomArray()) {
+		for(room in houseDescriptor.getRoomArray()) {
 			for(outlet in room.getOutletsArray()) {
 				result.push(new Outlet(0, Std.string(outlet.outletId), outlet.name, 
-
-							onOffMap.get(outlet.outletId), room.roomName, 0,room.roomColor,
-							outlet.outletColor));
-
+								onOffMap.get(outlet.outletId), room.roomName, 0,
+								room.roomColor, outlet.outletColor));
 			}
 		}
-		
 	
 		return result;
-		*/
-		return getOnOffData_OLD();
-	
 	}
 	
 	
+	/*
 	public function requestOnOffData(callback:Array<Outlet>->Void) {
 		var houseId=Config.instance.houseId;
 		var hD:HouseDescriptor = houseDescriptor; //Get the stored house data.
@@ -519,6 +539,7 @@ class DataInterface {
 		});
 		
 	}
+	*/
 	
 	//Returns data for the ArealScreen for todays usage.
 	//The callback: function(outletIds:Array<Int>, usage:Map<outletId, Array<Float>>, color:Map<outletId, Int>) : Void
@@ -547,10 +568,52 @@ class DataInterface {
 		
 	}
 	
-	//typedef ArealDataStruct = {outletIds:Array<Int>, watts:Map<Int, Array<Float>>, colors:Map<Int,Int>}
+	//Returns the daily usage data for the ArealScreen diagram.
 	public function getArealUsageToday() : ArealDataStruct {
+		return getArealUsage("day");
+	}
+	
+	public function getArealUsageHour() : ArealDataStruct {
+		return getArealUsage("hour");
+	}
+	
+	public function getArealUsageWeek() : ArealDataStruct {
+		return getArealUsage("week");
+	}
+	
+	private function getArealUsage(timespan:String) : ArealDataStruct {
 		var r:ArealDataStruct = {outletIds:new Array<Int>(), watts:new Map<Int, Array<Float>>(), colors:new Map<Int,Int>()};
-		return r;
+		
+		var rvIds = new Array<Int>();
+		var rvUsage = new Map<Int, Array<Float>>();
+		var rvColors = new Map<Int, Int>();
+		
+		var usage = new Array<Float>();
+		
+		var source:Map<Int, Array<TimeWatts>>;
+		switch(timespan) {
+			case "hour":
+				source = mOutletDataHourTimed;
+			case "day":
+				source = mOutletDataDayTimed;
+			case "week":
+				source = mOutletDataWeekTimed;
+			default:
+				return null;
+		}
+		
+		for(key in source.keys()) {	
+			rvIds.push(key);
+			for(reading in source.get(key)) {
+				usage.push(reading.watts);
+				rvUsage.set(key, usage);
+				usage = new Array<Float>();
+				rvColors.set(key, houseDescriptor.getOutlet(key).outletColor);
+			}
+		}
+		
+		return {outletIds:rvIds, watts:rvUsage, colors:rvColors};
+		
 	}
 
 
@@ -568,7 +631,6 @@ class DataInterface {
 	
 	//returns the total wh from a device in the last week
 	public function getOutletLastWeekTotal(outletId:Int) : Float {
-		return 1000;
 		var u = mOutletDataWeek.get(outletId);
 		return u==null ? 0 : u;
 	}
