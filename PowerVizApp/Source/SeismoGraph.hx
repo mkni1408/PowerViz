@@ -2,6 +2,7 @@ import flash.display.Sprite;
 import flash.Lib;
 import flash.display.Bitmap;
 import openfl.Assets;
+import DataInterface;
 
 
 class SeismoGraph extends Sprite{

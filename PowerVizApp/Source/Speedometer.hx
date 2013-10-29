@@ -3,6 +3,7 @@ import flash.Lib;
 import flash.display.Bitmap;
 import openfl.Assets;
 import SpeedometerArrow;
+import DataInterface;
 
 class Speedometer extends Sprite{
 	
