@@ -17,7 +17,6 @@ class ArealDiagram extends Sprite {
 	*/
 	public function generate(values:Array< Array<Float> >, colors:Array<Int>, width:Float, height:Float) {
 		//remove children
-		trace(values);
 
 		if(values.length<1 || values[0].length<1)
 			return;
@@ -41,6 +40,7 @@ class ArealDiagram extends Sprite {
 		
 			//bottoms = drawArea(bottoms, a, this.graphics, colors[i], width/values[0].length, 1); //Draw each area, getting the new bottom line.
 			bottoms = drawArea2(bottoms, a, this.graphics, colors[i], width/values[0].length, 1);
+			trace(width/values[0].length);
 			i += 1;
 		}
 		

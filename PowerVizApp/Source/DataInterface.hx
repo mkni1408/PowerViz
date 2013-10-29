@@ -604,7 +604,7 @@ class DataInterface {
 			default:
 				return null;
 		}
-		trace(source);
+		
 		for(key in source.keys()) {	
 
 			rvIds.push(key);

@@ -248,8 +248,7 @@ class CoordSystem extends Sprite {
 		}
 
 		private function convertTime(time:Date):Float{
-			//trace("...........");
-			//trace(convertTimeHour(time)+convertTimeMinute(time));
+			
 			return (convertTimeHour(time)+convertTimeMinute(time));
 
 		}
@@ -263,9 +262,9 @@ class CoordSystem extends Sprite {
 		}
 		//returns the positionoffset 
 		private function convertTimeMinute(time:Date):Float{
-			//trace("MINUTES",time.getMinutes());
+			trace("MINUTES",time.getMinutes());
 			var minutes = time.getMinutes()/100;
-			//trace("minut:",xHeight * minutes);
+			trace("minut:",xHeight * minutes);
 			//trace((xHeight/100) * minutes);
 			return (xHeight * minutes);
 		}
