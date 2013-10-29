@@ -231,15 +231,38 @@ class DataBaseInterface {
 		return -1;		
 	}
 	
+	public static function fillInMissingReadings(readings:Array<TimeWatts>, from:Date, to:Date) {
+		var result = new Array<TimeWatts>(); //New return value.
+		var t = Date.fromTime(from.getTime()); //Used for the "current time" in the loop.
+		var sub:Date; //Substitute with 0.
+		var index:Int=0;
+		while(t.getTime() <= to.getTime()) {
+		
+			if(readings[index].time.getTime() != t.getTime()) //There is no reading in this timespan.
+				result.push({time:t, watts:0}); //Put an empty reading in.
+			else if(readings[index].time.getTime() == t.getTime() ) {
+				result.push(readings[index]); //Put the real reading in.
+				index += 1; //Advance to next reading.
+			}
+			t = DateTools.delta(t, DateTools.minutes(15)); //Advance the timer with 15 minutes.
+		}
+		
+		return result;
+	}
+	
 	//Returns the load data that was recorded in the specified timespan for the specified outlet.
 	//Returned as an array of anonymous structures.
+	//UPDATE: When there are gaps in the data, this should fill out the gaps and return decent data.
 	public static function getOutletHistory(houseId:Int, outletId:Int, from:Date, to:Date) : Array<TimeWatts> {
 		
 		var r = new Array<TimeWatts>();
 		for(lh in LoadHistory.manager.search($houseId==houseId && $outletId==outletId && $time>=from && $time <= to, {orderBy : time})) {
 				r.push({time:lh.time, watts:lh.load});
 		}
-		return r;
+		
+		//End of the original function:
+		//return r;
+		return fillInMissingReadings(r, from, to);
 	}
 	
 	
@@ -251,13 +274,25 @@ class DataBaseInterface {
 		for(oh in qr) {
 			if(result.exists(oh.outletId)==false) {
 				result.set(oh.outletId, new Array<TimeWatts>());
-				trace(false);
 			}
 			
 			result.get(oh.outletId).push({time:oh.time, watts:oh.load});
 			
 		}
+		
+		//End of the original 
 		return result;
+		
+		var r2 = new Map<Int, Array<TimeWatts>>();
+		var tempArray:Array<TimeWatts>;
+		for(key in result.keys()) {
+			tempArray = result.get(key);
+			tempArray = fillInMissingReadings(tempArray, from, to);
+			//result.set(key, tempArray);
+			r2.set(key, tempArray);
+		}
+		return r2;
+		
 	}
 	
 	//Returns the usage data of all outlets today.

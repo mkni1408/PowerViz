@@ -11,6 +11,14 @@ import Config;
 typedef TimeWatts = {time:Date, watts:Float}
 typedef ArealDataStruct = {outletIds:Array<Int>, watts:Map<Int, Array<Float>>, colors:Map<Int,Int>}
 
+enum PowerSource {
+	Coal;
+	Wind;
+	Water;
+	Sun;
+	Nuclear;
+}
+
 /*
 Class that handles all data comming from the server.
 This class works mainly as a dummy during the development.
@@ -59,6 +67,7 @@ class DataInterface {
 	
 	//Layout data:
 	public var houseDescriptor(default,null) : HouseDescriptor; //All data describing the house and its outlets.
+	public var currentPowerSource(default,null):PowerSource; //The current power source. See the enum above.
 	
 	//Usage data now:
 	private var mOutletDataNow : Map<Int, Float>; //Usage now for each outlet, measured in watts.
@@ -164,7 +173,7 @@ class DataInterface {
 		onTimerQuarter(null);
 		onTimerHour(null);
 		onTimerDay(null);
-		//onTimerWeek(null);
+		onTimerWeek(null);
 	}
 	
 	
@@ -363,30 +372,7 @@ class DataInterface {
 		return returns;
 	}
 
-	//Severely deprecated. Will be removed very soon.
-	public function getOnOffData_OLD():Array<Outlet>{
-		var outletData = new Array<Outlet>();
-		var intData = [0,1,2,3,4,5,6,7,8,9,10];
-		var idData = ["1","2","3","4","5","6","7","8","9","10"];
-		var catData = ["tv","opvask","lampe","ovn","frys","køl","vaskemaskine","komfur","funky","elpisker","Tues funky"];
-		var wattData = [10.4,10.4,2.4,5.3,10.4,10.4,2.4,5.3,5.2,8.2,1.1];
-		var roomData=["Stue","Køkken","Toilet","Køkken","Bad","Gang","Gang","Køkken","Køkken","sm-rum","pool rum"];
-
-		var onOffData = new OnOffData(Date.fromString("2013-10-21 10:15:00"),Date.fromString("2013-10-21 10:45:00"));
-		var onOffData2 = new OnOffData(Date.fromString("2013-10-21 12:15:00"),Date.fromString("2013-10-21 16:46:00"));
-		
-		var OnOffDataArray = [onOffData,onOffData2];
-
-		var data = [OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray,OnOffDataArray];
-
-		for(i in 0...intData.length){
-			outletData.push(new Outlet(i,idData[i],catData[i],OnOffDataArray,roomData[i],wattData[i]));	
-		}		
-
-		return outletData;
-
-	}
-	
+	/*
 	//Request todays usage, passing a callback to receive the data.
 	public function requestUsageToday(f:Map<Int, Array<{time:Date, watts:Float}> > -> Void) {
 		var houseId = Config.instance.houseId;
@@ -396,7 +382,7 @@ class DataInterface {
 			f(usageToday);
 		});
 	}
-	
+	*/
 	
 	//This is only called once on app startup, so it is in sync.
 	private function getHouseDescriptor() : HouseDescriptor {
@@ -475,76 +461,8 @@ class DataInterface {
 		return result;
 	}
 	
-	
 	/*
-	public function requestOnOffData(callback:Array<Outlet>->Void) {
-		var houseId=Config.instance.houseId;
-		var hD:HouseDescriptor = houseDescriptor; //Get the stored house data.
-		
-		var usageToday:Map<Int, Array<{time:Date, watts:Float}> >;
-		requestUsageToday(function(ut:Map<Int, Array<{time:Date, watts:Float}>>) { //Request usage, then proceed when data is received.
-			usageToday = ut;
-			var onOffMap = new Map<Int, Array<OnOffData> >();
-			var start:Date=null;
-			var stop:Date=null;
-			//trace(usageToday);
-			for(key in usageToday.keys()) {
-
-				onOffMap.set(key, new Array<OnOffData>());
-				start = null;
-				stop = null;
-			
-				for(u in usageToday.get(key)) {
-				
-					if(u.watts>0) {
-						if(start==null) {
-							start = u.time; //Date.fromTime(u.time.getTime() - (15*60*1000));
-						}
-						stop = u.time;
-					}
-					else {	
-						if(start!=null && stop!=null) {
-							if(stop.getDate()!=start.getDate())
-								stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
-							if(stop.getTime() == start.getTime())
-								stop = DateTools.delta(start, DateTools.minutes(15));
-							onOffMap.get(key).push(new OnOffData(start, stop));
-							start = null;
-							stop = null;
-						}
-					}
-								
-				}
-			
-				if(start!=null && stop!=null) { //End of data, so close the block if open.
-					if(stop.getDate()!=start.getDate())
-						stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
-					onOffMap.get(key).push(new OnOffData(start, stop));
-				}
-
-			}	
-			
-
-			var result = new Array<Outlet>();
-			for(room in hD.getRoomArray()) {
-				for(outlet in room.getOutletsArray()) {
-					result.push(new Outlet(0, Std.string(outlet.outletId), outlet.name, 
-									onOffMap.get(outlet.outletId), room.roomName, 0,
-									room.roomColor, outlet.outletColor));
-				}
-			}
-			
-			callback(result); //Return the result in the callback.
-
-		});
-		
-	}
-	*/
-	
-	
-	
-
-		//Returns data for the ArealScreen for todays usage.
+	//Returns data for the ArealScreen for todays usage.
 	//The callback: function(outletIds:Array<Int>, usage:Map<outletId, Array<Float>>, color:Map<outletId, Int>) : Void
 	public function requestArealDataToday(callback:Array<Int> -> Map<Int, Array<Float>> -> Map<Int, Int> -> Void) {
 		
@@ -570,6 +488,7 @@ class DataInterface {
 		});		
 		
 	}
+	*/
 
 	//Returns the daily usage data for the ArealScreen diagram.
 	public function getArealUsageToday() : ArealDataStruct {
@@ -604,18 +523,18 @@ class DataInterface {
 			default:
 				return null;
 		}
-		trace(source);
+
 		for(key in source.keys()) {	
 
 			rvIds.push(key);
 			for(reading in source.get(key)) {
-				usage.push(reading.watts);
-				}
+					usage.push(reading.watts);
+			}
 
 				rvUsage.set(key, usage);
 				usage = new Array<Float>();
 				rvColors.set(key, houseDescriptor.getOutlet(key).outletColor);
-			}
+		}
 		
 		return {outletIds:rvIds, watts:rvUsage, colors:rvColors};
 		
@@ -638,6 +557,25 @@ class DataInterface {
 	public function getOutletLastWeekTotal(outletId:Int) : Float {
 		var u = mOutletDataWeek.get(outletId);
 		return u==null ? 0 : u;
+	}
+	
+	//Returns the current powersource.
+	private function powerSourceStringToEnum(str:String) : PowerSource {
+	
+		switch(str.toLowerCase()) {
+			case "coal":
+				return PowerSource.Coal;
+			case "wind":
+				return PowerSource.Wind;
+			case "water":
+				return PowerSource.Water;
+			case "sun":
+				return PowerSource.Sun;
+			case "nuclear":
+				return PowerSource.Nuclear;
+			default:
+				return PowerSource.Coal;
+		}
 	}
 
 }
