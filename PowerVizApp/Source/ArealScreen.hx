@@ -69,7 +69,7 @@ class ArealScreen extends Sprite {
                 
                 mTitle = new TextField();
                 mTitle.mouseEnabled=false;
-                mTitle.text = "Forbrug denne time ";
+                mTitle.text = "Forbrug i dag ";
                 mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
                 mTitle.selectable = false;
                 
@@ -239,8 +239,36 @@ class ArealScreen extends Sprite {
 
                 if(mViewMode == 0){
                         //hour
+                        mTimeArray = new Array<String>();//ensure that array is empty
                         mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
-                        mTimeArray = [".15",".30",".45",""];
+                         var date = Date.now();
+                         var hour = date.getHours();
+                         var minutes = date.getMinutes();
+
+
+                        for(i in 0...60){
+
+                                if(minutes == 45){
+                                    mTimeArray.push(Std.string(hour)+":45");
+                                }
+                                if(minutes == 30){
+                                    mTimeArray.push(Std.string(hour)+":30");
+                                }
+                                if(minutes == 15){
+                                    mTimeArray.push(Std.string(hour)+":15");
+                                }
+                                if(minutes == 0){
+                                    mTimeArray.push(Std.string(hour)+":00");
+                                    hour -= 1;
+                                    minutes = 59;
+                                }
+
+                                minutes -= 1;
+
+                        }
+
+                         mTimeArray.reverse();
+                        //mTimeArray = [":15",":30",":45",""];
 
 
                         mTitle.text = "Forbrug denne time ";
@@ -256,13 +284,32 @@ class ArealScreen extends Sprite {
 
                 }
                 if(mViewMode == 2){
+                        mTimeArray = new Array<String>();//ensure that array is empty
+                        var dateCount = Date.now().getDay();
+
+
+                        for(i in 0...6){    //pushing days into array, needs to be reversed
+                            
+                            mTimeArray.push(getWeekDay(dateCount));
+                            dateCount -= 1;
+                            trace(dateCount);
+                            if(dateCount == -1){
+                                dateCount = 6;
+
+                            }
+
+                        }
+                        mTimeArray.reverse();
+                        
                         ///week
                         mUsageArray = ["10kWt ", "20kWt ", "30kWt ","40kWt ","50kWt ", "60kWt ","70kWt ", "80kWt ","90kWt ","100kWt "];
-                        mTimeArray = ["Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"];
+                        //mTimeArray = ["Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"];
                         mTitle.text = "Forbrug denne uge ";
 
                 }
                 
+                
+
                 mTimeButton.changeButtonState(mViewMode);
                 mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 
@@ -293,6 +340,29 @@ class ArealScreen extends Sprite {
                         mColorArray.push(r.roomColor);
                 }
                 
+        }
+
+        private function getWeekDay(day:Int):String{
+
+             switch( day ) {
+                case 0:
+                     return "Søndag";
+                case 1:
+                     return "Mandag";
+                case 2:
+                    return "Tirsdag";
+                case 3:
+                     return "Onsdag";
+                case 4:
+                     return "Torsdag";
+                case 5:
+                    return "Fredag";
+                case 6:
+                    return "Lørdag";
+
+                default:
+                    return "Dag ";
+            }
         }
 
 }
