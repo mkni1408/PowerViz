@@ -504,6 +504,7 @@ class DataInterface {
 	}
 	
 	private function getArealUsage(timespan:String) : ArealDataStruct {
+	
 		var r:ArealDataStruct = {outletIds:new Array<Int>(), watts:new Map<Int, Array<Float>>(), colors:new Map<Int,Int>()};
 		
 		var rvIds = new Array<Int>();

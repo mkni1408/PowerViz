@@ -44,6 +44,10 @@ class DataBaseInterface {
 		
 		return true;
 	}
+	
+	private static function getNow() : Date {
+		return DateTools.delta(Date.now(), DateTools.hours(1)); //Correct time...
+	}
 
 	
 	/**
@@ -52,7 +56,7 @@ class DataBaseInterface {
 	**/
 	public static function setCurrentLoad(houseId:Int, outletId:Int, load:Float, ?_time:Date) {
 
-		var now = _time==null ? Date.now() : _time;
+		var now = _time==null ? getNow() : _time;
 		
 		//Write the current load to the CurrentLoad table (in mem):
 		
@@ -304,19 +308,19 @@ class DataBaseInterface {
 	}
 	
 	public static function getOutletHistoryAllHour(houseId:Int) : Map<Int, Array<TimeWatts> > {
-		var to:Date = Date.now();
+		var to:Date = getNow();
 		var from = DateTools.delta(to, -DateTools.hours(1));
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
 	public static function getOutletHistoryAllDay(houseId:Int) : Map<Int, Array<TimeWatts> > {
-		var to:Date = Date.now();
+		var to:Date = getNow();
 		var from = new Date(to.getFullYear(), to.getMonth(), to.getDate(), 0,0,0);
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
 	public static function getOutletHistoryAllWeek(houseId:Int) : Map<Int, Array<TimeWatts> >{
-		var to:Date = Date.now();
+		var to:Date = getNow();
 		var from = DateTools.delta(to, -DateTools.days(7));
 		return getOutletHistoryAll(houseId, from, to);
 	}
@@ -325,7 +329,7 @@ class DataBaseInterface {
 	public static function getOutletHistoryLastQuarter(houseId:Int) : Map<Int, Float> {
 		
 		var r = new Map<Int, Float>();
-		var to = Date.now();
+		var to = getNow();
 		var from = DateTools.delta(to, -DateTools.minutes(15));
 		for(h in LoadHistory.manager.search($houseId==houseId && $time>from && $time<to, {orderBy:time}) ) {
 			r.set(h.outletId, h.load);
@@ -335,7 +339,7 @@ class DataBaseInterface {
 	
 	
 	public static function getCurrentPowerSource() : String {
-		var now = Date.now();
+		var now = getNow();
 		var source:PowerSource = null;
 		for(s in PowerSource.manager.search($time<=now, {orderBy:time, limit:1}) ) {
 			source = s;
