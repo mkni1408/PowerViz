@@ -58,6 +58,12 @@ class Api {
 	public function getHouseDescriptor(houseId:Int) : HouseDescriptor {
 			return DataBaseInterface.getHouseDescriptor(houseId);
 	}
+	
+	public function setOutletColor(houseId:Int, outletColor:String) {
+	}
+	
+	public function setRoomColor(houseId:Int, roomColor:String) {
+	}
 		
 	///////////////////////////////////////////////////////
 	//Functions for setting the current data state.

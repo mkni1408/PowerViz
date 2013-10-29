@@ -66,10 +66,7 @@ class RoomDescriptor {
 	}
 	
 	public function toString():String {
-		var str="{ houseId: " + houseId + "\n";
-		str += "roomId: " + roomId + "\n";
-		str += "roomName: " + roomName + "\n";
-		str += "roomColor: " + roomColor + "\n";
+		var str="{ " + toShortString();
 		str += "outlets: {\n";
 		for(outlet in getOutletsArray()) {
 			str += Std.string(outlet) + "\n";
@@ -77,6 +74,14 @@ class RoomDescriptor {
 		str += "}";
 		return str;
 		
+	}
+	
+	public function toShortString() : String {
+		var str="houseId: " + houseId + "\n";
+		str += "roomId: " + roomId + "\n";
+		str += "roomName: " + roomName + "\n";
+		str += "roomColor: " + roomColor + " (0x" + StringTools.hex(roomColor, 6) + ") \n";
+		return str;
 	}
 	
 }
