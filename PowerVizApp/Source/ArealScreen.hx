@@ -121,7 +121,6 @@ class ArealScreen extends Sprite {
                                                                                                                         mTimeArray, mUsageArray, true, true);
                 mCoordSys.x = (Lib.stage.stageWidth - mDiagram.width);
                 mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
-                
 
                 mLegend.x = mCoordSys.x;
                 mLegend.y = mCoordSys.y + mLegend.height;
@@ -171,45 +170,21 @@ class ArealScreen extends Sprite {
                 rvUsage = r.watts;
                 rvColors = r.colors;
 
-                onDataReceivedDay(rvIds,rvUsage,rvColors);
+                drawDate(rvIds,rvUsage,rvColors);
         }        
         
-        private function onDataReceivedDay(outletIds:Array<Int>, usage:Map<Int, Array<Float>>, colors:Map<Int, Int>) : Void {
+        private function drawDate(outletIds:Array<Int>, usage:Map<Int, Array<Float>>, colors:Map<Int, Int>) : Void {
                 
-                var _usage = new Array< Array<Float> >();
-                var _colors = new Array<Int>();
-                var _ta:Array<Float>;
-
-                if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden
-                    _ta = new Array<Float>();
-                        for(t in 0...96){
-                                _ta.push(0);
-                            }
-
-                             _usage.push(_ta);
-
-                }
-                else{
                 
-                    for(id in outletIds) {
-                            _ta = usage.get(id);
-                            while(_ta.length<96)
-                                    _ta.push(0);
-                            if(_ta.length>96)
-                                    _ta = _ta.slice(0,96);
-                                
-                            _usage.push(_ta);
 
-                                
-                        
-                            _colors.push(colors.get(id));
+                var data = prepareArray(outletIds,usage,colors);
 
-                    }
-            }
                 
                 mDiagram.graphics.clear();
 
-                mDiagram.generate(_usage, _colors, Lib.stage.stageWidth / 1.15,Lib.stage.stageHeight / 1.25);
+               
+
+                mDiagram.generate(data.usage, data.colors, Lib.stage.stageWidth / 1.25,Lib.stage.stageHeight / 1.25);
                 
         }
         
@@ -242,11 +217,10 @@ class ArealScreen extends Sprite {
                         mTimeArray = new Array<String>();//ensure that array is empty
                         mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
                          var date = Date.now();
-                         var hour = date.getHours();
-                         var minutes = date.getMinutes();
-
-
-                        for(i in 0...60){
+                        var hour = date.getHours();
+                        var minutes = date.getMinutes();
+                        
+                        for(i in 0...59){//pushing minutes into array, needs to be reversed
 
                                 if(minutes == 45){
                                     mTimeArray.push(Std.string(hour)+":45");
@@ -260,6 +234,9 @@ class ArealScreen extends Sprite {
                                 if(minutes == 0){
                                     mTimeArray.push(Std.string(hour)+":00");
                                     hour -= 1;
+                                    if(hour == -1){
+                                        hour = 23;
+                                    }
                                     minutes = 59;
                                 }
 
@@ -292,7 +269,6 @@ class ArealScreen extends Sprite {
                             
                             mTimeArray.push(getWeekDay(dateCount));
                             dateCount -= 1;
-                            trace(dateCount);
                             if(dateCount == -1){
                                 dateCount = 6;
 
@@ -318,13 +294,16 @@ class ArealScreen extends Sprite {
 
 
 
+
                 mDiagram = new ArealDiagram();
                 mLegend = new Legend();
                 mCoordSys = new CoordSystem();
                 
                 fillWithData();
-                addChildrenToBack();
                 doLayout();
+                addChildrenToBack();
+                
+                
 
                 
         }
@@ -364,5 +343,116 @@ class ArealScreen extends Sprite {
                     return "Dag ";
             }
         }
+
+        private function prepareArray(outletIds:Array<Int>, usage:Map<Int, Array<Float>>, colors:Map<Int, Int>):{usage:Array<Array<Float>>,colors:Array<Int>}{
+
+                var _usage = new Array< Array<Float> >();
+                var _colors = new Array<Int>();
+                var _ta:Array<Float>;
+
+
+
+                if(mViewMode==0){//hour
+                    
+                    if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden
+                    _ta = new Array<Float>();
+                        for(t in 0...3){
+                                _ta.push(0);
+                            }
+
+                             _usage.push(_ta);
+
+                    }
+                    else{
+                
+                        for(id in outletIds) {
+                            _ta = usage.get(id);
+                            while(_ta.length<4)
+                                    _ta.push(0);
+                            if(_ta.length>4)
+                                    _ta = _ta.slice(0,4);
+                                
+                            _usage.push(_ta);
+
+                                
+                        
+                            _colors.push(colors.get(id));
+
+                        }
+
+                    }
+                }
+                 if(mViewMode==1){//Day
+                    if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden
+                    _ta = new Array<Float>();
+                        for(t in 0...96){
+                                _ta.push(0);
+                            }
+
+                             _usage.push(_ta);
+
+                    }
+                    else{
+                
+                        for(id in outletIds) {
+                            _ta = usage.get(id);
+                            while(_ta.length<96)
+                                    _ta.push(0);
+                            if(_ta.length>96)
+                                    _ta = _ta.slice(0,96);
+                                
+                            _usage.push(_ta);
+
+                                
+                        
+                            _colors.push(colors.get(id));
+
+                        }
+
+                    }
+                }
+                 if(mViewMode==2){//Week
+                    if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden
+                    _ta = new Array<Float>();
+                        for(t in 0...672){
+                                _ta.push(0);
+                            }
+
+                             _usage.push(_ta);
+
+                    }
+                    else{
+                
+                        for(id in outletIds) {
+                            _ta = usage.get(id);
+                            while(_ta.length<672)
+                                    _ta.push(0);
+                            if(_ta.length>672)
+                                    _ta = _ta.slice(0,672);
+                                
+                            _usage.push(_ta);
+
+                                
+                        
+                            _colors.push(colors.get(id));
+
+                        }
+
+                    }
+
+
+
+                }
+                trace("usage......");
+
+                trace(_usage);
+                return {usage:_usage,colors:_colors}
+            
+                
+            }
+
+        
+
+
 
 }
