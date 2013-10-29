@@ -84,22 +84,15 @@ class Speedometer extends Sprite{
 	//calculates and returns the amount of degrees the speedometorarrow should turn
 	private function calculateArrowPosition(wattUsage:Float):Int{
 
-
 			return 1;
 	}
 
 	private function fetchWattConsumption():Void{
 
-		var wattMeasure:Float = testDataInterfaceWatt();
+		var wattMeasure:Float = DataInterface.instance.relativeUsage();
 		arrow.setValue(wattMeasure);
 
 
-	}
-
-	private function testDataInterfaceWatt():Float{
-
-
-		return Math.random();
 	}
 
 	//draws the frame around the Sprite

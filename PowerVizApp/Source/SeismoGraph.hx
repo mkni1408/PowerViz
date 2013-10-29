@@ -85,8 +85,8 @@ class SeismoGraph extends Sprite{
 			mwhereIsThePowerFromArray.reverse();
 		}	
 
-		var wattMeasure:Float = testDataInterfaceWatt();
-		var origin:Int = testDataInterfaceOrigin();
+		var wattMeasure:Float = DataInterface.instance.relativeUsage(); 
+		var origin:Int = testDataInterfaceOrigin(); //TODO!!!
 
         mwattMeasurementArray.push(calculatePeakHeight(wattMeasure));
         mwhereIsThePowerFromArray.push(origin);

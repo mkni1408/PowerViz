@@ -71,31 +71,33 @@ class DataInterface {
 	
 	//Usage data now:
 	private var mOutletDataNow : Map<Int, Float>; //Usage now for each outlet, measured in watts.
-	private var mOutletDataNowTotal : Float; //Total usage data now for all outlets, measured in watts.
-	private var mRelativeUsageNow : Float; //Relative usage. From 0.0 to 1.0.
+	private var mOutletDataNowTotal : Float = 0; //Total usage data now for all outlets, measured in watts.
+	private var mRelativeUsageNow : Float = 0; //Relative usage. From 0.0 to 1.0.
+	private var mRelativeMax : Float = 0; //Max usage value, used for calculating the relative value.
 	
 	//Usage data quarter:
 	private var mOutletDataQuarter : Map<Int, Float>; //Usage data for the last 15 minutes, for each outlet, measured in watts/15min.
-	private var mOutletDataQuarterTotal : Float; //Total usage for last outlets in the last 15 minutes.
+	private var mOutletDataQuarterTotal : Float = 0; //Total usage for last outlets in the last 15 minutes.
 	
 	//Usage data hour:
 	private var mOutletDataHour : Map<Int, Float>; //Total usage for each outlet in the last hour.
-	private var mOutletDataHourTotal : Float; //Total usage for all outlets in the last hour.
+	private var mOutletDataHourTotal : Float = 0; //Total usage for all outlets in the last hour.
 	private var mOutletDataHourTimed : Map<Int, Array<TimeWatts> >; //Usage for the last hour, timed in 15 minute intervals.
 	
 	//Usage data day:
 	private var mOutletDataDay : Map<Int, Float>; //Total usage for each outlet this day.
-	private var mOutletDataDayTotal : Float; //Total usage for all outlets this day.
+	private var mOutletDataDayTotal : Float = 0; //Total usage for all outlets this day.
 	private var mOutletDataDayTimed : Map<Int, Array<TimeWatts> >; //Usage for today, timed in 15 minute intervals.
 	
 	//Usage data week:
 	private var mOutletDataWeek : Map<Int, Float>; //Total usage for each outlet this week.
-	private var mOutletDataWeekTotal : Float; //Total usage for all outlets this week.
+	private var mOutletDataWeekTotal : Float = 0; //Total usage for all outlets this week.
 	private var mOutletDataWeekTimed : Map<Int, Array<TimeWatts> >; //Usage for this week, timed in 15 minute intervals.
 
 
 	
 	public function new() {
+		
 		#if production
 			this.connect("http://78.47.92.222/pvs/"); //Connect to production version.
 		#else
@@ -103,6 +105,7 @@ class DataInterface {
 		#end 
 		constructUsageDataContainers();
 		getDataOnCreation();
+		initTimers();
 	}
 	
 	private function constructUsageDataContainers() {
@@ -123,6 +126,7 @@ class DataInterface {
 		//Usage data week= new 
 		 mOutletDataWeek = new  Map<Int, Float>(); //Total usage for each outlet this week.
 		 mOutletDataWeekTimed = new  Map<Int, Array<TimeWatts> >(); //Usage for this week, timed in 15 minute intervals.
+		 
 	}
 	
 	//Connects to the server, setting up the remoting system.
@@ -144,7 +148,7 @@ class DataInterface {
 	//Initialize the timers that will get data from the server.
 	private function initTimers() {
 	
-		mTimerNow = new Timer(3*1000); //Every 3 secs.
+		mTimerNow = new Timer(3*1000, 0); //Every 3 secs.
 		mTimerNow.addEventListener(TimerEvent.TIMER, onTimerNow);
 		mTimerNow.start();
 	
@@ -168,6 +172,7 @@ class DataInterface {
 	//Get data to start with.
 	private function getDataOnCreation() {
 		houseDescriptor = getHouseDescriptor(); //Get the house layout.
+		
 		//Call the timers to get data to start with:
 		onTimerNow(null);
 		onTimerQuarter(null);
@@ -177,15 +182,14 @@ class DataInterface {
 	}
 	
 	
-	private function onTimerNow(event:Dynamic) : Void {	
-		//TODO: Get total relative consumption right now.
-		
+	private function onTimerNow(d:Dynamic) : Void {	
 		mCnx.Api.getCurrentLoadAll.call([Config.instance.houseId], onGetCurrentLoadAll);
 	}
 	
 	
 	private function onTimerQuarter(event:Dynamic) : Void {
 		mCnx.Api.getOutletHistoryLastQuarter.call([Config.instance.houseId], onGetOutletHistoryLastQuarter);
+		mCnx.Api.getRelativeMax.call([Config.instance.houseId], onGetRelativeMax);
 	}
 	
 	private function onTimerHour(event:Dynamic) : Void {
@@ -210,6 +214,14 @@ class DataInterface {
 		mOutletDataNowTotal = 0;
 		for(w in mOutletDataNow)
 			mOutletDataNowTotal += w;
+			
+		mRelativeUsageNow = mOutletDataNowTotal / mRelativeMax;
+		if(mRelativeUsageNow>1) {
+			mRelativeUsageNow=1;
+		}
+		else if(mRelativeUsageNow<0) {
+			mRelativeUsageNow = 0;
+		}
 	}
 	
 	private function onGetOutletHistoryLastQuarter(data:Dynamic) : Void {
@@ -275,6 +287,10 @@ class DataInterface {
 
 	}
 	
+	private function onGetRelativeMax(data:Dynamic) : Void {
+		mRelativeMax = data;
+	}
+	
 	//************************************************
 	// Functions for delivering the supplied data: (These are the functions that the screens should use).
 	//************************************************
@@ -330,59 +346,6 @@ class DataInterface {
 		return outlet!=null ? outlet.outletColor : 0xFF00FF;
 	}
 	
-	/*
-	Returns an array of 96 floats, representing the useage data from the last 24 hours,
-	based on HouseID and outletId.
-	TODO: Remove this function, despite its random beautiness!!!!
-	*/
-	public function getOutletLastDayUsage(outletId:Int) : Array<Float> {
-		
-		
-		var values = new Array<Float>();
-		var cycles:Int = Std.random(12) + 1;
-		var section:Int = Std.int(96 / cycles);
-		
-		while(cycles < 1 || cycles * section < 96)
-			cycles += 1;
-			
-		
-		var i:Int = 0;
-		var j:Int = 0;
-		var s:Int = 0;
-		var a:Int = 0;
-		while(i < cycles) {
-			j = 0;
-			s = Std.random(4) + 1;
-			a = Std.random(30);
-			while(j < section) {
-				values.push((Math.random()*s)+a);
-				j += 1;
-			}
-			i += 1;
-		}
-		
-		
-		var returns = new Array<Float>();
-		var r:Int=0;
-		while(r < 96) {
-			returns.push(values[r]);
-			r += 1;
-		}
-		
-		return returns;
-	}
-
-	/*
-	//Request todays usage, passing a callback to receive the data.
-	public function requestUsageToday(f:Map<Int, Array<{time:Date, watts:Float}> > -> Void) {
-		var houseId = Config.instance.houseId;
-		var usageToday:Map<Int, Array<{time:Date, watts:Float}> > = null;
-		mCnx.Api.getOutletHistoryAllToday.call([houseId, Date.now()], function(x:Dynamic){
-			usageToday = x;
-			f(usageToday);
-		});
-	}
-	*/
 	
 	//This is only called once on app startup, so it is in sync.
 	private function getHouseDescriptor() : HouseDescriptor {
@@ -578,6 +541,11 @@ class DataInterface {
 				return PowerSource.Coal;
 		}
 	}
+	
+	public function relativeUsage() : Float {
+		return mRelativeUsageNow; 
+	}
+	
 
 }
 

@@ -76,6 +76,7 @@ class DataBaseInterface {
 		}
 	
 	}
+
 	
 	/**
 	Adds history data to the database.
@@ -335,6 +336,32 @@ class DataBaseInterface {
 			r.set(h.outletId, h.load);
 		}
 		return r;
+	}
+	
+	
+	//Returns the greatest relative max poweruse. Used for calculating the relative total current use.
+	public static function getRelativeMax(houseId:Int) : Float {
+		var to = getNow();
+		var from = DateTools.delta(to, -DateTools.days(2)); //48 hours. 
+		var hist = getOutletHistoryAll(houseId, from, to);
+		var timeTotal = new Map<Int, Float>();
+		var t:Int;
+		for(outlet in hist) {
+			for(tw in outlet) {
+				t = Std.int(tw.time.getTime());
+				if(timeTotal.get(t)==null)
+					timeTotal.set(t, tw.watts);
+				else
+					timeTotal.set(t, timeTotal.get(t)+tw.watts);
+			} 
+		}
+		
+		var max:Float=0;
+		for(u in timeTotal) {
+			if(u>max)
+				max = u;
+		}
+		return max;
 	}
 	
 	

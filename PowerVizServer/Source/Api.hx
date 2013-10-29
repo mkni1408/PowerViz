@@ -143,6 +143,10 @@ class Api {
 		return DataBaseInterface.getOutletHistoryLastQuarter(houseId);
 	}
 	
+	public function getRelativeMax(houseId:Int) : Float {
+		return DataBaseInterface.getRelativeMax(houseId);
+	}
+	
 	public function getCurrentPowerSource() : String {
 		return DataBaseInterface.getCurrentPowerSource();
 	}
