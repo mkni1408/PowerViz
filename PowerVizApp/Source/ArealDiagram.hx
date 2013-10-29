@@ -24,7 +24,7 @@ class ArealDiagram extends Sprite {
 		//Clear before drawing:
 		this.graphics.clear();
 
-		trace(colors);
+		
 	
 		var bottoms = new Array<Float>(); //Bottom values of the previous row.
 		
@@ -37,10 +37,10 @@ class ArealDiagram extends Sprite {
 		//For each array, draw a polygon, where the bottom line is the bottoms line, and the top line is bottom+value.
 		var i:Int=0;
 		for(a in values) {
-		
+			trace("width",width);
 			//bottoms = drawArea(bottoms, a, this.graphics, colors[i], width/values[0].length, 1); //Draw each area, getting the new bottom line.
-			bottoms = drawArea2(bottoms, a, this.graphics, colors[i], width/values[0].length, 1);
-			trace(width/values[0].length);
+			bottoms = drawArea2(bottoms, a, this.graphics, colors[i], 30, 1);
+			
 			i += 1;
 		}
 		
@@ -49,7 +49,7 @@ class ArealDiagram extends Sprite {
 	}
 	
 	//Draws a single area. Returns the top edge of the area.
-	private function drawArea(bottoms:Array<Float>, values:Array<Float>, 
+	/*private function drawArea(bottoms:Array<Float>, values:Array<Float>, 
 								gfx:flash.display.Graphics, color:Int, hspace:Float, vmult:Float) : Array<Float> {
 	
 		var topLine = new Array<Float>(); //The new bottom line. The return value of this function.
@@ -91,7 +91,7 @@ class ArealDiagram extends Sprite {
 		
 	}
 	
-	/*
+	
 	Draws a single area. Returns the top edge of the area.
 	This is an alternate implementation of the drawing method. The original method above 
 	turned out to be slightly glitchy, so a new method is implemented here.
@@ -107,8 +107,10 @@ class ArealDiagram extends Sprite {
 			for(i in 0...bottoms.length) {
 				#if cpp
 					topLine[i] = bottoms[i] - (values[i]*vmult);
+					trace("c++");
 				#else
 					topLine[i] = (bottoms[i]==null ? 0 : bottoms[i]) - (values[i]*vmult);
+					trace("neko");
 				#end
 			}
 			
@@ -139,10 +141,10 @@ class ArealDiagram extends Sprite {
 				indices.push(first);
 				indices.push(first+3);
 				indices.push(first+2);
-				
+				trace("X",x);
 				x += hspace; //Move to next drawing position.
 			}
-			
+			trace(triangles);
 			gfx.beginFill(color);
 			gfx.drawTriangles(triangles, indices); //Draw generated triangles.
 			gfx.endFill();

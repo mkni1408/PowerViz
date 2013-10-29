@@ -121,7 +121,6 @@ class ArealScreen extends Sprite {
                                                                                                                         mTimeArray, mUsageArray, true, true);
                 mCoordSys.x = (Lib.stage.stageWidth - mDiagram.width);
                 mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
-                
 
                 mLegend.x = mCoordSys.x;
                 mLegend.y = mCoordSys.y + mLegend.height;
@@ -183,7 +182,9 @@ class ArealScreen extends Sprite {
                 
                 mDiagram.graphics.clear();
 
-                mDiagram.generate(data.usage, data.colors, Lib.stage.stageWidth / 1.15,Lib.stage.stageHeight / 1.25);
+               
+
+                mDiagram.generate(data.usage, data.colors, Lib.stage.stageWidth / 1.25,Lib.stage.stageHeight / 1.25);
                 
         }
         
@@ -293,13 +294,16 @@ class ArealScreen extends Sprite {
 
 
 
+
                 mDiagram = new ArealDiagram();
                 mLegend = new Legend();
                 mCoordSys = new CoordSystem();
                 
                 fillWithData();
-                addChildrenToBack();
                 doLayout();
+                addChildrenToBack();
+                
+                
 
                 
         }

@@ -182,6 +182,10 @@ class CoordSystem extends Sprite {
 
 		return yCoordinates[y];
 	}
+	public function getXwidth():Float{
+
+		return xWidth;
+	}
 
 		//draws an onoffbar given a from and to X coordinate and an Y coordinate 
 		//pointXfrom is the time that the contact went on converted to a float pointXto is 
@@ -263,7 +267,7 @@ class CoordSystem extends Sprite {
 		//returns the positionoffset 
 		private function convertTimeMinute(time:Date):Float{
 			trace("MINUTES",time.getMinutes());
-			var minutes = time.getMinutes()/100;
+			var minutes = time.getMinutes()/60;
 			trace("minut:",xHeight * minutes);
 			//trace((xHeight/100) * minutes);
 			return (xHeight * minutes);
