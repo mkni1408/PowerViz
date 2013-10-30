@@ -51,7 +51,7 @@ class ArealScreen extends Sprite {
                 
                 mBack = new Sprite();
 
-                mBack.graphics.beginFill(0xFFFFFF, 0);
+                mBack.graphics.beginFill(0xFFFFFF);
                 mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
                 mBack.graphics.endFill();
                 this.addChild(mBack);
@@ -364,7 +364,7 @@ class ArealScreen extends Sprite {
                 var _colors = new Array<Int>();
                 var _ta:Array<Float>;
 
-
+                
 
                 if(mViewMode==0){//hour
                     
@@ -380,6 +380,7 @@ class ArealScreen extends Sprite {
                     else{
                 
                         for(id in outletIds) {
+
                             _ta = usage.get(id);
                             while(_ta.length<4)
                                     _ta.push(0);
@@ -399,6 +400,8 @@ class ArealScreen extends Sprite {
                  if(mViewMode==1){//Day
                     if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden
                     _ta = new Array<Float>();
+
+
                         for(t in 0...96){
                                 _ta.push(0);
                             }
@@ -409,6 +412,7 @@ class ArealScreen extends Sprite {
                     else{
                 
                         for(id in outletIds) {
+                            trace(id);
                             _ta = usage.get(id);
                             while(_ta.length<96)
                                     _ta.push(0);
