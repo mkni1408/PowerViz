@@ -265,16 +265,18 @@ class DataInterface {
                 
 
                 for(key in dest.keys()) {
-                		trace(key);
+                		trace("key",key);
                         accumOutlet.set(key,0);
                         count = 0;
                         watts = 0;
                         for(tw in dest.get(key)) {
+
                                 watts += tw.watts;
                                 count += 1;
                         }
                         
                         watts /= 4; //From watt quarter to watt hour.
+                        trace("watt",watts);
                         accumOutlet.set(key, watts);
                 }
                 
