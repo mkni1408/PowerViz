@@ -186,6 +186,11 @@ class CoordSystem extends Sprite {
 
 		return xWidth;
 	}
+	public function getHeight():Float{
+
+
+		return yHeight;
+	}
 
 		//draws an onoffbar given a from and to X coordinate and an Y coordinate 
 		//pointXfrom is the time that the contact went on converted to a float pointXto is 
@@ -320,7 +325,7 @@ class CoordSystem extends Sprite {
 		//draws vertical bars
 		public function drawVerticalBar(colors:Array<Int>, height:Array<Float>,conversionType:Int) {
 
-		
+		trace(height);
 		var barWidth:Float = xHeight;
 		var totalpoints = yHeight/100;
 
@@ -352,108 +357,7 @@ class CoordSystem extends Sprite {
 
 	}
 
-	public function generateArealData(values:Array< Array<Float> >, colors:Array<Int>, width:Float, height:Float) {
-		//remove children
-		trace(values);
-		if(values.length<1 || values[0].length<1)
-			return;
-			
-		
-
-		
 	
-		var bottoms = new Array<Float>(); //Bottom values of the previous row.
 		
-		//bottoms[values[0].length-1] = 0;
-		for(i in 0...values[0].length-1){
-			bottoms.push(0);
-
-		}
-		/*
-		for(i in values[0]) 
-			bottoms.push(0); //Start out by setting the bottom line to the bottom.
-		*/
-			
-		//For each array, draw a polygon, where the bottom line is the bottoms line, and the top line is bottom+value.
-		var i:Int=0;
-		for(a in values) {
-			//bottoms = drawArea(bottoms, a, this.graphics, colors[i], width/values[0].length, 1); //Draw each area, getting the new bottom line.
-			//bottoms = drawArea2(bottoms, a, this.graphics, colors[i], width/values[0].length, 1);
-			bottoms = drawArea3(bottoms,a,this.graphics,colors[i],width/bottoms.length);
-			
-			
-			i += 1;
-		}
-		//maxValue = highestAccumValue(values);
-		
-	}
-
-	private function drawArea3(bottoms:Array<Float>, values:Array<Float>, 
-								gfx:flash.display.Graphics, color:Int, hspace:Float): Array<Float>{
-		bottoms.reverse();//reverse so the last value is first
-		var star_commands:Array<Int> = new Array<Int>(); 
-		var star_coord:Array<Float> = new Array<Float>();
-		var newBottoms:Array<Float> = new Array<Float>();
-		trace(xWidth);
-		trace(bottoms.length);
-		var xValues = xWidth/bottoms.length;
-
-
-
-		//move the cursor to
-		star_commands.push(1);
-		star_coord.push(width);
-		star_coord.push(bottoms[0]);
-		var widthDenoter = xWidth;//so it wont hit 0
-
-		widthDenoter -= xValues;
-		//draw bottom line
-		for(i in 0...bottoms.length-1){
-			star_commands.push(2);
-			star_coord.push(widthDenoter);
-			star_coord.push(bottoms[i]);
-			widthDenoter = widthDenoter - xValues;
-
-			
-		}
-
-		bottoms.reverse();
-
-		
-		//draw the line up to the values
-			star_commands.push(2);
-			star_coord.push(widthDenoter);
-			star_coord.push(bottoms[0]-values[0]);
-			newBottoms.push(bottoms[0]-values[0]);
-			widthDenoter += xValues;
-
-			
-
-		//draw the values
-		for(i in 1...values.length-1){
-
-			star_commands.push(2);
-			star_coord.push(widthDenoter);
-			star_coord.push(bottoms[i]-values[i]);
-			newBottoms.push(bottoms[i] - values[i]);
-			widthDenoter += xValues;
-
-		}
-		//draw the line down to the start value
-			star_commands.push(2);
-			star_coord.push(widthDenoter);
-			star_coord.push(bottoms[bottoms.length-1]-values[values.length-1]);
-			newBottoms.push(bottoms[bottoms.length-1] - values[values.length-1]);
-
-			gfx.lineStyle(0, 0xFFFFFF);
-			gfx.beginFill(color);
-			gfx.drawPath(star_commands, star_coord);
-			gfx.endFill();
-			
-			return newBottoms;
-
-
-
-		}
 
 }

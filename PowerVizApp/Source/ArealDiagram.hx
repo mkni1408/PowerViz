@@ -15,7 +15,7 @@ class ArealDiagram extends Sprite {
 	colors: An array of colors used for visualizing/painting the different areas. 
 	This function assumes, that all arrays in 'values' are of equal length.
 	*/
-	public function generate(values:Array< Array<Float> >, colors:Array<Int>, width:Float, height:Float) {
+	public function generate(values:Array< Array<Float> >, colors:Array<Int>, width:Float, height:Float):Void {
 		//remove children
 		//trace(values);
 
@@ -46,6 +46,8 @@ class ArealDiagram extends Sprite {
 		}
 		
 		maxValue = highestAccumValue(values);
+
+		trace("MAXVALUE",maxValue);
 		
 	}
 	
