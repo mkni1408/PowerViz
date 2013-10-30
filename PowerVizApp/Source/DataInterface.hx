@@ -265,7 +265,7 @@ class DataInterface {
                 
 
                 for(key in dest.keys()) {
-                		trace("key",key);
+                		
                         accumOutlet.set(key,0);
                         count = 0;
                         watts = 0;
@@ -276,7 +276,7 @@ class DataInterface {
                         }
                         
                         watts /= 4; //From watt quarter to watt hour.
-                        trace("watt",watts);
+                        
                         accumOutlet.set(key, watts);
                 }
                 
@@ -507,10 +507,11 @@ class DataInterface {
                 
 
                 for(key in source.keys()) {        
-
+                		trace("key",key);
                         rvIds.push(key);
                         for(reading in source.get(key)) {
                                         usage.push(reading.watts);
+                                        trace("reading",reading.watts);
                         }
 
                                 rvUsage.set(key, usage);
