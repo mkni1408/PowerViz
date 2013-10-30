@@ -108,13 +108,13 @@ class ArealDiagram extends Sprite {
 			
 		
 			for(i in 0...bottoms.length) {
-				//#if cpp
-				//	topLine[i] = bottoms[i] - (values[i]*vmult);
+				#if cpp
+					topLine[i] = bottoms[i] - (values[i]*vmult);
 					//trace("c++");
-				//#else
+				#else
 					topLine[i] = (bottoms[i]==null ? 0 : bottoms[i]) - (values[i]*vmult);
 					//trace("neko");
-				//#end
+				#end
 			}
 			
 			var triangles = new Array<Float>();

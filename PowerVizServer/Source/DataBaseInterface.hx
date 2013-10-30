@@ -291,6 +291,7 @@ class DataBaseInterface {
 	
 		var result = new Map<Int, Array<TimeWatts> >();
 
+
 		var qr = LoadHistory.manager.search($houseId == houseId && $time>=from && $time<=to, {orderBy : time});
 		for(oh in qr) {
 			if(result.exists(oh.outletId)==false) {
