@@ -93,6 +93,14 @@
 		It uses repeated daily activities, and should therefore run for "24 hours" before giving complete usefull output.
 	-->
 	
+	<time every="01:00:00" comment="Vild Data" >
+		<load outlet="4002" set="2500" />
+	</time>
+	<time every="01:00:00" offset="00:40:00">
+		<load outlet="4002" set="0" />
+	</time>
+	
+	
 	<!-- vågner -->
 	<time at="06:00:00" comment="Vågner op." >
 		<load outlet="3001" set="20" comment="Turn on light in bedroom" /> <!-- turn on light -->

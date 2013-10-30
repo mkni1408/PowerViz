@@ -2,6 +2,8 @@ import flash.display.Sprite;
 import flash.Lib;
 import flash.display.Bitmap;
 import openfl.Assets;
+import flash.events.TimerEvent;
+import flash.utils.Timer;
 import SpeedometerArrow;
 import DataInterface;
 
@@ -11,6 +13,8 @@ class Speedometer extends Sprite{
 	private var bitMapSpeedometer : Bitmap;
 	private var arrow: SpeedometerArrow;
 	private var speedometerArrow: Sprite;
+	
+	private var mTimer:Timer;
 	private var mTimerSetting:Int = 3000;
 
 	public function new(){
@@ -40,16 +44,11 @@ class Speedometer extends Sprite{
 		mSpeedometer.mouseEnabled = false;
 		arrow.mouseEnabled = false;
 
-
-		var yourSeismoGraphTimer:haxe.Timer = new haxe.Timer(mTimerSetting);
-
-			yourSeismoGraphTimer.run = function():Void{
-   			//trace("PowerOrigin timer running!!");
-   				
-
-   				fetchWattConsumption();
-			};
-		//arrow.rotation = 40;
+		mTimer = new Timer(mTimerSetting, 0);
+		mTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
+			fetchWattConsumption();
+		});
+		mTimer.start();
 
 
 	}

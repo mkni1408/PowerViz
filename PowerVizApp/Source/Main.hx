@@ -17,6 +17,8 @@ import OnOffDiagram;
 //Main class which extends a sprite(sprite as in a display object) 
 class Main extends Sprite {
 
+	private var mBackground : Bitmap = null;
+
 	private var mScreenSaver : ScreenSaver = null;
 	private var mArealScreen : ArealScreen = null;
 	private var mBarScreen : BarScreen = null;
@@ -29,10 +31,12 @@ class Main extends Sprite {
 		
 		super ();
 		
+		setBackground();
+		
 		SwipeMill.init(this);	
 		SwipeMill.onScreenChange = this.onScreenChange;
 		
-		prepareSwipeTest();
+		prepareScreens();
 
 		//add screensaver to the main sprite
 		mScreenSaver = new ScreenSaver();
@@ -43,8 +47,18 @@ class Main extends Sprite {
 		
 	}
 	
-	//prepares the swipetest, we add images to the swipemill
-	public function prepareSwipeTest() {
+	public function setBackground() {
+	
+		mBackground = new Bitmap(openfl.Assets.getBitmapData("assets/background2.png"));
+		mBackground.width = Lib.stage.stageWidth;
+		mBackground.height = Lib.stage.stageHeight;
+		this.addChild(mBackground);
+		//mBackground.mouseEnabled = false;
+	
+	}
+	
+	
+	public function prepareScreens() {
 		
 		mArealScreen = new ArealScreen();
 		SwipeMill.add(mArealScreen);
@@ -58,8 +72,8 @@ class Main extends Sprite {
 		mCurrentUsage = new CurrentUsage();
 		SwipeMill.add(mCurrentUsage);
 		
-		mCoinScreen = new CoinScreen();
-		SwipeMill.add(mCoinScreen);
+		//mCoinScreen = new CoinScreen();
+		//SwipeMill.add(mCoinScreen);
 
 		SwipeMill.screenPos = 0.0; //Set to the first screen.
 	}

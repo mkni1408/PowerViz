@@ -3,6 +3,8 @@ package;
 
 import flash.display.Sprite;
 import flash.events.MouseEvent;
+import flash.events.TimerEvent;
+import flash.utils.Timer;
 import flash.Lib;
 import Bulb;
 import motion.Actuate;
@@ -33,9 +35,9 @@ class ScreenSaver extends Sprite {
 	private var ninthBulb:Bulb;
 	private var mIsTransparant: Bool;
 	private var mHasRecievedTouchEvent: Bool;
-	private var yourbulbTimer:haxe.Timer;
-	private var yourScreensaverTimerTimer:haxe.Timer;
-	private var yourBulbFaderTimer:haxe.Timer;
+	private var yourbulbTimer:Timer;
+	private var yourScreensaverTimerTimer:Timer;
+	private var yourBulbFaderTimer:Timer;
 	private var dataInterface:DataInterface;
 
 	private var mBulbArray:Array<Bulb>;
@@ -228,17 +230,11 @@ class ScreenSaver extends Sprite {
 	public function restartScreenSaverTimer(){
 
 		yourScreensaverTimerTimer.stop();
-
-			yourScreensaverTimerTimer= new haxe.Timer(screenSaverTimerAction);
-
-			yourScreensaverTimerTimer.run = function():Void{
-   			//trace("Screen saver Timer running!!");
-   				
-   				//trace(mIsTransparant);
-   				//trace(mHasRecievedTouchEvent);
-   				setScreenSaver();
-
-			};
+		yourScreensaverTimerTimer = new Timer(screenSaverTimerAction, 0);
+		yourScreensaverTimerTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
+			setScreenSaver();
+		});
+		yourScreensaverTimerTimer.start();
 
 
 	}
@@ -248,77 +244,54 @@ class ScreenSaver extends Sprite {
 		yourbulbTimer.stop();
 		yourBulbFaderTimer.stop();
 
-
 	}
 
 	//start bulbactiontimer when view is visible
 	public function startBulbActionTimer(){
 		
 		yourbulbTimer.stop();
-
-		yourbulbTimer= new haxe.Timer(bulbTimerAction);
-
-			yourbulbTimer.run = function():Void{
-   			//trace("BulbTimer running!!");
-   				//get current load from dataInterface
-   				var f  = DataInterface.instance.relativeUsage();
-   				//var f  = Math.random();
-
-   				//trace(f);
-
-   				calculatBulbStates(f);
-			};
+		yourbulbTimer = new Timer(bulbTimerAction, 0);
+		yourbulbTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
+			var f  = dataInterface.getTotalCurrentLoad();
+			calculatBulbStates(f);
+		});
+		yourbulbTimer.start();			
 
 		yourBulbFaderTimer.stop();
-			yourBulbFaderTimer= new haxe.Timer(yourBulbFaderTimerAction);
-
-			yourBulbFaderTimer.run = function():Void{
-   			//trace("Screen saver Timer running!!");
-   				
-   				fadeBulbsWhenInactive();
-   				
-			};
-
+		yourBulbFaderTimer = new Timer(yourBulbFaderTimerAction, 0);
+		yourBulbFaderTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent){
+			fadeBulbsWhenInactive();
+		});
+		yourBulbFaderTimer.start();
+		
 
 	}
 
 
 //starts timers that 1, updates bulbs and 2, checks if screen has been tuched.
 	public function setBulbAction(watt:Float):Void {
-			yourbulbTimer= new haxe.Timer(bulbTimerAction);
+			
+			yourbulbTimer = new Timer(bulbTimerAction, 0);
+			yourbulbTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
+				var f  = dataInterface.getTotalCurrentLoad();
+				calculatBulbStates(f);
+			});
+			yourbulbTimer.start();
+			
 
-			yourbulbTimer.run = function():Void{
-   			//trace("BulbTimer running!!");
-   				//get current load from dataInterface
-   				var f  = dataInterface.getTotalCurrentLoad();
-
-   				//var f  = Math.random();
-
-   				//trace(f);
-
-   				calculatBulbStates(f);
-			};
+			yourScreensaverTimerTimer = new Timer(screenSaverTimerAction, 0);
+			yourScreensaverTimerTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
+				setScreenSaver();
+			});
+			yourScreensaverTimerTimer.start();
 
 
-			yourScreensaverTimerTimer= new haxe.Timer(screenSaverTimerAction);
-
-			yourScreensaverTimerTimer.run = function():Void{
-   			//trace("Screen saver Timer running!!");
-   				
-   				//trace(mIsTransparant);
-   				//trace(mHasRecievedTouchEvent);
-   				setScreenSaver();
-   				
-			};
-
-			yourBulbFaderTimer= new haxe.Timer(yourBulbFaderTimerAction);
-
-			yourBulbFaderTimer.run = function():Void{
-   			//trace("Screen saver Timer running!!");
-   				
-   				fadeBulbsWhenInactive();
-   				
-			};
+			yourBulbFaderTimer = new Timer(yourBulbFaderTimerAction, 0);
+			yourBulbFaderTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent){
+				fadeBulbsWhenInactive();
+			});
+			yourBulbFaderTimer.start();
+			
 
 	}
 

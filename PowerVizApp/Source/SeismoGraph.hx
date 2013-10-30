@@ -3,6 +3,8 @@ import flash.Lib;
 import flash.display.Bitmap;
 import openfl.Assets;
 import DataInterface;
+import flash.utils.Timer;
+import flash.events.TimerEvent;
 
 
 class SeismoGraph extends Sprite{
@@ -14,6 +16,8 @@ class SeismoGraph extends Sprite{
 	private var mMeasurmentFactor = 10;
 	private var mMeasurmenthalfFactor = 5;
 	private var mNumofFieldsWidthScreen:Float;
+	
+	private var mTimer:Timer;
 	private var mTimerSetting:Int = 6000;
 	
 	public function new(){
@@ -41,15 +45,12 @@ class SeismoGraph extends Sprite{
 
 		redrawSeismoGraphCurve();
 
-		var yourSeismoGraphTimer:haxe.Timer = new haxe.Timer(mTimerSetting);
-
-			yourSeismoGraphTimer.run = function():Void{
-   			//trace("PowerOrigin timer running!!");
-   				
-
-   				fetchWattConsumption();
-			};
-
+		mTimer = new Timer(mTimerSetting, 0);
+		mTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
+			fetchWattConsumption();
+		});
+		mTimer.start();
+		
 	}
 
 

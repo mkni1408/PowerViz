@@ -66,7 +66,7 @@ class SwipeMill {
 	//Internal function. Create the sprite elements used for receiving touch/mouse events.
 	private static function createVisualElements(parent:Sprite) {
 		mTouchReceiver = new Sprite();
-		mTouchReceiver.graphics.beginFill(0xFF00FF);
+		mTouchReceiver.graphics.beginFill(0xFF00FF, 0);
 		mTouchReceiver.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
 		mTouchReceiver.graphics.endFill();
 		

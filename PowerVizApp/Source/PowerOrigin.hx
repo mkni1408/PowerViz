@@ -1,6 +1,8 @@
 	import flash.display.Sprite;
 import flash.Lib;
 import flash.display.Bitmap;
+import flash.events.TimerEvent;
+import flash.utils.Timer;
 import openfl.Assets;
 import motion.Actuate;
 import Std;
@@ -14,6 +16,8 @@ class PowerOrigin extends Sprite{
 	private var mPowerOriginCoal : Sprite;
 	private var mPowerOriginSolar : Sprite;
 	private var mPowerOriginNuclear : Sprite;
+	
+	private var mTimer:Timer;
 	private var mTimerSetting:Int = 10000;
 
 	public function new(){
@@ -52,12 +56,11 @@ class PowerOrigin extends Sprite{
 		mPowerOriginSolar.visible = false;
 		mPowerOriginNuclear.visible = false;
 		
-		var yourPowerOrigin:haxe.Timer = new haxe.Timer(mTimerSetting);
-
-		yourPowerOrigin.run = function():Void{
-			//trace("PowerOrigin timer running!!");
+		mTimer = new Timer(mTimerSetting, 0);
+		mTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
 			changePowerOrigin();
-		};	
+		});
+		mTimer.start();
 	}
 
 	private function centerGraphics(origin:Sprite, bitmap:Bitmap){

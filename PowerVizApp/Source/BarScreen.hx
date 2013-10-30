@@ -43,7 +43,7 @@ class BarScreen extends Sprite {
 		mNewIDArray = DataInterface.instance.getAllOutletNames();
 		mKwhArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
 		mBack = new Sprite();
-		mBack.graphics.beginFill(0xFFFFFF);
+		mBack.graphics.beginFill(0xFFFFFF, 0);
 		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageHeight);
 		mBack.graphics.endFill();
 		this.addChild(mBack);

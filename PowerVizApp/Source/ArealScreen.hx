@@ -51,7 +51,7 @@ class ArealScreen extends Sprite {
                 
                 mBack = new Sprite();
 
-                mBack.graphics.beginFill(0xFFFFFF);
+                mBack.graphics.beginFill(0xFFFFFF, 0);
                 mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
                 mBack.graphics.endFill();
                 this.addChild(mBack);

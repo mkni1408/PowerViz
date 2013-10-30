@@ -64,7 +64,7 @@ class OnOffDiagram extends Sprite{
 									,"14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
 
 		mBack = new Sprite();
-		mBack.graphics.beginFill(0xFFFFFF);
+		mBack.graphics.beginFill(0xFFFFFF, 0);
 		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageHeight);
 		mBack.graphics.endFill();
 		
