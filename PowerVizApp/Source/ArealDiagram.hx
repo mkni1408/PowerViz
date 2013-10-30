@@ -17,7 +17,7 @@ class ArealDiagram extends Sprite {
 	*/
 	public function generate(values:Array< Array<Float> >, colors:Array<Int>, width:Float, height:Float) {
 		//remove children
-		trace(values);
+		//trace(values);
 
 		if(values.length<1 || values[0].length<1)
 			return;
