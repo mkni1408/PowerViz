@@ -117,15 +117,15 @@ class ArealScreen extends Sprite {
                 mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
                 mTimeButton.y = 0;
 
-                mCoordSys.generate(Lib.stage.stageWidth/1.25, (Lib.stage.stageHeight/1.25)-mLegend.height, "X", "Y", (Lib.stage.stageWidth/1.25)/mTimeArray.length, ((Lib.stage.stageHeight/1.25)-mLegend.height)/mUsageArray.length, 
+                mCoordSys.generate(Lib.stage.stageWidth/1.15, (Lib.stage.stageHeight/1.25)-mLegend.height, "X", "Y", (Lib.stage.stageWidth/1.15)/mTimeArray.length, ((Lib.stage.stageHeight/1.25)-mLegend.height)/mUsageArray.length, 
                                                                                                                         mTimeArray, mUsageArray, true, true);
-                mCoordSys.x = (Lib.stage.stageWidth - mDiagram.width);
+                mCoordSys.x = 70;
                 mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
 
                 mLegend.x = mCoordSys.x;
                 mLegend.y = mCoordSys.y + mLegend.height;
 
-                mDiagram.x = mCoordSys.x;
+                mDiagram.x = 70;
                 mDiagram.y = mCoordSys.y;        
                 
 
@@ -184,7 +184,7 @@ class ArealScreen extends Sprite {
 
                
 
-                mDiagram.generate(data.usage, data.colors, Lib.stage.stageWidth / 1.25,Lib.stage.stageHeight / 1.25);
+                mDiagram.generate(data.usage, data.colors, Lib.stage.stageWidth / 1.15,Lib.stage.stageHeight / 1.25);
                 
         }
         
@@ -220,7 +220,7 @@ class ArealScreen extends Sprite {
                         var hour = date.getHours();
                         var minutes = date.getMinutes();
                         
-                        for(i in 0...59){//pushing minutes into array, needs to be reversed
+                        for(i in 0...44){//pushing minutes into array, needs to be reversed
 
                                 if(minutes == 45){
                                     mTimeArray.push(Std.string(hour)+":45");
