@@ -255,13 +255,17 @@ class DataInterface {
         private function onGetOutletHistory(data:Dynamic, timespan:String) {
         
                 var dest:Map<Int, Array<TimeWatts>> = data;
+
                 var accumOutlet:Map<Int, Float>;
                 var accum:Float=0;
                 
                 var count=0; //Counts number of measurements on the outlet.
                 var watts:Float=0;
                 accumOutlet = new Map<Int, Float>();
+                
+
                 for(key in dest.keys()) {
+                		trace(key);
                         accumOutlet.set(key,0);
                         count = 0;
                         watts = 0;
