@@ -17,6 +17,7 @@ class ArealDiagram extends Sprite {
 	*/
 	public function generate(values:Array< Array<Float> >, colors:Array<Int>, width:Float, height:Float) {
 		//remove children
+		trace(values);
 
 		if(values.length<1 || values[0].length<1)
 			return;
@@ -28,7 +29,7 @@ class ArealDiagram extends Sprite {
 	
 		var bottoms = new Array<Float>(); //Bottom values of the previous row.
 		
-		bottoms[values[0].length-1] = 0;
+		bottoms[values[0].length-1] = 0;//hack MEGAHACK <- Og Tue lavede det!
 		/*
 		for(i in values[0]) 
 			bottoms.push(0); //Start out by setting the bottom line to the bottom.
@@ -37,7 +38,7 @@ class ArealDiagram extends Sprite {
 		//For each array, draw a polygon, where the bottom line is the bottoms line, and the top line is bottom+value.
 		var i:Int=0;
 		for(a in values) {
-			trace("width",width);
+			//trace("width",width);
 			//bottoms = drawArea(bottoms, a, this.graphics, colors[i], width/values[0].length, 1); //Draw each area, getting the new bottom line.
 			bottoms = drawArea2(bottoms, a, this.graphics, colors[i], 30, 1);
 			
@@ -107,10 +108,10 @@ class ArealDiagram extends Sprite {
 			for(i in 0...bottoms.length) {
 				#if cpp
 					topLine[i] = bottoms[i] - (values[i]*vmult);
-					trace("c++");
+					//trace("c++");
 				#else
 					topLine[i] = (bottoms[i]==null ? 0 : bottoms[i]) - (values[i]*vmult);
-					trace("neko");
+					//trace("neko");
 				#end
 			}
 			
@@ -141,10 +142,9 @@ class ArealDiagram extends Sprite {
 				indices.push(first);
 				indices.push(first+3);
 				indices.push(first+2);
-				trace("X",x);
+				//trace("X",x);
 				x += hspace; //Move to next drawing position.
 			}
-			trace(triangles);
 			gfx.beginFill(color);
 			gfx.drawTriangles(triangles, indices); //Draw generated triangles.
 			gfx.endFill();
