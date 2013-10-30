@@ -106,16 +106,16 @@ class ArealScreen extends Sprite {
                 mBack.addChild(mLegend);
                 //mBack.addChild(mLegend);
         
-        
-                mDiagram.width = Lib.stage.stageWidth / 1.15;
-                mDiagram.height = Lib.stage.stageHeight / 1.25;
+                //generates a usagearray and returns a height devide number 
+                var devider = generateUsageArray(mDiagram.maxValue);
                 
                 
                 mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
                 mTimeButton.y = 0;
 
-                mCoordSys.generate(Lib.stage.stageWidth/1.15, (Lib.stage.stageHeight/1.25)-mLegend.height, "X", "Y", (Lib.stage.stageWidth/1.15)/mTimeArray.length, ((Lib.stage.stageHeight/1.25)-mLegend.height)/mUsageArray.length, 
-                                                                                                                        mTimeArray, mUsageArray, true, true);
+                mCoordSys.generate(Lib.stage.stageWidth/1.15, (Lib.stage.stageHeight/1.25)-mLegend.height, "X", "Y", 
+                    (Lib.stage.stageWidth/1.15)/mTimeArray.length, ((Lib.stage.stageHeight/1.25)-mLegend.height)/mUsageArray.length, 
+                                                                                                        mTimeArray, mUsageArray, true, false);
                 mCoordSys.x = 70;
                 mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
 
@@ -126,6 +126,20 @@ class ArealScreen extends Sprite {
                 mDiagram.y = mCoordSys.y;        
                 
 
+                 switch( mViewMode ) {
+                    case 0:
+                        mDiagram.width = Lib.stage.stageWidth/1.15;
+                        mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
+                    case 1:
+                        mDiagram.width = Lib.stage.stageWidth/1.15;
+                        mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
+                    case 2:
+                        mDiagram.width = Lib.stage.stageWidth/1.15 - ((Lib.stage.stageWidth/1.15)/mTimeArray.length);
+                        mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
+                    default:
+                        mDiagram.width = Lib.stage.stageWidth/1.15;
+                        mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
+            }
                 //mBack.addChild(mCoordSys);
 
         }
@@ -167,10 +181,10 @@ class ArealScreen extends Sprite {
                 rvUsage = r.watts;
                 rvColors = r.colors;
 
-                drawDate(rvIds,rvUsage,rvColors);
+                drawData(rvIds,rvUsage,rvColors);
         }        
         
-        private function drawDate(outletIds:Array<Int>, usage:Map<Int, Array<Float>>, colors:Map<Int, Int>) : Void {
+        private function drawData(outletIds:Array<Int>, usage:Map<Int, Array<Float>>, colors:Map<Int, Int>) : Void {
                 
                 
 
@@ -179,10 +193,15 @@ class ArealScreen extends Sprite {
                 
                 mDiagram.graphics.clear();
 
-               
+                
 
                 mDiagram.generate(data.usage, data.colors, Lib.stage.stageWidth / 1.15,Lib.stage.stageHeight / 1.25);
-                
+
+                //mDiagram.width = Lib.stage.stageWidth/1.15 - ((Lib.stage.stageWidth/1.15)/mTimeArray.length);
+                //mDiagram.height = Lib.stage.stageHeight / 1.25;
+
+               
+                    
         }
         
         /**Some test function.**/
@@ -450,6 +469,43 @@ class ArealScreen extends Sprite {
                 return {usage:_usage,colors:_colors}
             
                 
+            }
+
+            private function generateUsageArray(maxValue:Float):Float{
+
+                if(maxValue <= 100){
+
+                    mUsageArray = ["10W ", "20W ", "30W ","40W ","50W ", "60W ","70W ", "80W ","90W ","100W "];
+                    return 10;
+                }
+                 if(maxValue > 100 && maxValue <= 500){
+
+                    mUsageArray = ["50W ", "100W ", "150W ","200W ","250W ", "300W ","350W ", "400W ","450W ","500W "];
+                    return 50;
+                }
+                if(maxValue > 500 && maxValue <= 1000){
+
+                    mUsageArray = ["100W ", "200W ", "300W ","400W ","500W ", "600W ","700W ", "800W ","900W ","1000W "];
+                    return 100;
+                }
+                if(maxValue > 1000 && maxValue <= 2000){
+
+                    mUsageArray = ["200W ", "400W ", "600W ","800W ","1000W ", "1200W ","1400W ", "1600W ","1800W ","2000W "];
+                    return 200;
+                }
+                if(maxValue > 2000 && maxValue <= 4000){
+
+                    mUsageArray = ["400W ", "800W ", "1200W ","1600W ","2000W ", "2400W ","2800W ", "3200W ","3600W ","4000W "];
+                    return 400;
+                }
+                else{//defaulter til denne her hvis forbruget overstiger 20kw(meget!)
+
+                    mUsageArray = ["2kW ", "4kW ", "6kW ","8kW ","10kW ", "12kW ","14kW ", "16kW ","18kW ","20kW "];
+                    return 2000;
+                }
+
+
+
             }
 
         
