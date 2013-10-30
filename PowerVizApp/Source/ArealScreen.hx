@@ -78,9 +78,7 @@ class ArealScreen extends Sprite {
                 
                 mCoordSys = new CoordSystem();
                 
-                addChildrenToBack();
-                
-                testFunctionToBeRemoveLater();
+                callDrawMethods();
                 
         }
         
@@ -104,14 +102,13 @@ class ArealScreen extends Sprite {
                 //mBack.addChild(mTitle);
 
                 mLegend = new Legend();
-                mLegend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mRoomArray, mColorArray);
+                mLegend.drawLegend(mBack.width/1.15,mBack.height/1.25,mColorArray.length,mRoomArray, mColorArray);
                 mBack.addChild(mLegend);
                 //mBack.addChild(mLegend);
         
         
-                mBack.addChild(mDiagram);
-                mDiagram.width = Lib.stage.stageWidth / 1.15;
-                mDiagram.height = Lib.stage.stageHeight / 1.25;
+                //mDiagram.width = Lib.stage.stageWidth / 1.15;
+                //mDiagram.height = Lib.stage.stageHeight / 1.25;
                 
                 
                 mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
@@ -189,10 +186,10 @@ class ArealScreen extends Sprite {
         }
         
         /**Some test function.**/
-        private function testFunctionToBeRemoveLater() { 
-                fillWithData();
-                doLayout();
-        }
+       // private function testFunctionToBeRemoveLater() { 
+       //         fillWithData();
+       //         doLayout();
+       // }
         
         private function onButtonPush(coordSystemType:Int):Void{
 
@@ -257,7 +254,7 @@ class ArealScreen extends Sprite {
                         mTimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00",""
                                                         ,"14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
 
-                        mTitle.text = "Forbrug i dag ";
+                        mTitle.text = "Dagens forbrug ";
 
                 }
                 if(mViewMode == 2){
@@ -280,7 +277,7 @@ class ArealScreen extends Sprite {
                         ///week
                         mUsageArray = ["10kWt ", "20kWt ", "30kWt ","40kWt ","50kWt ", "60kWt ","70kWt ", "80kWt ","90kWt ","100kWt "];
                         //mTimeArray = ["Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"];
-                        mTitle.text = "Forbrug denne uge ";
+                        mTitle.text = "Ugens forbrug ";
 
                 }
                 
@@ -296,16 +293,20 @@ class ArealScreen extends Sprite {
 
 
                 mDiagram = new ArealDiagram();
-                mLegend = new Legend();
                 mCoordSys = new CoordSystem();
                 
-                fillWithData();
-                doLayout();
-                addChildrenToBack();
+                callDrawMethods();
                 
                 
 
                 
+        }
+
+        private function callDrawMethods():Void{
+
+             fillWithData();
+                doLayout();
+                addChildrenToBack();
         }
 
 
@@ -356,7 +357,7 @@ class ArealScreen extends Sprite {
                     
                     if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden
                     _ta = new Array<Float>();
-                        for(t in 0...3){
+                        for(t in 0...4){
                                 _ta.push(0);
                             }
 
