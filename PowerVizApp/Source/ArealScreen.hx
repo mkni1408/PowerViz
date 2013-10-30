@@ -363,6 +363,7 @@ class ArealScreen extends Sprite {
                 var _usage = new Array< Array<Float> >();
                 var _colors = new Array<Int>();
                 var _ta:Array<Float>;
+                var _room:Array<String>;
 
                 
 
@@ -398,7 +399,7 @@ class ArealScreen extends Sprite {
                     }
                 }
                  if(mViewMode==1){//Day
-                    if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden
+                    if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden hvis tomt
                     _ta = new Array<Float>();
 
 
@@ -412,7 +413,7 @@ class ArealScreen extends Sprite {
                     else{
                 
                         for(id in outletIds) {
-                            trace(id);
+                            
                             _ta = usage.get(id);
                             while(_ta.length<96)
                                     _ta.push(0);
@@ -461,7 +462,10 @@ class ArealScreen extends Sprite {
 
 
                 }
-               
+               trace(outletIds);
+               trace(_colors);
+
+
                 return {usage:_usage,colors:_colors}
             
                 
