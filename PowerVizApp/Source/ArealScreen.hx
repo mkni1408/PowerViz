@@ -85,7 +85,7 @@ class ArealScreen extends Sprite {
         }
         
         private function addChildrenToBack() {        
-                //mBack.addChild(mDiagram);
+                mBack.addChild(mDiagram);
                 mBack.addChild(mTimeButton);
 
                 mBack.addChild(mCoordSys);

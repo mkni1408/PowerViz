@@ -17,7 +17,7 @@ class ArealDiagram extends Sprite {
 	*/
 	public function generate(values:Array< Array<Float> >, colors:Array<Int>, width:Float, height:Float) {
 		//remove children
-
+		trace(values);
 		if(values.length<1 || values[0].length<1)
 			return;
 			
@@ -28,7 +28,11 @@ class ArealDiagram extends Sprite {
 	
 		var bottoms = new Array<Float>(); //Bottom values of the previous row.
 		
-		bottoms[values[0].length-1] = 0;
+		//bottoms[values[0].length-1] = 0;
+		//for(i in 0...values[0].length){
+		//		bottoms.push(0);
+
+		//}
 		/*
 		for(i in values[0]) 
 			bottoms.push(0); //Start out by setting the bottom line to the bottom.
@@ -37,13 +41,13 @@ class ArealDiagram extends Sprite {
 		//For each array, draw a polygon, where the bottom line is the bottoms line, and the top line is bottom+value.
 		var i:Int=0;
 		for(a in values) {
-			trace("width",width);
 			//bottoms = drawArea(bottoms, a, this.graphics, colors[i], width/values[0].length, 1); //Draw each area, getting the new bottom line.
-			bottoms = drawArea2(bottoms, a, this.graphics, colors[i], 30, 1);
+			bottoms = drawArea2(bottoms, a, this.graphics, colors[i], width/values[0].length, 1);
+			//bottoms = drawArea3(bottoms,a,this.graphics,colors[i],width/bottoms.length,width);
+			
 			
 			i += 1;
 		}
-		
 		maxValue = highestAccumValue(values);
 		
 	}
@@ -107,10 +111,10 @@ class ArealDiagram extends Sprite {
 			for(i in 0...bottoms.length) {
 				#if cpp
 					topLine[i] = bottoms[i] - (values[i]*vmult);
-					trace("c++");
+					
 				#else
 					topLine[i] = (bottoms[i]==null ? 0 : bottoms[i]) - (values[i]*vmult);
-					trace("neko");
+					
 				#end
 			}
 			
@@ -141,16 +145,150 @@ class ArealDiagram extends Sprite {
 				indices.push(first);
 				indices.push(first+3);
 				indices.push(first+2);
-				trace("X",x);
+				
 				x += hspace; //Move to next drawing position.
 			}
-			trace(triangles);
+			
 			gfx.beginFill(color);
 			gfx.drawTriangles(triangles, indices); //Draw generated triangles.
 			gfx.endFill();
 			
 			return topLine;
 	}
+
+	private function drawArea3(bottoms:Array<Float>, values:Array<Float>, 
+								gfx:flash.display.Graphics, color:Int, hspace:Float,width:Float): Array<Float>{
+		bottoms.reverse();//reverse so the last value is first
+		var star_commands:Array<Int> = new Array<Int>(); 
+		var star_coord:Array<Float> = new Array<Float>();
+		var newBottoms:Array<Float> = new Array<Float>();
+		
+
+		//move the cursor to
+		star_commands.push(1);
+		star_coord.push(width);
+		star_coord.push(bottoms[0]);
+		var widthDenoter = width;//so it wont hit 0
+
+		widthDenoter -= hspace;
+		//draw bottom line
+		for(i in 1...values.length){
+
+			star_commands.push(2);
+			star_coord.push(widthDenoter);
+			star_coord.push(bottoms[i]);
+			
+
+			
+		}
+
+		bottoms.reverse();
+
+		
+		//draw the line up to the values
+			star_commands.push(2);
+			star_coord.push(widthDenoter);
+			star_coord.push(bottoms[0]-values[0]);
+			newBottoms.push(bottoms[0]-values[0]);
+			widthDenoter += hspace;
+
+			
+
+		//draw the values
+		for(i in 1...values.length){
+
+			star_commands.push(2);
+			star_coord.push(widthDenoter);
+			star_coord.push(bottoms[i]-values[i]);
+			newBottoms.push(bottoms[i]-values[i]);
+			widthDenoter += hspace;
+
+		}
+		//draw the line down to the start value
+			star_commands.push(2);
+			star_coord.push(widthDenoter);
+			star_coord.push(bottoms[bottoms.length-1]-values[values.length-1]);
+			newBottoms.push(bottoms[bottoms.length-1] - values[values.length-1]);
+
+			
+			gfx.beginFill(color);
+			gfx.drawPath(star_commands, star_coord);
+			gfx.endFill();
+			
+			return newBottoms;
+
+
+
+		}
+private function drawArea4(bottoms:Array<Float>, values:Array<Float>, 
+								gfx:flash.display.Graphics, color:Int, hspace:Float,width:Float): Array<Float>{
+		
+		var star_commands:Array<Int> = new Array<Int>(); 
+		var star_coord:Array<Float> = new Array<Float>();
+		var newBottoms:Array<Float> = new Array<Float>();
+
+
+		var pointX = 0.0;
+
+		star_commands.push(1);
+		star_coord.push(pointX);
+		star_coord.push(bottoms[0]);
+
+
+		for(i in 1...values.length){
+			pointX = pointX +hspace;
+			star_commands.push(2);
+			star_coord.push(pointX);
+			star_coord.push(bottoms[i]);
+			
+
+		}
+		trace("X",pointX);
+		pointX = 0.0;
+
+		star_commands.push(1);
+		star_coord.push(pointX);
+		star_coord.push(bottoms[0]);
+
+		star_commands.push(2);
+
+		star_coord.push(pointX);
+		star_coord.push(bottoms[0]-values[0]);
+		newBottoms.push(bottoms[0]-values[0]);
+
+		for (i in 1...values.length) {
+			pointX = pointX + hspace;
+			
+			star_commands.push(2);
+			star_coord.push(pointX);
+			star_coord.push(bottoms[i]-values[i]);
+			newBottoms.push(bottoms[i]-values[i]);
+
+
+		}
+
+		star_commands.push(2);
+		
+		star_coord.push(pointX);
+
+		var len = bottoms.length-1;
+		trace("X",pointX);
+		
+
+		star_coord.push(bottoms[len]);
+
+		gfx.beginFill(color);
+		gfx.drawPath(star_commands, star_coord);
+		gfx.endFill();
+		
+		return newBottoms;
+
+			
+
+		}
+
+
+	
 	
 	/*Returns the highest accumulated value of all arrays passed.
 	Used for calculating the max in the diagram.
