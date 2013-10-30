@@ -270,7 +270,8 @@ class DataInterface {
 				watts += tw.watts;
 				count += 1;
 			}
-			watts /= count;
+			
+			watts /= 4; //From watt quarter to watt hour.
 			accumOutlet.set(key, watts);
 		}
 		
