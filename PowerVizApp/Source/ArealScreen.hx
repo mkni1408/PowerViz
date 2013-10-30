@@ -197,18 +197,12 @@ class ArealScreen extends Sprite {
 
                 mDiagram.generate(data.usage, data.colors, Lib.stage.stageWidth / 1.15,Lib.stage.stageHeight / 1.25);
 
-                //mDiagram.width = Lib.stage.stageWidth/1.15 - ((Lib.stage.stageWidth/1.15)/mTimeArray.length);
-                //mDiagram.height = Lib.stage.stageHeight / 1.25;
 
                
                     
         }
         
-        /**Some test function.**/
-       // private function testFunctionToBeRemoveLater() { 
-       //         fillWithData();
-       //         doLayout();
-       // }
+      
         
         private function onButtonPush(coordSystemType:Int):Void{
 
@@ -232,7 +226,7 @@ class ArealScreen extends Sprite {
                         //hour
                         mTimeArray = new Array<String>();//ensure that array is empty
                         mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
-                         var date = Date.now();
+                        var date = Date.now();
                         var hour = date.getHours();
                         var minutes = date.getMinutes();
                         
@@ -463,14 +457,13 @@ class ArealScreen extends Sprite {
 
 
                 }
-                trace("usage......");
-
-                trace(_usage);
+               
                 return {usage:_usage,colors:_colors}
             
                 
             }
-
+            //creates an array of strings that matches the max watt consumption
+            //returns a devider used to calculate the height of the arealdiagram
             private function generateUsageArray(maxValue:Float):Float{
 
                 if(maxValue <= 100){
