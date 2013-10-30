@@ -1,5 +1,6 @@
 -main Config
 -cp ../PowerVizCommon
--neko Config.n
--cmd nekotools boot Config.n
+#-neko Config.n
+#-cmd nekotools boot Config.n
+-cpp Export
 

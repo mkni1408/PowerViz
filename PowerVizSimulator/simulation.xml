@@ -94,36 +94,36 @@
 	-->
 	
 	<!-- vågner -->
-	<time every="24:00:00" offset="06:00:00" comment="Vågner op." >
+	<time at="06:00:00" comment="Vågner op." >
 		<load outlet="3001" set="20" comment="Turn on light in bedroom" /> <!-- turn on light -->
 		<load outlet="3003" set="0" /><!-- unplug mobiloplader -->
 		<load outlet="3004" set="40" /> <!-- turn on big light bedroom -->
 	</time> 
 	
-	<time every="24:00:00" offset="06:10:00" comment="Tænder lys i stue og køkken." > <!-- going to the living room, start making breakfast. -->
+	<time at="06:10:00" comment="Tænder lys i stue og køkken." > <!-- going to the living room, start making breakfast. -->
 		<load outlet="1006" set="40" comment="Goint to the living room" />
 		<load outlet="1005" add="60" /> <!-- turn on computer -->	
 
 		<load outlet="2006" set="50" /> <!-- turn on light in kitchen -->
 	</time>
 	
-	<time every="24:00:00" offset="06:20:00" comment="Begynder at lave morgenmad." >
+	<time at="06:20:00" comment="Begynder at lave morgenmad." >
 		<load outlet="2007" set="700" /> <!-- Tænder kaffemaskine på fuld skrald -->
 		<load outlet="2003" set="400" /> <!-- Bruger køkkenmaskine -->
 	</time>
 	
-	<time every="24:00:00" offset="06:25:00" >
+	<time at="06:25:00" >
 		<load outlet="2003" set="0" /> <!-- Slukker køkkenmaskine -->
 	</time>	
 	
-	<time every="24:00:00" offset="06:30:00" >
+	<time at="06:30:00" >
 		<load outlet="2007" set="300" /> <!-- Kaffemaskine holder kaffen varm. Slukkes først når tager hjemmefra -->
 		<load outlet="1001" add="120" /> <!-- tænder tv i stuen -->
 	</time>
 	
 	
 	
-	<time every="24:00:00" offset="06:50:00" comment="Tager afsted hjemmefra" >
+	<time at="06:50:00" comment="Tager afsted hjemmefra" >
 		<load outlet="1001" sub="120" />
 		<load outlet="1005" sub="60" />
 		<load outlet="1006" set="0" />
@@ -131,6 +131,23 @@
 		
 	</time>
 	
+	<!-- Something that uses a lot of power on a regular basis: -->
+	<time at="08:00:00" comment="Something starts.." >
+		<load outlet="4003" set="300" />
+	</time>
+	
+	<time at="13:00:00" >
+		<load outlet="4003" set="50" />
+	</time>
+	
+
+	<!-- Haunting mode! -->
+	<time every="00:32:00" >
+		<load outlet="1006" set="200" />
+	</time>	
+	<time every="00:32:00" offset="00:15:00" >
+		<load outlet="1006" set="0" />
+	</time>
 	
 
 	<!-- _________________________________ -->	

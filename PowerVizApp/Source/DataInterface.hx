@@ -148,23 +148,33 @@ class DataInterface {
 	//Initialize the timers that will get data from the server.
 	private function initTimers() {
 	
-		mTimerNow = new Timer(3*1000, 0); //Every 3 secs.
+		var nowInterval = 3*1000;
+		var quarterInterval = 15*60*1000;
+		#if demo
+			trace("IIIATLAJDLSAID IT WORKS");
+			quarterInterval = 60*1000;
+		#end
+		var hourInterval = quarterInterval*4;
+		var dayInterval = hourInterval * 24;
+		var weekInterval = dayInterval * 7;
+	
+		mTimerNow = new Timer(nowInterval, 0); //Every 3 secs.
 		mTimerNow.addEventListener(TimerEvent.TIMER, onTimerNow);
 		mTimerNow.start();
 	
-		mTimerQuarter = new Timer(15*60*1000); //Every 15 minutes.
+		mTimerQuarter = new Timer(quarterInterval, 0); //Every 15 minutes.
 		mTimerQuarter.addEventListener(TimerEvent.TIMER, onTimerQuarter);
 		mTimerQuarter.start();
 		
-		mTimerHour = new Timer(60*60*1000); //Every hour.
+		mTimerHour = new Timer(hourInterval, 0); //Every hour.
 		mTimerHour.addEventListener(TimerEvent.TIMER, onTimerHour);
 		mTimerHour.start();
 		
-		mTimerDay = new Timer(24*60*60*1000); //Once a day.
+		mTimerDay = new Timer(dayInterval, 0); //Once a day.
 		mTimerDay.addEventListener(TimerEvent.TIMER, onTimerDay);
 		mTimerDay.start();
 		
-		mTimerWeek = new Timer(24*60*60*1000*7); //Once a week.
+		mTimerWeek = new Timer(weekInterval); //Once a week.
 		mTimerWeek.addEventListener(TimerEvent.TIMER, onTimerWeek);
 		mTimerWeek.start();
 	}
