@@ -212,6 +212,22 @@ class DataBaseInterface {
 	
 	}
 	
+	public static function setRoomColor(houseId:Int, roomId:Int, color:String) : Void {
+		var room = HouseRooms.manager.select($houseId==houseId && $roomId==roomId);
+		if(room==null)
+			return;
+		room.roomColor = color;
+		room.update();
+	}
+	
+	public static function setOutletColor(houseId:Int, outletId:Int, color:String) {
+		var outlet = HouseOutlets.manager.select($houseId==houseId && $outletId==outletId);
+		if(outlet==null)
+			return;
+		outlet.color = color;
+		outlet.update();
+	}
+	
 	
 	
 	//*************************************************************************************

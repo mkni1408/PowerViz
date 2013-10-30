@@ -59,7 +59,15 @@ class RGB {
 		return n;		
 	}
 	
-	public function setFromInt(int:Int) {
+	public static function fromHexString(s:String) : RGB {
+		return fromInt(Std.parseInt(s));
+	}
+	
+	public function setFromInt(int:Null<Int>) {
+		if(int==null) {
+			R = G = B = 0;
+			return;
+		}
 		R = ((int >> 16) & 255) / 255;
 		G = ((int >> 8) & 255) / 255;
 		B = (int & 255) / 255;
@@ -72,6 +80,10 @@ class RGB {
 	public function toString() : String {
 		return "r:" + R + ", g:" + G + ", b:" + B;
 	
+	}
+	
+	public function toHexString() : String {
+		return "0x" + StringTools.hex(toInt(), 6);
 	}
 	
 	public function toHSV() : HSV {
@@ -120,15 +132,42 @@ class RGB {
 
 class HSV {
 
-	public var H:Float; //0-360.
-	public var S:Float; //0-1
-	public var V:Float; //0-1
+	public var H(default,set):Float; //0-360.
+	public var S(default,set):Float; //0-1
+	public var V(default,set):Float; //0-1
 	
 	public function new(?_h:Float, ?_s:Float, ?_v:Float) {
 		H = _h!=null ? _h : 1;
 		S = _s!=null ? _s : 1;
 		V = _v!=null ? _v : 1;
 	}	
+	
+	function set_H(h:Float) : Float {
+		H = h; 
+		while(H<0)
+			H += 360;
+		while(H>360)
+			H -= 360;
+		return H;
+	}
+	
+	function set_S(s:Float) : Float {
+		S = s;
+		if(S<0)
+			S = 0;
+		if(S>1)
+			S = 1;
+		return S;
+	}
+	
+	function set_V(v:Float) : Float {
+		V = v;
+		if(V<0)
+			V = 0;
+		if(V>1)
+			V = 1;
+		return V;
+	}
 	
 	public static function fromRGBInt(int:Int) : HSV {
 		return fromRGB(RGB.fromInt(int));
@@ -202,6 +241,10 @@ class HSV {
 	
 	public function toRGBInt() : Int {
 		return toRGB().toInt();
+	}
+	
+	public function toString() : String {
+		return "h:" + H + ", s:" + S + ", v:" + V;
 	}
 	
 }

@@ -7,6 +7,8 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.TouchEvent;
 import flash.events.MouseEvent;
+import flash.events.KeyboardEvent;
+import flash.ui.Keyboard;
 
 import flash.Lib;
 
@@ -79,6 +81,10 @@ class SwipeMill {
 			mTouchReceiver.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			mTouchReceiver.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			mTouchReceiver.addEventListener(MouseEvent.MOUSE_OUT, onMouseLeave);
+			
+			//Keyboard events, to make swiping simpler during dev.
+			Lib.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			
 		#end
 		
 		#if mobile
@@ -151,6 +157,17 @@ class SwipeMill {
 	/*Called when the tween effect ends. Purpose unknown.*/
 	private static function onMakeScreenFitDone() {
 		//trace("Done tweening");
+	}
+	
+	private static function onKeyUp(event:KeyboardEvent) {
+	
+		switch(event.keyCode) {
+			case Keyboard.RIGHT:
+				screenPos += 1;
+			case Keyboard.LEFT:
+				screenPos -= 1;
+		}			
+
 	}
 	
 	//Listener for the mouse down event.

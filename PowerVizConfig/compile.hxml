@@ -1,0 +1,5 @@
+-main Config
+-cp ../PowerVizCommon
+-neko Config.n
+-cmd nekotools boot Config.n
+

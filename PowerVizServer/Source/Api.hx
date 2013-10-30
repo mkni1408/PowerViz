@@ -59,10 +59,12 @@ class Api {
 			return DataBaseInterface.getHouseDescriptor(houseId);
 	}
 	
-	public function setOutletColor(houseId:Int, outletColor:String) {
+	public function setRoomColor(houseId:Int, roomId:Int, color:String) {
+		DataBaseInterface.setRoomColor(houseId, roomId, color);
 	}
 	
-	public function setRoomColor(houseId:Int, roomColor:String) {
+	public function setOutletColor(houseId:Int, outletId:Int, color:String) {
+		DataBaseInterface.setOutletColor(houseId, outletId, color);
 	}
 		
 	///////////////////////////////////////////////////////
