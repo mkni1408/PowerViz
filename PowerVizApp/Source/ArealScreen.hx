@@ -11,8 +11,7 @@ import DataInterface;
 import TimeChangeButton;
 import CoordSystem;
 import Outlet;
-import flash.utils.Timer;
-import flash.events.TimerEvent;
+import PowerTimer;
 
 /**
 Screen displaying the Areal diagram.
@@ -40,6 +39,8 @@ class ArealScreen extends Sprite {
         private var mViewMode:Int;
         private var mFront:Sprite;
         private var mTimer:Timer;
+
+        private var mTimer:PowerTimer;
         #if demo
             private var mTimerInterval:Int = 60*1000; //Once a minute in demo mode.
         #else
@@ -92,17 +93,16 @@ class ArealScreen extends Sprite {
 
                 callDrawMethods();
 
-                mTimer = new Timer(mTimerInterval); 
-                mTimer.addEventListener(TimerEvent.TIMER, onTime);
+                mTimer = new PowerTimer(mTimerInterval); 
+                mTimer.onTime = onTime;
                 mTimer.start();
-                
                 
                 
         }
 
-        private function onTime(event:TimerEvent) {
-           
+        private function onTime() {
             redrawEverything();
+            trace("Redrawing ArealScreen");
         }
         
         private function addChildrenToBack() {        

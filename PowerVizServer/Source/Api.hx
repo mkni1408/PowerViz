@@ -145,6 +145,10 @@ class Api {
 		return DataBaseInterface.getOutletHistoryAllWeek(houseId);
 	}
 	
+	public function getOutletHistoryThreeDays(houseId:Int) : Map<Int, Array<TimeWatts> > {
+		return DataBaseInterface.getOutletHistoryThreeDays(houseId);
+	}
+	
 	public function getOutletHistoryLastQuarter(houseId:Int) : Map<Int, Float> {
 		return DataBaseInterface.getOutletHistoryLastQuarter(houseId);
 	}

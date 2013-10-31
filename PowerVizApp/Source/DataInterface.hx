@@ -206,7 +206,7 @@ class DataInterface {
         }
         
         private function onTimerDay(event:Dynamic) : Void {
-                mCnx.Api.getOutletHistoryAllDay.call([Config.instance.houseId], onGetOutletHistoryAllDay);
+                mCnx.Api.getOutletHistoryAllToday.call([Config.instance.houseId], onGetOutletHistoryAllDay);
         }
         
         private function onTimerWeek(event:Dynamic) : Void {

@@ -9,8 +9,8 @@ import BarGraph;
 import FontSupply;
 import TimeChangeButton;
 import CoordSystem;
-import flash.utils.Timer;
-import flash.events.TimerEvent;
+import PowerTimer;
+
 
 class BarScreen extends Sprite {
 
@@ -31,7 +31,7 @@ class BarScreen extends Sprite {
 	private var mViewMode:Int;
 	private var mViewModes:Array<Int>;
 
-	private var mTimer:Timer;
+	private var mTimer:PowerTimer;
         #if demo
             private var mTimerInterval:Int = 60*1000; //Once a minute in demo mode.
         #else
@@ -80,25 +80,20 @@ class BarScreen extends Sprite {
 
 		this.addChild(mBack);
 
-		  mTimer = new Timer(mTimerInterval); 
-          mTimer.addEventListener(TimerEvent.TIMER, onTime);
-          mTimer.start();
+		mTimer = new PowerTimer(mTimerInterval); 
+		mTimer.onTime = onTime;
+		mTimer.start();
 	}
 
-	private function onTime(event:TimerEvent) {
-            trace("Bar timer running");
-            redrawEverything();
-        }
+	private function onTime() {
+        trace("Bar timer running");
+        redrawEverything();
+	}
 	
 	private function layout() {
 	
-		
-	
-	
 			
 		mBarGraph.y = Lib.stage.stageHeight - ((Lib.stage.stageHeight - mBarGraph.height)/2);	
-		
-
 		
 		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
 

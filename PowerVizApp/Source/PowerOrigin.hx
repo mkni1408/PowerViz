@@ -1,11 +1,10 @@
 	import flash.display.Sprite;
 import flash.Lib;
 import flash.display.Bitmap;
-import flash.events.TimerEvent;
-import flash.utils.Timer;
 import openfl.Assets;
 import motion.Actuate;
-import Std;
+import PowerTimer;
+
 /*
 Defines the powerorigin interface. In short it just shifts between a few pictures
 */
@@ -17,7 +16,7 @@ class PowerOrigin extends Sprite{
 	private var mPowerOriginSolar : Sprite;
 	private var mPowerOriginNuclear : Sprite;
 	
-	private var mTimer:Timer;
+	private var mTimer:PowerTimer;
 	private var mTimerSetting:Int = 10000;
 
 	public function new(){
@@ -56,10 +55,8 @@ class PowerOrigin extends Sprite{
 		mPowerOriginSolar.visible = false;
 		mPowerOriginNuclear.visible = false;
 		
-		mTimer = new Timer(mTimerSetting, 0);
-		mTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
-			changePowerOrigin();
-		});
+		mTimer = new PowerTimer(mTimerSetting);
+		mTimer.onTime = function(){ changePowerOrigin();};
 		mTimer.start();
 	}
 
