@@ -9,6 +9,8 @@ import BarGraph;
 import FontSupply;
 import TimeChangeButton;
 import CoordSystem;
+import flash.utils.Timer;
+import flash.events.TimerEvent;
 
 class BarScreen extends Sprite {
 
@@ -28,6 +30,13 @@ class BarScreen extends Sprite {
 	//is used to determine which coordinate system type it is e.g week, day, month
 	private var mViewMode:Int;
 	private var mViewModes:Array<Int>;
+
+	private var mTimer:Timer;
+        #if demo
+            private var mTimerInterval:Int = 60*1000; //Once a minute in demo mode.
+        #else
+            private var mTimerInterval:Int = 5*60*1000; //Every 5 minutes in normal mode.
+        #end
 
 	public function new() {
 		super();
@@ -70,7 +79,16 @@ class BarScreen extends Sprite {
 		fillWithData();
 
 		this.addChild(mBack);
+
+		  mTimer = new Timer(mTimerInterval); 
+          mTimer.addEventListener(TimerEvent.TIMER, onTime);
+          mTimer.start();
 	}
+
+	private function onTime(event:TimerEvent) {
+            trace("Bar timer running");
+            redrawEverything();
+        }
 	
 	private function layout() {
 	

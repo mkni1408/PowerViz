@@ -11,6 +11,8 @@ import DataInterface;
 import TimeChangeButton;
 import CoordSystem;
 import Outlet;
+import flash.utils.Timer;
+import flash.events.TimerEvent;
 
 /**
 Screen displaying the Areal diagram.
@@ -39,11 +41,20 @@ class ArealScreen extends Sprite {
         private var mViewMode:Int;
         private var mFront:Sprite;
 
+         private var mTimer:Timer;
+        #if demo
+            private var mTimerInterval:Int = 60*1000; //Once a minute in demo mode.
+        #else
+            private var mTimerInterval:Int = 5*60*1000; //Every 5 minutes in normal mode.
+        #end
+
         public function new() {
                 super();
                 
                 mRoomArray = new Array<String>();
                 mColorArray = new Array<Int>();
+
+               
 
                 getColorAndRoomData();
 
@@ -77,9 +88,21 @@ class ArealScreen extends Sprite {
                 
                 
                 mCoordSys = new CoordSystem();
-                
+
+
                 callDrawMethods();
+
+                mTimer = new Timer(mTimerInterval); 
+                mTimer.addEventListener(TimerEvent.TIMER, onTime);
+                mTimer.start();
                 
+                
+                
+        }
+
+        private function onTime(event:TimerEvent) {
+           
+            redrawEverything();
         }
         
         private function addChildrenToBack() {        
@@ -317,7 +340,7 @@ class ArealScreen extends Sprite {
 
         private function callDrawMethods():Void{
 
-             fillWithData();
+                fillWithData();
                 doLayout();
                 addChildrenToBack();
         }
@@ -552,27 +575,27 @@ class ArealScreen extends Sprite {
                     mUsageArray = ["10W ", "20W ", "30W ","40W ","50W ", "60W ","70W ", "80W ","90W ","100W "];
                     return 10;
                 }
-                 if(maxValue > 100 && maxValue <= 500){
+                else if(maxValue > 100 && maxValue <= 500){
 
                     mUsageArray = ["50W ", "100W ", "150W ","200W ","250W ", "300W ","350W ", "400W ","450W ","500W "];
                     return 50;
                 }
-                if(maxValue > 500 && maxValue <= 1000){
+                else if(maxValue > 500 && maxValue <= 1000){
 
                     mUsageArray = ["100W ", "200W ", "300W ","400W ","500W ", "600W ","700W ", "800W ","900W ","1000W "];
                     return 100;
                 }
-                if(maxValue > 1000 && maxValue <= 2000){
+                else if(maxValue > 1000 && maxValue <= 2000){
 
                     mUsageArray = ["200W ", "400W ", "600W ","800W ","1000W ", "1200W ","1400W ", "1600W ","1800W ","2000W "];
                     return 200;
                 }
-                 if(maxValue > 2000 && maxValue <= 3000){
+                else if(maxValue > 2000 && maxValue <= 3000){
 
                     mUsageArray = ["300W ", "600W ", "900W ","1200W ","1500W ", "1800W ","2100W ", "2400W ","2700W ","3000W "];
                     return 300;
                 }
-                if(maxValue > 2000 && maxValue <= 4000){
+                else if(maxValue > 2000 && maxValue <= 4000){
 
                     mUsageArray = ["400W ", "800W ", "1200W ","1600W ","2000W ", "2400W ","2800W ", "3200W ","3600W ","4000W "];
                     return 400;
