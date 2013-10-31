@@ -37,16 +37,17 @@ class ArealScreen extends Sprite {
         private var mLegend:Legend;
         private var mRoomArray:Array<String>;
         private var mColorArray:Array<Int>;
-        
         private var mViewMode:Int;
         private var mFront:Sprite;
-
-         private var mTimer:Timer;
+        private var mTimer:Timer;
         #if demo
             private var mTimerInterval:Int = 60*1000; //Once a minute in demo mode.
         #else
             private var mTimerInterval:Int = 5*60*1000; //Every 5 minutes in normal mode.
         #end
+
+
+
 
         public function new() {
                 super();
@@ -67,8 +68,7 @@ class ArealScreen extends Sprite {
                 mBack.graphics.endFill();
                 this.addChild(mBack);
 
-                mTimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00",""
-                                                        ,"14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
+                mTimeArray = generateTimeArray();
 
 
                 mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", 
@@ -245,11 +245,12 @@ class ArealScreen extends Sprite {
 
         private function redrawEverything():Void{
 
+                var date = Date.now();
                 if(mViewMode == 0){
                         //hour
                         mTimeArray = new Array<String>();//ensure that array is empty
                         mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
-                        var date = Date.now();
+                        
                         var hour = date.getHours();
                         var minutes = date.getMinutes();
                         
@@ -287,6 +288,7 @@ class ArealScreen extends Sprite {
                 if(mViewMode == 1){
                         //day
                         mUsageArray = ["1kWt  ", "2kWt  ", "3kWt  ","4kWt  ","5kWt  ", "6kWt  ","7kWt  ", "8kWt  ","9kWt  ","10kWt  "];
+
                         mTimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00",""
                                                         ,"14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
 
@@ -555,8 +557,6 @@ class ArealScreen extends Sprite {
 
                 }
 
-                trace(_returnUsage);
-                trace(_returnColors);
 
                 if(_returnUsage.length == 0){
 
@@ -606,6 +606,87 @@ class ArealScreen extends Sprite {
                     return 2000;
                 }
 
+
+
+            }
+
+            private function generateTimeArray():Array<String>{
+
+                var date = Date.now();
+                var stringAr = new Array<String>();
+                var minutesString = "00";
+
+                for(i in 0...24){
+
+
+                        stringAr.push(Std.string(i)+":"+"00");
+                        stringAr.push(Std.string(i)+":"+"15");
+                        stringAr.push(Std.string(i)+":"+"30");
+                        stringAr.push(Std.string(i)+":"+"45");
+
+                }
+
+                trace(stringAr);
+
+                if(date.getMinutes() >= 0 && date.getMinutes() < 15){
+                       minutesString = "00"; 
+                }
+                else if(date.getMinutes() >= 15 && date.getMinutes() < 30){
+                    minutesString = "15";
+                }
+                 else if(date.getMinutes() >= 30 && date.getMinutes() < 45){
+                    minutesString = "30";      
+                }
+                 else if(date.getMinutes() >= 45 && date.getMinutes() < 59){
+                    minutesString = "45"; 
+                }
+
+                var tempTime = date.getHours()+":"+minutesString;
+                trace(tempTime);
+
+
+
+                stringAr.reverse();
+
+                var arrEl = 0;
+                for(el in 0...stringAr.length ){
+
+                    if(stringAr[el] == tempTime)
+                    {
+                        arrEl = el;
+                    }
+                }
+
+                var stringAr = new Array<String>();
+
+                 for(i in 0...12){
+
+
+
+                        stringAr.push(Std.string(i*2)+":"+"00");
+                        stringAr.push("");
+                        stringAr.push("");
+                        stringAr.push("");
+                        stringAr.push("");
+                        stringAr.push("");
+                        stringAr.push("");
+                        stringAr.push("");
+
+
+                }
+
+                stringAr.reverse();
+
+                var tempArray = stringAr.splice(arrEl,stringAr.length+1);
+
+                trace (tempArray);
+
+                tempArray = tempArray.concat(stringAr);
+                trace (tempArray);
+                tempArray.reverse();
+
+
+                return tempArray;
 
 
             }

@@ -498,7 +498,6 @@ class DataInterface {
                                 return null;
                 }
 
-                trace(source);
 
                 for(key in source.keys()) {        
 
