@@ -567,6 +567,11 @@ class ArealScreen extends Sprite {
                     mUsageArray = ["200W ", "400W ", "600W ","800W ","1000W ", "1200W ","1400W ", "1600W ","1800W ","2000W "];
                     return 200;
                 }
+                 if(maxValue > 2000 && maxValue <= 3000){
+
+                    mUsageArray = ["300W ", "600W ", "900W ","1200W ","1500W ", "1800W ","2100W ", "2400W ","2700W ","3000W "];
+                    return 300;
+                }
                 if(maxValue > 2000 && maxValue <= 4000){
 
                     mUsageArray = ["400W ", "800W ", "1200W ","1600W ","2000W ", "2400W ","2800W ", "3200W ","3600W ","4000W "];
