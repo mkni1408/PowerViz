@@ -44,10 +44,6 @@ class DataBaseInterface {
 		
 		return true;
 	}
-	
-	private static function getNow() : Date {
-		return DateTools.delta(Date.now(), DateTools.hours(1)); //Correct time...
-	}
 
 	
 	/**
@@ -56,7 +52,7 @@ class DataBaseInterface {
 	**/
 	public static function setCurrentLoad(houseId:Int, outletId:Int, load:Float, ?_time:Date) {
 
-		var now = _time==null ? getNow() : _time;
+		var now = _time==null ? Date.now() : _time;
 		
 		//Write the current load to the CurrentLoad table (in mem):
 		
@@ -76,7 +72,6 @@ class DataBaseInterface {
 		}
 	
 	}
-
 	
 	/**
 	Adds history data to the database.
@@ -212,22 +207,6 @@ class DataBaseInterface {
 	
 	}
 	
-	public static function setRoomColor(houseId:Int, roomId:Int, color:String) : Void {
-		var room = HouseRooms.manager.select($houseId==houseId && $roomId==roomId);
-		if(room==null)
-			return;
-		room.roomColor = color;
-		room.update();
-	}
-	
-	public static function setOutletColor(houseId:Int, outletId:Int, color:String) {
-		var outlet = HouseOutlets.manager.select($houseId==houseId && $outletId==outletId);
-		if(outlet==null)
-			return;
-		outlet.color = color;
-		outlet.update();
-	}
-	
 	
 	
 	//*************************************************************************************
@@ -252,38 +231,15 @@ class DataBaseInterface {
 		return -1;		
 	}
 	
-	public static function fillInMissingReadings(readings:Array<TimeWatts>, from:Date, to:Date) {
-		var result = new Array<TimeWatts>(); //New return value.
-		var t = Date.fromTime(from.getTime()); //Used for the "current time" in the loop.
-		var sub:Date; //Substitute with 0.
-		var index:Int=0;
-		while(t.getTime() <= to.getTime()) {
-		
-			if(readings[index].time.getTime() != t.getTime()) //There is no reading in this timespan.
-				result.push({time:t, watts:0}); //Put an empty reading in.
-			else if(readings[index].time.getTime() == t.getTime() ) {
-				result.push(readings[index]); //Put the real reading in.
-				index += 1; //Advance to next reading.
-			}
-			t = DateTools.delta(t, DateTools.minutes(15)); //Advance the timer with 15 minutes.
-		}
-		
-		return result;
-	}
-	
 	//Returns the load data that was recorded in the specified timespan for the specified outlet.
 	//Returned as an array of anonymous structures.
-	//UPDATE: When there are gaps in the data, this should fill out the gaps and return decent data.
 	public static function getOutletHistory(houseId:Int, outletId:Int, from:Date, to:Date) : Array<TimeWatts> {
 		
 		var r = new Array<TimeWatts>();
 		for(lh in LoadHistory.manager.search($houseId==houseId && $outletId==outletId && $time>=from && $time <= to, {orderBy : time})) {
 				r.push({time:lh.time, watts:lh.load});
 		}
-		
-		//End of the original function:
-		//return r;
-		return fillInMissingReadings(r, from, to);
+		return r;
 	}
 	
 	
@@ -291,30 +247,15 @@ class DataBaseInterface {
 	
 		var result = new Map<Int, Array<TimeWatts> >();
 
-
 		var qr = LoadHistory.manager.search($houseId == houseId && $time>=from && $time<=to, {orderBy : time});
 		for(oh in qr) {
 			if(result.exists(oh.outletId)==false) {
 				result.set(oh.outletId, new Array<TimeWatts>());
 			}
-			
 			result.get(oh.outletId).push({time:oh.time, watts:oh.load});
 			
 		}
-		
-		//End of the original 
 		return result;
-		
-		var r2 = new Map<Int, Array<TimeWatts>>();
-		var tempArray:Array<TimeWatts>;
-		for(key in result.keys()) {
-			tempArray = result.get(key);
-			tempArray = fillInMissingReadings(tempArray, from, to);
-			//result.set(key, tempArray);
-			r2.set(key, tempArray);
-		}
-		return r2;
-		
 	}
 	
 	//Returns the usage data of all outlets today.
@@ -326,19 +267,19 @@ class DataBaseInterface {
 	}
 	
 	public static function getOutletHistoryAllHour(houseId:Int) : Map<Int, Array<TimeWatts> > {
-		var to:Date = getNow();
+		var to:Date = Date.now();
 		var from = DateTools.delta(to, -DateTools.hours(1));
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
 	public static function getOutletHistoryAllDay(houseId:Int) : Map<Int, Array<TimeWatts> > {
-		var to:Date = getNow();
+		var to:Date = Date.now();
 		var from = new Date(to.getFullYear(), to.getMonth(), to.getDate(), 0,0,0);
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
 	public static function getOutletHistoryAllWeek(houseId:Int) : Map<Int, Array<TimeWatts> >{
-		var to:Date = getNow();
+		var to:Date = Date.now();
 		var from = DateTools.delta(to, -DateTools.days(7));
 		return getOutletHistoryAll(houseId, from, to);
 	}
@@ -347,7 +288,7 @@ class DataBaseInterface {
 	public static function getOutletHistoryLastQuarter(houseId:Int) : Map<Int, Float> {
 		
 		var r = new Map<Int, Float>();
-		var to = getNow();
+		var to = Date.now();
 		var from = DateTools.delta(to, -DateTools.minutes(15));
 		for(h in LoadHistory.manager.search($houseId==houseId && $time>from && $time<to, {orderBy:time}) ) {
 			r.set(h.outletId, h.load);
@@ -356,34 +297,8 @@ class DataBaseInterface {
 	}
 	
 	
-	//Returns the greatest relative max poweruse. Used for calculating the relative total current use.
-	public static function getRelativeMax(houseId:Int) : Float {
-		var to = getNow();
-		var from = DateTools.delta(to, -DateTools.days(2)); //48 hours. 
-		var hist = getOutletHistoryAll(houseId, from, to);
-		var timeTotal = new Map<Int, Float>();
-		var t:Int;
-		for(outlet in hist) {
-			for(tw in outlet) {
-				t = Std.int(tw.time.getTime());
-				if(timeTotal.get(t)==null)
-					timeTotal.set(t, tw.watts);
-				else
-					timeTotal.set(t, timeTotal.get(t)+tw.watts);
-			} 
-		}
-		
-		var max:Float=0;
-		for(u in timeTotal) {
-			if(u>max)
-				max = u;
-		}
-		return max;
-	}
-	
-	
 	public static function getCurrentPowerSource() : String {
-		var now = getNow();
+		var now = Date.now();
 		var source:PowerSource = null;
 		for(s in PowerSource.manager.search($time<=now, {orderBy:time, limit:1}) ) {
 			source = s;

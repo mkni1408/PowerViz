@@ -51,7 +51,7 @@ class ArealScreen extends Sprite {
                 
                 mBack = new Sprite();
 
-                mBack.graphics.beginFill(0xFFFFFF);
+                mBack.graphics.beginFill(0xFFFFFF,0);
                 mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
                 mBack.graphics.endFill();
                 this.addChild(mBack);
@@ -108,7 +108,7 @@ class ArealScreen extends Sprite {
         
                 //generates a usagearray and returns a height devide number 
                 var devider = generateUsageArray(mDiagram.maxValue);
-                
+                trace("Divider" + devider);
                 
                 mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
                 mTimeButton.y = 0;
@@ -186,7 +186,7 @@ class ArealScreen extends Sprite {
         
         private function drawData(outletIds:Array<Int>, usage:Map<Int, Array<Float>>, colors:Map<Int, Int>) : Void {
                 
-                
+                trace(outletIds);
 
                 var data = prepareArray(outletIds,usage,colors);
 
@@ -362,10 +362,54 @@ class ArealScreen extends Sprite {
 
                 var _usage = new Array< Array<Float> >();
                 var _colors = new Array<Int>();
+                var _returnUsage = new Array< Array<Float> >();
+                var _returnColors = new Array<Int>();
                 var _ta:Array<Float>;
-                var _room:Array<String>;
-
+                var _room = new Array<Array<Int>>();
+                var _outlets = new Array<Outlet>();
+                var _roomMap = new Array<Int>();
+                trace(outletIds);
                 
+                
+
+
+                    for(room in DataInterface.instance.houseDescriptor.getRoomArray()) {
+                        for(outlet in room.getOutletsArray()) {
+                                _outlets.push(new Outlet(0, Std.string(outlet.outletId), outlet.name, 
+                                                                null, room.roomName, 0,
+                                                                room.roomColor, outlet.outletColor));
+
+                                
+                        }
+                    }
+
+
+                    
+                    for(room in mRoomArray){
+                        //trace(DataInterface.instance.houseDescriptor.getRoom(id).roomName);
+                        var tmpArray = new Array<Int>();
+                        for(out in _outlets){
+
+                            //trace("comparing "+Std.parseInt(out.getid())+" with "+id);
+
+                            if(out.getRoom() == room){
+
+                            tmpArray.push(Std.parseInt(out.getid()));
+                            
+
+                            }
+
+                        }
+                        
+                        
+                        _room.push(tmpArray);
+                        
+                                           
+                    }
+
+                trace(_room);
+
+               
 
                 if(mViewMode==0){//hour
                     
@@ -389,7 +433,7 @@ class ArealScreen extends Sprite {
                                     _ta = _ta.slice(0,4);
                                 
                             _usage.push(_ta);
-
+                            _roomMap.push(id);
                                 
                         
                             _colors.push(colors.get(id));
@@ -421,6 +465,7 @@ class ArealScreen extends Sprite {
                                     _ta = _ta.slice(0,96);
                                 
                             _usage.push(_ta);
+                            _roomMap.push(id);
 
                                 
                         
@@ -450,6 +495,7 @@ class ArealScreen extends Sprite {
                                     _ta = _ta.slice(0,672);
                                 
                             _usage.push(_ta);
+                            _roomMap.push(id);
 
                                 
                         
@@ -462,11 +508,38 @@ class ArealScreen extends Sprite {
 
 
                 }
-               trace(outletIds);
-               trace(_colors);
+                trace(_roomMap);
 
 
-                return {usage:_usage,colors:_colors}
+                //rearrange the array so it matches room colors
+
+                for(room in _room){//grab the room array
+
+                    for(ro in room){//for each value in room array: int
+
+                        for(i in 0..._usage.length){
+                            if(_roomMap[i]==ro){
+                                _returnUsage.push(_usage[i]);
+                                _returnColors.push(_colors[i]);
+                                break;
+                            }
+
+                        }
+
+                    }
+
+
+
+                }
+
+                trace(_returnUsage);
+                trace(_returnColors);
+
+                if(_returnUsage.length == 0){
+
+                    return {usage:_usage,colors:_colors}
+                }
+                return {usage:_returnUsage,colors:_returnColors}
             
                 
             }

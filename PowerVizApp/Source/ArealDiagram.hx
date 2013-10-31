@@ -180,7 +180,9 @@ class ArealDiagram extends Sprite {
 			if(t > highest)
 				highest = t;
 		}
-		
+		if(highest == 0){
+			highest = 1;
+		}
 		return highest;
 		
 	}

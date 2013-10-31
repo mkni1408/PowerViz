@@ -255,28 +255,22 @@ class DataInterface {
         private function onGetOutletHistory(data:Dynamic, timespan:String) {
         
                 var dest:Map<Int, Array<TimeWatts>> = data;
-
                 var accumOutlet:Map<Int, Float>;
                 var accum:Float=0;
                 
                 var count=0; //Counts number of measurements on the outlet.
                 var watts:Float=0;
                 accumOutlet = new Map<Int, Float>();
-                
-
                 for(key in dest.keys()) {
-                		
                         accumOutlet.set(key,0);
                         count = 0;
                         watts = 0;
                         for(tw in dest.get(key)) {
-
                                 watts += tw.watts;
                                 count += 1;
                         }
                         
                         watts /= 4; //From watt quarter to watt hour.
-                        
                         accumOutlet.set(key, watts);
                 }
                 
@@ -504,14 +498,13 @@ class DataInterface {
                                 return null;
                 }
 
-                
+                trace(source);
 
                 for(key in source.keys()) {        
-                		trace("key",key);
+
                         rvIds.push(key);
                         for(reading in source.get(key)) {
                                         usage.push(reading.watts);
-                                        trace("reading",reading.watts);
                         }
 
                                 rvUsage.set(key, usage);
