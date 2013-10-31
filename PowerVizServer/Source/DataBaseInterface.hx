@@ -166,6 +166,23 @@ class DataBaseInterface {
 		return r;
 	}
 	
+	   
+    public static function setRoomColor(houseId:Int, roomId:Int, color:String) : Void {
+            var room = HouseRooms.manager.select($houseId==houseId && $roomId==roomId);
+            if(room==null)
+                    return;
+            room.roomColor = color;
+            room.update();
+    }
+    
+    public static function setOutletColor(houseId:Int, outletId:Int, color:String) {
+            var outlet = HouseOutlets.manager.select($houseId==houseId && $outletId==outletId);
+            if(outlet==null)
+                    return;
+            outlet.color = color;
+            outlet.update();
+    }
+	
 	
 	/**
 	Sets the layout data as obtained from the zense PC-boks.
@@ -227,6 +244,30 @@ class DataBaseInterface {
 	
 	//*************************************************************************************
 	
+    //Returns the greatest relative max poweruse. Used for calculating the relative total current use.
+    public static function getRelativeMax(houseId:Int) : Float {
+            var to = getNow();
+            var from = DateTools.delta(to, -DateTools.days(2)); //48 hours.
+            var hist = getOutletHistoryAll(houseId, from, to);
+            var timeTotal = new Map<Int, Float>();
+            var t:Int;
+            for(outlet in hist) {
+                    for(tw in outlet) {
+                            t = Std.int(tw.time.getTime());
+                            if(timeTotal.get(t)==null)
+                                    timeTotal.set(t, tw.watts);
+                            else
+                                    timeTotal.set(t, timeTotal.get(t)+tw.watts);
+                    }
+            }
+            
+            var max:Float=0;
+            for(u in timeTotal) {
+                    if(u>max)
+                            max = u;
+            }
+            return max;
+    }
 	
 	//Returns the current load on all outlets in the house.
 	public static function getCurrentLoadAll(houseId:Int) : Map<Int, Float> {
@@ -297,6 +338,12 @@ class DataBaseInterface {
 	public static function getOutletHistoryAllWeek(houseId:Int) : Map<Int, Array<TimeWatts> >{
 		var to:Date = Date.now();
 		var from = DateTools.delta(to, -DateTools.days(7));
+		return getOutletHistoryAll(houseId, from, to);
+	}
+	
+	public static function getOutletHistoryThreeDays(houseId:Int) : Map<Int, Array<TimeWatts> > {
+		var to:Date = Date.now();
+		var from = DateTools.delta(to, -DateTools.days(3));
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	

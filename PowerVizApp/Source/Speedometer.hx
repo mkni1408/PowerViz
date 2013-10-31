@@ -2,10 +2,9 @@ import flash.display.Sprite;
 import flash.Lib;
 import flash.display.Bitmap;
 import openfl.Assets;
-import flash.events.TimerEvent;
-import flash.utils.Timer;
 import SpeedometerArrow;
 import DataInterface;
+import PowerTimer;
 
 class Speedometer extends Sprite{
 	
@@ -14,7 +13,7 @@ class Speedometer extends Sprite{
 	private var arrow: SpeedometerArrow;
 	private var speedometerArrow: Sprite;
 	
-	private var mTimer:Timer;
+	private var mTimer:PowerTimer;
 	private var mTimerSetting:Int = 3000;
 
 	public function new(){
@@ -44,10 +43,10 @@ class Speedometer extends Sprite{
 		mSpeedometer.mouseEnabled = false;
 		arrow.mouseEnabled = false;
 
-		mTimer = new Timer(mTimerSetting, 0);
-		mTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
+		mTimer = new PowerTimer(mTimerSetting);
+		mTimer.onTime = function() {
 			fetchWattConsumption();
-		});
+		};
 		mTimer.start();
 
 

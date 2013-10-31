@@ -3,8 +3,7 @@ import flash.Lib;
 import flash.display.Bitmap;
 import openfl.Assets;
 import DataInterface;
-import flash.utils.Timer;
-import flash.events.TimerEvent;
+import PowerTimer;
 
 
 class SeismoGraph extends Sprite{
@@ -17,7 +16,7 @@ class SeismoGraph extends Sprite{
 	private var mMeasurmenthalfFactor = 5;
 	private var mNumofFieldsWidthScreen:Float;
 	
-	private var mTimer:Timer;
+	private var mTimer:PowerTimer;
 	private var mTimerSetting:Int = 6000;
 	
 	public function new(){
@@ -29,8 +28,6 @@ class SeismoGraph extends Sprite{
 		mSeismoGraph = new Sprite();
 
 		mNumofFieldsWidthScreen = Lib.stage.stageWidth/mMeasurmentFactor;
-
-		
 
 		redrawFrame();
 
@@ -45,10 +42,10 @@ class SeismoGraph extends Sprite{
 
 		redrawSeismoGraphCurve();
 
-		mTimer = new Timer(mTimerSetting, 0);
-		mTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
+		mTimer = new PowerTimer(mTimerSetting);
+		mTimer.onTime = function() {
 			fetchWattConsumption();
-		});
+		};
 		mTimer.start();
 		
 	}

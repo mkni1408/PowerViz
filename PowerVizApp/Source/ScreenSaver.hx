@@ -3,13 +3,13 @@ package;
 
 import flash.display.Sprite;
 import flash.events.MouseEvent;
-import flash.events.TimerEvent;
-import flash.utils.Timer;
 import flash.Lib;
 import Bulb;
 import motion.Actuate;
 import Math;
 import DataInterface;
+import PowerTimer;
+
 /*
 // Sprite that defines a Screensaver
 */
@@ -20,7 +20,7 @@ class ScreenSaver extends Sprite {
 	//bulbTimerAction: the timer for the update frequency of the bulbs
 	//screenSaverTimerAction: The time until the screensaver becomes visible again
 	private var bulbTimerAction:Int = 5000;
-	private var screenSaverTimerAction:Int = 20000;
+	private var screenSaverTimerAction:Int = 60000;
 	private var yourBulbFaderTimerAction:Int = 8000;
 
 
@@ -35,9 +35,9 @@ class ScreenSaver extends Sprite {
 	private var ninthBulb:Bulb;
 	private var mIsTransparant: Bool;
 	private var mHasRecievedTouchEvent: Bool;
-	private var yourbulbTimer:Timer;
-	private var yourScreensaverTimerTimer:Timer;
-	private var yourBulbFaderTimer:Timer;
+	private var yourbulbTimer:PowerTimer;
+	private var yourScreensaverTimerTimer:PowerTimer;
+	private var yourBulbFaderTimer:PowerTimer;
 	private var dataInterface:DataInterface;
 
 	private var mBulbArray:Array<Bulb>;
@@ -230,10 +230,10 @@ class ScreenSaver extends Sprite {
 	public function restartScreenSaverTimer(){
 
 		yourScreensaverTimerTimer.stop();
-		yourScreensaverTimerTimer = new Timer(screenSaverTimerAction, 0);
-		yourScreensaverTimerTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
+		yourScreensaverTimerTimer = new PowerTimer(screenSaverTimerAction);
+		yourScreensaverTimerTimer.onTime = function() {
 			setScreenSaver();
-		});
+		};
 		yourScreensaverTimerTimer.start();
 
 
@@ -250,18 +250,18 @@ class ScreenSaver extends Sprite {
 	public function startBulbActionTimer(){
 		
 		yourbulbTimer.stop();
-		yourbulbTimer = new Timer(bulbTimerAction, 0);
-		yourbulbTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
+		yourbulbTimer = new PowerTimer(bulbTimerAction);
+		yourbulbTimer.onTime = function() {
 			var f  = dataInterface.getTotalCurrentLoad();
 			calculatBulbStates(f);
-		});
+		};
 		yourbulbTimer.start();			
 
 		yourBulbFaderTimer.stop();
-		yourBulbFaderTimer = new Timer(yourBulbFaderTimerAction, 0);
-		yourBulbFaderTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent){
+		yourBulbFaderTimer = new PowerTimer(yourBulbFaderTimerAction);
+		yourBulbFaderTimer.onTime = function(){
 			fadeBulbsWhenInactive();
-		});
+		};
 		yourBulbFaderTimer.start();
 		
 
@@ -271,25 +271,25 @@ class ScreenSaver extends Sprite {
 //starts timers that 1, updates bulbs and 2, checks if screen has been tuched.
 	public function setBulbAction(watt:Float):Void {
 			
-			yourbulbTimer = new Timer(bulbTimerAction, 0);
-			yourbulbTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
+			yourbulbTimer = new PowerTimer(bulbTimerAction);
+			yourbulbTimer.onTime = function() {
 				var f  = dataInterface.getTotalCurrentLoad();
 				calculatBulbStates(f);
-			});
+			};
 			yourbulbTimer.start();
 			
 
-			yourScreensaverTimerTimer = new Timer(screenSaverTimerAction, 0);
-			yourScreensaverTimerTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent) {
+			yourScreensaverTimerTimer = new PowerTimer(screenSaverTimerAction);
+			yourScreensaverTimerTimer.onTime = function() {
 				setScreenSaver();
-			});
+			};
 			yourScreensaverTimerTimer.start();
 
 
-			yourBulbFaderTimer = new Timer(yourBulbFaderTimerAction, 0);
-			yourBulbFaderTimer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent){
+			yourBulbFaderTimer = new PowerTimer(yourBulbFaderTimerAction);
+			yourBulbFaderTimer.onTime = function(){
 				fadeBulbsWhenInactive();
-			});
+			};
 			yourBulbFaderTimer.start();
 			
 

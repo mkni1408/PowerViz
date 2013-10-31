@@ -1,9 +1,7 @@
 package;
 
 import flash.display.Sprite;
-import flash.utils.Timer;
 import flash.Lib;
-import flash.events.TimerEvent;
 
 import CoordSystem;
 import OnOffBar;
@@ -14,6 +12,7 @@ import flash.text.TextField;
 import FontSupply;
 import OnOffData;
 import Legend;
+import PowerTimer;
 
 /*
 
@@ -40,7 +39,7 @@ class OnOffDiagram extends Sprite{
 	private var mTitle : TextField;
 	private var mLegend:Legend;
 
-	private var mTimer:Timer;
+	private var mTimer:PowerTimer;
 	#if demo
 		private var mTimerInterval:Int = 60*1000; //Once a minute in demo mode.
 	#else
@@ -76,8 +75,8 @@ class OnOffDiagram extends Sprite{
 		mBack.addChild(mTitle);
 
 		
-		mTimer = new Timer(mTimerInterval);	
-		mTimer.addEventListener(TimerEvent.TIMER, onTime);
+		mTimer = new PowerTimer(mTimerInterval);	
+		mTimer.onTime = onTime;
 		mTimer.start();
 		
 		mCoordSystem = new CoordSystem();
@@ -86,7 +85,7 @@ class OnOffDiagram extends Sprite{
 				
 	}
 	
-	private function onTime(event:TimerEvent) {
+	private function onTime() {
 		updateData();
 	}
 	
