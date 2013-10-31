@@ -90,15 +90,7 @@
 	
 	<!-- 
 		This simulation should be started at 00:00:00 to give realistic times for activities. 
-		It uses repeated daily activities, and should therefore run for "24 hours" before giving complete usefull output.
 	-->
-	
-	<time every="01:00:00" comment="Vild Data" >
-		<load outlet="4002" set="2500" />
-	</time>
-	<time every="01:00:00" offset="00:40:00">
-		<load outlet="4002" set="0" />
-	</time>
 	
 	
 	<!-- vågner -->
@@ -140,7 +132,7 @@
 	</time>
 	
 	<!-- Something that uses a lot of power on a regular basis: -->
-	<time at="08:00:00" comment="Something starts.." >
+	<time at="03:00:00" comment="Something starts.." >
 		<load outlet="4003" set="300" />
 	</time>
 	

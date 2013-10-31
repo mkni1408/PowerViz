@@ -46,6 +46,14 @@ class ServerInterface {
 		mCnx.Api.setRoomColor.call([houseId, roomId, color], function(d:Dynamic){});
 	}
 	
+	
+	public function removeFutureHistoryData(houseId:Int, from:Date) {
+		#if production
+			//This functionality is only allowed on the development server!
+		#else
+			mCnx.Api.removeHistoryDataOnwards.call([houseId, from], function(d:Dynamic) {});
+		#end
+	}
 } 
 
 

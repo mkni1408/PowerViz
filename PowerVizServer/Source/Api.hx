@@ -83,6 +83,10 @@ class Api {
 		DataBaseInterface.addHistoryData(houseId, outletId, time, watts);
 	}
 	
+	public function removeHistoryDataOnwards(houseId:Int, from:Date) {
+		DataBaseInterface.removeHistoryDataOnwards(houseId, from);
+	}
+	
 	public function setPowerSource(source:String, time:Date) {
 		DataBaseInterface.setPowerSource(source, time);
 	}

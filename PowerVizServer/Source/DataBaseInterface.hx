@@ -48,6 +48,11 @@ class DataBaseInterface {
 	private static function getNow() : Date {
 		return DateTools.delta(Date.now(), DateTools.hours(1)); //Correct time...
 	}
+	
+	private static function getToday() : Date {
+		var now = getNow();
+		return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0);
+	}
 
 	
 	/**
@@ -88,6 +93,12 @@ class DataBaseInterface {
 		data.time = time;
 		data.load = watts<0 ? 0 : watts;
 		data.insert();
+	}
+	
+	public static function removeHistoryDataOnwards(houseId:Int, from:Date) {
+		for(lhd in LoadHistory.manager.search($houseId==houseId && $time>=from)) {
+			lhd.delete();
+		}
 	}
 	
 	

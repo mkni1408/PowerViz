@@ -33,9 +33,10 @@ class Config {
 			"where <args> can be a list of 0 to n arguments",
 			"--------------------------------------------",
 			"Available commands and their arguments are:",
-			"listOutlets       [no arguments]                        Displays a list of all outlets in the house.",
-			"listRooms         [no arguments]                        Displays a list of all rooms in the house.",
-			"setRoomColor      <roomId> <hexcolor> [autotone]        Sets the color of a room. If autotone is positive, all outlets will be colored to fit the room."
+			"listOutlets       [no arguments]                     Displays a list of all outlets in the house.",
+			"listRooms         [no arguments]                     Displays a list of all rooms in the house.",
+			"setRoomColor      <roomId> <hexcolor> [autotone]     Sets the color of a room. If autotone is positive, all outlets will be colored to fit the room.",
+			"deleteFutureData  <from>                             Deletes data from the specified date and onwards."
 			
 		];
 	
@@ -59,7 +60,10 @@ class Config {
 				cmdListRooms();
 			case "setRoomColor":
 				cmdSetRoomColor(Sys.args()[2], Sys.args()[3], Sys.args()[4]);
+			case "deleteFutureData":
+				cmdDeleteFutureData(Sys.args()[2]);
 			default:
+				Sys.println("Unrecognized command: " + cmd);
 				return false;
 		}
 		
@@ -99,8 +103,20 @@ class Config {
 				tone.S -= 0.1;
 			}
 		}
+	}
 	
+	function cmdDeleteFutureData(from:String) {
+		var fromDate = Date.fromString(from);
+		if(fromDate==null) {
+			Sys.println("Error parsing date string: " + from);
+			return;
+		}
+		
+		ServerInterface.instance.removeFutureHistoryData(mHouseId, fromDate);
 	}
 	
 	
 }
+
+
+

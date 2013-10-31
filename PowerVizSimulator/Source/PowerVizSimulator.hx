@@ -43,6 +43,8 @@ class PowerVizSimulator {
 	
 		mBoxTimer = new SimTimer((Config.instance.sleepTime * mSpeed ), 0, 0, onBoxTimer); //Timer running the BoxModel. 
 		BoxModel.instance.sendOutletLayout(ServerInterface.instance.sendLayoutData); //Start by sending the layout data.
+		
+		ServerInterface.instance.deletePreviousData(BoxModel.instance.houseId, mStartTime);
 	
 		Sys.println("Running simulation...");
 	

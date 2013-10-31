@@ -39,6 +39,10 @@ class ServerInterface {
 		mCnx.Api.setZenseLayout.call([houseId, data], function(v:Dynamic) {});
 	}
 	
+	public function deletePreviousData(houseId:Int, from:Date) {
+		mCnx.Api.removeHistoryDataOnwards.call([houseId, from], function(v:Dynamic){});
+	}
+	
 	public function configure(houseId:Int) {
 		
 		var done=false;
