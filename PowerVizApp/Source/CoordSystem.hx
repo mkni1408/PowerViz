@@ -35,7 +35,7 @@ class CoordSystem extends Sprite {
 	xLabelsBetween and yLabelsBetween indicate if the labels on the axes should be on the lines or between then.
 	**/
 	public function generate(width:Float, height:Float, xLabel:String, yLabel:String, xSpace:Float, ySpace:Float,
-							?xLabelStrings:Array<String>, ?yLabelStrings:Array<String>, ?xLabelsBetween:Bool, ?yLabelsBetween:Bool, ?xLabelVertical:Bool) {
+							?xLabelStrings:Array<String>, ?yLabelStrings:Array<String>, ?xLabelsBetween:Bool, ?yLabelsBetween:Bool, ?xLabelVertical:Bool, ?offset:Bool, ?xOffset:Float) {
 	
 
 		var counterArray = new Array<Int>();
@@ -55,7 +55,10 @@ class CoordSystem extends Sprite {
 		var betweenX:Bool = (xLabelsBetween==null ? false : xLabelsBetween);
 		var betweenY:Bool = (yLabelsBetween==null ? false : yLabelsBetween);
 		var xVertical:Bool = (xLabelVertical==null ? false : xLabelVertical);
-		
+		var xoff:Bool = (offset==null ? false : offset);
+		var xoffset:Float = (xOffset==null ? 0 : xOffset);
+		trace("offset is"+xoffset);
+		trace("offset is"+xoff);
 		
 		var numLinesY:Int = Std.int(height/ySpace);
 		yHeight = ySpace;
@@ -86,6 +89,12 @@ class CoordSystem extends Sprite {
 		xWidth = width;
 		xHeight = xSpace;
 		var x:Float=0;
+
+		if(xoff){
+			x -= xoffset;
+
+		}
+
 		labelIndex=0;
 		addXcoordinate(x);
 		for(j in 0...numLinesX) { //Draw the X axis.

@@ -38,8 +38,7 @@ class ArealScreen extends Sprite {
         private var mColorArray:Array<Int>;
         private var mViewMode:Int;
         private var mFront:Sprite;
-        private var mTimer:Timer;
-
+        private var mOffset = 1.0;
         private var mTimer:PowerTimer;
         #if demo
             private var mTimerInterval:Int = 60*1000; //Once a minute in demo mode.
@@ -69,7 +68,7 @@ class ArealScreen extends Sprite {
                 mBack.graphics.endFill();
                 this.addChild(mBack);
 
-                mTimeArray = generateTimeArray();
+                mTimeArray = generateTimeArrayandCalcOffset();
 
 
                 mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", 
@@ -132,13 +131,14 @@ class ArealScreen extends Sprite {
                 //generates a usagearray and returns a height devide number 
                 var devider = generateUsageArray(mDiagram.maxValue);
                 trace("Divider" + devider);
+
                 
                 mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
                 mTimeButton.y = 0;
 
                 mCoordSys.generate(Lib.stage.stageWidth/1.15, (Lib.stage.stageHeight/1.25)-mLegend.height, "X", "Y", 
                     (Lib.stage.stageWidth/1.15)/mTimeArray.length, ((Lib.stage.stageHeight/1.25)-mLegend.height)/mUsageArray.length, 
-                                                                                                        mTimeArray, mUsageArray, true, false);
+                                                                                                        mTimeArray, mUsageArray, true, false,false,true,mOffset);
                 mCoordSys.x = 70;
                 mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
 
@@ -157,7 +157,7 @@ class ArealScreen extends Sprite {
                         mDiagram.width = Lib.stage.stageWidth/1.15;
                         mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
                     case 2:
-                        mDiagram.width = Lib.stage.stageWidth/1.15 - ((Lib.stage.stageWidth/1.15)/mTimeArray.length);
+                        mDiagram.width = Lib.stage.stageWidth/1.15;
                         mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
                     default:
                         mDiagram.width = Lib.stage.stageWidth/1.15;
@@ -248,39 +248,9 @@ class ArealScreen extends Sprite {
                 var date = Date.now();
                 if(mViewMode == 0){
                         //hour
-                        mTimeArray = new Array<String>();//ensure that array is empty
                         mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
-                        
-                        var hour = date.getHours();
-                        var minutes = date.getMinutes();
-                        
-                        for(i in 0...44){//pushing minutes into array, needs to be reversed
 
-                                if(minutes == 45){
-                                    mTimeArray.push(Std.string(hour)+":45");
-                                }
-                                if(minutes == 30){
-                                    mTimeArray.push(Std.string(hour)+":30");
-                                }
-                                if(minutes == 15){
-                                    mTimeArray.push(Std.string(hour)+":15");
-                                }
-                                if(minutes == 0){
-                                    mTimeArray.push(Std.string(hour)+":00");
-                                    hour -= 1;
-                                    if(hour == -1){
-                                        hour = 23;
-                                    }
-                                    minutes = 59;
-                                }
-
-                                minutes -= 1;
-
-                        }
-
-                         mTimeArray.reverse();
-                        //mTimeArray = [":15",":30",":45",""];
-
+                        mTimeArray = generateTimeArrayandCalcOffset();
 
                         mTitle.text = "Forbrug denne time ";
 
@@ -289,28 +259,13 @@ class ArealScreen extends Sprite {
                         //day
                         mUsageArray = ["1kWt  ", "2kWt  ", "3kWt  ","4kWt  ","5kWt  ", "6kWt  ","7kWt  ", "8kWt  ","9kWt  ","10kWt  "];
 
-                        mTimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00",""
-                                                        ,"14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
+                        mTimeArray = generateTimeArrayandCalcOffset();
 
                         mTitle.text = "Dagens forbrug ";
 
                 }
                 if(mViewMode == 2){
-                        mTimeArray = new Array<String>();//ensure that array is empty
-                        var dateCount = Date.now().getDay();
-
-
-                        for(i in 0...6){    //pushing days into array, needs to be reversed
-                            
-                            mTimeArray.push(getWeekDay(dateCount));
-                            dateCount -= 1;
-                            if(dateCount == -1){
-                                dateCount = 6;
-
-                            }
-
-                        }
-                        mTimeArray.reverse();
+                       mTimeArray = generateTimeArrayandCalcOffset();
                         
                         ///week
                         mUsageArray = ["10kWt ", "20kWt ", "30kWt ","40kWt ","50kWt ", "60kWt ","70kWt ", "80kWt ","90kWt ","100kWt "];
@@ -514,10 +469,10 @@ class ArealScreen extends Sprite {
                 
                         for(id in outletIds) {
                             _ta = usage.get(id);
-                            while(_ta.length<672)
+                            while(_ta.length<288)
                                     _ta.push(0);
-                            if(_ta.length>672)
-                                    _ta = _ta.slice(0,672);
+                            if(_ta.length>288)
+                                    _ta = _ta.slice(0,288);
                                 
                             _usage.push(_ta);
                             _roomMap.push(id);
@@ -610,86 +565,140 @@ class ArealScreen extends Sprite {
 
             }
 
-            private function generateTimeArray():Array<String>{
+            
+
+            //generates an offset pr. viewmode
+            //generates an array of labels for x coordinate
+            private function generateTimeArrayandCalcOffset():Array<String>{
 
                 var date = Date.now();
                 var stringAr = new Array<String>();
                 var minutesString = "00";
+                var offset = 0.0;
+                var tempArray = new Array<String>();
+                var hour = date.getHours();
+                var minutes = date.getMinutes();
 
                 for(i in 0...24){
 
 
                         stringAr.push(Std.string(i)+":"+"00");
-                        stringAr.push(Std.string(i)+":"+"15");
-                        stringAr.push(Std.string(i)+":"+"30");
-                        stringAr.push(Std.string(i)+":"+"45");
 
                 }
-
-                trace(stringAr);
-
-                if(date.getMinutes() >= 0 && date.getMinutes() < 15){
-                       minutesString = "00"; 
-                }
-                else if(date.getMinutes() >= 15 && date.getMinutes() < 30){
-                    minutesString = "15";
-                }
-                 else if(date.getMinutes() >= 30 && date.getMinutes() < 45){
-                    minutesString = "30";      
-                }
-                 else if(date.getMinutes() >= 45 && date.getMinutes() < 59){
-                    minutesString = "45"; 
-                }
-
-                var tempTime = date.getHours()+":"+minutesString;
-                trace(tempTime);
-
-
-
-                stringAr.reverse();
 
                 var arrEl = 0;
-                for(el in 0...stringAr.length ){
+
+                var tempTime = date.getHours()+":"+"00";
+
+                for(el in 0...stringAr.length ){//calculate
 
                     if(stringAr[el] == tempTime)
                     {
                         arrEl = el;
                     }
                 }
+                
+                trace(arrEl);
 
-                var stringAr = new Array<String>();
+                switch(mViewMode){
+                    case 0://Hour
+                        mOffset = 0;
+      
+                        for(i in 0...44){//pushing minutes into array, needs to be reversed
 
-                 for(i in 0...12){
+                                if(minutes == 45){
+                                    tempArray.push(Std.string(hour)+":45");
+                                }
+                                if(minutes == 30){
+                                    tempArray.push(Std.string(hour)+":30");
+                                }
+                                if(minutes == 15){
+                                    tempArray.push(Std.string(hour)+":15");
+                                }
+                                if(minutes == 0){
+                                    tempArray.push(Std.string(hour)+":00");
+                                    hour -= 1;
+                                    if(hour == -1){
+                                        hour = 23;
+                                    }
+                                    minutes = 59;
+                                }
+
+                                minutes -= 1;
+
+                        }
+
+                        tempArray.reverse();
+
+                    case 1://day
+                        if(date.getMinutes() >= 0 && date.getMinutes() < 15){
+                           minutesString = "00"; 
+                           offset= 1.0;
+                        }
+                        else if(date.getMinutes() >= 15 && date.getMinutes() < 30){
+                            minutesString = "15";
+                            offset= 2.0;
+                        }
+                        else if(date.getMinutes() >= 30 && date.getMinutes() < 45){
+                            minutesString = "30"; 
+                            offset= 3.0;     
+                        }
+                        else if(date.getMinutes() >= 45 && date.getMinutes() < 59){
+                            minutesString = "45"; 
+                            offset= 4.0;
+                        }
+                        mOffset = ((Lib.stage.stageWidth/1.15)/stringAr.length)/offset;
+                        //offset = 2.0;//test
 
 
+                        
 
-                        stringAr.push(Std.string(i*2)+":"+"00");
-                        stringAr.push("");
-                        stringAr.push("");
-                        stringAr.push("");
-                        stringAr.push("");
-                        stringAr.push("");
-                        stringAr.push("");
-                        stringAr.push("");
+                        stringAr.reverse();
+
+                
+
+
+                         //calculate the offset and set it
+                        tempArray = stringAr.splice(arrEl,stringAr.length+1);
+
+                        trace(tempArray);
+                        tempArray = tempArray.concat(stringAr);
+                        tempArray.reverse();
+                        
+
+                    case 2://3 days
+                        offset = arrEl+1;
+
+                        var dateCount = date.getDay();
+
+
+                        for(i in 0...3){    //pushing days into array, needs to be reversed
+                            
+                            tempArray.push(getWeekDay(dateCount));
+                            dateCount -= 1;
+                            if(dateCount == -1){
+                                dateCount = 6;
+
+                            }
+
+                        }
+                        tempArray.reverse();
+                        mOffset = (((Lib.stage.stageWidth/1.15)/tempArray.length)/24)*offset;
+
 
 
                 }
+                 
 
-                stringAr.reverse();
-
-                var tempArray = stringAr.splice(arrEl,stringAr.length+1);
-
-                trace (tempArray);
-
-                tempArray = tempArray.concat(stringAr);
-                trace (tempArray);
-                tempArray.reverse();
-
+ 
+               
+                trace(offset);
 
                 return tempArray;
 
 
             }
+
 
         
 
