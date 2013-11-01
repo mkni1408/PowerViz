@@ -46,7 +46,7 @@ class DataBaseInterface {
 	}
 	
 	
-	private static function getNow() : Date {
+	public static function getNow() : Date {
 		return DateTools.delta(Date.now(), DateTools.hours(1)); //Correct time...
 	}
 	

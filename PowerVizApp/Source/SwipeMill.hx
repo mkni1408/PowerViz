@@ -4,6 +4,7 @@ import motion.Actuate;
 
 import flash.display.DisplayObject;
 import flash.display.Sprite;
+import flash.display.Graphics;
 import flash.events.Event;
 import flash.events.TouchEvent;
 import flash.events.MouseEvent;
@@ -11,6 +12,8 @@ import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
 
 import flash.Lib;
+
+import PowerTimer;
 
 
 
@@ -45,6 +48,10 @@ class SwipeMill {
 	private static var mPrevX:Int; //Previous x position of the mouse/touch.
 	private static var mDeltaX:Int;
 	
+	//Graphics for representing interacion information:
+	private static var mArrows : SwipeArrows;
+	private static var mSwipeDots : SwipeDots;
+	
 
 	/*Initializes the SwipeMill. Call this ONCE, preferebly in the main sprite constuctor.*/
 	public static function init(parent:Sprite) {
@@ -60,6 +67,7 @@ class SwipeMill {
 		mTouchReceiver.addChild(obj);
 		mObjects.push(obj);
 		positionObjects();
+		mSwipeDots.addDot();
 	}	
 	
 	
@@ -72,7 +80,16 @@ class SwipeMill {
 		
 		
 		parent.addChild(mTouchReceiver);
+		
+		mArrows = new SwipeArrows();
+		mTouchReceiver.addChild(mArrows);
+		
+		mSwipeDots = new SwipeDots();
+		mSwipeDots.x = Lib.stage.stageWidth / 2;
+		mSwipeDots.y = Lib.stage.stageHeight/2;
+		parent.addChild(mSwipeDots);
 	}
+	
 	
 	/*Registers all events that the SwipeMill is listening for.*/
 	private static function registerEvents() {
@@ -130,6 +147,9 @@ class SwipeMill {
 		if(mScreenPos>(mObjects.length-1)) {
 			mObjects[0].x = (i - mScreenPos)*mObjects[0].width;
 		}
+		
+		if(mSwipeDots!=null)
+			mSwipeDots.setActive(mScreenPos);
 		
 	}
 	
@@ -189,6 +209,7 @@ class SwipeMill {
 		mDeltaX = 0;
 		Actuate.stop(SwipeMill); //Stop any tweening that might be going on.
 		onScreenTouch();
+		mSwipeDots.showDots();
 	}
 	
 	private static function onMouseUp(event:MouseEvent) {
@@ -203,6 +224,7 @@ class SwipeMill {
 		mFingerDown = false;
 		makeScreenFit();
 		onScreenTouch();
+		mSwipeDots.hideDots();
 	}
 	
 	private static function onMouseMove(event:MouseEvent) {
@@ -234,6 +256,129 @@ class SwipeMill {
 	}
 
 }
+
+class SwipeArrows extends Sprite {
+
+	private var mLeftArrow : Sprite;
+	private var mRightArrow : Sprite;
+
+	public function new() {
+		super();
+		draw();
+	}
+	
+	private function draw() {
+		mLeftArrow = new Sprite();
+		drawArrow(mLeftArrow.graphics, Lib.stage.stageWidth/20, Lib.stage.stageHeight/4);
+		mLeftArrow.alpha=0.1;
+		mLeftArrow.y = Lib.stage.stageHeight/2;
+		mRightArrow = new Sprite();
+		drawArrow(mRightArrow.graphics, Lib.stage.stageWidth/20, Lib.stage.stageHeight/4);
+		mRightArrow.rotation = 180;
+		mRightArrow.alpha=0.1;
+		mRightArrow.x = Lib.stage.stageWidth;
+		mRightArrow.y = Lib.stage.stageHeight/2;
+		this.addChild(mLeftArrow);
+		this.addChild(mRightArrow);
+	}
+	
+	private function drawArrow(gfx:Graphics, w:Float, h:Float) {
+		gfx.beginFill(0x000000);
+		gfx.moveTo(w,-(h/2));
+		gfx.lineTo(w,h/2);
+		gfx.lineTo(0,0);
+		gfx.lineTo(w,-(h/2));
+		gfx.endFill();
+	}
+}
+
+class SwipeDots extends Sprite {
+
+	private var mDots:Array<Sprite>;
+	private var mActive:Int;
+
+	public function new() {
+		super();
+		mDots = new Array<Sprite>();
+		mActive = 0;
+	}
+	
+	public function addDot() {
+
+		var newDot = createDot();
+		mDots.push(newDot);
+		this.addChild(newDot);	
+		arrangeDots();
+		setActive(mActive);
+		
+	}
+	
+	public function setActive(curScreen:Float) {
+	
+		var oldVal = mActive;
+	
+		var newVal:Int = (curScreen - Math.floor(curScreen))<0.5 ? Math.floor(curScreen) : Math.ceil(curScreen);
+		if(newVal<0)
+			newVal=0;
+		if(newVal>=mDots.length)
+			newVal = 0 + (newVal - mDots.length);
+		
+		mActive = newVal;
+		setDotAlpha(mActive);
+		
+	}
+	
+	private function arrangeDots() {
+		var dotWidth = mDots[0]!=null ? mDots[0].width : 16;
+		var totalWidth = (mDots.length*dotWidth) + ((mDots.length-1)*dotWidth);
+		
+		var x:Int = -Std.int((totalWidth/2));
+		for(i in 0...mDots.length) {
+			mDots[i].x = x;
+			x += Std.int(dotWidth*2);
+		}
+	}
+	
+	private function createDot() : Sprite {
+		var dot = new Sprite();
+		dot.graphics.beginFill(0x0000A0);
+		/*
+		dot.graphics.drawCircle(0,0, Lib.stage.stageWidth/100);
+		*/
+		var w:Float = Lib.stage.stageWidth/30;
+		var h:Float = Lib.stage.stageHeight/30;
+		dot.graphics.drawRect(w/2, h/2, w,h);
+		dot.graphics.endFill();
+		dot.mouseEnabled = false;
+		return dot;
+	}
+	
+	public function showDots() {
+		trace("showDots");
+		this.visible=true;
+		Actuate.apply(this, {alpha:1});
+	}
+	
+	public function hideDots() {
+		trace("hideDots");
+		Actuate.tween(this, 2, {alpha:0}, false).delay(1);
+	}
+	
+	public function setDotAlpha(active:Int) {
+		for(i in 0...mDots.length) {
+			Actuate.apply(mDots[i], {alpha:0.3});
+			if(i == active) {
+				Actuate.apply(mDots[i], {alpha:1});
+			}
+		}
+	}
+	
+
+}
+
+
+
+
 
 
 

@@ -129,8 +129,8 @@ class Api {
 	}
 	
 	//Should not be used!
-	public function getOutletHistoryAllToday(houseId:Int, now:Date) : Map<Int, Array<TimeWatts> > {
-		return DataBaseInterface.getOutletHistoryAllToday(houseId, now);
+	public function getOutletHistoryAllToday(houseId:Int) : Map<Int, Array<TimeWatts> > {
+		return DataBaseInterface.getOutletHistoryAllToday(houseId, DataBaseInterface.getNow());
 	}
 	
 	public function getOutletHistoryAllDay(houseId:Int) : Map<Int, Array<TimeWatts> > {
