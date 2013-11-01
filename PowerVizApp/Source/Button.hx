@@ -20,23 +20,48 @@ public function new(name:String, color:Int,id:Int,f:Int->Void){
 		mUnpressedButton = new Sprite();
 		mPressedButton = new Sprite();
 		//var s = new Sprite();
-		var unpressed = new Bitmap (Assets.getBitmapData ("assets/button_unpressed.png"));
-		var pressed = new Bitmap (Assets.getBitmapData ("assets/button_pressed.png"));
+		
+		if(id == 0) {
+			var unpressed = new Bitmap (Assets.getBitmapData ("assets/hour_unpressed.png"));
+			var pressed = new Bitmap (Assets.getBitmapData ("assets/hour_pressed.png"));
+			
+			mPressedButton.addChild(pressed);
+			mUnpressedButton.addChild(unpressed);
+		} else if (id == 1) {
+			var unpressed = new Bitmap (Assets.getBitmapData ("assets/day_unpressed.png"));
+			var pressed = new Bitmap (Assets.getBitmapData ("assets/day_pressed.png"));
+			
+			mPressedButton.addChild(pressed);
+			mUnpressedButton.addChild(unpressed);
+		} else if (id == 2) {
+			var unpressed = new Bitmap (Assets.getBitmapData ("assets/week_unpressed.png"));
+			var pressed = new Bitmap (Assets.getBitmapData ("assets/week_pressed.png"));
+			
+			mPressedButton.addChild(pressed);
+			mUnpressedButton.addChild(unpressed);
+		} else {
+			var unpressed = new Bitmap (Assets.getBitmapData ("assets/button_unpressed.png"));
+			var pressed = new Bitmap (Assets.getBitmapData ("assets/button_pressed.png"));
+			
+			mPressedButton.addChild(pressed);
+			mUnpressedButton.addChild(unpressed);
+		}
+		
+		//var unpressed = new Bitmap (Assets.getBitmapData ("assets/button_unpressed.png"));
+		//var pressed = new Bitmap (Assets.getBitmapData ("assets/button_pressed.png"));
 		//s.graphics.beginFill(color);
 		//s.graphics.drawRect(0,0, 50,50);
 		//s.graphics.endFill();
-		mPressedButton.addChild(pressed);
-		mUnpressedButton.addChild(unpressed);
 
 		this.addChild(mPressedButton);
 		this.addChild(mUnpressedButton);
 
 		this.mPressedButton.visible = false;
 		this.mUnpressedButton.visible = true;
-
+		
 		mTitle = new TextField();
 		mTitle.mouseEnabled=false;
-		mTitle.text = name;
+		//mTitle.text = name;
 		mTitle.setTextFormat(FontSupply.instance.getButtonFormat());
 		mTitle.selectable = false;
 		mTitle.width = mTitle.textWidth+5;
