@@ -17,7 +17,6 @@ import PowerTimer;
 
 
 
-
 /*
 Swipe mill, used for swipe between screens.
 
@@ -85,11 +84,13 @@ class SwipeMill {
 		parent.addChild(mTouchReceiver);
 		
 		mArrows = new SwipeArrows();
-		mTouchReceiver.addChild(mArrows);
+		parent.addChild(mArrows);
+		mArrows.onLeftClick = onLeftArrow;
+		mArrows.onRightClick = onRightArrow;
 		
 		mSwipeDots = new SwipeDots();
 		mSwipeDots.x = Lib.stage.stageWidth / 2;
-		mSwipeDots.y = Lib.stage.stageHeight/2;
+		mSwipeDots.y = Lib.stage.stageHeight / 2;
 		parent.addChild(mSwipeDots);
 	}
 	
@@ -101,9 +102,6 @@ class SwipeMill {
 			mTouchReceiver.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			mTouchReceiver.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			mTouchReceiver.addEventListener(MouseEvent.MOUSE_OUT, onMouseLeave);
-			
-			//Keyboard events, to make swiping simpler during dev.
-			Lib.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			
 		#end
 		
@@ -125,12 +123,13 @@ class SwipeMill {
 		
 		mScreenPos = f;
 		
-		if(mScreenPos<0)
-			mScreenPos=0;
-		if(mScreenPos>=mObjects.length)
+		if(mScreenPos < 0)
+			mScreenPos = 0;
+		if(mScreenPos >= mObjects.length-1)
 			mScreenPos = mObjects.length-1;
 		
 		positionObjects();
+		setArrowsVisibility();
 			
 		return mScreenPos;
 		
@@ -213,19 +212,23 @@ class SwipeMill {
 	/*Called when the tween effect ends. Purpose unknown.*/
 	private static function onMakeScreenFitDone() {
 		trace("onMakeScreenFitDone() - " + mScreenPos);
-		//trace("Done tweening");
 	}
 	
-	private static function onKeyUp(event:KeyboardEvent) {
-	
-		switch(event.keyCode) {
-			case Keyboard.RIGHT:
-				screenPos += 1;
-			case Keyboard.LEFT:
-				screenPos -= 1;
-		}			
-
+	private static function setArrowsVisibility() {
+		if(mScreenPos<0.1) {
+			mArrows.showLeft(false);
+			mArrows.showRight(true);
+		}
+		else if(mScreenPos>(mObjects.length-1)-0.1) {
+			mArrows.showLeft(true);
+			mArrows.showRight(false);
+		}
+		else {
+			mArrows.showLeft(true);
+			mArrows.showRight(true);
+		}
 	}
+	
 	
 	//Listener for the mouse down event.
 	private static function onMouseDown(event:MouseEvent) {
@@ -291,6 +294,20 @@ class SwipeMill {
 		mFingerDown = false;
 		makeScreenFit(); //When the finger leaves the screen, make the screen tween into correct position.
 	}
+	
+	private static function onLeftArrow() {
+		Actuate.tween(SwipeMill, 0.75, {screenPos:screenPos-1}).onComplete(makeScreenFit); 
+		mSwipeDots.showDots();
+		mSwipeDots.hideDots();
+		onScreenTouch();
+	}
+	
+	private static function onRightArrow() {
+		Actuate.tween(SwipeMill, 0.75, {screenPos:screenPos+1}).onComplete(makeScreenFit);
+		mSwipeDots.showDots();
+		mSwipeDots.hideDots();
+		onScreenTouch();
+	}
 
 }
 
@@ -302,6 +319,12 @@ class SwipeArrows extends Sprite {
 	public function new() {
 		super();
 		draw();
+		registerEvents();
+	}
+	
+	private function registerEvents() {
+		mLeftArrow.addEventListener(MouseEvent.MOUSE_DOWN, function(event:MouseEvent){onLeftClick();});
+		mRightArrow.addEventListener(MouseEvent.MOUSE_DOWN, function(event:MouseEvent){onRightClick();});
 	}
 	
 	private function draw() {
@@ -327,6 +350,18 @@ class SwipeArrows extends Sprite {
 		gfx.lineTo(w,-(h/2));
 		gfx.endFill();
 	}
+	
+	public function showLeft(b:Bool) {
+		mLeftArrow.visible = b;
+	}
+	
+	public function showRight(b:Bool) {
+		mRightArrow.visible = b;
+	}
+	
+	dynamic public function onLeftClick() { trace("Left arrow clicked."); }
+	dynamic public function onRightClick() { trace("Right arrow clicked"); }
+	
 }
 
 class SwipeDots extends Sprite {
@@ -368,11 +403,12 @@ class SwipeDots extends Sprite {
 	private function arrangeDots() {
 		var dotWidth = mDots[0]!=null ? mDots[0].width : 16;
 		var totalWidth = (mDots.length*dotWidth) + ((mDots.length-1)*dotWidth);
+		var dotSpace = Std.int(dotWidth / 2);
 		
 		var x:Int = -Std.int((totalWidth/2));
 		for(i in 0...mDots.length) {
 			mDots[i].x = x;
-			x += Std.int(dotWidth*2);
+			x += Std.int(dotWidth)+dotSpace;
 		}
 	}
 	
