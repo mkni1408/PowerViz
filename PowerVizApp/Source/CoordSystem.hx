@@ -18,6 +18,8 @@ class CoordSystem extends Sprite {
 	private var xHeight : Float;
 	private var xWidth : Float;
 	private var VerticalBars: Sprite;
+	private var cordCordArray:Array<Float>;
+	private var cordNameArray:Array<String>;
 
 	public function new() {
 		super();
@@ -37,7 +39,7 @@ class CoordSystem extends Sprite {
 	public function generate(width:Float, height:Float, xLabel:String, yLabel:String, xSpace:Float, ySpace:Float,
 							?xLabelStrings:Array<String>, ?yLabelStrings:Array<String>, ?xLabelsBetween:Bool, ?yLabelsBetween:Bool, ?xLabelVertical:Bool, ?offset:Bool, ?xOffset:Float) {
 	
-
+		
 		var counterArray = new Array<Int>();
 		this.graphics.clear();
 		
@@ -123,6 +125,8 @@ class CoordSystem extends Sprite {
 		}
 	
 		this.mouseEnabled = false;	
+
+		generateCordArray(xWidth,xSpace);
 	
 	}
 	
@@ -206,30 +210,13 @@ class CoordSystem extends Sprite {
 		//the time the contact was shut off
 		public function drawBar(pointXfrom:OnOffData, pointYfrom:Float,pointYto:Float,color:Int){
 
-			//just sanitising the input
-			/*
-			if(pointXfrom>=24.0 )
-			{
-				pointXfrom = 23.99;
+			
+			trimDateArrays(Date.now());//update array position
 
-			}
-			if(pointXfrom<=0.0 )
-			{
-				pointXfrom = 0.01;
+			convertTime(pointXfrom.getStart());
 
-			}
-			if(pointXto>=24.0 )
-			{
-				pointXto = 23.99;
-
-			}
-			if(pointXto<=0.0 )
-			{
-				pointXto = 0.01;
-
-			}*/
-			//var date =Date.fromString("2013-10-21 10:15:00");
-
+			trace(pointXfrom.getStart());
+			trace(pointXfrom.getStop());
 			this.graphics.lineStyle(1, 0x000000);
 			this.graphics.beginFill(color);
 			//this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), yHeight-10.0);
@@ -239,6 +226,9 @@ class CoordSystem extends Sprite {
 
 
 		}
+
+
+
 		//generates the seperator lines
 		public function generateSeperatorLines(pointYfrom:Int,pointUbefore:Int,roomLabel:String):Void{
 
@@ -264,14 +254,75 @@ class CoordSystem extends Sprite {
 			addTextField(xWidth+100, yPointbef+half, roomLabel, true, false);
 
 		}
+		//update array positions
+		private function trimDateArrays(date:Date):Void{
+
+			var hour = date.getHours();
+            var minutes = "";
+
+            			if(date.getMinutes() >= 0 && date.getMinutes() < 15){
+                           minutes = "00";
+                        }
+                        else if(date.getMinutes() >= 15 && date.getMinutes() < 30){
+                            minutes = "15";
+                        }
+                        else if(date.getMinutes() >= 30 && date.getMinutes() < 45){
+                            minutes = "30";    
+                        }
+                        else if(date.getMinutes() >= 45 && date.getMinutes() < 59){
+                            minutes = "45"; 
+                        }
+
+			var tempDateString = hour + ":" + minutes;
+			var arrayPointer = 0;
+
+			for(date in 0...cordNameArray.length){
+
+				if(cordNameArray[date] == tempDateString){
+
+					arrayPointer = date;
+				}
+			}
+
+			//cordNameArray.reverse();
+
+			 //calculate the offset and set it
+            var tempArray = cordNameArray.splice(arrayPointer,cordNameArray.length);
+            			
+            			tempArray.reverse();
+            			cordNameArray.reverse();
+
+
+                        cordNameArray = cordNameArray.concat(tempArray);
+                        cordNameArray.reverse();
+                        		//trace(cordNameArray);
+			
+
+		}
 
 		private function convertTime(time:Date):Float{
 			
-			return (convertTimeHour(time)+convertTimeMinute(time));
+
+			var timeString = time.getHours()+":"+time.getMinutes();
+
+			for(i in 0...cordNameArray.length-1){
+
+						if(cordNameArray[i] == timeString){
+
+							//trace(cordCordArray[i]);
+							return cordCordArray[i];
+						}
+
+
+			}
+			return 0.0;
 
 		}
-		//return the time position
+		/*//return the time position
 		private function convertTimeHour(time:Date):Float{
+
+			
+
 
 			//trace("HOURS",time.getHours());
 			//- 1 because of array starting at 0
@@ -285,7 +336,7 @@ class CoordSystem extends Sprite {
 			//trace("minut:",xHeight * minutes);
 			//trace((xHeight/100) * minutes);
 			return (xHeight * minutes);
-		}
+		}*/
 		//creates legend
 		public function createLegend(numberOfentries:Int,arrayOfLabelStrings:Array<String>,arrayOfColors:Array<Int>):Void{
 			
@@ -365,6 +416,44 @@ class CoordSystem extends Sprite {
 		}
 
 	}
+	private function generateCordArray(xWidth:Float,space:Float):Void{
+
+
+		var xSpace = (xWidth/96);
+		cordNameArray = new Array<String>();
+		cordCordArray = new Array<Float>();
+
+		for(i in 0...24){
+
+			cordNameArray.push(i + ":" + "00");
+			cordNameArray.push(i + ":" + "15");
+			cordNameArray.push(i + ":" + "30");
+			cordNameArray.push(i + ":" + "45");
+
+		}
+
+
+
+		var cordCounter = 0.0;
+		cordCordArray.push(cordCounter);
+		cordCounter += xSpace;
+
+		for(time in 0...96){
+			
+			cordCordArray.push(cordCounter);
+			cordCounter += xSpace;
+
+		}
+
+
+		trace(cordCordArray);
+
+
+	}
+
+
+
+	
 
 	
 		

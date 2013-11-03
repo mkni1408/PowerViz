@@ -348,7 +348,7 @@ class ArealScreen extends Sprite {
                 var _room = new Array<Array<Int>>();
                 var _outlets = new Array<Outlet>();
                 var _roomMap = new Array<Int>();
-                trace(outletIds);
+                
                 
                 
 
@@ -387,7 +387,6 @@ class ArealScreen extends Sprite {
                                            
                     }
 
-                trace(_room);
 
                
 
@@ -587,16 +586,20 @@ class ArealScreen extends Sprite {
                 }
 
                 var arrEl = 0;
+                stringAr.reverse();
 
                 var tempTime = date.getHours()+":"+"00";
 
-                for(el in 0...stringAr.length ){//calculate
+                for(el in 0...stringAr.length -1 ){//calculate
 
                     if(stringAr[el] == tempTime)
                     {
                         arrEl = el;
                     }
                 }
+
+
+                trace(stringAr);
                 
                 trace(arrEl);
 
@@ -633,19 +636,19 @@ class ArealScreen extends Sprite {
                     case 1://day
                         if(date.getMinutes() >= 0 && date.getMinutes() < 15){
                            minutesString = "00"; 
-                           offset= 1.0;
+                           offset= 4.0;
                         }
                         else if(date.getMinutes() >= 15 && date.getMinutes() < 30){
                             minutesString = "15";
-                            offset= 2.0;
+                            offset= 3.0;
                         }
                         else if(date.getMinutes() >= 30 && date.getMinutes() < 45){
                             minutesString = "30"; 
-                            offset= 3.0;     
+                            offset= 2.0;     
                         }
                         else if(date.getMinutes() >= 45 && date.getMinutes() < 59){
                             minutesString = "45"; 
-                            offset= 4.0;
+                            offset= 1.0;
                         }
                         mOffset = ((Lib.stage.stageWidth/1.15)/stringAr.length)/offset;
                         //offset = 2.0;//test
@@ -653,13 +656,13 @@ class ArealScreen extends Sprite {
 
                         
 
-                        stringAr.reverse();
+                        
 
                 
 
 
                          //calculate the offset and set it
-                        tempArray = stringAr.splice(arrEl,stringAr.length+1);
+                        tempArray = stringAr.splice(arrEl,stringAr.length);
 
                         trace(tempArray);
                         tempArray = tempArray.concat(stringAr);
@@ -692,7 +695,7 @@ class ArealScreen extends Sprite {
 
  
                
-                trace(offset);
+                trace("ArEALSCREEN:",arrEl);
 
                 return tempArray;
 
