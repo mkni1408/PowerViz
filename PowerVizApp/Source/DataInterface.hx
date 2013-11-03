@@ -97,7 +97,6 @@ class DataInterface {
         
         private function new() {
         	
-        	trace(haxe.CallStack.callStack());
 		    #if production
 		            this.connect("http://78.47.92.222/pvs/"); //Connect to production version.
 		    #else
