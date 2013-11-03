@@ -38,6 +38,7 @@ class OnOffDiagram extends Sprite{
 	private var mColorArray:Array<Int>;
 	private var mTitle : TextField;
 	private var mLegend:Legend;
+	private var mOffset = 1.0;
 
 	private var mTimer:PowerTimer;
 	#if demo
@@ -59,8 +60,7 @@ class OnOffDiagram extends Sprite{
 		mColorArray = new Array<Int>();
 		mLegend = new Legend();
 
-		mtimeArray = ["","2:00","","4:00","","6:00","","8:00","","10:00","","12:00",""
-									,"14:00","","16:00","","18:00","","20:00","","22:00","","24:00"];
+		mtimeArray = generateTimeArrayandCalcOffset();
 
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF, 0);
@@ -154,7 +154,7 @@ class OnOffDiagram extends Sprite{
 
 		mCoordSystem.generate(mBack.width/1.25, (mBack.height/1.25)-mLegend.height, "X", "Y", 
 								(mBack.width/1.25)/mtimeArray.length,((mBack.height/1.25)-mLegend.height)/mNewIDArray.length,
-								mtimeArray,mNewIDArray,true,true);
+								mtimeArray,mNewIDArray,true,true,false,true,mOffset);
 
 		mCoordSystem.x = (mBack.width- mCoordSystem.width);
 		mCoordSystem.y = (mBack.height/1.25)+50;
@@ -265,12 +265,13 @@ class OnOffDiagram extends Sprite{
 		var count2 = 1;
 		var lengthofArray =outletData.length;
 		var incId = id;
-		
+		trace("....");
 		for(i in 0...lengthofArray){
 
 			mCoordSystem.drawBar(outletData[i], mCoordSystem.getYcoordinate(incId+1),mCoordSystem.getYcoordinate(incId+1),color);
 
 		}
+		trace("....");
 
 	}
 
@@ -385,6 +386,92 @@ class OnOffDiagram extends Sprite{
 	
 
 }
+
+//generates an offset pr. viewmode
+            //generates an array of labels for x coordinate
+            private function generateTimeArrayandCalcOffset():Array<String>{
+
+                var date = Date.now();
+                var stringAr = new Array<String>();
+                var minutesString = "00";
+                var offset = 0.0;
+                var tempArray = new Array<String>();
+                var hour = date.getHours();
+                var minutes = date.getMinutes();
+
+                for(i in 0...24){
+
+
+                        stringAr.push(Std.string(i)+":"+"00");
+
+                }
+
+                var arrEl = 0;
+                stringAr.reverse();
+
+                var tempTime = date.getHours()+":"+"00";
+
+                for(el in 0...stringAr.length -1 ){//calculate
+
+                    if(stringAr[el] == tempTime)
+                    {
+                        arrEl = el;
+                    }
+                }
+
+
+                trace(stringAr);
+                
+                trace(arrEl);
+
+                
+                    
+                        if(date.getMinutes() >= 0 && date.getMinutes() < 15){
+                           minutesString = "00"; 
+                           offset= 4.0;
+                        }
+                        else if(date.getMinutes() >= 15 && date.getMinutes() < 30){
+                            minutesString = "15";
+                            offset= 3.0;
+                        }
+                        else if(date.getMinutes() >= 30 && date.getMinutes() < 45){
+                            minutesString = "30"; 
+                            offset= 2.0;     
+                        }
+                        else if(date.getMinutes() >= 45 && date.getMinutes() < 59){
+                            minutesString = "45"; 
+                            offset= 1.0;
+                        }
+                        mOffset = ((Lib.stage.stageWidth/1.15)/stringAr.length)/offset;
+                        //offset = 2.0;//test
+
+
+                        
+
+                        
+
+                
+
+
+                         //calculate the offset and set it
+                        tempArray = stringAr.splice(arrEl,stringAr.length);
+
+                        trace(tempArray);
+                        tempArray = tempArray.concat(stringAr);
+                        tempArray.reverse();
+                        
+
+                   
+                 
+
+ 
+               
+                trace(offset);
+
+                return tempArray;
+
+
+            }
 
 
 
