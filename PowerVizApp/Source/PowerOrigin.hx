@@ -1,4 +1,4 @@
-	import flash.display.Sprite;
+import flash.display.Sprite;
 import flash.Lib;
 import flash.display.Bitmap;
 import openfl.Assets;
@@ -10,7 +10,7 @@ Defines the powerorigin interface. In short it just shifts between a few picture
 */
 
 class PowerOrigin extends Sprite{
-	
+	/*
 	private var mPowerOriginWind : Sprite;
 	private var mPowerOriginCoal : Sprite;
 	private var mPowerOriginSolar : Sprite;
@@ -18,11 +18,14 @@ class PowerOrigin extends Sprite{
 	
 	private var mTimer:PowerTimer;
 	private var mTimerSetting:Int = 10000;
-
+	*/
+	
+	private var mEnergySource : Sprite;
+	
 	public function new(){
 
 		super();
-		
+		/*
 		var bitMapOriginWind = new Bitmap (Assets.getBitmapData ("assets/windmill.png"));
 		var bitMapOriginCoal = new Bitmap (Assets.getBitmapData ("assets/coal.png"));
 		var bitMapOriginSolar = new Bitmap (Assets.getBitmapData ("assets/solar.png"));
@@ -42,7 +45,7 @@ class PowerOrigin extends Sprite{
 		centerGraphics(mPowerOriginCoal,bitMapOriginCoal);
 		centerGraphics(mPowerOriginSolar, bitMapOriginSolar);
 		centerGraphics(mPowerOriginNuclear, bitMapOriginNuclear);
-
+		
 		drawFrame();
 
 		this.addChild(mPowerOriginWind);
@@ -58,6 +61,19 @@ class PowerOrigin extends Sprite{
 		mTimer = new PowerTimer(mTimerSetting);
 		mTimer.onTime = function(){ changePowerOrigin();};
 		mTimer.start();
+		*/
+		
+		var bitMapEnergySource = new Bitmap (Assets.getBitmapData ("assets/energy_source.png"));
+		mEnergySource = new Sprite();
+		mEnergySource.addChild (bitMapEnergySource);
+		centerGraphics(mEnergySource, bitMapEnergySource);
+		
+		drawFrame();
+		
+		this.addChild(mEnergySource);
+		
+		mEnergySource.visible = true;
+		
 	}
 
 	private function centerGraphics(origin:Sprite, bitmap:Bitmap){
@@ -75,21 +91,22 @@ class PowerOrigin extends Sprite{
 		origin.y = centerSpriteY - centerBitmapY;
 	}
 
+	/*
 	public function changePowerOrigin():Void{
-		/*
-		var powerOrigin = DataInterface.instance.method();
+		
+		//var powerOrigin = DataInterface.instance.method();
 		
 		//pull powerorigin and change which sprite is visible
-		if(powerOrigin == "wind") {
-			changeOrigin(true,false,false,false);
-		} else if(powerOrigin == "coal") {
-			changeOrigin(false,true,false,false);
-		} else if(powerOrigin == "solar") {
-			changeOrigin(false,false,true,false);
-		} else if(powerOrigin == "nuclear") {
-			changeOrigin(false,false,false,true);
-		}
-		*/
+		//if(powerOrigin == "wind") {
+		//	changeOrigin(true,false,false,false);
+		//} else if(powerOrigin == "coal") {
+		//	changeOrigin(false,true,false,false);
+		//} else if(powerOrigin == "solar") {
+		//	changeOrigin(false,false,true,false);
+		//} else if(powerOrigin == "nuclear") {
+		//	changeOrigin(false,false,false,true);
+		//}
+		
 		
 		
 		var changenumber = Std.random(4);
@@ -130,6 +147,7 @@ class PowerOrigin extends Sprite{
 			Actuate.tween (mPowerOriginNuclear, 2, { alpha: 1 } );
 		}
 	}
+	*/
 	
 	//draws the frame around the Sprite
 	private function drawFrame():Void{
