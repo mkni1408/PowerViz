@@ -19,7 +19,7 @@ class CoordSystem extends Sprite {
 	private var xWidth : Float;
 	private var VerticalBars: Sprite;
 	private var cordCordArray:Array<Float>;
-	private var cordNameArray:Array<String>;
+	private var cordNameArray:Array<Date>;
 
 	public function new() {
 		super();
@@ -257,7 +257,7 @@ class CoordSystem extends Sprite {
 		//update array positions
 		private function trimDateArrays(date:Date):Void{
 
-			var hour = date.getHours();
+			/*var hour = date.getHours();
             var minutes = "";
 
             			if(date.getMinutes() >= 0 && date.getMinutes() < 15){
@@ -276,27 +276,30 @@ class CoordSystem extends Sprite {
 			var tempDateString = hour + ":" + minutes;
 			var arrayPointer = 0;
 
-			for(date in 0...cordNameArray.length){
+			for(num in 0...cordNameArray.length){
 
-				if(cordNameArray[date] == tempDateString){
+				trace(com);
 
-					arrayPointer = date;
+				if(cordNameArray[num] == date){
+
+					arrayPointer = num;
 				}
 			}
 
+			trace(num);
 			//cordNameArray.reverse();
 
 			 //calculate the offset and set it
-            var tempArray = cordNameArray.splice(arrayPointer,cordNameArray.length);
+            //var tempArray = cordNameArray.splice(arrayPointer,cordNameArray.length);
             			
-            			tempArray.reverse();
-            			cordNameArray.reverse();
+            //			tempArray.reverse();
+            //			cordNameArray.reverse();
 
 
-                        cordNameArray = cordNameArray.concat(tempArray);
-                        cordNameArray.reverse();
+            //            cordNameArray = cordNameArray.concat(tempArray);
+            //            cordNameArray.reverse();
                         		//trace(cordNameArray);
-			
+			*/
 
 		}
 
@@ -306,9 +309,10 @@ class CoordSystem extends Sprite {
 			var timeString = time.getHours()+":"+time.getMinutes();
 
 			for(i in 0...cordNameArray.length-1){
+					var temptimeString = cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes();
 
-						if(cordNameArray[i] == timeString){
-
+						if(temptimeString == timeString){
+							trace("found:"+temptimeString +" at position:" + cordCordArray[i]);
 							//trace(cordCordArray[i]);
 							return cordCordArray[i];
 						}
@@ -418,19 +422,80 @@ class CoordSystem extends Sprite {
 	}
 	private function generateCordArray(xWidth:Float,space:Float):Void{
 
+		var date = Date.now();
+
+		var hour = date.getHours()-1;
+		trace(hour);
+		var minute = date.getMinutes();
 
 		var xSpace = (xWidth/96);
-		cordNameArray = new Array<String>();
+		cordNameArray = new Array<Date>();
 		cordCordArray = new Array<Float>();
+		var count = 96;
+		var lastAdd = 0;
 
-		for(i in 0...24){
+		if(minute >= 0 && minute < 15){
 
-			cordNameArray.push(i + ":" + "00");
-			cordNameArray.push(i + ":" + "15");
-			cordNameArray.push(i + ":" + "30");
-			cordNameArray.push(i + ":" + "45");
+							cordNameArray.push(Date.fromString(hour + ":" + "00" +":" +"00"));
+							cordNameArray.push(Date.fromString(hour + ":" + "15" + ":" +"00"));
+							cordNameArray.push(Date.fromString(hour + ":" + "30" + ":" + "00"));
+							cordNameArray.push(Date.fromString(hour + ":" + "45" + ":" + "00"));
+							count -= 4;
+							
+                        }
+                        else if(minute >= 15 && minute < 30){
+                            
+							cordNameArray.push(Date.fromString(hour + ":" + "15" + ":" + "00"));
+							cordNameArray.push(Date.fromString(hour + ":" + "30" + ":" + "00"));
+							cordNameArray.push(Date.fromString(hour + ":" + "45" + ":" + "00"));
+							count -= 3;
+							
+                        }
+                        else if(minute >= 30 && minute < 45){
+
+							cordNameArray.push(Date.fromString(hour + ":" + "30" + ":" + "00"));
+							cordNameArray.push(Date.fromString(hour + ":" + "45" + ":" + "00"));
+							count -= 2;  
+                        }
+                        else if(minute >= 45 && minute < 59){
+							cordNameArray.push(Date.fromString(hour + ":" + "45" + ":" + "00"));  
+							count -= 1;
+                        }
+		lastAdd = 45;
+		trace(count);
+
+		for(i in 0...count){
+			
+			if(lastAdd == 45){
+				lastAdd = 0;
+				hour += 1;
+				cordNameArray.push(Date.fromString(hour + ":" + "00" +":" +"00"));
+			}
+			else if(lastAdd == 0){
+
+				cordNameArray.push(Date.fromString(hour + ":" + "15" + ":" +"00"));
+				lastAdd = 15;
+
+			}
+			else if(lastAdd == 15){
+
+				cordNameArray.push(Date.fromString(hour + ":" + "30" + ":" + "00"));
+				lastAdd = 30;
+
+			}
+			else if(lastAdd == 30){
+
+				cordNameArray.push(Date.fromString(hour + ":" + "45" + ":" +"00"));
+				lastAdd = 45;
+
+			}
+
+			
 
 		}
+
+		trace(cordNameArray);
+            			
 
 
 
