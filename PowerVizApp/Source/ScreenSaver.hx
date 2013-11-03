@@ -38,7 +38,6 @@ class ScreenSaver extends Sprite {
 	private var yourbulbTimer:PowerTimer;
 	private var yourScreensaverTimerTimer:PowerTimer;
 	private var yourBulbFaderTimer:PowerTimer;
-	private var dataInterface:DataInterface;
 
 	private var mBulbArray:Array<Bulb>;
 
@@ -47,8 +46,6 @@ class ScreenSaver extends Sprite {
 
 		super();
 
-
-		dataInterface = new DataInterface();
 
 		mIsTransparant = true;
 		mHasRecievedTouchEvent = false;
@@ -252,7 +249,7 @@ class ScreenSaver extends Sprite {
 		yourbulbTimer.stop();
 		yourbulbTimer = new PowerTimer(bulbTimerAction);
 		yourbulbTimer.onTime = function() {
-			var f  = dataInterface.getTotalCurrentLoad();
+			var f  = DataInterface.instance.getTotalCurrentLoad();
 			calculatBulbStates(f);
 		};
 		yourbulbTimer.start();			
@@ -273,7 +270,7 @@ class ScreenSaver extends Sprite {
 			
 			yourbulbTimer = new PowerTimer(bulbTimerAction);
 			yourbulbTimer.onTime = function() {
-				var f  = dataInterface.getTotalCurrentLoad();
+				var f  = DataInterface.instance.getTotalCurrentLoad();
 				calculatBulbStates(f);
 			};
 			yourbulbTimer.start();

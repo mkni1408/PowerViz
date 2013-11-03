@@ -50,9 +50,9 @@ class DataInterface {
 
         public static var instance(get, null) : DataInterface;
         static function get_instance() : DataInterface {
-                if(instance == null)
-                        instance = new DataInterface();
-                return instance;
+			if(instance == null)
+				instance = new DataInterface();
+			return instance;
         }
         
         private var mCnx : HttpAsyncConnection; //Remoting connection used for communicating with the server. 
@@ -95,16 +95,17 @@ class DataInterface {
 
 
         
-        public function new() {
-                
-                #if production
-                        this.connect("http://78.47.92.222/pvs/"); //Connect to production version.
-                #else
-                        this.connect("http://78.47.92.222/pvsdev/"); //Connect to development version.
-                #end 
-                constructUsageDataContainers();
-                getDataOnCreation();
-                initTimers();
+        private function new() {
+        	
+        	trace(haxe.CallStack.callStack());
+		    #if production
+		            this.connect("http://78.47.92.222/pvs/"); //Connect to production version.
+		    #else
+		            this.connect("http://78.47.92.222/pvsdev/"); //Connect to development version.
+		    #end 
+		    constructUsageDataContainers();
+		    getDataOnCreation();
+		    initTimers();
         }
         
         private function constructUsageDataContainers() {
@@ -180,6 +181,7 @@ class DataInterface {
         
         //Get data to start with.
         private function getDataOnCreation() {
+        		trace("Getting data from server....");
                 houseDescriptor = getHouseDescriptor(); //Get the house layout.
                 
                 //Call the timers to get data to start with:
@@ -188,6 +190,7 @@ class DataInterface {
                 onTimerHour(null);
                 onTimerDay(null);
                 onTimerWeek(null);
+                trace("More or less done getting data.");
         }
         
         

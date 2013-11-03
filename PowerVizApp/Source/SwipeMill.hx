@@ -60,6 +60,9 @@ class SwipeMill {
 		registerEvents();
 		mFingerDown = false;
 		mScreenPos = 0.0;
+		mStartX = 0;
+		mPrevX = 0;
+		mDeltaX = 0;
 	}
 	
 	/*Add a single display element to the SwipeMill.*/
@@ -112,24 +115,52 @@ class SwipeMill {
 		#end
 	}
 	
-	/*Returns the current position. Position 1 is screen, 2 screen two etc.
+	/*Returns the current position. Position 1 is screen one, 2 screen two etc.
 	Therefore, when position is 1.5, the position is in the midle between screen one and two.*/
 	static function get_screenPos() : Float {
 		return mScreenPos;
 	}
 	/*Sets the screen position. See comment above.*/
 	static function set_screenPos(f:Float) : Float {
+		
+		mScreenPos = f;
+		
+		if(mScreenPos<0)
+			mScreenPos=0;
+		if(mScreenPos>=mObjects.length)
+			mScreenPos = mObjects.length-1;
+		
+		positionObjects();
+			
+		return mScreenPos;
+		
+		
+		/*
 		mScreenPos = f;
 		if(mScreenPos<0) {
 			mScreenPos += mObjects.length;
 		}
 		positionObjects();
 		return mScreenPos;
+		*/
+		
 	}
 	
 	/*Internal function. Positions all the DisplayObjects.*/
 	private static function positionObjects() {
+	
+		var i = 0;
+		for(obj in mObjects) {
+			obj.x = (i - mScreenPos)*obj.width;
+			i+=1;
+		}
 		
+		if(mSwipeDots!=null)
+			mSwipeDots.setActive(mScreenPos);
+		
+	
+		
+		/*
 		if(mScreenPos>=mObjects.length) {
 			mScreenPos -= mObjects.length;
 		}
@@ -150,6 +181,8 @@ class SwipeMill {
 		
 		if(mSwipeDots!=null)
 			mSwipeDots.setActive(mScreenPos);
+		*/
+		
 		
 	}
 	
@@ -169,13 +202,17 @@ class SwipeMill {
 		}
 		motion.Actuate.tween(SwipeMill, 1, {screenPos : to}).onComplete(SwipeMill.onMakeScreenFitDone, []);
 		
+		
 		if(to != mStartScreenPosi) {
+			trace(mScreenPos);
 			onScreenChange(Std.int(to));
 		}
+		
 	}
 	
 	/*Called when the tween effect ends. Purpose unknown.*/
 	private static function onMakeScreenFitDone() {
+		trace("onMakeScreenFitDone() - " + mScreenPos);
 		//trace("Done tweening");
 	}
 	
@@ -345,8 +382,8 @@ class SwipeDots extends Sprite {
 		/*
 		dot.graphics.drawCircle(0,0, Lib.stage.stageWidth/100);
 		*/
-		var w:Float = Lib.stage.stageWidth/30;
-		var h:Float = Lib.stage.stageHeight/30;
+		var w:Float = Lib.stage.stageWidth/20;
+		var h:Float = Lib.stage.stageHeight/20;
 		dot.graphics.drawRect(w/2, h/2, w,h);
 		dot.graphics.endFill();
 		dot.mouseEnabled = false;
