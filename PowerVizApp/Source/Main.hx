@@ -4,6 +4,7 @@ import openfl.Assets;
 import flash.display.Sprite;
 import flash.display.Bitmap;
 import flash.Lib;
+import motion.Actuate;
 
 import DataVBarDisplay;	
 import SwipeMill;
@@ -13,6 +14,7 @@ import BarScreen;
 import CurrentUsage;
 import CoinScreen;
 import OnOffDiagram;
+import BusyAnimation;
 
 //Main class which extends a sprite(sprite as in a display object) 
 class Main extends Sprite {
@@ -33,6 +35,17 @@ class Main extends Sprite {
 		
 		setBackground();
 		
+		this.addChild(BusyAnimation.instance);
+		BusyAnimation.instance.busy();
+		
+		//Make a very short delay, so that this function
+		//can return and the graphics be displayed, before the huge chunk
+		//of startup work is done.
+		Actuate.timer(0.1).onComplete(initAndLoadScreens); 		
+	}
+	
+	//This is called slightly later than 
+	private function initAndLoadScreens() {
 		SwipeMill.init(this);	
 		SwipeMill.onScreenChange = this.onScreenChange;
 		
@@ -43,8 +56,6 @@ class Main extends Sprite {
 		addChild(mScreenSaver);
 
 		SwipeMill.onScreenTouch = mScreenSaver.onScreenTouch;
-
-		
 	}
 	
 	public function setBackground() {
@@ -59,6 +70,8 @@ class Main extends Sprite {
 	
 	
 	public function prepareScreens() {
+	
+		BusyAnimation.instance.busy();
 		
 		mArealScreen = new ArealScreen();
 		SwipeMill.add(mArealScreen);
@@ -74,6 +87,8 @@ class Main extends Sprite {
 		
 		//mCoinScreen = new CoinScreen();
 		//SwipeMill.add(mCoinScreen);
+		
+		BusyAnimation.instance.done();
 
 		SwipeMill.screenPos = 0.0; //Set to the first screen.
 	}
