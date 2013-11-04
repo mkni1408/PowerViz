@@ -308,7 +308,7 @@ class CoordSystem extends Sprite {
 
 			
 
-			for(i in 0...cordNameArray.length-1){
+			for(i in 0...cordNameArray.length){
 					var temptimeString = cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes();
 					trace("Comparing "+timeString+ " and "+ temptimeString);
 						if(temptimeString == timeString){
