@@ -127,6 +127,9 @@ class OnOffDiagram extends Sprite{
 		for(i in 0...mMapArray.length){
 			
 			var outArray = mMapArray[i];
+
+
+
 			
 			for(count in 0...outArray.length){
 				fetchOnOffData(mNewOutletArray[outArray[count]],mColorArray[i]);
@@ -265,6 +268,12 @@ class OnOffDiagram extends Sprite{
 		var count2 = 1;
 		var lengthofArray =outletData.length;
 		var incId = id;
+
+		trace(".........");
+
+			trace(outletData);
+
+		trace(".........");
 
 		for(i in 0...lengthofArray){
 
