@@ -312,7 +312,7 @@ class CoordSystem extends Sprite {
 					var temptimeString = cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes();
 
 						if(temptimeString == timeString){
-							//trace(cordCordArray[i]);
+							trace("FOUNd");
 							return cordCordArray[i];
 						}
 
