@@ -295,7 +295,7 @@ class ArealScreen extends Sprite {
         }
 
         private function callDrawMethods():Void{
-
+                getColorAndRoomData();
                 fillWithData();
                 doLayout();
                 addChildrenToBack();

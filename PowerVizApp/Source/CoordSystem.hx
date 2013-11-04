@@ -306,6 +306,8 @@ class CoordSystem extends Sprite {
 
 			var timeString = time.getHours()+":"+time.getMinutes();
 
+			trace("Timestring "+timeString);
+
 			for(i in 0...cordNameArray.length-1){
 					var temptimeString = cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes();
 
