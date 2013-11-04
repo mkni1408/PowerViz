@@ -319,7 +319,7 @@ class DataBaseInterface {
 	public static function getOutletHistoryAllToday(houseId:Int, now:Date) : Map<Int, Array<TimeWatts> > {
 		
 		var to = now;
-		var from = DateTools.delta(to, -DateTools.days(1));
+		var from = DateTools.delta(to, -(DateTools.hours(23)+DateTools.minutes(45)));
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	

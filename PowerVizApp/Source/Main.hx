@@ -49,13 +49,11 @@ class Main extends Sprite {
 	
 	//This is called slightly later than 
 	private function initAndLoadScreens() {
-            
-            try {
-            
-                trace("Loading screens");
+                    
+        trace("Loading screens");
 		SwipeMill.init(this);	
 		SwipeMill.onScreenChange = this.onScreenChange;
-		
+	
 		prepareScreens();
 
 		//add screensaver to the main sprite
@@ -63,11 +61,7 @@ class Main extends Sprite {
 		addChild(mScreenSaver);
 
 		SwipeMill.onScreenTouch = mScreenSaver.onScreenTouch;
-            }
-            catch(e:Dynamic) {
-                trace(Std.string(e));
-                trace("Callstack: " + haxe.CallStack.callStack());
-            }
+
 	}
 	
 	public function setBackground() {

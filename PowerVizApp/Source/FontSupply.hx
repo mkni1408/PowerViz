@@ -30,7 +30,7 @@ class FontSupply {
 	private var mButtonFont : TextFormat;
 	
 	
-	public function new() {
+	private function new() {
 	
 		mTitleFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 30, 0x000000);
 		
