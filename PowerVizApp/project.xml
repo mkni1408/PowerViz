@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<meta title="EcoViz" package="com.example.powerviz" version="1.0.0" company="Bad Crew" />
+	<meta title="PowerViz" package="com.example.powerviz" version="1.0.0" company="i902e13" />
 	<app main="Main" path="Export" file="PowerViz" />
 	
 	<source path="Source" />

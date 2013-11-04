@@ -1,3 +1,5 @@
+package;
+
 import flash.display.Sprite;
 //class that defines an onoffBar
 class OnOffBar extends Sprite{

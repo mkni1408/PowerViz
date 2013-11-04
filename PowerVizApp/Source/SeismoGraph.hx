@@ -1,3 +1,5 @@
+package;
+
 import flash.display.Sprite;
 import flash.Lib;
 import flash.display.Bitmap;

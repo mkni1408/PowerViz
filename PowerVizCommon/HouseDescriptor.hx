@@ -1,4 +1,4 @@
-
+package;
 
 /**
 Simple descriptor class that contains all room and outlet descriptions of a house.

@@ -1,3 +1,5 @@
+package;
+
 import OnOffData;
 //
 //Class that defines an outlet

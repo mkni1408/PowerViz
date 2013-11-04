@@ -1,3 +1,5 @@
+package;
+
 //class that defines an on off object. Has a start and stop date
 
 class OnOffData{

@@ -1,3 +1,4 @@
+package;
 
 import haxe.remoting.HttpAsyncConnection;
 

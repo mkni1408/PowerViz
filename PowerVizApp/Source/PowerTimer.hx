@@ -1,3 +1,5 @@
+package;
+
 import flash.utils.Timer;
 import flash.events.TimerEvent;
 

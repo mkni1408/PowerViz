@@ -1,3 +1,5 @@
+package;
+
 import haxe.remoting.HttpAsyncConnection;
 
 import flash.utils.Timer;

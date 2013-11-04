@@ -1,3 +1,5 @@
+package;
+
 //purpose of colorgenerator class is to generate "random" colors and return them 
 
 class ColorGenerator{

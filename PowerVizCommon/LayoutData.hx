@@ -1,3 +1,4 @@
+package;
 
 /** 
 Structure for containing outlet layout data.

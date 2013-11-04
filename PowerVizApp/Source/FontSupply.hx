@@ -1,3 +1,4 @@
+package;
 
 import flash.text.TextFormat;
 import openfl.Assets;
