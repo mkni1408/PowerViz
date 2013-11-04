@@ -436,32 +436,29 @@ class CoordSystem extends Sprite {
 		var lastAdd = 0;
 
 		if(minute >= 0 && minute < 15){
-
-							cordNameArray.push(Date.fromString(hour + ":" + "00" +":" +"00"));
-							cordNameArray.push(Date.fromString(hour + ":" + "15" + ":" +"00"));
-							cordNameArray.push(Date.fromString(hour + ":" + "30" + ":" + "00"));
-							cordNameArray.push(Date.fromString(hour + ":" + "45" + ":" + "00"));
-							count -= 4;
-							
-                        }
-                        else if(minute >= 15 && minute < 30){
-                            
-							cordNameArray.push(Date.fromString(hour + ":" + "15" + ":" + "00"));
-							cordNameArray.push(Date.fromString(hour + ":" + "30" + ":" + "00"));
-							cordNameArray.push(Date.fromString(hour + ":" + "45" + ":" + "00"));
-							count -= 3;
-							
-                        }
-                        else if(minute >= 30 && minute < 45){
-
-							cordNameArray.push(Date.fromString(hour + ":" + "30" + ":" + "00"));
-							cordNameArray.push(Date.fromString(hour + ":" + "45" + ":" + "00"));
-							count -= 2;  
-                        }
-                        else if(minute >= 45 && minute < 59){
-							cordNameArray.push(Date.fromString(hour + ":" + "45" + ":" + "00"));  
-							count -= 1;
-                        }
+                        cordNameArray.push(hmsToDate(hour,0,0));
+                        cordNameArray.push(hmsToDate(hour,15,0));
+                        cordNameArray.push(hmsToDate(hour,30,0));
+                        cordNameArray.push(hmsToDate(hour,45,0));
+                        count -= 4;
+                                                    
+                    }
+                    else if(minute >= 15 && minute < 30){
+                        cordNameArray.push(hmsToDate(hour,15,0));
+                        cordNameArray.push(hmsToDate(hour,30,0));
+                        cordNameArray.push(hmsToDate(hour,45,0));
+                        count -= 3;
+                                                    
+                    }
+                    else if(minute >= 30 && minute < 45){
+                        cordNameArray.push(hmsToDate(hour,30,0));
+                        cordNameArray.push(hmsToDate(hour,45,0));
+                        count -= 2;  
+                    }
+                    else if(minute >= 45 && minute < 59){
+                        cordNameArray.push(hmsToDate(hour,45,0));
+                        count -= 1;
+                    }
 		lastAdd = 45;
 		trace(count);
 
@@ -470,23 +467,23 @@ class CoordSystem extends Sprite {
 			if(lastAdd == 45){
 				lastAdd = 0;
 				hour += 1;
-				cordNameArray.push(Date.fromString(hour + ":" + "00" +":" +"00"));
+				cordNameArray.push(hmsToDate(hour,0,0));
 			}
 			else if(lastAdd == 0){
 
-				cordNameArray.push(Date.fromString(hour + ":" + "15" + ":" +"00"));
+				cordNameArray.push(hmsToDate(hour,15,0));
 				lastAdd = 15;
 
 			}
 			else if(lastAdd == 15){
 
-				cordNameArray.push(Date.fromString(hour + ":" + "30" + ":" + "00"));
+				cordNameArray.push(hmsToDate(hour,30,0));
 				lastAdd = 30;
 
 			}
 			else if(lastAdd == 30){
 
-				cordNameArray.push(Date.fromString(hour + ":" + "45" + ":" +"00"));
+				cordNameArray.push(hmsToDate(hour,45,0));
 				lastAdd = 45;
 
 			}
@@ -516,6 +513,13 @@ class CoordSystem extends Sprite {
 
 
 	}
+        
+        //Returns a date from hours, minutes and seconds. 
+        private function hmsToDate(h:Int, m:Int, s:Int) : Date {
+                return Date.fromString(Std.string(h<10 ? "0"+h : h) + ":" + 
+                                        Std.string(m<10 ? "0"+m : m ) + ":" + 
+                                        Std.string(s<10 ? "0"+s : s));
+        }
 
 
 
