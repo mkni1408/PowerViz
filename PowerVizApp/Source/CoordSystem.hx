@@ -212,7 +212,6 @@ class CoordSystem extends Sprite {
 			
 			//trimDateArrays(Date.now());//update array position
 
-			convertTime(pointXfrom.getStart());
 			trace("Start:",convertTime(pointXfrom.getStart()));
 			trace("Stop",convertTime(pointXfrom.getStop()));
 			

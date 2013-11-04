@@ -124,14 +124,14 @@ class OnOffDiagram extends Sprite{
 		//add the bars
 		var outletCounter = 0;
 
-		for(i in 0...3){
+		for(i in 0...mMapArray.length){
 			
 			var outArray = mMapArray[i];
 
 
 
 			
-			for(count in 0...1){
+			for(count in 0...outArray.length){
 				fetchOnOffData(mNewOutletArray[outArray[count]],mColorArray[i]);
 				
 			}
