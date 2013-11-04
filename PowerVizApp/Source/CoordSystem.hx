@@ -210,15 +210,16 @@ class CoordSystem extends Sprite {
 		public function drawBar(pointXfrom:OnOffData, pointYfrom:Float,pointYto:Float,color:Int){
 
 			
-			trimDateArrays(Date.now());//update array position
+			//trimDateArrays(Date.now());//update array position
 
 			convertTime(pointXfrom.getStart());
-
+			trace("Start:",convertTime(pointXfrom.getStart()));
+			trace("Stop",convertTime(pointXfrom.getStop()));
 			
 			this.graphics.lineStyle(1, 0x000000);
 			this.graphics.beginFill(color);
-			//this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), yHeight-10.0);
 			this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), yHeight-10.0);
+			//this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop()), yHeight-10.0);
 
 			this.graphics.endFill();
 
