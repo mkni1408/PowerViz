@@ -98,48 +98,48 @@ class DataInterface {
 
         
         private function new() {
-        	
-		    #if production
-		            this.connect("http://78.47.92.222/pvs/"); //Connect to production version.
-		    #else
-		            this.connect("http://78.47.92.222/pvsdev/"); //Connect to development version.
-		    #end 
-		    constructUsageDataContainers();
-		    getDataOnCreation();
-		    initTimers();
+        
+            #if production
+                    this.connect("http://78.47.92.222/pvs/"); //Connect to production version.
+            #else
+                    this.connect("http://78.47.92.222/pvsdev/"); //Connect to development version.
+            #end 
+            constructUsageDataContainers();
+            getDataOnCreation();
+            initTimers();
         }
         
         private function constructUsageDataContainers() {
-        
-                 mOutletDataNow = new Map<Int, Float>(); //Usage now for each outlet, measured in watts.
-        
-                //Usage data quarter= new 
-                 mOutletDataQuarter = new  Map<Int, Float>(); //Usage data for the last 15 minutes, for each outlet, measured in watts/15min.
-        
-                //Usage data hour= new 
-                 mOutletDataHour = new  Map<Int, Float>(); //Total usage for each outlet in the last hour.
-                 mOutletDataHourTimed = new  Map<Int, Array<TimeWatts> >(); //Usage for the last hour, timed in 15 minute intervals.
-        
-                //Usage data day= new 
-                 mOutletDataDay = new  Map<Int, Float>(); //Total usage for each outlet this day.
-                 mOutletDataDayTimed = new  Map<Int, Array<TimeWatts> >(); //Usage for today, timed in 15 minute intervals.
-        
-                //Usage data week= new 
-                 mOutletDataWeek = new  Map<Int, Float>(); //Total usage for each outlet this week.
-                 mOutletDataWeekTimed = new  Map<Int, Array<TimeWatts> >(); //Usage for this week, timed in 15 minute intervals.
-                 
+
+            mOutletDataNow = new Map<Int, Float>(); //Usage now for each outlet, measured in watts.
+
+            //Usage data quarter= new 
+            mOutletDataQuarter = new  Map<Int, Float>(); //Usage data for the last 15 minutes, for each outlet, measured in watts/15min.
+
+            //Usage data hour= new 
+            mOutletDataHour = new  Map<Int, Float>(); //Total usage for each outlet in the last hour.
+            mOutletDataHourTimed = new  Map<Int, Array<TimeWatts> >(); //Usage for the last hour, timed in 15 minute intervals.
+
+            //Usage data day= new 
+            mOutletDataDay = new  Map<Int, Float>(); //Total usage for each outlet this day.
+            mOutletDataDayTimed = new  Map<Int, Array<TimeWatts> >(); //Usage for today, timed in 15 minute intervals.
+
+            //Usage data week= new 
+            mOutletDataWeek = new  Map<Int, Float>(); //Total usage for each outlet this week.
+            mOutletDataWeekTimed = new  Map<Int, Array<TimeWatts> >(); //Usage for this week, timed in 15 minute intervals.
+             
         }
         
         //Connects to the server, setting up the remoting system.
         public function connect(url:String) {
-                mCnx = HttpAsyncConnection.urlConnect(url);
-                mCnx.setErrorHandler(onError);
+            mCnx = HttpAsyncConnection.urlConnect(url);
+            mCnx.setErrorHandler(onError);
         }
         
         //Called when a connection or server error occurs.
         private function onError(e:String) {
-                Sys.println("Connection error: " + e);
-                //TODO: We should try to reconnect somehow...
+            Sys.println("Connection error: " + e);
+            //TODO: We should try to reconnect somehow...
         }
         
         //**************************************************
@@ -148,50 +148,50 @@ class DataInterface {
         
         //Initialize the timers that will get data from the server.
         private function initTimers() {
-        
-                var nowInterval = 3*1000;
-                var quarterInterval = 15*60*1000;
-                #if demo
-                        trace("IIIATLAJDLSAID IT WORKS");
-                        quarterInterval = 60*1000;
-                #end
-                var hourInterval = quarterInterval*4;
-                var dayInterval = hourInterval * 24;
-                var weekInterval = dayInterval * 7;
-        
-                mTimerNow = new Timer(nowInterval, 0); //Every 3 secs.
-                mTimerNow.addEventListener(TimerEvent.TIMER, onTimerNow);
-                mTimerNow.start();
-        
-                mTimerQuarter = new Timer(quarterInterval, 0); //Every 15 minutes.
-                mTimerQuarter.addEventListener(TimerEvent.TIMER, onTimerQuarter);
-                mTimerQuarter.start();
-                
-                mTimerHour = new Timer(hourInterval, 0); //Every hour.
-                mTimerHour.addEventListener(TimerEvent.TIMER, onTimerHour);
-                mTimerHour.start();
-                
-                mTimerDay = new Timer(dayInterval, 0); //Once a day.
-                mTimerDay.addEventListener(TimerEvent.TIMER, onTimerDay);
-                mTimerDay.start();
-                
-                mTimerWeek = new Timer(weekInterval); //Once a week.
-                mTimerWeek.addEventListener(TimerEvent.TIMER, onTimerWeek);
-                mTimerWeek.start();
+
+            var nowInterval = 3*1000;
+            var quarterInterval = 15*60*1000;
+            #if demo
+                trace("RUNNING TIMERS IN DEMOMODE!");
+                quarterInterval = 60*1000;
+            #end
+            var hourInterval = quarterInterval*4;
+            var dayInterval = hourInterval * 24;
+            var weekInterval = dayInterval * 7;
+
+            mTimerNow = new Timer(nowInterval, 0); //Every 3 secs.
+            mTimerNow.addEventListener(TimerEvent.TIMER, onTimerNow);
+            mTimerNow.start();
+
+            mTimerQuarter = new Timer(quarterInterval, 0); //Every 15 minutes.
+            mTimerQuarter.addEventListener(TimerEvent.TIMER, onTimerQuarter);
+            mTimerQuarter.start();
+
+            mTimerHour = new Timer(hourInterval, 0); //Every hour.
+            mTimerHour.addEventListener(TimerEvent.TIMER, onTimerHour);
+            mTimerHour.start();
+
+            mTimerDay = new Timer(dayInterval, 0); //Once a day.
+            mTimerDay.addEventListener(TimerEvent.TIMER, onTimerDay);
+            mTimerDay.start();
+
+            mTimerWeek = new Timer(weekInterval); //Once a week.
+            mTimerWeek.addEventListener(TimerEvent.TIMER, onTimerWeek);
+            mTimerWeek.start();
         }
         
         //Get data to start with.
         private function getDataOnCreation() {
-        		trace("Getting data from server....");
-                houseDescriptor = getHouseDescriptor(); //Get the house layout.
-                
-                //Call the timers to get data to start with:
-                onTimerNow(null);
-                onTimerQuarter(null);
-                onTimerHour(null);
-                onTimerDay(null);
-                onTimerWeek(null);
-                trace("More or less done getting data.");
+            trace("Getting data from server....");
+            houseDescriptor = getHouseDescriptor(); //Get the house layout.
+
+            //Call the timers to get data to start with:
+            onTimerNow(null);
+            onTimerQuarter(null);
+            onTimerHour(null);
+            onTimerDay(null);
+            onTimerWeek(null);
+            trace("More or less done getting data.");
         }
         
         
@@ -305,6 +305,35 @@ class DataInterface {
                 mRelativeMax = data;
         }
         
+        //Function for filling in missing dates in a specified dataset:
+        public function fillInMissingData(_from:Date, _to:Date, dataSet:Map<Int, Array<TimeWatts> >) {
+        	var from:Date = _from;
+        	var timeIndex:Date = _from;
+        	var arrayIndex:Int=0;
+        	for(key in dataSet.keys()) {
+        		arrayIndex = 0;
+        		timeIndex = from;
+        		for(tw in dataSet.get(key)) {
+        		
+        			if(timeIndex.getTime() >= _to.getTime()) //Out of time range.
+        				break; //Break this loop, going to next key.
+        				
+        			if(timeIndex.getTime() == tw.time.getTime()) { //Data on time as expected.
+        				//Do nothing. Data is OK.
+        			}
+        			else if(timeIndex.getTime() < tw.time.getTime()) { //Data ahead of expected time.
+                        while(timeIndex.getTime() < tw.time.getTime()) {
+                            dataSet.get(key).insert(arrayIndex, {time:timeIndex, watts:0});
+                            arrayIndex += 1;
+                        }
+        			}   
+                    
+                    timeIndex = DateTools.delta(timeIndex, DateTools.minutes(15)); //Advance 15 minutes.
+                    arrayIndex += 1;     			
+        		}
+        	}
+        }
+        
         //************************************************
         // Functions for delivering the supplied data: (These are the functions that the screens should use).
         //************************************************
@@ -403,8 +432,12 @@ class DataInterface {
                                                 start = Date.fromTime(u.time.getTime() - (15*60*1000));
                                         stop = u.time;
                                 }
-                                else {        
+                                else { //Watts<=0
                                         if(start!=null && stop!=null) {
+                                            onOffMap.get(key).push(new OnOffData(start, stop));
+                                            start = null;
+                                            stop = null;
+                                            /*
                                                 if(stop.getDate()!=start.getDate())
                                                         stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
                                                 if(stop.getTime() == start.getTime())
@@ -412,14 +445,15 @@ class DataInterface {
                                                 onOffMap.get(key).push(new OnOffData(start, stop));
                                                 start = null;
                                                 stop = null;
+                                            */
                                         }
                                 }
                                                                 
                         }
                         
                         if(start!=null && stop!=null) { //End of data, so close the block if open.
-                                if(stop.getDate()!=start.getDate())
-                                        stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
+                                //if(stop.getDate()!=start.getDate())
+                                //        stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
                                 onOffMap.get(key).push(new OnOffData(start, stop));
                         }
 
@@ -435,6 +469,7 @@ class DataInterface {
                         }
                 }
         
+                trace(result);
                 return result;
         }
         

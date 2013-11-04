@@ -16,6 +16,7 @@ import CoinScreen;
 import OnOffDiagram;
 import BusyAnimation;
 
+
 //Main class which extends a sprite(sprite as in a display object) 
 class Main extends Sprite {
 
@@ -27,6 +28,7 @@ class Main extends Sprite {
 	private var mCurrentUsage : CurrentUsage = null;
 	private var mCoinScreen : CoinScreen = null;
 	private var mOnOff: OnOffDiagram = null;
+
 	
 	//constructor - instantiates new SwipeMill object. 
 	public function new () {
