@@ -212,12 +212,12 @@ class CoordSystem extends Sprite {
 			
 			//trimDateArrays(Date.now());//update array position
 
-			trace("Start:",convertTime(pointXfrom.getStart()));
-			trace("Stop",convertTime(pointXfrom.getStop()));
+			//trace("Start:",Std.string(convertTime(pointXfrom.getStart())));
+			//trace("Stop",Std.string(convertTime(pointXfrom.getStop())));
 			
 			this.graphics.lineStyle(1, 0x000000);
 			this.graphics.beginFill(color);
-			this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), yHeight-10.0);
+			this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), 			yHeight-10.0);
 			//this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop()), yHeight-10.0);
 
 			this.graphics.endFill();
@@ -304,13 +304,13 @@ class CoordSystem extends Sprite {
 		private function convertTime(time:Date):Float{
 			
 
-			var timeString = time.getHours()+":"+time.getMinutes();
+			var timeString = Std.string(time.getHours()+":"+time.getMinutes());
 
 			
 
 			for(i in 0...cordNameArray.length){
-					var temptimeString = cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes();
-					trace("Comparing "+timeString+ " and "+ temptimeString);
+					var temptimeString = Std.string(cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes());
+					//trace(cordNameArray[i]);
 						if(temptimeString == timeString){
 							trace("FOUNd");
 							return cordCordArray[i];
@@ -318,6 +318,8 @@ class CoordSystem extends Sprite {
 
 
 			}
+
+			//trace(cordNameArray);
 			return 0.0;
 
 		}
@@ -422,8 +424,11 @@ class CoordSystem extends Sprite {
 
 		var date = Date.now();
 
-		var hour = date.getHours()-1;
+		var hour = date.getHours();
 		var minute = date.getMinutes();
+
+		trace(hour);
+		trace(minute);
 
 		var xSpace = (xWidth/96);
 		cordNameArray = new Array<Date>();
@@ -449,19 +454,30 @@ class CoordSystem extends Sprite {
                     else if(minute >= 30 && minute < 45){
                         cordNameArray.push(hmsToDate(hour,30,0));
                         cordNameArray.push(hmsToDate(hour,45,0));
-                        count -= 2;  
+                        count -= 2;  	
                     }
                     else if(minute >= 45 && minute < 59){
                         cordNameArray.push(hmsToDate(hour,45,0));
                         count -= 1;
                     }
 		lastAdd = 45;
+		var restart = false;
 
 		for(i in 0...count){
+
+	
+			if(!restart && lastAdd == 45){
+				hour += 1;
+				restart = false;
+				}
+			else if(restart && lastAdd == 45){
+				restart = false;
+			}
+			
 			
 			if(lastAdd == 45){
 				lastAdd = 0;
-				hour += 1;
+				
 				cordNameArray.push(hmsToDate(hour,0,0));
 			}
 			else if(lastAdd == 0){
@@ -483,12 +499,17 @@ class CoordSystem extends Sprite {
 
 			}
 
+			if(hour == 23  && lastAdd == 45){
+				hour = 0;
+				restart=true;
+			}
+
 			
 
 		}
 
             			
-
+		trace(cordNameArray);
 
 
 		var cordCounter = 0.0;
@@ -509,9 +530,26 @@ class CoordSystem extends Sprite {
         
         //Returns a date from hours, minutes and seconds. 
         private function hmsToDate(h:Int, m:Int, s:Int) : Date {
-                return Date.fromString(Std.string(h<10 ? "0"+h : h) + ":" + 
-                                        Std.string(m<10 ? "0"+m : m ) + ":" + 
-                                        Std.string(s<10 ? "0"+s : s));
+
+		/*var hour = "";
+		var minute = "";
+
+		if(h< 10){
+			hour = Std.string("0"+h);
+		}
+		else{
+			hour = Std.string(h);
+		}
+		if(m< 10){
+			minute = Std.string("0"+m);
+		}
+		else{
+			minute = Std.string(m);
+		}*/
+
+		var date = new Date(1999,1,1,h,m,s);
+		
+                return date; 
         }
 
 
