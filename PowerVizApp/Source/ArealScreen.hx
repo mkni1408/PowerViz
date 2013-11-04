@@ -130,7 +130,6 @@ class ArealScreen extends Sprite {
         
                 //generates a usagearray and returns a height devide number 
                 var devider = generateUsageArray(mDiagram.maxValue);
-                trace("Divider" + devider);
 
                 
                 mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
@@ -143,7 +142,7 @@ class ArealScreen extends Sprite {
                 mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
 
                 mLegend.x = mCoordSys.x;
-                mLegend.y = mCoordSys.y + mLegend.height;
+                mLegend.y = mCoordSys.y + mLegend.height + 10;
 
                 mDiagram.x = 70;
                 mDiagram.y = mCoordSys.y;        
@@ -209,7 +208,7 @@ class ArealScreen extends Sprite {
         
         private function drawData(outletIds:Array<Int>, usage:Map<Int, Array<Float>>, colors:Map<Int, Int>) : Void {
                 
-                trace(outletIds);
+                
 
                 var data = prepareArray(outletIds,usage,colors);
 
@@ -487,7 +486,6 @@ class ArealScreen extends Sprite {
 
 
                 }
-                trace(_roomMap);
 
 
                 //rearrange the array so it matches room colors
@@ -578,19 +576,19 @@ class ArealScreen extends Sprite {
                 var hour = date.getHours();
                 var minutes = date.getMinutes();
 
-                for(i in 0...24){
+                for(i in 0...24){//generate initial time array
 
 
-                        stringAr.push(Std.string(i)+":"+"00");
+                        stringAr.push(Std.string(i));
 
                 }
 
                 var arrEl = 0;
                 stringAr.reverse();
 
-                var tempTime = date.getHours()+":"+"00";
+                var tempTime = Std.string(date.getHours());
 
-                for(el in 0...stringAr.length -1 ){//calculate
+                for(el in 0...stringAr.length -1 ){//calculate a position according to the time now
 
                     if(stringAr[el] == tempTime)
                     {
@@ -599,9 +597,7 @@ class ArealScreen extends Sprite {
                 }
 
 
-                trace(stringAr);
                 
-                trace(arrEl);
 
                 switch(mViewMode){
                     case 0://Hour
@@ -661,10 +657,9 @@ class ArealScreen extends Sprite {
                 
 
 
-                         //calculate the offset and set it
+                         //trim array an generate the offset and set it
                         tempArray = stringAr.splice(arrEl,stringAr.length);
 
-                        trace(tempArray);
                         tempArray = tempArray.concat(stringAr);
                         tempArray.reverse();
                         
@@ -695,7 +690,6 @@ class ArealScreen extends Sprite {
 
  
                
-                trace("ArEALSCREEN:",arrEl);
 
                 return tempArray;
 

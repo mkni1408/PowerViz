@@ -48,7 +48,7 @@ class ArealDiagram extends Sprite {
 		
 		maxValue = highestAccumValue(values);
 
-		trace("MAXVALUE",maxValue);
+		
 		
 	}
 	

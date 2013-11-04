@@ -148,18 +148,18 @@ class OnOffDiagram extends Sprite{
 		
 		//legend = legend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mNewRoomArray,mColorArray);
 		mLegend = new Legend();
-		mLegend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mNewRoomArray,mColorArray);
+		mLegend.drawLegend(mBack.width/1.20,mBack.height/1.20,mColorArray.length,mNewRoomArray,mColorArray);
 
 		mBack.addChild(mLegend);
 
-		mCoordSystem.generate(mBack.width/1.25, (mBack.height/1.25)-mLegend.height, "X", "Y", 
-								(mBack.width/1.25)/mtimeArray.length,((mBack.height/1.25)-mLegend.height)/mNewIDArray.length,
+		mCoordSystem.generate(mBack.width/1.20, (mBack.height/1.20)-mLegend.height, "X", "Y", 
+								(mBack.width/1.20)/mtimeArray.length,((mBack.height/1.20)-mLegend.height)/mNewIDArray.length,
 								mtimeArray,mNewIDArray,true,true,false,true,mOffset);
 
 		mCoordSystem.x = (mBack.width- mCoordSystem.width);
 		mCoordSystem.y = (mBack.height/1.25)+50;
 		mLegend.x =mCoordSystem.x;
-		mLegend.y = mCoordSystem.y + mLegend.height;
+		mLegend.y = mCoordSystem.y + mLegend.height + 10;
 		
 	}
 	
@@ -265,13 +265,13 @@ class OnOffDiagram extends Sprite{
 		var count2 = 1;
 		var lengthofArray =outletData.length;
 		var incId = id;
-		trace("....");
+
 		for(i in 0...lengthofArray){
 
 			mCoordSystem.drawBar(outletData[i], mCoordSystem.getYcoordinate(incId+1),mCoordSystem.getYcoordinate(incId+1),color);
 
 		}
-		trace("....");
+
 
 	}
 
@@ -387,7 +387,7 @@ class OnOffDiagram extends Sprite{
 
 }
 
-//generates an offset pr. viewmode
+			//generates an offset pr. viewmode
             //generates an array of labels for x coordinate
             private function generateTimeArrayandCalcOffset():Array<String>{
 
@@ -402,14 +402,14 @@ class OnOffDiagram extends Sprite{
                 for(i in 0...24){
 
 
-                        stringAr.push(Std.string(i)+":"+"00");
+                        stringAr.push(Std.string(i));
 
                 }
 
                 var arrEl = 0;
                 stringAr.reverse();
 
-                var tempTime = date.getHours()+":"+"00";
+                var tempTime = Std.string(date.getHours());
 
                 for(el in 0...stringAr.length -1 ){//calculate
 
@@ -420,10 +420,7 @@ class OnOffDiagram extends Sprite{
                 }
 
 
-                trace(stringAr);
                 
-                trace(arrEl);
-
                 
                     
                         if(date.getMinutes() >= 0 && date.getMinutes() < 15){
@@ -456,7 +453,6 @@ class OnOffDiagram extends Sprite{
                          //calculate the offset and set it
                         tempArray = stringAr.splice(arrEl,stringAr.length);
 
-                        trace(tempArray);
                         tempArray = tempArray.concat(stringAr);
                         tempArray.reverse();
                         
@@ -465,8 +461,6 @@ class OnOffDiagram extends Sprite{
                  
 
  
-               
-                trace(offset);
 
                 return tempArray;
 

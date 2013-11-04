@@ -60,8 +60,6 @@ class CoordSystem extends Sprite {
 		var xVertical:Bool = (xLabelVertical==null ? false : xLabelVertical);
 		var xoff:Bool = (offset==null ? false : offset);
 		var xoffset:Float = (xOffset==null ? 0 : xOffset);
-		trace("offset is"+xoffset);
-		trace("offset is"+xoff);
 		
 		var numLinesY:Int = Std.int(height/ySpace);
 		yHeight = ySpace;
@@ -216,8 +214,7 @@ class CoordSystem extends Sprite {
 
 			convertTime(pointXfrom.getStart());
 
-			trace(pointXfrom.getStart());
-			trace(pointXfrom.getStop());
+			
 			this.graphics.lineStyle(1, 0x000000);
 			this.graphics.beginFill(color);
 			//this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), yHeight-10.0);
@@ -313,7 +310,6 @@ class CoordSystem extends Sprite {
 					var temptimeString = cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes();
 
 						if(temptimeString == timeString){
-							trace("found:"+temptimeString +" at position:" + cordCordArray[i]);
 							//trace(cordCordArray[i]);
 							return cordCordArray[i];
 						}
@@ -390,7 +386,6 @@ class CoordSystem extends Sprite {
 		//draws vertical bars
 		public function drawVerticalBar(colors:Array<Int>, height:Array<Float>,conversionType:Int) {
 
-		trace(height);
 		var barWidth:Float = xHeight;
 		var totalpoints = yHeight/100;
 
@@ -426,7 +421,6 @@ class CoordSystem extends Sprite {
 		var date = Date.now();
 
 		var hour = date.getHours()-1;
-		trace(hour);
 		var minute = date.getMinutes();
 
 		var xSpace = (xWidth/96);
@@ -460,7 +454,6 @@ class CoordSystem extends Sprite {
                         count -= 1;
                     }
 		lastAdd = 45;
-		trace(count);
 
 		for(i in 0...count){
 			
@@ -492,7 +485,6 @@ class CoordSystem extends Sprite {
 
 		}
 
-		trace(cordNameArray);
             			
 
 
@@ -509,7 +501,6 @@ class CoordSystem extends Sprite {
 		}
 
 
-		trace(cordCordArray);
 
 
 	}
