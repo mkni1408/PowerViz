@@ -34,7 +34,7 @@ class FontSupply {
 	
 		mTitleFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 30, 0x000000);
 		
-		mCoordAxisFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 14, 0x000000);
+		mCoordAxisFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 17, 0x000000);
 		
 		mButtonFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 10, 0x000000);
 

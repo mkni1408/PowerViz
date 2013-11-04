@@ -469,7 +469,6 @@ class DataInterface {
                         }
                 }
         
-                trace(result);
                 return result;
         }
         

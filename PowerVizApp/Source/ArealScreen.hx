@@ -119,7 +119,7 @@ class ArealScreen extends Sprite {
 
                 mTitle.width = mTitle.textWidth;        
                 mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
-                mTitle.y = Lib.stage.stageHeight/30;
+                mTitle.y = 0;
 
                 //mBack.addChild(mTitle);
 

@@ -99,9 +99,9 @@ class BarScreen extends Sprite {
 
 		mTimeButton.y = 0;
 		
-		mCoordSys.generate(mBack.width/1.20, mBack.height/1.25, "X", "Y", (mBack.width/1.20)/mNewIDArray.length, (mBack.height/1.25)/mKwhArray.length, mNewIDArray, mKwhArray, true, false,true);
+		mCoordSys.generate(mBack.width/1.20, mBack.height/1.30, "X", "Y", (mBack.width/1.20)/mNewIDArray.length, (mBack.height/1.30)/mKwhArray.length, mNewIDArray, mKwhArray, true, false,true);
 		mCoordSys.x = (Lib.stage.stageWidth- mCoordSys.width);
-		mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
+		mCoordSys.y = (Lib.stage.stageHeight/1.30)+50;
 
 		mTitle.width = mTitle.textWidth+5;	
 		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
@@ -184,7 +184,7 @@ class BarScreen extends Sprite {
 
 		if(mViewMode == 0){
 			//hour
-			mKwhArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
+			mKwhArray = ["100Wt", "200Wt", "300Wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
 			mTitle.text = "Forbrug denne time";
 
 		}

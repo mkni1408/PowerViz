@@ -69,7 +69,7 @@ class OnOffDiagram extends Sprite{
 		
 		mTitle = new TextField();
 		mTitle.mouseEnabled=false;
-		mTitle.text = "Forbrug i dag";
+		mTitle.text = "Tænd/sluk i dag";
 		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 		mTitle.selectable = false;
 		mBack.addChild(mTitle);
@@ -95,6 +95,7 @@ class OnOffDiagram extends Sprite{
 		
 		handleCategoryData(data);
 		drawDiagram();
+		mBack.addChild(mTitle);
 		mBack.addChild(monOffBar);
 		this.addChild(mBack);
 	}
@@ -116,7 +117,7 @@ class OnOffDiagram extends Sprite{
 		//set textlabel position
 		mTitle.width = mTitle.textWidth+2;	
 		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
-		mTitle.y = 20;
+		mTitle.y = 0;
 		
 
 		var testSprite = new Sprite();
@@ -164,6 +165,8 @@ class OnOffDiagram extends Sprite{
 		mCoordSystem.y = (mBack.height/1.25)+50;
 		mLegend.x =mCoordSystem.x;
 		mLegend.y = mCoordSystem.y + mLegend.height + 10;
+		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
+        mTitle.y = 0;
 		
 	}
 	
@@ -270,11 +273,7 @@ class OnOffDiagram extends Sprite{
 		var lengthofArray =outletData.length;
 		var incId = id;
 
-		trace(".........");
-
-			trace(outletData);
-
-		trace(".........");
+	
 
 		for(i in 0...lengthofArray){
 
@@ -449,7 +448,7 @@ class OnOffDiagram extends Sprite{
                             minutesString = "45"; 
                             offset= 1.0;
                         }
-                        mOffset = ((Lib.stage.stageWidth/1.15)/stringAr.length)/offset;
+                        mOffset = ((Lib.stage.stageWidth/1.20)/stringAr.length)/offset;
                         //offset = 2.0;//test
 
 

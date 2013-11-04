@@ -60,6 +60,7 @@ class CoordSystem extends Sprite {
 		var xVertical:Bool = (xLabelVertical==null ? false : xLabelVertical);
 		var xoff:Bool = (offset==null ? false : offset);
 		var xoffset:Float = (xOffset==null ? 0 : xOffset);
+		trace(xLabelStrings);
 		
 		var numLinesY:Int = Std.int(height/ySpace);
 		yHeight = ySpace;
@@ -93,11 +94,15 @@ class CoordSystem extends Sprite {
 
 		if(xoff){
 			x -= xoffset;
+			trace(xoffset);
+			trace(xSpace);
 
 		}
 
 		labelIndex=0;
 		addXcoordinate(x);
+
+		trace(x);
 		for(j in 0...numLinesX) { //Draw the X axis.
 			
 			x += xSpace;
@@ -147,8 +152,11 @@ class CoordSystem extends Sprite {
 		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
 
 		this.addChild(tf);
-		tf.width = (tf.textWidth*1.1) + 5;
+		tf.width = (tf.textWidth*1.1)+2;
 		tf.height = (tf.textHeight * 1.1);
+
+		tf.x = x - (tf.width / 2);
+			tf.y = y - (tf.height/2);
 		if(between) {
 			tf.x = x - (tf.width + 3);
 			tf.y = y - (tf.height/2);
@@ -210,14 +218,9 @@ class CoordSystem extends Sprite {
 		public function drawBar(pointXfrom:OnOffData, pointYfrom:Float,pointYto:Float,color:Int){
 
 			
-			//trimDateArrays(Date.now());//update array position
-
-			//trace("Start:",Std.string(convertTime(pointXfrom.getStart())));
-			//trace("Stop",Std.string(convertTime(pointXfrom.getStop())));
-			
 			this.graphics.lineStyle(1, 0x000000);
 			this.graphics.beginFill(color);
-			this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), 			yHeight-10.0);
+			this.graphics.drawRect(convertTime(pointXfrom.getStart())+1.5,pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), 			yHeight-10.0);
 			//this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop()), yHeight-10.0);
 
 			this.graphics.endFill();
@@ -312,7 +315,6 @@ class CoordSystem extends Sprite {
 					var temptimeString = Std.string(cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes());
 					//trace(cordNameArray[i]);
 						if(temptimeString == timeString){
-							trace("FOUNd");
 							return cordCordArray[i];
 						}
 
@@ -427,8 +429,7 @@ class CoordSystem extends Sprite {
 		var hour = date.getHours();
 		var minute = date.getMinutes();
 
-		trace(hour);
-		trace(minute);
+		
 
 		var xSpace = (xWidth/96);
 		cordNameArray = new Array<Date>();
@@ -508,8 +509,6 @@ class CoordSystem extends Sprite {
 
 		}
 
-            			
-		trace(cordNameArray);
 
 
 		var cordCounter = 0.0;
