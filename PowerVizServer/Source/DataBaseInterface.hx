@@ -315,11 +315,11 @@ class DataBaseInterface {
 		return result;
 	}
 	
-	//Returns the usage data of all outlets today.
+	//Returns the usage data of this outlet in the last 24 hours.
 	public static function getOutletHistoryAllToday(houseId:Int, now:Date) : Map<Int, Array<TimeWatts> > {
 		
-		var from:Date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0);
-		var to:Date = Date.fromTime(from.getTime() + 24*60*60*1000); 
+		var to = now;
+		var from = DateTools.delta(to, -DateTools.days(1));
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
