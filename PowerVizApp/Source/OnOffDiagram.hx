@@ -69,7 +69,7 @@ class OnOffDiagram extends Sprite{
 		
 		mTitle = new TextField();
 		mTitle.mouseEnabled=false;
-		mTitle.text = "Forbrug i dag";
+		mTitle.text = "Tænd/sluk i dag";
 		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 		mTitle.selectable = false;
 		mBack.addChild(mTitle);
@@ -91,9 +91,11 @@ class OnOffDiagram extends Sprite{
 	
 	private function updateData() {
 		var data = DataInterface.instance.getOnOffData();
+		mtimeArray = generateTimeArrayandCalcOffset();
 		
 		handleCategoryData(data);
 		drawDiagram();
+		mBack.addChild(mTitle);
 		mBack.addChild(monOffBar);
 		this.addChild(mBack);
 	}
@@ -115,7 +117,7 @@ class OnOffDiagram extends Sprite{
 		//set textlabel position
 		mTitle.width = mTitle.textWidth+2;	
 		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
-		mTitle.y = 20;
+		mTitle.y = 0;
 		
 
 		var testSprite = new Sprite();
@@ -124,14 +126,14 @@ class OnOffDiagram extends Sprite{
 		//add the bars
 		var outletCounter = 0;
 
-		for(i in 0...3){
+		for(i in 0...mMapArray.length){
 			
 			var outArray = mMapArray[i];
 
 
 
 			
-			for(count in 0...1){
+			for(count in 0...outArray.length){
 				fetchOnOffData(mNewOutletArray[outArray[count]],mColorArray[i]);
 				
 			}
@@ -163,6 +165,8 @@ class OnOffDiagram extends Sprite{
 		mCoordSystem.y = (mBack.height/1.25)+50;
 		mLegend.x =mCoordSystem.x;
 		mLegend.y = mCoordSystem.y + mLegend.height + 10;
+		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
+        mTitle.y = 0;
 		
 	}
 	
@@ -268,14 +272,13 @@ class OnOffDiagram extends Sprite{
 		var count2 = 1;
 		var lengthofArray =outletData.length;
 		var incId = id;
-
-		trace(".........");
-
+		trace("......");
 			trace(outletData);
-
-		trace(".........");
+		trace("......");
+		
 
 		for(i in 0...lengthofArray){
+
 
 			mCoordSystem.drawBar(outletData[i], mCoordSystem.getYcoordinate(incId+1),mCoordSystem.getYcoordinate(incId+1),color);
 
@@ -434,21 +437,21 @@ class OnOffDiagram extends Sprite{
                     
                         if(date.getMinutes() >= 0 && date.getMinutes() < 15){
                            minutesString = "00"; 
-                           offset= 4.0;
+                           offset= 0.0;
                         }
                         else if(date.getMinutes() >= 15 && date.getMinutes() < 30){
                             minutesString = "15";
-                            offset= 3.0;
+                            offset= 0.25;
                         }
                         else if(date.getMinutes() >= 30 && date.getMinutes() < 45){
                             minutesString = "30"; 
-                            offset= 2.0;     
+                            offset= 0.50;     
                         }
                         else if(date.getMinutes() >= 45 && date.getMinutes() < 59){
                             minutesString = "45"; 
-                            offset= 1.0;
+                            offset= 0.75;
                         }
-                        mOffset = ((Lib.stage.stageWidth/1.15)/stringAr.length)/offset;
+                        mOffset = ((Lib.stage.stageWidth/1.20)/stringAr.length)*offset;
                         //offset = 2.0;//test
 
 
