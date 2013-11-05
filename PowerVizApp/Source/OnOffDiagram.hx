@@ -272,11 +272,13 @@ class OnOffDiagram extends Sprite{
 		var count2 = 1;
 		var lengthofArray =outletData.length;
 		var incId = id;
-
+		trace("......");
+			trace(outletData);
+		trace("......");
 	
 
 		for(i in 0...lengthofArray){
-			trace(outletData[i]);
+
 
 			mCoordSystem.drawBar(outletData[i], mCoordSystem.getYcoordinate(incId+1),mCoordSystem.getYcoordinate(incId+1),color);
 
