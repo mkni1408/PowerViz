@@ -434,21 +434,21 @@ class OnOffDiagram extends Sprite{
                     
                         if(date.getMinutes() >= 0 && date.getMinutes() < 15){
                            minutesString = "00"; 
-                           offset= 4.0;
+                           offset= 0.0;
                         }
                         else if(date.getMinutes() >= 15 && date.getMinutes() < 30){
                             minutesString = "15";
-                            offset= 3.0;
+                            offset= 0.25;
                         }
                         else if(date.getMinutes() >= 30 && date.getMinutes() < 45){
                             minutesString = "30"; 
-                            offset= 2.0;     
+                            offset= 0.50;     
                         }
                         else if(date.getMinutes() >= 45 && date.getMinutes() < 59){
                             minutesString = "45"; 
-                            offset= 1.0;
+                            offset= 0.75;
                         }
-                        mOffset = ((Lib.stage.stageWidth/1.20)/stringAr.length)/offset;
+                        mOffset = ((Lib.stage.stageWidth/1.20)/stringAr.length)*offset;
                         //offset = 2.0;//test
 
 

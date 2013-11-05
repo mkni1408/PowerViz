@@ -60,7 +60,7 @@ class CoordSystem extends Sprite {
 		var xVertical:Bool = (xLabelVertical==null ? false : xLabelVertical);
 		var xoff:Bool = (offset==null ? false : offset);
 		var xoffset:Float = (xOffset==null ? 0 : xOffset);
-		trace(xLabelStrings);
+		
 		
 		var numLinesY:Int = Std.int(height/ySpace);
 		yHeight = ySpace;
@@ -393,20 +393,9 @@ class CoordSystem extends Sprite {
 		public function drawVerticalBar(colors:Array<Int>, height:Array<Float>,conversionType:Int) {
 
 		var barWidth:Float = xHeight;
-		var totalpoints = yHeight/100;
+		var totalpoints = yHeight/conversionType;
 
-		if(conversionType == 0){
-
-		 totalpoints = (yHeight/100);
-		}		
-		if(conversionType == 1){
-
-		 totalpoints = (yHeight/1000);
-		}
-		if(conversionType == 2){
-
-		 totalpoints = (yHeight/10000);
-		}
+		
 		
 		
 		var i:Int = 0;

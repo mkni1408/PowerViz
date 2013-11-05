@@ -532,7 +532,17 @@ class ArealScreen extends Sprite {
                     mUsageArray = ["50W ", "100W ", "150W ","200W ","250W ", "300W ","350W ", "400W ","450W ","500W "];
                     return 50;
                 }
-                else if(maxValue > 500 && maxValue <= 1000){
+                else if(maxValue > 500 && maxValue <= 600){
+
+                    mUsageArray = ["60W ", "120W ", "180W ","240W ","300W ", "360W ","420W ", "480W ","540W ","600W "];
+                    return 61;
+                }
+                else if(maxValue > 600 && maxValue <= 750){
+
+                    mUsageArray = ["75W ", "150W ", "225W ","300W ","375W ", "450W ","525W ", "600W ","675W ","750W "];
+                    return 75;
+                }
+                else if(maxValue > 750 && maxValue <= 1000){
 
                     mUsageArray = ["100W ", "200W ", "300W ","400W ","500W ", "600W ","700W ", "800W ","900W ","1000W "];
                     return 100;
@@ -632,21 +642,22 @@ class ArealScreen extends Sprite {
                     case 1://day
                         if(date.getMinutes() >= 0 && date.getMinutes() < 15){
                            minutesString = "00"; 
-                           offset= 4.0;
+                           offset= 0.0;
                         }
                         else if(date.getMinutes() >= 15 && date.getMinutes() < 30){
                             minutesString = "15";
-                            offset= 3.0;
+                            offset= 0.25;
                         }
                         else if(date.getMinutes() >= 30 && date.getMinutes() < 45){
                             minutesString = "30"; 
-                            offset= 2.0;     
+                            offset= 0.50;     
                         }
                         else if(date.getMinutes() >= 45 && date.getMinutes() < 59){
                             minutesString = "45"; 
-                            offset= 1.0;
+                            offset= 0.75;
                         }
-                        mOffset = ((Lib.stage.stageWidth/1.15)/stringAr.length)/offset;
+                        //should be the length of the coordsystem
+                        mOffset = ((Lib.stage.stageWidth/1.15)/stringAr.length)*offset;
                         //offset = 2.0;//test
 
 

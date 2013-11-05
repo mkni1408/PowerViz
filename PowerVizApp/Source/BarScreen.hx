@@ -27,6 +27,10 @@ class BarScreen extends Sprite {
 	private var mKwhArray : Array<String>;
 	private var mRoomArray : Array<String>;
 	private var mColorArray : Array <Int>;
+	private var mWattMax: Float = 0;
+	private var musageAA: Array<Float>;
+	private var mBarScale: Int;
+
 	//is used to determine which coordinate system type it is e.g week, day, month
 	private var mViewMode:Int;
 	private var mViewModes:Array<Int>;
@@ -47,6 +51,8 @@ class BarScreen extends Sprite {
 		mKwhArray = new Array<String>();
 		mRoomArray = new Array<String>();
 		mColorArray = new Array<Int>();
+		musageAA = new Array<Float>();
+		mBarScale = 0;
 		mViewModes = [VIEWMODE_DAY,VIEWMODE_WEEK,VIEWMODE_MONTH];
 		
 		mNewIDArray = DataInterface.instance.getAllOutletNames();
@@ -75,8 +81,8 @@ class BarScreen extends Sprite {
 		
 		mTimeButton = new TimeChangeButton(mViewModes,mViewMode,onButtonPush); //Day, week, month.
 		mBack.addChild(mTimeButton);
-		layout();
-		fillWithData();
+		
+		redrawEverything();
 
 		this.addChild(mBack);
 
@@ -117,35 +123,46 @@ class BarScreen extends Sprite {
         
         var outlets = DataInterface.instance.getAllOutlets();
         var colors = new Array<Int>();
-        var usageAA = new Array<Float>();
+        musageAA = new Array<Float>();
+        mWattMax = 0;
 
         switch(mViewMode) {
             case 0:
             	for(t in outlets) {
-            	    usageAA.push(DataInterface.instance.getOutletLastHourTotal(t));
+            	    musageAA.push(DataInterface.instance.getOutletLastHourTotal(t));
             	    colors.push(DataInterface.instance.getOutletColor(t));
+
         		}
             case 1:
             	for(t in outlets) {
-            	    usageAA.push(DataInterface.instance.getOutletLastDayTotal(t));
+            	    musageAA.push(DataInterface.instance.getOutletLastDayTotal(t));
             	    colors.push(DataInterface.instance.getOutletColor(t));
         		}
             case 2:
             	for(t in outlets) {
-            	    usageAA.push(DataInterface.instance.getOutletLastWeekTotal(t));
+            	    musageAA.push(DataInterface.instance.getOutletLastWeekTotal(t));
             	    colors.push(DataInterface.instance.getOutletColor(t));
        			 }
             default:
 				for(t in outlets) {
-                	usageAA.push(DataInterface.instance.getOutletLastHourTotal(t));
+                	musageAA.push(DataInterface.instance.getOutletLastHourTotal(t));
                 	colors.push(DataInterface.instance.getOutletColor(t));
         		}
   	  	
 			}
-			
-		
 
-		mCoordSys.drawVerticalBar(colors, usageAA,mViewMode);
+			for(wattMeasure in musageAA){
+						if(wattMeasure > mWattMax){
+							trace(wattMeasure);
+            	    		mWattMax = wattMeasure;
+            	    	}
+           	}
+
+           	trace("Wattmeasure max", mWattMax);
+			
+			mColorArray = colors;
+
+		
 		
 	
 
@@ -184,27 +201,73 @@ class BarScreen extends Sprite {
 
 		if(mViewMode == 0){
 			//hour
-			mKwhArray = ["100Wt", "200Wt", "300Wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
 			mTitle.text = "Forbrug denne time";
 
 		}
 		if(mViewMode == 1){
 			//day
-			mKwhArray = ["1kWt  ", "2kWt  ", "3kWt  ","4kWt  ","5kWt  ", "6kWt  ","7kWt  ", "8kWt  ","9kWt  ","10kWt  "];
 			mTitle.text = "Forbrug i dag";
 
 		}
 		if(mViewMode == 2){
 			///week
-			mKwhArray = ["10kWt ", "20kWt ", "30kWt ","40kWt ","50kWt ", "60kWt ","70kWt ", "80kWt ","90kWt ","100kWt "];
 			mTitle.text = "Forbrug denne uge";
 
 		}
+
+
+				
+
 		mTimeButton.changeButtonState(mViewMode);
 		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 
-		layout();
+		
 		fillWithData();
+
+
+		if(mWattMax <= 100){
+
+                    mKwhArray = ["10Wt  ", "20Wt  ", "30Wt  ","40Wt  ","50Wt  ", "60Wt  ","70Wt  ", "80Wt  ","90Wt  ","100Wt "];
+                    mBarScale = 10;
+                }
+                else if(mWattMax > 100 && mWattMax <= 500){
+
+                    mKwhArray = ["50Wt  ", "100Wt ", "150Wt ","200Wt ","250Wt ", "300Wt ","350Wt ", "400Wt","450Wt ","500Wt "];
+                    mBarScale =  50;
+                }
+                else if(mWattMax > 500 && mWattMax <= 1000){
+
+                    mKwhArray = ["100Wt ", "200Wt ", "300Wt ","400Wt ","500Wt ", "600Wt ","700Wt ", "800Wt ","900Wt ","1000Wt"];
+                    mBarScale =  100;
+                }
+                else if(mWattMax > 1000 && mWattMax <= 2000){
+
+                    mKwhArray = ["200Wt ", "400Wt ", "600Wt ","800Wt ","1000Wt", "1200Wt","1400Wt ", "1600Wt","1800Wt","2000Wt"];
+                    mBarScale =  200;
+                }
+                else if(mWattMax > 2000 && mWattMax <= 3000){
+
+                    mKwhArray = ["0,3kWt ", "0,6kWt ", "0,9kWt ","1,2kWt ","1,5kWt ", "1,8kWt ","2,1kWt ", "2,4kWt","2,7kWt","3kWt"];
+                    mBarScale =  300;
+                }
+                else if(mWattMax > 2000 && mWattMax <= 4000){
+
+                    mKwhArray = ["0,4Wt ", "0,8Wt ", "1,2kWt","1,6kWt","2kWt  ", "2,4kWt ","2,8kWt", "3,2kWt","3,6kWt","4kWt  "];
+                    mBarScale =  400;
+                }
+                else if(mWattMax > 2000 && mWattMax <= 20000){
+
+                    mKwhArray = ["2kWt  ", "4kWt  ", "6kWt  ","8kWt  ","10kWt  ", "12kWt  ","14kWt  ", "16kWt ","18kWt ","20kWt "];
+                    mBarScale =  2000;
+                }
+                else{//defaulter til denne her hvis forbruget overstiger 20kw(meget!)
+
+                    mKwhArray = ["4kWt ", "8kWt ", "12kWt ","16kWt ","20kWt ", "24kWt ","28kWt ", "32kWt ","36kWt ","40kWt "];
+                    mBarScale = 4000;
+                }
+
+		layout();
+		mCoordSys.drawVerticalBar(mColorArray, musageAA,mBarScale);
 	}
 
 }
