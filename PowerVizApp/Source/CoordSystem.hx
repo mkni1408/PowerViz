@@ -131,6 +131,8 @@ class CoordSystem extends Sprite {
 		this.mouseEnabled = false;	
 
 		generateCordArray(xWidth,xSpace);
+
+		trace(cordNameArray);
 	
 	}
 	
@@ -498,6 +500,9 @@ class CoordSystem extends Sprite {
 
 		}
 
+		var tmpAr = cordNameArray.splice(0,1);
+
+		cordNameArray = cordNameArray.concat(tmpAr);
 
 
 		var cordCounter = 0.0;

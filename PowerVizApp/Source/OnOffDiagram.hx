@@ -275,7 +275,7 @@ class OnOffDiagram extends Sprite{
 		trace("......");
 			trace(outletData);
 		trace("......");
-	
+		
 
 		for(i in 0...lengthofArray){
 
