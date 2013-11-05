@@ -40,7 +40,11 @@ class CurrentUsage extends Sprite{
 		graphics.drawRect(0,0,Lib.stage.stageWidth,Lib.stage.stageHeight);
 		graphics.endFill();
 		this.mouseEnabled = false;
-		this.mouseChildren = false;
+		this.powerOrigin.mouseEnabled = false;
+		this.powerOrigin.mouseChildren = false;
+		this.seismoGraph.mouseChildren = false;
+		this.seismoGraph.mouseEnabled = false;
+		//this.mouseChildren = false;
 
 
 	}

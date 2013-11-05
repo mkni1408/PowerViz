@@ -5,6 +5,7 @@ import flash.Lib;
 import flash.display.Bitmap;
 import flash.text.TextField;
 import openfl.Assets;
+import flash.events.MouseEvent;
 
 import SpeedometerArrow;
 import DataInterface;
@@ -46,6 +47,8 @@ class Speedometer extends Sprite{
 		
 		mSpeedometer.mouseEnabled = true; //This is set to true, to enable settings.
 		arrow.mouseEnabled = false;
+		
+		registerEvents();
 
 		mTimer = new PowerTimer(mTimerSetting);
 		mTimer.onTime = function() {
@@ -53,7 +56,13 @@ class Speedometer extends Sprite{
 		};
 		mTimer.start();
 
-
+	}
+	
+	//Registers all events that this class will handle.
+	private function registerEvents() {
+		mSpeedometer.addEventListener(MouseEvent.CLICK, function(event:MouseEvent) {
+				mSpeedometerSettings.showSettings();
+			});
 	}
 
 	private function centerGraphics(){
@@ -89,15 +98,12 @@ class Speedometer extends Sprite{
 
 		var wattMeasure:Float = DataInterface.instance.relativeUsage();
 		arrow.setValue(wattMeasure);
-
-
 	}
 
 	//draws the frame around the Sprite
 	private function drawFrame():Void{
 
 		graphics.lineStyle(4,0x000000);
-
 		graphics.drawRect(0, 0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
 
 	}
@@ -150,6 +156,7 @@ class SpeedometerSettings extends Sprite {
 	
 	//Show the settings menu thing.
 	public function showSettings() {
+		trace("Showing Speedometer settings");
 		this.visible = true;
 	}
 	

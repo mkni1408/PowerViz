@@ -238,11 +238,9 @@ class CoordSystem extends Sprite {
 
 			this.graphics.lineTo(xWidth, pointY);
 
-			
-
-			
-
 		}
+	
+	
 		public function generateSeperatorTextFields(y:Int,ybef:Int,roomLabel:String):Void{
 			
 			var yPoint = getYcoordinate(y); 
@@ -253,6 +251,8 @@ class CoordSystem extends Sprite {
 			addTextField(xWidth+100, yPointbef+half, roomLabel, true, false);
 
 		}
+		
+		
 		//update array positions
 		private function trimDateArrays(date:Date):Void{
 
@@ -369,9 +369,6 @@ class CoordSystem extends Sprite {
 			tf.height = tf.textHeight+3;
 			tf.x = xCor+10;
 			tf.y = yCor-5;
-
-
-
 
 
 			xCor=(xCor+legendSpace)-legendWidth;
