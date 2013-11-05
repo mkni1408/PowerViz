@@ -276,6 +276,7 @@ class OnOffDiagram extends Sprite{
 	
 
 		for(i in 0...lengthofArray){
+			trace(outletData[i]);
 
 			mCoordSystem.drawBar(outletData[i], mCoordSystem.getYcoordinate(incId+1),mCoordSystem.getYcoordinate(incId+1),color);
 

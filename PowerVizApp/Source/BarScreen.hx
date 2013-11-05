@@ -158,7 +158,6 @@ class BarScreen extends Sprite {
             	    	}
            	}
 
-           	trace("Wattmeasure max", mWattMax);
 			
 			mColorArray = colors;
 
@@ -172,7 +171,7 @@ class BarScreen extends Sprite {
 	//is Called when a button is pushed
 	private function onButtonPush(coordSystemType:Int):Void{
 
-		trace("Button", coordSystemType, " Clicked");
+		
 
 
 
@@ -265,7 +264,6 @@ class BarScreen extends Sprite {
                     mKwhArray = ["4kWt ", "8kWt ", "12kWt ","16kWt ","20kWt ", "24kWt ","28kWt ", "32kWt ","36kWt ","40kWt "];
                     mBarScale = 4000;
                 }
-                trace(mBarScale);
 		layout();
 		mCoordSys.drawVerticalBar(mColorArray, musageAA,mBarScale);
 	}
