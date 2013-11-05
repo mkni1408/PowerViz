@@ -395,7 +395,7 @@ class CoordSystem extends Sprite {
 		var barWidth:Float = xHeight;
 		var totalpoints = yHeight/conversionType;
 
-		
+		trace("barwidth:"+barWidth +" totalpoints"+totalpoints);
 		
 		
 		var i:Int = 0;

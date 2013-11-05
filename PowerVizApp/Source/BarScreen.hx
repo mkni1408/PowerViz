@@ -265,7 +265,7 @@ class BarScreen extends Sprite {
                     mKwhArray = ["4kWt ", "8kWt ", "12kWt ","16kWt ","20kWt ", "24kWt ","28kWt ", "32kWt ","36kWt ","40kWt "];
                     mBarScale = 4000;
                 }
-
+                trace(mBarScale);
 		layout();
 		mCoordSys.drawVerticalBar(mColorArray, musageAA,mBarScale);
 	}
