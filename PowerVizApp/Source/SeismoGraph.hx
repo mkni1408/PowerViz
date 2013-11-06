@@ -14,8 +14,8 @@ class SeismoGraph extends Sprite{
 	private var mwattMeasurementArray: Array<Int>;
 	private var mwhereIsThePowerFromArray: Array<Int>;
 	//remember that mMeasurmenthalfFactor should be exactly half of mMeasurmentFactor
-	private var mMeasurmentFactor = 10;
-	private var mMeasurmenthalfFactor = 5;
+	private var mMeasurmentFactor = 20;
+	private var mMeasurmenthalfFactor = 10;
 	private var mNumofFieldsWidthScreen:Float;
 	
 	private var mTimer:PowerTimer;
@@ -29,7 +29,7 @@ class SeismoGraph extends Sprite{
 
 		mSeismoGraph = new Sprite();
 
-		mNumofFieldsWidthScreen = Lib.stage.stageWidth/mMeasurmentFactor;
+		mNumofFieldsWidthScreen = Lib.stage.stageWidth/mMeasurmenthalfFactor;
 
 		redrawFrame();
 
@@ -102,10 +102,12 @@ class SeismoGraph extends Sprite{
 	public function redrawSeismoGraphCurve(){
 
 		//clear graphics to redraw seismograph
+		/*
 		graphics.clear();
 
 		redrawFrame();
 
+		
 		//draw horizontal line
 		graphics.lineStyle(2,0x000000);
 		graphics.moveTo(0,(Lib.stage.stageHeight/4)*3);
@@ -153,7 +155,85 @@ class SeismoGraph extends Sprite{
 		graphics.moveTo(xPosition,yPosition);
 		yPosition = yPosition+mwattMeasurementArray[i];
 
+		}*/
+		//trace(".......");
+		redrawCurve();
+
+	}
+
+	public function redrawCurve(){
+
+		//clear graphics to redraw seismograph
+		graphics.clear();
+
+		redrawFrame();
+
+		var commands = new Array<Int>();
+		var coords = new Array<Float>();
+		var origin = new Array<Int>();
+		var commandCommands = new Array<Array<Int>>();
+		var cordcordArray = new Array<Array<Float>>();
+
+		//draw horizontal line
+		//graphics.lineStyle(2,0x000000);
+		//graphics.moveTo(0,(Lib.stage.stageHeight/4)*3);
+		//graphics.lineTo(Lib.stage.stageWidth,(Lib.stage.stageHeight/4)*3);
+
+		var xPosition = (Lib.stage.stageWidth-2) - (((mwattMeasurementArray.length-1) * mMeasurmenthalfFactor));
+		var yPosition = (Lib.stage.stageHeight/4)*3;
+
+		var prevMeasure = 0;
+
+		for(wattmeasure in mwattMeasurementArray){
+
+			commands.push(1);
+			coords.push(xPosition);
+			coords.push(Lib.stage.stageHeight-4);
+
+			xPosition = xPosition-mMeasurmenthalfFactor;
+			
+			commands.push(2);
+			coords.push(xPosition);
+			coords.push(Lib.stage.stageHeight-4);
+
+			commands.push(2);
+			coords.push(xPosition);
+			coords.push(Lib.stage.stageHeight-prevMeasure);
+			
+			xPosition = xPosition+mMeasurmenthalfFactor;
+
+			commands.push(2);
+			coords.push(xPosition);
+			coords.push(Lib.stage.stageHeight-wattmeasure);
+
+			prevMeasure = wattmeasure;
+
+			commands.push(2);
+			coords.push(xPosition);
+			coords.push(Lib.stage.stageHeight-4);
+
+			xPosition = xPosition+mMeasurmenthalfFactor;
+
+			commandCommands.push(commands);
+			cordcordArray.push(coords);
+			
+
+			commands = new Array<Int>();
+			coords = new Array<Float>();
+
 		}
+
+		for(i in 0...commandCommands.length){
+
+			graphics.beginFill(mwhereIsThePowerFromArray[i]);//set the color 
+			graphics.lineStyle(0,mwhereIsThePowerFromArray[i]);
+    		graphics.drawPath(commandCommands[i], cordcordArray[i]); 
+
+
+		}
+
+		
+		
 
 	}
 
@@ -164,14 +244,26 @@ class SeismoGraph extends Sprite{
 	}
 	public function testDataInterfaceOrigin():Int{
 
+			var tmp = Std.random(2);
 
-		return Std.random(2);
+			if(tmp == 1)
+			{
+				//change color to green
+				return 0x000000;
+			}
+			else 
+			{
+				//change color to black
+				return 0x00FF00;
+			}
+
+		
 	}
 	//function that returns a peakheight 
 	//takes a float between 0-1 and calculates the peakheight
 	private function calculatePeakHeight(f:Float):Int{
 
-		var numPixels = (Lib.stage.stageHeight/4) - 10;
+		var numPixels = (Lib.stage.stageHeight/2)-10;
 
 		return Math.floor(numPixels * f);
 

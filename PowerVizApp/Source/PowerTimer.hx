@@ -1,32 +1,32 @@
 package;
 
-//import flash.utils.Timer;
-//import flash.events.TimerEvent;
+import flash.utils.Timer;
+import flash.events.TimerEvent;
 
 
 class PowerTimer {
 
-	//private var mTimer:Timer;
+	private var mTimer:Timer;
 
 	public function new(millisecs:Int) {
-	//	mTimer = new Timer(millisecs, 0);
-	//	mTimer.addEventListener(TimerEvent.TIMER, onTimerEvent);
+		mTimer = new Timer(millisecs, 0);
+		mTimer.addEventListener(TimerEvent.TIMER, onTimerEvent);
 	}
 	
 	public function start() {
-	//	mTimer.start();
+		mTimer.start();
 	}
 	
 	public function stop() {
-	//	mTimer.stop();
+		mTimer.stop();
 	}
 	
 	dynamic public function onTime() : Void {
 		trace("onTime not implemented. DO THAT!");
 	}
 	
-	//private function onTimerEvent(event:TimerEvent) {
-	//	onTime();
-	//}
+	private function onTimerEvent(event:TimerEvent) {
+		onTime();
+	}
 
 }

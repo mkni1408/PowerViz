@@ -132,7 +132,7 @@ class CoordSystem extends Sprite {
 
 		generateCordArray(xWidth,xSpace);
 
-		trace(cordNameArray);
+		
 	
 	}
 	
