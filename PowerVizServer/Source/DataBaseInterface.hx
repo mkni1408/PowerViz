@@ -1,3 +1,4 @@
+package;
 
 import sys.db.Types;
 
@@ -316,27 +317,27 @@ class DataBaseInterface {
 	}
 	
 	//Returns the usage data of this outlet in the last 24 hours.
-	public static function getOutletHistoryAllToday(houseId:Int, now:Date) : Map<Int, Array<TimeWatts> > {
+	public static function getOutletHistoryAllToday(houseId:Int) : Map<Int, Array<TimeWatts> > {
 		
-		var to = now;
+		var to = getNow();
 		var from = DateTools.delta(to, -(DateTools.hours(23)+DateTools.minutes(45)));
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
 	public static function getOutletHistoryAllHour(houseId:Int) : Map<Int, Array<TimeWatts> > {
-		var to:Date = Date.now();
+		var to:Date = getNow();
 		var from = DateTools.delta(to, -DateTools.hours(1));
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
 	public static function getOutletHistoryAllDay(houseId:Int) : Map<Int, Array<TimeWatts> > {
-		var to:Date = Date.now();
+		var to:Date = getNow();
 		var from = new Date(to.getFullYear(), to.getMonth(), to.getDate(), 0,0,0);
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
 	public static function getOutletHistoryAllWeek(houseId:Int) : Map<Int, Array<TimeWatts> >{
-		var to:Date = Date.now();
+		var to:Date = getNow();
 		var from = DateTools.delta(to, -DateTools.days(7));
 		return getOutletHistoryAll(houseId, from, to);
 	}
@@ -359,7 +360,7 @@ class DataBaseInterface {
 		return r;
 	}
 	
-	
+	/*
 	public static function getCurrentPowerSource() : String {
 		var now = Date.now();
 		var source:PowerSource = null;
@@ -369,6 +370,19 @@ class DataBaseInterface {
 		if(source==null)
 			return "coal";
 		return source.source;
+	}*/
+	
+	
+	public static function getPowerSourceGoodness() : Float {
+		var now = getNow();
+		var element = PowerSource.manager.select($time<=now, {orderBy:-time});
+		if(element==null) {
+			trace("Error getting power source thing. I will now officially fuck up");
+			return 0.0;
+		}
+		
+		//TODO: Finish this thing. Calculate the balance.
+		
 	}
 	
 	

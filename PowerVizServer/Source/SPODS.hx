@@ -77,19 +77,16 @@ class HouseRooms extends sys.db.Object {
 }
 
 
-//Different power sources.
-enum Source {
-	coal;
-	wind;
-	water;
-	sun;
-	nuclear;
-}
 
 @:id(time)
 class PowerSource extends sys.db.Object {
-	public var time : SDateTime;
-	public var source : SString<16>; //In practice this is an enumeration. See the enum above.
+	public var time : SDateTime; //Time of powersource change.
+	//Following variables describe the amount of different power sources. Used for calculating a weight between "good" and "bad":
+	public var wind : SFloat;
+	public var water : SFloat;
+	public var coal : SFloat;
+	public var nuclear : SFloat;
+	public var sun : SFloat;
 }
 
 
