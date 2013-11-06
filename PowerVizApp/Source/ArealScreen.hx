@@ -101,7 +101,6 @@ class ArealScreen extends Sprite {
 
         private function onTime() {
             redrawEverything();
-            trace("Redrawing ArealScreen");
         }
         
         private function addChildrenToBack() {        
@@ -676,7 +675,7 @@ class ArealScreen extends Sprite {
                         
 
                     case 2://3 days
-                        offset = arrEl+1;
+                        offset = date.getHours();
 
                         var dateCount = date.getDay();
 
@@ -686,12 +685,13 @@ class ArealScreen extends Sprite {
                             tempArray.push(getWeekDay(dateCount));
                             dateCount -= 1;
                             if(dateCount == -1){
-                                dateCount = 6;
+                                dateCount = 3;
 
                             }
 
                         }
                         tempArray.reverse();
+
                         mOffset = (((Lib.stage.stageWidth/1.15)/tempArray.length)/24)*offset;
 
 

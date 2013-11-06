@@ -153,7 +153,6 @@ class BarScreen extends Sprite {
 
 			for(wattMeasure in musageAA){
 						if(wattMeasure > mWattMax){
-							trace(wattMeasure);
             	    		mWattMax = wattMeasure;
             	    	}
            	}

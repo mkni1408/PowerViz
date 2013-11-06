@@ -175,7 +175,7 @@ class DataInterface {
             mTimerHour.onTime = onTimerHour;
             mTimerHour.start();
 
-            mTimerDay = new PowerTimer(dayInterval); //Once a day.
+            mTimerDay = new PowerTimer(quarterInterval); //Once a day.
             mTimerDay.onTime = onTimerDay;
             mTimerDay.start();
 
@@ -186,39 +186,43 @@ class DataInterface {
         
         //Get data to start with.
         private function getDataOnCreation() {
-            trace("Getting data from server....");
+            //trace("Getting data from server....");
             houseDescriptor = getHouseDescriptor(); //Get the house layout.
 
             //Call the timers to get data to start with:
             onTimerNow();
-            Sys.sleep(0.5);
+            Sys.sleep(1.0);
             onTimerQuarter();
-            Sys.sleep(0.5);
+            Sys.sleep(1.0);
             onTimerHour();
-            Sys.sleep(0.5);
+            Sys.sleep(1.0);
             onTimerDay();
-            Sys.sleep(0.5);
+            Sys.sleep(1.0);
             onTimerWeek();
             trace("More or less done getting data.");
         }
         
         
         private function onTimerNow() : Void {  
+            trace("called1");
         	  
                 mCnx.Api.getCurrentLoadAll.call([Config.instance.houseId], onGetCurrentLoadAll);
         }
         
         
         private function onTimerQuarter() : Void {
+            trace("called2");
                 mCnx.Api.getOutletHistoryLastQuarter.call([Config.instance.houseId], onGetOutletHistoryLastQuarter);
                 mCnx.Api.getRelativeMax.call([Config.instance.houseId], onGetRelativeMax);
         }
         
         private function onTimerHour() : Void {
+                trace("called3");
                 mCnx.Api.getOutletHistoryAllHour.call([Config.instance.houseId], onGetOutletHistoryAllHour);
         }
         
         private function onTimerDay() : Void {
+            trace("called4");
                 mCnx.Api.getOutletHistoryAllToday.call([Config.instance.houseId], onGetOutletHistoryAllDay);
         }
         
@@ -232,6 +236,7 @@ class DataInterface {
         //****************************************************
         
         private function onGetCurrentLoadAll(data:Dynamic) : Void {
+                trace("recieved");
                 mOutletDataNow = data;
                 mOutletDataNowTotal = 0;
                 for(w in mOutletDataNow)
@@ -247,18 +252,23 @@ class DataInterface {
         }
         
         private function onGetOutletHistoryLastQuarter(data:Dynamic) : Void {
+            trace("recieved2");
                 mOutletDataQuarter = data;
+
                 mOutletDataQuarterTotal = 0;
                 for(w in mOutletDataQuarter)
                         mOutletDataQuarterTotal += w;
         }
         
         private function onGetOutletHistoryAllHour(data:Dynamic) : Void {
+
                 onGetOutletHistory(data, "hour");
         }
         
         private function onGetOutletHistoryAllDay(data:Dynamic) : Void {
+                trace("Outlethistory updated");
                 onGetOutletHistory(data, "day");
+                
         }
         
         private function onGetOutletHistoryAllWeek(data:Dynamic) : Void {
@@ -267,8 +277,8 @@ class DataInterface {
         
         private function onGetOutletHistory(data:Dynamic, timespan:String) {
         
-        		trace("onGetOutletHistoryData (" + Std.string(Date.now())+"): " + timespan);
-        
+        		//trace("onGetOutletHistoryData (" + Std.string(Date.now())+"): " + timespan);
+                
                 var dest:Map<Int, Array<TimeWatts>> = data;
                 var accumOutlet:Map<Int, Float>;
                 var accum:Float=0;
@@ -290,7 +300,7 @@ class DataInterface {
                 }
                 
                 if(timespan == "hour")
-                	trace("Data: " + dest);
+                	//trace("Data: " + dest);
                 
                 accum = 0;
                 for(w in accumOutlet)

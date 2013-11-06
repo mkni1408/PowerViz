@@ -203,7 +203,7 @@ class SwipeMill {
 		
 		
 		if(to != mStartScreenPosi) {
-			trace(mScreenPos);
+			//trace(mScreenPos);
 			onScreenChange(Std.int(to));
 		}
 		
@@ -211,7 +211,7 @@ class SwipeMill {
 	
 	/*Called when the tween effect ends. Purpose unknown.*/
 	private static function onMakeScreenFitDone() {
-		trace("onMakeScreenFitDone() - " + mScreenPos);
+		//trace("onMakeScreenFitDone() - " + mScreenPos);
 	}
 	
 	private static function setArrowsVisibility() {
@@ -427,13 +427,13 @@ class SwipeDots extends Sprite {
 	}
 	
 	public function showDots() {
-		trace("showDots");
+		//trace("showDots");
 		this.visible=true;
 		Actuate.apply(this, {alpha:1});
 	}
 	
 	public function hideDots() {
-		trace("hideDots");
+		//trace("hideDots");
 		Actuate.tween(this, 2, {alpha:0}, false).delay(1);
 	}
 	

@@ -100,7 +100,7 @@ class CoordSystem extends Sprite {
 		labelIndex=0;
 		addXcoordinate(x);
 
-		trace(x);
+		
 		for(j in 0...numLinesX) { //Draw the X axis.
 			
 			x += xSpace;
