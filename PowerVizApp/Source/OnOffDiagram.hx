@@ -60,7 +60,7 @@ class OnOffDiagram extends Sprite{
 		mColorArray = new Array<Int>();
 		mLegend = new Legend();
 
-		mtimeArray = generateTimeArrayandCalcOffset();
+		//mtimeArray = generateTimeArrayandCalcOffset();
 
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF, 0);
@@ -91,9 +91,10 @@ class OnOffDiagram extends Sprite{
 	
 	private function updateData() {
 		var data = DataInterface.instance.getOnOffData();
-		mtimeArray = generateTimeArrayandCalcOffset();
+		
 		
 		handleCategoryData(data);
+		mtimeArray = generateTimeArrayandCalcOffset();
 		drawDiagram();
 		mBack.addChild(mTitle);
 		mBack.addChild(monOffBar);
@@ -272,9 +273,9 @@ class OnOffDiagram extends Sprite{
 		var count2 = 1;
 		var lengthofArray =outletData.length;
 		var incId = id;
-		trace("......");
+		/*trace("......");
 			trace(outletData);
-		trace("......");
+		trace("......");*/
 		
 
 		for(i in 0...lengthofArray){

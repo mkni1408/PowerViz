@@ -414,7 +414,13 @@ class DataInterface {
                 var houseId=Config.instance.houseId;
                 
                 //var usageToday:Map<Int, Array<{time:Date, watts:Float}> > = getUsageToday();
-                var usageToday = mOutletDataDayTimed;
+                var usageToday = new Map<Int, Array<TimeWatts> >();
+
+                usageToday = mOutletDataDayTimed;
+
+                trace(usageToday);
+
+
                 
                 var onOffMap = new Map<Int, Array<OnOffData> >();
                 var start:Date=null;
@@ -468,7 +474,7 @@ class DataInterface {
                                                                 room.roomColor, outlet.outletColor));
                         }
                 }
-        
+                //trace("Usage today:",result);
                 return result;
         }
         

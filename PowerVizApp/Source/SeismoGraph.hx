@@ -156,7 +156,7 @@ class SeismoGraph extends Sprite{
 		yPosition = yPosition+mwattMeasurementArray[i];
 
 		}*/
-		trace(".......");
+		//trace(".......");
 		redrawCurve();
 
 	}
