@@ -1,13 +1,13 @@
 package;
 
 import haxe.remoting.HttpAsyncConnection;
-
-import flash.utils.Timer;
-import flash.events.TimerEvent;
+import motion.Actuate;
 
 import Outlet;
 import OnOffData;
 import Config;
+
+import PowerTimer;
 
 typedef TimeWatts = {time:Date, watts:Float}
 typedef ArealDataStruct = {outletIds:Array<Int>, watts:Map<Int, Array<Float>>, colors:Map<Int,Int>}
@@ -58,13 +58,14 @@ class DataInterface {
         }
         
         private var mCnx : HttpAsyncConnection; //Remoting connection used for communicating with the server. 
+        private var mUrl : String;
         
         //Timers:
-        private var mTimerNow : Timer; //Timer used to get the "now" usage data. 
-        private var mTimerQuarter : Timer; //Timer used to get data every 15 minutes.
-        private var mTimerHour : Timer; //Timer to get data every hour.
-        private var mTimerDay : Timer; //Timer to get data once a day.
-        private var mTimerWeek : Timer;
+        private var mTimerNow : PowerTimer; //Timer used to get the "now" usage data. 
+        private var mTimerQuarter : PowerTimer; //Timer used to get data every 15 minutes.
+        private var mTimerHour : PowerTimer; //Timer to get data every hour.
+        private var mTimerDay : PowerTimer; //Timer to get data once a day.
+        private var mTimerWeek : PowerTimer;
         
         //Layout data:
         public var houseDescriptor(default,null) : HouseDescriptor; //All data describing the house and its outlets.
@@ -96,14 +97,17 @@ class DataInterface {
         private var mOutletDataWeekTimed : Map<Int, Array<TimeWatts> >; //Usage for this week, timed in 15 minute intervals.
 
 
+		//Operation timer: Used for doing operations that have failed once, but should be attempted again:
+		
         
         private function new() {
         
             #if production
-                    this.connect("http://78.47.92.222/pvs/"); //Connect to production version.
+                    mUrl = "http://78.47.92.222/pvs/"; //Connect to production version.
             #else
-                    this.connect("http://78.47.92.222/pvsdev/"); //Connect to development version.
+                    mUrl = "http://78.47.92.222/pvsdev/"; //Connect to development version.
             #end 
+            connect();
             constructUsageDataContainers();
             getDataOnCreation();
             initTimers();
@@ -131,16 +135,16 @@ class DataInterface {
         }
         
         //Connects to the server, setting up the remoting system.
-        public function connect(url:String) {
-            mCnx = HttpAsyncConnection.urlConnect(url);
+        public function connect()  {
+            mCnx = HttpAsyncConnection.urlConnect(mUrl);
             mCnx.setErrorHandler(onError);
         }
         
         //Called when a connection or server error occurs.
         private function onError(e:String) {
             Sys.println("Connection error: " + e);
-            //TODO: We should try to reconnect somehow...
         }
+       
         
         //**************************************************
         // Functions for fetching the data from the server:
@@ -159,24 +163,24 @@ class DataInterface {
             var dayInterval = hourInterval * 24;
             var weekInterval = dayInterval * 7;
 
-            mTimerNow = new Timer(nowInterval, 0); //Every 3 secs.
-            mTimerNow.addEventListener(TimerEvent.TIMER, onTimerNow);
+            mTimerNow = new PowerTimer(nowInterval); //Every 3 secs.
+            mTimerNow.onTime = onTimerNow;
             mTimerNow.start();
 
-            mTimerQuarter = new Timer(quarterInterval, 0); //Every 15 minutes.
-            mTimerQuarter.addEventListener(TimerEvent.TIMER, onTimerQuarter);
+            mTimerQuarter = new PowerTimer(quarterInterval); //Every 15 minutes.
+            mTimerQuarter.onTime = onTimerQuarter;
             mTimerQuarter.start();
 
-            mTimerHour = new Timer(hourInterval, 0); //Every hour.
-            mTimerHour.addEventListener(TimerEvent.TIMER, onTimerHour);
+            mTimerHour = new PowerTimer(hourInterval); //Every hour.
+            mTimerHour.onTime = onTimerHour;
             mTimerHour.start();
 
-            mTimerDay = new Timer(dayInterval, 0); //Once a day.
-            mTimerDay.addEventListener(TimerEvent.TIMER, onTimerDay);
+            mTimerDay = new PowerTimer(dayInterval); //Once a day.
+            mTimerDay.onTime = onTimerDay;
             mTimerDay.start();
 
-            mTimerWeek = new Timer(weekInterval); //Once a week.
-            mTimerWeek.addEventListener(TimerEvent.TIMER, onTimerWeek);
+            mTimerWeek = new PowerTimer(weekInterval); //Once a week.
+            mTimerWeek.onTime = onTimerWeek;
             mTimerWeek.start();
         }
         
@@ -186,34 +190,39 @@ class DataInterface {
             houseDescriptor = getHouseDescriptor(); //Get the house layout.
 
             //Call the timers to get data to start with:
-            onTimerNow(null);
-            onTimerQuarter(null);
-            onTimerHour(null);
-            onTimerDay(null);
-            onTimerWeek(null);
+            onTimerNow();
+            Sys.sleep(0.5);
+            onTimerQuarter();
+            Sys.sleep(0.5);
+            onTimerHour();
+            Sys.sleep(0.5);
+            onTimerDay();
+            Sys.sleep(0.5);
+            onTimerWeek();
             trace("More or less done getting data.");
         }
         
         
-        private function onTimerNow(d:Dynamic) : Void {        
+        private function onTimerNow() : Void {  
+        	  
                 mCnx.Api.getCurrentLoadAll.call([Config.instance.houseId], onGetCurrentLoadAll);
         }
         
         
-        private function onTimerQuarter(event:Dynamic) : Void {
+        private function onTimerQuarter() : Void {
                 mCnx.Api.getOutletHistoryLastQuarter.call([Config.instance.houseId], onGetOutletHistoryLastQuarter);
                 mCnx.Api.getRelativeMax.call([Config.instance.houseId], onGetRelativeMax);
         }
         
-        private function onTimerHour(event:Dynamic) : Void {
+        private function onTimerHour() : Void {
                 mCnx.Api.getOutletHistoryAllHour.call([Config.instance.houseId], onGetOutletHistoryAllHour);
         }
         
-        private function onTimerDay(event:Dynamic) : Void {
+        private function onTimerDay() : Void {
                 mCnx.Api.getOutletHistoryAllToday.call([Config.instance.houseId], onGetOutletHistoryAllDay);
         }
         
-        private function onTimerWeek(event:Dynamic) : Void {
+        private function onTimerWeek() : Void {
                 mCnx.Api.getOutletHistoryAllWeek.call([Config.instance.houseId], onGetOutletHistoryAllWeek);
         }
         
@@ -258,6 +267,8 @@ class DataInterface {
         
         private function onGetOutletHistory(data:Dynamic, timespan:String) {
         
+        		trace("onGetOutletHistoryData (" + Std.string(Date.now())+"): " + timespan);
+        
                 var dest:Map<Int, Array<TimeWatts>> = data;
                 var accumOutlet:Map<Int, Float>;
                 var accum:Float=0;
@@ -278,8 +289,11 @@ class DataInterface {
                         accumOutlet.set(key, watts);
                 }
                 
+                if(timespan == "hour")
+                	trace("Data: " + dest);
+                
                 accum = 0;
-                for(w in mOutletDataDay)
+                for(w in accumOutlet)
                         accum += w;
                         
                 switch(timespan) {
@@ -417,62 +431,58 @@ class DataInterface {
                 var usageToday = new Map<Int, Array<TimeWatts> >();
 
                 usageToday = mOutletDataDayTimed;
-
-                trace(usageToday);
-
-
                 
                 var onOffMap = new Map<Int, Array<OnOffData> >();
                 var start:Date=null;
                 var stop:Date=null;
                 for(key in usageToday.keys()) {
 
-                        onOffMap.set(key, new Array<OnOffData>());
-                        start = null;
-                        stop = null;
+	                onOffMap.set(key, new Array<OnOffData>());
+	                start = null;
+	                stop = null;
+	                
+	                for(u in usageToday.get(key)) {
                         
-                        for(u in usageToday.get(key)) {
-                                
-                                if(u.watts>0) {
-                                        if(start==null)
-                                                start = Date.fromTime(u.time.getTime() - (15*60*1000));
-                                        stop = u.time;
-                                }
-                                else { //Watts<=0
-                                        if(start!=null && stop!=null) {
-                                            onOffMap.get(key).push(new OnOffData(start, stop));
-                                            start = null;
-                                            stop = null;
-                                            /*
-                                                if(stop.getDate()!=start.getDate())
-                                                        stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
-                                                if(stop.getTime() == start.getTime())
-                                                        stop = DateTools.delta(start, DateTools.minutes(15));
-                                                onOffMap.get(key).push(new OnOffData(start, stop));
-                                                start = null;
-                                                stop = null;
-                                            */
-                                        }
-                                }
-                                                                
+                        if(u.watts>0) {
+                                if(start==null)
+                                    start = Date.fromTime(u.time.getTime() - (15*60*1000));
+                                stop = u.time;
                         }
-                        
-                        if(start!=null && stop!=null) { //End of data, so close the block if open.
-                                //if(stop.getDate()!=start.getDate())
-                                //        stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
+                        else { //Watts<=0
+                            if(start!=null && stop!=null) {
                                 onOffMap.get(key).push(new OnOffData(start, stop));
+                                start = null;
+                                stop = null;
+                                /*
+                                    if(stop.getDate()!=start.getDate())
+                                            stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
+                                    if(stop.getTime() == start.getTime())
+                                            stop = DateTools.delta(start, DateTools.minutes(15));
+                                    onOffMap.get(key).push(new OnOffData(start, stop));
+                                    start = null;
+                                    stop = null;
+                                */
+                            }
                         }
+                                                        
+	                }
+                        
+                    if(start!=null && stop!=null) { //End of data, so close the block if open.
+                            //if(stop.getDate()!=start.getDate())
+                            //        stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
+                            onOffMap.get(key).push(new OnOffData(start, stop));
+                    }
 
                 }        
                         
 
                 var result = new Array<Outlet>();
                 for(room in houseDescriptor.getRoomArray()) {
-                        for(outlet in room.getOutletsArray()) {
-                                result.push(new Outlet(0, Std.string(outlet.outletId), outlet.name, 
-                                                                onOffMap.get(outlet.outletId), room.roomName, 0,
-                                                                room.roomColor, outlet.outletColor));
-                        }
+                    for(outlet in room.getOutletsArray()) {
+                        result.push(new Outlet(0, Std.string(outlet.outletId), outlet.name, 
+		                                            onOffMap.get(outlet.outletId), room.roomName, 0,
+		                                            room.roomColor, outlet.outletColor));
+                    }
                 }
                 //trace("Usage today:",result);
                 return result;

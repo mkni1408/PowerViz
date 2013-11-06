@@ -106,10 +106,12 @@ class DataBaseInterface {
 	/**Sets the power source on a specific point in time.**/
 	public static function setPowerSource(source:String, time:Date) {
 	
+		/*
 		var ps = new PowerSource();
 		ps.time = time;
 		ps.source = source; //Use a text string, but in DB this is an enum.
 		ps.insert();
+		*/
 	}
 	
 	//Returns all outlet IDs in the house.
@@ -360,8 +362,10 @@ class DataBaseInterface {
 		return r;
 	}
 	
-	/*
+	//TO BE ERADICATED!
 	public static function getCurrentPowerSource() : String {
+		return "coal";
+		/*
 		var now = Date.now();
 		var source:PowerSource = null;
 		for(s in PowerSource.manager.search($time<=now, {orderBy:time, limit:1}) ) {
@@ -370,10 +374,14 @@ class DataBaseInterface {
 		if(source==null)
 			return "coal";
 		return source.source;
-	}*/
+		*/
+	}
 	
 	
 	public static function getPowerSourceGoodness() : Float {
+	
+		return 0; //TEMP!
+	
 		var now = getNow();
 		var element = PowerSource.manager.select($time<=now, {orderBy:-time});
 		if(element==null) {

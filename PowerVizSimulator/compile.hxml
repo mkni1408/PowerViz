@@ -4,4 +4,11 @@
 -cp ../PowerVizCommon
 -cp ../PowerVizHarvester
 -cmd nekotools boot Simulator.n
-#-cpp Export
+
+--next
+
+-main PowerVizSimulator
+-cp Source
+-cp ../PowerVizCommon
+-cp ../PowerVizHarvester
+-cpp Export
