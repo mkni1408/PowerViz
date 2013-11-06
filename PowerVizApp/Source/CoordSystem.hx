@@ -94,9 +94,7 @@ class CoordSystem extends Sprite {
 
 		if(xoff){
 			x -= xoffset;
-			trace(xoffset);
-			trace(xSpace);
-
+			
 		}
 
 		labelIndex=0;

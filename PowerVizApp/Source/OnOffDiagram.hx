@@ -91,7 +91,7 @@ class OnOffDiagram extends Sprite{
 	
 	private function updateData() {
 		var data = DataInterface.instance.getOnOffData();
-		
+		trace(data);
 		
 		handleCategoryData(data);
 		mtimeArray = generateTimeArrayandCalcOffset();
@@ -130,7 +130,7 @@ class OnOffDiagram extends Sprite{
 		for(i in 0...mMapArray.length){
 			
 			var outArray = mMapArray[i];
-
+			
 
 
 			

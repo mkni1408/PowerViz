@@ -418,7 +418,7 @@ class DataInterface {
 
                 usageToday = mOutletDataDayTimed;
 
-                trace(usageToday);
+                //trace(usageToday);
 
 
                 
