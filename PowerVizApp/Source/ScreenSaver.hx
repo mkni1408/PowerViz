@@ -25,6 +25,8 @@ class ScreenSaver extends Sprite {
 	private var screenSaverTimerAction:Int = 10000;
 	private var yourBulbFaderTimerAction:Int = 8000;
 	private var mBackground : Bitmap = null;
+	private var mAlertBitmap : Bitmap = null;
+	private var mAlertTimerInterval = 1500;
 
 	private var firstBulb:Bulb;
 	private var secondBulb:Bulb;
@@ -40,6 +42,8 @@ class ScreenSaver extends Sprite {
 	private var yourbulbTimer:PowerTimer;
 	private var yourScreensaverTimerTimer:PowerTimer;
 	private var yourBulbFaderTimer:PowerTimer;
+	private var mAlertTimer:PowerTimer;
+
 
 	private var mBulbArray:Array<Bulb>;
 
@@ -75,6 +79,13 @@ class ScreenSaver extends Sprite {
 		mBackground.height = Lib.stage.stageHeight;
 		this.addChild(mBackground);
 
+		mAlertBitmap = new Bitmap(openfl.Assets.getBitmapData("assets/alert.png"));
+		mAlertBitmap.width = 75;
+		mAlertBitmap.height = 75;
+		mAlertBitmap.x = (Lib.stage.stageWidth-mAlertBitmap.width)-10;
+		mAlertBitmap.y = (Lib.stage.stageHeight-mAlertBitmap.height)-10;
+		this.addChild(mAlertBitmap);
+		mAlertBitmap.alpha = 0;
 		//add bulbobjects to main sprite
 		addChild(firstBulb);
 		addChild(secondBulb);
@@ -98,17 +109,20 @@ class ScreenSaver extends Sprite {
 
 		this.mouseEnabled = false;
 
+		mAlertTimer = new PowerTimer(mAlertTimerInterval); 
+        mAlertTimer.onTime = onTime;
+
 	}
 	
 
 	
 	//change the bulbstates man
 	public function calculatBulbStates(f:Float):Void{
-		trace(f);
-				
+		
 				if(f < 0.1){
 
 					changeBulbStates(true,false,false,false,false,false,false,false,false);
+					mAlertTimer.stop();
 
 
    				}	
@@ -116,35 +130,49 @@ class ScreenSaver extends Sprite {
 
 
 					changeBulbStates(true,true,false,false,false,false,false,false,false);
+					mAlertTimer.stop();
 
    				}
    				else if(f > 0.2 && f < 0.3){
 
 					changeBulbStates(true,true,true,false,false,false,false,false,false);
+					mAlertTimer.stop();
    				}
    				else if(f > 0.3 && f < 0.4){
 
 					changeBulbStates(true,true,true,true,false,false,false,false,false);
+					mAlertTimer.stop();
    				}
    				else if(f > 0.4 && f < 0.5){
 
 					changeBulbStates(true,true,true,true,true,false,false,false,false);
+					mAlertTimer.stop();
    				}
    				else if(f > 0.5 && f < 0.6){
 
 					changeBulbStates(true,true,true,true,true,true,false,false,false);
+					mAlertTimer.stop();
    				}
    				else if(f > 0.6 && f < 0.7){
 
 					changeBulbStates(true,true,true,true,true,true,true,false,false);
+					mAlertTimer.stop();
    				}
    				else if(f > 0.7 && f < 0.8){
 
 					changeBulbStates(true,true,true,true,true,true,true,true,false);
+					mAlertTimer.stop();
    				}
    				else if(f > 0.9 && f <= 1.0){
 
 					changeBulbStates(true,true,true,true,true,true,true,true,true);
+					mAlertTimer.stop();
+   				}
+   				else if(f > 1.0){
+
+					changeBulbStates(true,true,true,true,true,true,true,true,true);
+
+					mAlertTimer.start();
    				}
 
 
@@ -246,6 +274,7 @@ class ScreenSaver extends Sprite {
 		
 		yourbulbTimer.stop();
 		yourBulbFaderTimer.stop();
+		mAlertTimer.stop();
 
 	}
 
@@ -309,6 +338,8 @@ class ScreenSaver extends Sprite {
 					fifthBulb.bulb_changeState(fifthbulb);
 					sixthBulb.bulb_changeState(sixthbulb);
 					seventhBulb.bulb_changeState(seventhbulb);
+					eightBulb.bulb_changeState(eightbulb);
+					ninthBulb.bulb_changeState(ninthbulb);
 
 	}
 
@@ -322,6 +353,15 @@ class ScreenSaver extends Sprite {
 
 	}
 
+	private function onTime() {
+            if(mAlertBitmap.alpha == 1){
+            	Actuate.tween (mAlertBitmap, 1, { alpha: 0 } );
+
+            }
+            else{
+            	Actuate.tween (mAlertBitmap, 1, { alpha: 1 } );
+            }
+        }
 
 
 	
