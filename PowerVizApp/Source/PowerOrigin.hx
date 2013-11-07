@@ -14,20 +14,33 @@ Defines the powerorigin interface. In short it just shifts between a few picture
 class PowerOrigin extends Sprite{
 
 	
-	private var mEnergySource : Sprite;
+	private var mFrame : Sprite; //Frame to contain all elements.
+	private var mSliderBar : Sprite; 
+	private var mEnergySource : Sprite; 
+	private var mUsagePointer : Sprite;
 	
 	public function new(){
 
 		super();
 		
-		var bitMapEnergySource = new Bitmap (Assets.getBitmapData ("assets/energy_source.png"));
-		mEnergySource = new Sprite();
-		mEnergySource.addChild (bitMapEnergySource);
-		centerGraphics(mEnergySource, bitMapEnergySource);
+		mFrame = createAndPositionFrame();
+		this.addChild(mFrame);
 		
 		drawFrame();
 		
-		this.addChild(mEnergySource);
+		var bitMapEnergySource = new Bitmap (Assets.getBitmapData ("assets/energy_source.png"));
+		mEnergySource = new Sprite();
+		mEnergySource.addChild (bitMapEnergySource);
+		//centerGraphics(mEnergySource, bitMapEnergySource);
+		
+		
+		mFrame.addChild(mEnergySource);
+		
+		mSliderBar = createSliderBar();
+		mFrame.addChild(mSliderBar);
+		
+		mUsagePointer = createUsagePointer();
+		mFrame.addChild(mUsagePointer);
 		
 		mEnergySource.visible = true;
 		
@@ -48,68 +61,40 @@ class PowerOrigin extends Sprite{
 		origin.y = centerSpriteY - centerBitmapY;
 	}
 
-	/*
-	public function changePowerOrigin():Void{
-		
-		//var powerOrigin = DataInterface.instance.method();
-		
-		//pull powerorigin and change which sprite is visible
-		//if(powerOrigin == "wind") {
-		//	changeOrigin(true,false,false,false);
-		//} else if(powerOrigin == "coal") {
-		//	changeOrigin(false,true,false,false);
-		//} else if(powerOrigin == "solar") {
-		//	changeOrigin(false,false,true,false);
-		//} else if(powerOrigin == "nuclear") {
-		//	changeOrigin(false,false,false,true);
-		//}
-		
-		
-		
-		var changenumber = Std.random(4);
-
-		//pull powerorigin and change which sprite is visible
-		if(changenumber == 0) {
-			changeOrigin(true,false,false,false);
-		} else if(changenumber == 1) {
-			changeOrigin(false,true,false,false);
-		} else if(changenumber == 2) {
-			changeOrigin(false,false,true,false);
-		} else if(changenumber == 3) {
-			changeOrigin(false,false,false,true);
-		}
-	}
-
-	private function changeOrigin(first:Bool,second:Bool,third:Bool,fourth:Bool):Void{
-
-		if(first){
-			Actuate.tween (mPowerOriginCoal, 2, { alpha: 0 } );
-			Actuate.tween (mPowerOriginSolar, 2, { alpha: 0 } );
-			Actuate.tween (mPowerOriginNuclear, 2, { alpha: 0 } );
-			Actuate.tween (mPowerOriginWind, 2, { alpha: 1 } );
-		} else if(second) {
-			Actuate.tween (mPowerOriginWind, 2, { alpha: 0 } );
-			Actuate.tween (mPowerOriginSolar, 2, { alpha: 0 } );
-			Actuate.tween (mPowerOriginNuclear, 2, { alpha: 0 } );
-			Actuate.tween (mPowerOriginCoal, 2, { alpha: 1 } );
-		} else if(third) {
-			Actuate.tween (mPowerOriginWind, 2, { alpha: 0 } );
-			Actuate.tween (mPowerOriginCoal, 2, { alpha: 0 } );
-			Actuate.tween (mPowerOriginNuclear, 2, { alpha: 0 } );
-			Actuate.tween (mPowerOriginSolar, 2, { alpha: 1 } );
-		} else {
-			Actuate.tween (mPowerOriginWind, 2, { alpha: 0 } );
-			Actuate.tween (mPowerOriginCoal, 2, { alpha: 0 } );
-			Actuate.tween (mPowerOriginSolar, 2, { alpha: 0 } );
-			Actuate.tween (mPowerOriginNuclear, 2, { alpha: 1 } );
-		}
-	}
-	*/
 	
 	//draws the frame around the Sprite
 	private function drawFrame():Void{
 		graphics.lineStyle(4,0x000000);
 		graphics.drawRect(Lib.stage.stageWidth/2, 0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
+	}
+	
+	//Returns a triangleular usage pointer.
+	private function createUsagePointer() : Sprite {
+		var ret = new Sprite();
+		ret.graphics.beginFill(0x0000FF);
+		ret.graphics.moveTo(0,0);
+		ret.graphics.lineTo(20, 20);
+		ret.graphics.lineTo(-20,20);
+		ret.graphics.lineTo(0,0);
+		ret.graphics.endFill();
+		return ret;
+	}
+	
+	private function createAndPositionFrame() : Sprite {
+		var rv = new Sprite();
+		rv.graphics.beginFill(0xFF00FF, 0);
+		rv.graphics.drawRect(0,0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
+		rv.x = Lib.stage.stageWidth / 2;
+		rv.y = 0;
+		return rv;
+	}
+	
+	private function createSliderBar() : Sprite {
+		var rv = new Sprite();
+		rv.graphics.beginGradientFill(flash.display.GradientType.LINEAR, [0x00FF00, 0xFF0000], [0,1], [0,100]);
+		rv.graphics.drawRect(0,0, 200,20);
+		rv.graphics.endFill();
+		return rv;
 	}
 
 }
