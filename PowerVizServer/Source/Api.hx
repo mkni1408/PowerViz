@@ -161,6 +161,14 @@ class Api {
 		return DataBaseInterface.getCurrentPowerSource();
 	}
 	
+	public function getMaxWattsSetting(houseId:Int) : Float {
+		return DataBaseInterface.getMaxWattsSetting(houseId);
+	}
+	
+	public function setMaxWattsSetting(houseId:Int, watts:Float) {
+		DataBaseInterface.setMaxWattsSetting(houseId, watts);
+	}
+	
 	
 	//*********************************************
 	//Functions for the simulator:

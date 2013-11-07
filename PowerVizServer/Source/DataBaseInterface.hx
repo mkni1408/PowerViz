@@ -244,6 +244,30 @@ class DataBaseInterface {
 	}
 	
 	
+	//------------------------------------------------------
+	//------------------------------------------------------
+	
+	//Gets the max watts setting. If nothing is found, returns 1000.
+	public static function getMaxWattsSetting(houseId:Int) : Float {
+		var element = BoxConfig.manager.select($houseId == houseId);
+		if(element == null) {
+			return 1000;
+		}
+		return element.maxWatts; 
+	}
+	
+	public static function setMaxWattsSetting(houseId:Int, watts:Float) {
+		var element = BoxConfig.manager.select($houseId == houseId);
+		if(element == null) {
+			return; }
+		element.maxWatts = Std.int(watts);
+		element.update(); 
+	}
+	
+	//------------------------------------------------------
+	//------------------------------------------------------
+	
+	
 	
 	//*************************************************************************************
 	

@@ -75,7 +75,7 @@ class DataInterface {
         private var mOutletDataNow : Map<Int, Float>; //Usage now for each outlet, measured in watts.
         private var mOutletDataNowTotal : Float = 0; //Total usage data now for all outlets, measured in watts.
         private var mRelativeUsageNow : Float = 0; //Relative usage. From 0.0 to 1.0.
-        private var mRelativeMax : Float = 0; //Max usage value, used for calculating the relative value.
+        private var mRelativeMax : Float = 0; //Max usage value, used for calculating the relative value. Set using the speedometer.
         
         //Usage data quarter:
         private var mOutletDataQuarter : Map<Int, Float>; //Usage data for the last 15 minutes, for each outlet, measured in watts/15min.
@@ -213,7 +213,8 @@ class DataInterface {
         private function onTimerQuarter() : Void {
             trace("called2");
                 mCnx.Api.getOutletHistoryLastQuarter.call([Config.instance.houseId], onGetOutletHistoryLastQuarter);
-                mCnx.Api.getRelativeMax.call([Config.instance.houseId], onGetRelativeMax);
+                //mCnx.Api.getRelativeMax.call([Config.instance.houseId], onGetRelativeMax);
+                mCnx.Api.getMaxWattsSetting.call([Config.instance.houseId], onGetMaxWatts);
         }
         
         private function onTimerHour() : Void {
@@ -327,6 +328,11 @@ class DataInterface {
         
         private function onGetRelativeMax(data:Dynamic) : Void {
                 mRelativeMax = data;
+        }
+        
+        private function onGetMaxWatts(data:Dynamic) : Void {
+        	trace(data);
+        	mRelativeMax = data;
         }
         
         //Function for filling in missing dates in a specified dataset:
@@ -621,5 +627,14 @@ class DataInterface {
                 return mRelativeUsageNow; 
         }
         
+        public function setMaxWatts(max:Float) {
+        	this.mCnx.Api.setMaxWattsSetting.call([Config.instance.houseId, Std.int(max)], function(r:Dynamic){});
+        	mRelativeMax = max;
+        }
+        
+        public function relativeMax() : Float {
+        	trace(mRelativeMax);
+        	return mRelativeMax;
+        }
 
 }

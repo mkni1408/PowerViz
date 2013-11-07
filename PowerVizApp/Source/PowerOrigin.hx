@@ -12,58 +12,13 @@ Defines the powerorigin interface. In short it just shifts between a few picture
 */
 
 class PowerOrigin extends Sprite{
-	/*
-	private var mPowerOriginWind : Sprite;
-	private var mPowerOriginCoal : Sprite;
-	private var mPowerOriginSolar : Sprite;
-	private var mPowerOriginNuclear : Sprite;
-	
-	private var mTimer:PowerTimer;
-	private var mTimerSetting:Int = 10000;
-	*/
+
 	
 	private var mEnergySource : Sprite;
 	
 	public function new(){
 
 		super();
-		/*
-		var bitMapOriginWind = new Bitmap (Assets.getBitmapData ("assets/windmill.png"));
-		var bitMapOriginCoal = new Bitmap (Assets.getBitmapData ("assets/coal.png"));
-		var bitMapOriginSolar = new Bitmap (Assets.getBitmapData ("assets/solar.png"));
-		var bitMapOriginNuclear = new Bitmap (Assets.getBitmapData ("assets/nuclear.png"));
-
-		mPowerOriginWind = new Sprite();
-		mPowerOriginCoal = new Sprite();
-		mPowerOriginSolar = new Sprite();
-		mPowerOriginNuclear = new Sprite();
-
-		mPowerOriginWind.addChild (bitMapOriginWind);
-		mPowerOriginCoal.addChild (bitMapOriginCoal);
-		mPowerOriginSolar.addChild (bitMapOriginSolar);
-		mPowerOriginNuclear.addChild (bitMapOriginNuclear);
-		
-		centerGraphics(mPowerOriginWind,bitMapOriginWind);
-		centerGraphics(mPowerOriginCoal,bitMapOriginCoal);
-		centerGraphics(mPowerOriginSolar, bitMapOriginSolar);
-		centerGraphics(mPowerOriginNuclear, bitMapOriginNuclear);
-		
-		drawFrame();
-
-		this.addChild(mPowerOriginWind);
-		this.addChild(mPowerOriginCoal);
-		this.addChild(mPowerOriginSolar);
-		this.addChild(mPowerOriginNuclear);
-
-		mPowerOriginWind.visible = true;
-		mPowerOriginCoal.visible = false;
-		mPowerOriginSolar.visible = false;
-		mPowerOriginNuclear.visible = false;
-		
-		mTimer = new PowerTimer(mTimerSetting);
-		mTimer.onTime = function(){ changePowerOrigin();};
-		mTimer.start();
-		*/
 		
 		var bitMapEnergySource = new Bitmap (Assets.getBitmapData ("assets/energy_source.png"));
 		mEnergySource = new Sprite();
