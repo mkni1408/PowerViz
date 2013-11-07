@@ -163,9 +163,9 @@ class OnOffDiagram extends Sprite{
 								mtimeArray,mNewIDArray,true,true,false,true,mOffset);
 
 		mCoordSystem.x = (mBack.width- mCoordSystem.width);
-		mCoordSystem.y = (mBack.height/1.25)+50;
+		mCoordSystem.y = (mBack.height/1.25)+40;
 		mLegend.x =mCoordSystem.x;
-		mLegend.y = mCoordSystem.y + mLegend.height + 10;
+		mLegend.y = mCoordSystem.y + 30;
 		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
         mTitle.y = 0;
 		
@@ -273,9 +273,9 @@ class OnOffDiagram extends Sprite{
 		var count2 = 1;
 		var lengthofArray =outletData.length;
 		var incId = id;
-		trace("......");
+		/*trace("......");
 			trace(outletData);
-		trace("......");
+		trace("......");*/
 		
 
 		for(i in 0...lengthofArray){

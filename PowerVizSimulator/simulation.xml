@@ -81,10 +81,30 @@
 			<outlet id="3003" name="Mobiloplader" /> <!--10 watt -->
 			<outlet id="3004" name="Loftslys" /> <!-- 40 watt -->
 		</room>
-		<room name="Badeværelse" floor="1.floor" >
+		<room name="Badeværelse" floor="0.floor" >
 			<outlet id="4001" name="Loftslys" />
 			<outlet id="4002" name="Hårtører" />
 			<outlet id="4003" name="Gulvvarme" />
+		</room>
+		<room name="smrum" floor="0.floor" >
+			<outlet id="5001" name="Loftslys" />
+			<outlet id="5002" name="Hårtører" />
+			<outlet id="5003" name="Gulvvarme" />
+		</room>
+		<room name="entre" floor="0.floor" >
+			<outlet id="6001" name="Loftslys" />
+			<outlet id="6002" name="Hårtører" />
+			<outlet id="6003" name="Gulvvarme" />
+		</room>
+		<room name="garage" floor="0.floor" >
+			<outlet id="7001" name="Loftslys" />
+			<outlet id="7002" name="Hårtører" />
+			<outlet id="7003" name="Gulvvarme" />
+		</room>
+		<room name="toilet" floor="0.floor" >
+			<outlet id="8001" name="Loftslys" />
+			<outlet id="8002" name="Hårtører" />
+			<outlet id="8003" name="Gulvvarme" />
 		</room>
 	</layout>
 	

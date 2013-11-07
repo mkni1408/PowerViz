@@ -171,7 +171,7 @@ class DataInterface {
             mTimerQuarter.onTime = onTimerQuarter;
             mTimerQuarter.start();
 
-            mTimerHour = new PowerTimer(hourInterval); //Every hour.
+            mTimerHour = new PowerTimer(quarterInterval); //Every hour.
             mTimerHour.onTime = onTimerHour;
             mTimerHour.start();
 
@@ -179,7 +179,7 @@ class DataInterface {
             mTimerDay.onTime = onTimerDay;
             mTimerDay.start();
 
-            mTimerWeek = new PowerTimer(weekInterval); //Once a week.
+            mTimerWeek = new PowerTimer(quarterInterval); //Once a week.
             mTimerWeek.onTime = onTimerWeek;
             mTimerWeek.start();
         }
@@ -204,30 +204,30 @@ class DataInterface {
         
         
         private function onTimerNow() : Void {  
-            trace("called1");
+            
         	  
                 mCnx.Api.getCurrentLoadAll.call([Config.instance.houseId], onGetCurrentLoadAll);
         }
         
         
         private function onTimerQuarter() : Void {
-            trace("called2");
+            
                 mCnx.Api.getOutletHistoryLastQuarter.call([Config.instance.houseId], onGetOutletHistoryLastQuarter);
                 mCnx.Api.getRelativeMax.call([Config.instance.houseId], onGetRelativeMax);
         }
         
         private function onTimerHour() : Void {
-                trace("called3");
+                
                 mCnx.Api.getOutletHistoryAllHour.call([Config.instance.houseId], onGetOutletHistoryAllHour);
         }
         
         private function onTimerDay() : Void {
-            trace("called4");
+            
                 mCnx.Api.getOutletHistoryAllToday.call([Config.instance.houseId], onGetOutletHistoryAllDay);
         }
         
         private function onTimerWeek() : Void {
-                mCnx.Api.getOutletHistoryAllWeek.call([Config.instance.houseId], onGetOutletHistoryAllWeek);
+                mCnx.Api.getOutletHistoryThreeDays.call([Config.instance.houseId], onGetOutletHistoryAllWeek);
         }
         
         
@@ -236,7 +236,7 @@ class DataInterface {
         //****************************************************
         
         private function onGetCurrentLoadAll(data:Dynamic) : Void {
-                trace("recieved");
+                
                 mOutletDataNow = data;
                 mOutletDataNowTotal = 0;
                 for(w in mOutletDataNow)
@@ -252,7 +252,7 @@ class DataInterface {
         }
         
         private function onGetOutletHistoryLastQuarter(data:Dynamic) : Void {
-            trace("recieved2");
+            
                 mOutletDataQuarter = data;
 
                 mOutletDataQuarterTotal = 0;
@@ -266,7 +266,7 @@ class DataInterface {
         }
         
         private function onGetOutletHistoryAllDay(data:Dynamic) : Void {
-                trace("Outlethistory updated");
+                
                 onGetOutletHistory(data, "day");
                 
         }

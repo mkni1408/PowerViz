@@ -55,13 +55,22 @@ class Legend extends Sprite{
 				var tf = new TextField();
 				tf.mouseEnabled = false;
 				tf.selectable = false;
-				tf.text = haxe.Utf8.encode(arrayOfLabelStrings[counter]);
+				var text = haxe.Utf8.encode(arrayOfLabelStrings[counter]);
+				
+
+				if(text.length <= 8){
+					tf.text = text;
+				}
+				else{	
+					tf.text = text.substr(0,8);
+				}
+				
 				//trace(tf.text);
 				tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
 				legendSprite.addChild(tf);
 				tf.width = (tf.textWidth*1.1) + 5;
 				tf.height = tf.textHeight+3;
-				tf.x = xCor+10;
+				tf.x = xCor+5;
 				tf.y = yCor-5;
 
 				xCor=(xCor+legendSpace)-legendWidth;
@@ -70,7 +79,7 @@ class Legend extends Sprite{
 				//break if the number of entries is beyond 6 
 				if(counter%6 == 0 || counter == numberOfentries){
 					xCor = 0.0;
-					yCor = yCor +rowHeight+ 3.0;
+					yCor = yCor +rowHeight+ 7.0;
 					break;
 				}
 
