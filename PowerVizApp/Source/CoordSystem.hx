@@ -171,6 +171,7 @@ class CoordSystem extends Sprite {
 			if(vertical)
 			{
 				//trace("new X==",x);
+				tf.x = (x - (tf.height/2))+(xHeight/2)+10;
 			tf.rotation = 90;	
 		}
 
@@ -345,7 +346,7 @@ class CoordSystem extends Sprite {
 			return (xHeight * minutes);
 		}*/
 		//creates legend
-		public function createLegend(numberOfentries:Int,arrayOfLabelStrings:Array<String>,arrayOfColors:Array<Int>):Void{
+		/*public function createLegend(numberOfentries:Int,arrayOfLabelStrings:Array<String>,arrayOfColors:Array<Int>):Void{
 			
 			var legendSpace = xWidth/numberOfentries;
 			var legendWidth = legendSpace/10;
@@ -385,7 +386,7 @@ class CoordSystem extends Sprite {
 			legendSprite.mouseEnabled = false;
 
 
-		}
+		}*/
 		//draws vertical bars
 		public function drawVerticalBar(colors:Array<Int>, height:Array<Float>,conversionType:Int) {
 

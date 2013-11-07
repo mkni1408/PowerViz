@@ -9,6 +9,8 @@ import motion.Actuate;
 import Math;
 import DataInterface;
 import PowerTimer;
+import openfl.Assets;
+import flash.display.Bitmap;
 
 /*
 // Sprite that defines a Screensaver
@@ -20,9 +22,9 @@ class ScreenSaver extends Sprite {
 	//bulbTimerAction: the timer for the update frequency of the bulbs
 	//screenSaverTimerAction: The time until the screensaver becomes visible again
 	private var bulbTimerAction:Int = 5000;
-	private var screenSaverTimerAction:Int = 60000;
+	private var screenSaverTimerAction:Int = 10000;
 	private var yourBulbFaderTimerAction:Int = 8000;
-
+	private var mBackground : Bitmap = null;
 
 	private var firstBulb:Bulb;
 	private var secondBulb:Bulb;
@@ -65,10 +67,13 @@ class ScreenSaver extends Sprite {
 		
 
 		//add background fill color
-		this.graphics.beginFill(0xFFFFFF);
-		this.graphics.drawRect(0,0,Lib.stage.stageWidth,Lib.stage.stageHeight);
-		this.graphics.endFill();
-
+		//this.graphics.beginFill(0xFFFFFF);
+		//this.graphics.drawRect(0,0,Lib.stage.stageWidth,Lib.stage.stageHeight);
+		//this.graphics.endFill();
+		mBackground = new Bitmap(openfl.Assets.getBitmapData("assets/background3.png"));
+		mBackground.width = Lib.stage.stageWidth;
+		mBackground.height = Lib.stage.stageHeight;
+		this.addChild(mBackground);
 
 		//add bulbobjects to main sprite
 		addChild(firstBulb);
@@ -99,6 +104,7 @@ class ScreenSaver extends Sprite {
 	
 	//change the bulbstates man
 	public function calculatBulbStates(f:Float):Void{
+		trace(f);
 				
 				if(f < 0.1){
 
@@ -192,7 +198,7 @@ class ScreenSaver extends Sprite {
 //set screensaverstate. If the screensaver is transparent and we have not recieved any Touchevents, 
 	//we make it visible. if it is invisible we tween it 
 	public function setScreenSaver():Void{
-
+		trace("setting screensaver");
 			if(this.visible){
 			this.visible = true;
 			}
@@ -247,18 +253,18 @@ class ScreenSaver extends Sprite {
 	public function startBulbActionTimer(){
 		
 		yourbulbTimer.stop();
-		yourbulbTimer = new PowerTimer(bulbTimerAction);
+		/*yourbulbTimer = new PowerTimer(bulbTimerAction);
 		yourbulbTimer.onTime = function() {
 			var f  = DataInterface.instance.getTotalCurrentLoad();
 			calculatBulbStates(f);
-		};
+		};*/
 		yourbulbTimer.start();			
 
 		yourBulbFaderTimer.stop();
-		yourBulbFaderTimer = new PowerTimer(yourBulbFaderTimerAction);
+		/*yourBulbFaderTimer = new PowerTimer(yourBulbFaderTimerAction);
 		yourBulbFaderTimer.onTime = function(){
 			fadeBulbsWhenInactive();
-		};
+		};*/
 		yourBulbFaderTimer.start();
 		
 
@@ -270,7 +276,7 @@ class ScreenSaver extends Sprite {
 			
 			yourbulbTimer = new PowerTimer(bulbTimerAction);
 			yourbulbTimer.onTime = function() {
-				var f  = DataInterface.instance.getTotalCurrentLoad();
+				var f  = DataInterface.instance.relativeUsage();
 				calculatBulbStates(f);
 			};
 			yourbulbTimer.start();
@@ -307,7 +313,7 @@ class ScreenSaver extends Sprite {
 	}
 
 	private function fadeBulbsWhenInactive():Void{
-
+		trace("calling");
 		for(i in 0...mBulbArray.length){
 
 			mBulbArray[i].bulbFade();

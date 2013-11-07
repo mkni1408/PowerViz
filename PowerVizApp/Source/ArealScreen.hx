@@ -138,10 +138,10 @@ class ArealScreen extends Sprite {
                     (Lib.stage.stageWidth/1.15)/mTimeArray.length, ((Lib.stage.stageHeight/1.25)-mLegend.height)/mUsageArray.length, 
                                                                                                         mTimeArray, mUsageArray, true, false,false,true,mOffset);
                 mCoordSys.x = 70;
-                mCoordSys.y = (Lib.stage.stageHeight/1.25)+50;
+                mCoordSys.y = (Lib.stage.stageHeight/1.25)+40;
 
                 mLegend.x = mCoordSys.x;
-                mLegend.y = mCoordSys.y + mLegend.height + 10;
+                mLegend.y = mCoordSys.y + 30;
 
                 mDiagram.x = 70;
                 mDiagram.y = mCoordSys.y;        
@@ -268,7 +268,7 @@ class ArealScreen extends Sprite {
                         ///week
                         mUsageArray = ["10kWt ", "20kWt ", "30kWt ","40kWt ","50kWt ", "60kWt ","70kWt ", "80kWt ","90kWt ","100kWt "];
                         //mTimeArray = ["Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"];
-                        mTitle.text = "Ugens forbrug ";
+                        mTitle.text = "3 dages forbrug ";
 
                 }
                 
@@ -348,7 +348,7 @@ class ArealScreen extends Sprite {
                 var _roomMap = new Array<Int>();
                 
                 
-                
+                    
 
 
                     for(room in DataInterface.instance.houseDescriptor.getRoomArray()) {
@@ -481,7 +481,7 @@ class ArealScreen extends Sprite {
                         }
 
                     }
-
+                    //trace(_usage);
 
 
                 }
