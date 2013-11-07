@@ -163,15 +163,23 @@ class CoordSystem extends Sprite {
 			if(vertical)
 			{
 			//tf.rotation = 90;
+
 		}
 		}
 		else{
+
 			tf.x = (x - (tf.height/2))+(xHeight/2);
 			tf.y = y + 3;
+			
 			if(vertical)
 			{
 				//trace("new X==",x);
-				tf.x = (x - (tf.height/2))+(xHeight/2)+10;
+				tf.x = (x - (tf.height/2));
+
+				trace(x);
+
+				trace(xHeight);
+			trace(tf.height);
 			tf.rotation = 90;	
 		}
 
