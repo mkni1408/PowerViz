@@ -79,6 +79,7 @@ class DataInterface {
         //Layout data:
         public var houseDescriptor(default,null) : HouseDescriptor; //All data describing the house and its outlets.
         public var currentPowerSource(default,null):PowerSource; //The current power source. See the enum above.
+        public var powerSourceBadness(default,null):Float; //How bad is the power? 0 is totally good, 1 is completely bad.
         
         //Usage data now:
         private var mOutletDataNow : Map<Int, Float>; //Usage now for each outlet, measured in watts.
@@ -213,6 +214,9 @@ class DataInterface {
         private function onTimerNow() : Void {  
         	mConnectionMutex.acquire();
         	mCnx.Api.getCurrentLoadAll.call([Config.instance.houseId], onGetCurrentLoadAll);
+     
+        	mConnectionMutex.acquire();
+        	mCnx.Api.getPowerSourceBadness.call([], onGetPowerSourceBadness);
         }
         
         
@@ -256,11 +260,8 @@ class DataInterface {
                         mOutletDataNowTotal += w;
                         
                 mRelativeUsageNow = mOutletDataNowTotal / mRelativeMax;
-                if(mRelativeUsageNow>1) {
-                        mRelativeUsageNow=1;
-                }
-                else if(mRelativeUsageNow<0) {
-                        mRelativeUsageNow = 0;
+                if(mRelativeUsageNow<0) {
+                	mRelativeUsageNow = 0;
                 }
                 mConnectionMutex.release();
         }
@@ -271,7 +272,7 @@ class DataInterface {
 
                 mOutletDataQuarterTotal = 0;
                 for(w in mOutletDataQuarter)
-                        mOutletDataQuarterTotal += w;
+					mOutletDataQuarterTotal += w;
                     
                 mConnectionMutex.release();
         }
@@ -350,6 +351,11 @@ class DataInterface {
         
         private function onGetMaxWatts(data:Dynamic) : Void {
         	mRelativeMax = data;
+        	mConnectionMutex.release();
+        }
+        
+        private function onGetPowerSourceBadness(data:Dynamic) : Void {
+        	powerSourceBadness = data;
         	mConnectionMutex.release();
         }
         
@@ -599,37 +605,34 @@ class DataInterface {
 
                 for(key in source.keys()) {        
 
-                        rvIds.push(key);
+                    rvIds.push(key);
 
 
-                        for(date in dateArray){
+                    for(date in dateArray){
 
-                            var found = false;
-                            source.get(key).reverse();
+                        var found = false;
+                        source.get(key).reverse();
 
-                            for(reading in source.get(key)) {
-                                //trace("comparing ",reading.time,"and",date);
-                                if(Std.string(reading.time) == Std.string(date)){ //date was found
-                                usage.push(reading.watts);
-                            
-                                found = true;
-                                }
-                                        
+                        for(reading in source.get(key)) {
+                            //trace("comparing ",reading.time,"and",date);
+                            if(Std.string(reading.time) == Std.string(date)){ //date was found
+                            usage.push(reading.watts);
+                            found = true;
                             }
-
-                            if(!found){//we did not find anything
-                            
-                            usage.push(0.0);
-                            }
-                    
-
-
+                                    
                         }
 
-                                
-                                rvUsage.set(key, usage);
-                                usage = new Array<Float>();
-                                rvColors.set(key, houseDescriptor.getOutlet(key).outletColor);
+                        if(!found){//we did not find anything
+                        
+                        usage.push(0.0);
+                        }
+                
+                    }
+
+                            
+                    rvUsage.set(key, usage);
+                    usage = new Array<Float>();
+                    rvColors.set(key, houseDescriptor.getOutlet(key).outletColor);
                 }
 
                 
@@ -692,7 +695,7 @@ class DataInterface {
         }
 
         public function createTimeArray(numberoffields:Int):Array<Date>{
-
+        
             var dateNow = Date.now();
             var hour = dateNow.getHours();
             var minute = dateNow.getMinutes();
@@ -700,27 +703,11 @@ class DataInterface {
             var month = dateNow.getMonth();
             var date = dateNow.getDate();
             var tempArray = new Array<Date>();
-
-
-            if(minute >= 0 && minute < 15){
-                  minute = 0;      
-                                                    
-            }
-            else if(minute >= 15 && minute < 30){
-                            minute = 15; 
-                                                    
-            }
-            else if(minute >= 30 && minute < 45){
-                         minute = 30;    
-            }
-            else if(minute >= 45 && minute < 59){
-                        minute = 45; 
-            }
+            
+            //minute alternative simple calculation:
+            minute = Math.floor(minute / 15) * 15;
 
             var newDate = new Date(year,month,date,hour,minute,00);//initial date
-
-            
-
 
             for(i in 0...numberoffields)//create an array of dates back in time
             {
@@ -731,7 +718,7 @@ class DataInterface {
 
             tempArray.reverse();
 
-            trace(tempArray);
+            //trace(tempArray);
             return tempArray;
 
         }

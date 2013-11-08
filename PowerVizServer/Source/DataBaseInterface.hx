@@ -401,19 +401,28 @@ class DataBaseInterface {
 		*/
 	}
 	
-	
-	public static function getPowerSourceGoodness() : Float {
-	
-		return 0; //TEMP!
-	
+	//Returns the balance between good and bad energy:
+	public static function getPowerSourceBadness() : Float {
+		
 		var now = getNow();
 		var element = PowerSource.manager.select($time<=now, {orderBy:-time});
 		if(element==null) {
-			trace("Error getting power source thing. I will now officially fuck up");
-			return 0.0;
+			return 0.5;
 		}
 		
-		//TODO: Finish this thing. Calculate the balance.
+		//Total all the bad energy:
+		var bad:Float = element.coal;
+		bad += element.nuclear;
+		
+		//Total all the good energy:
+		var good:Float = element.sun;
+		good += element.wind;
+		good += element.water;
+		
+		if(good+bad==0) //Cannot divide with zero.
+			return 0;
+			
+		return bad/(good+bad);
 		
 	}
 	
