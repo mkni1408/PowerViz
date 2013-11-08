@@ -19,6 +19,9 @@ class PowerOrigin extends Sprite{
 	private var mEnergySource : Sprite; 
 	private var mUsagePointer : Sprite;
 	
+	private var mGoodImage : Bitmap;
+	private var mBadImage : Bitmap;
+	
 	private static inline var mSliderFromColor:Int = 0x00FF00;
 	private static inline var mSliderToColor:Int = 0xFF0000;
 	private static inline var mSliderPointerColor:Int = 0x0000FF;
@@ -31,6 +34,11 @@ class PowerOrigin extends Sprite{
 		
 		mFrame = createAndPositionFrame();
 		this.addChild(mFrame);
+		
+		mGoodImage = createImage("assets/energy_good.png");
+		mFrame.addChild(mGoodImage);
+		mBadImage = createImage("assets/energy_bad.png");
+		mFrame.addChild(mBadImage);
 		
 		drawFrame();
 		
@@ -55,6 +63,20 @@ class PowerOrigin extends Sprite{
 		mSliderBar.height = mFrame.height / 10;
 		mSliderBar.x = (mFrame.width-mSliderBar.width)/2;
 		mSliderBar.y = (mFrame.height-mSliderBar.height)/2;
+		
+		mGoodImage.width = mFrame.width / 6;
+		mGoodImage.height = mGoodImage.width;
+		
+		mGoodImage.y = (mFrame.height-mGoodImage.height)/2;
+		mGoodImage.x = mGoodImage.width / 2.5;
+		
+		mBadImage.width = mGoodImage.width;
+		mBadImage.height = mGoodImage.height;
+		mBadImage.y = mGoodImage.y;
+		mBadImage.x = (mFrame.width - mBadImage.width) - mGoodImage.x; 
+		
+		
+		
 	}
 
 	private function centerGraphics(origin:Sprite, bitmap:Bitmap){
@@ -112,11 +134,18 @@ class PowerOrigin extends Sprite{
 		return rv;
 	}
 	
+	private function createImage(filename:String) : Bitmap {	
+		var r = new Bitmap(openfl.Assets.getBitmapData(filename));
+		r.smoothing = true;
+		return r;
+	}
+	
 	//Places the triangle slider thing on the slider bar. 
 	//Value should be 0-1.
 	private function positionPointerOnSlider(value:Float) {
-		mUsagePointer.y = (mSliderBar.y + mSliderBar.height) - (mUsagePointer.height/3);
-		mUsagePointer.x = mSliderBar.x + (mSliderBar.width*value);
+		var y : Float = (mSliderBar.y + mSliderBar.height) - (mUsagePointer.height/3);
+		var x : Float = mSliderBar.x + (mSliderBar.width*value);
+		Actuate.tween(mUsagePointer, 1, {x:x, y:y});
 	}
 	
 	private function onTime() {
