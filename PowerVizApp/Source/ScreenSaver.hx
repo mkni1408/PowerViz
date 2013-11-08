@@ -22,7 +22,7 @@ class ScreenSaver extends Sprite {
 	//bulbTimerAction: the timer for the update frequency of the bulbs
 	//screenSaverTimerAction: The time until the screensaver becomes visible again
 	private var bulbTimerAction:Int = 5000;
-	private var screenSaverTimerAction:Int = 10000;
+	private var screenSaverTimerAction:Int = 120000;
 	private var yourBulbFaderTimerAction:Int = 8000;
 	private var mBackground : Bitmap = null;
 	private var mAlertBitmap : Bitmap = null;
@@ -119,6 +119,8 @@ class ScreenSaver extends Sprite {
 	//change the bulbstates man
 	public function calculatBulbStates(f:Float):Void{
 		
+		trace(f);
+
 				if(f < 0.1){
 
 					changeBulbStates(true,false,false,false,false,false,false,false,false);
@@ -169,10 +171,10 @@ class ScreenSaver extends Sprite {
 					mAlertTimer.stop();
    				}
    				else if(f > 1.0){
-
+					mAlertTimer.start();
 					changeBulbStates(true,true,true,true,true,true,true,true,true);
 
-					mAlertTimer.start();
+					
    				}
 
 
@@ -226,7 +228,7 @@ class ScreenSaver extends Sprite {
 //set screensaverstate. If the screensaver is transparent and we have not recieved any Touchevents, 
 	//we make it visible. if it is invisible we tween it 
 	public function setScreenSaver():Void{
-		trace("setting screensaver");
+		
 			if(this.visible){
 			this.visible = true;
 			}
@@ -344,7 +346,7 @@ class ScreenSaver extends Sprite {
 	}
 
 	private function fadeBulbsWhenInactive():Void{
-		trace("calling");
+		
 		for(i in 0...mBulbArray.length){
 
 			mBulbArray[i].bulbFade();
@@ -354,6 +356,7 @@ class ScreenSaver extends Sprite {
 	}
 
 	private function onTime() {
+		trace("called");
             if(mAlertBitmap.alpha == 1){
             	Actuate.tween (mAlertBitmap, 1, { alpha: 0 } );
 

@@ -41,6 +41,7 @@ class SeismoGraph extends Sprite{
 		tf.text = "Watt nu:";
 		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
 		firstrun = true;//hack to not get the first value
+		tf.width = mMeasurmenthalfFactor*15;
 
 		mNumofFieldsWidthScreen = Lib.stage.stageWidth/mMeasurmenthalfFactor;
 
@@ -230,8 +231,7 @@ class SeismoGraph extends Sprite{
 			commands.push(2);
 			coords.push(xPosition);
 			coords.push(Lib.stage.stageHeight-wattmeasure);
-			trace("wattmeasure",wattmeasure);
-
+			
 			prevMeasure = wattmeasure;
 
 			commands.push(2);
@@ -250,7 +250,6 @@ class SeismoGraph extends Sprite{
 			
 
 		}
-		trace(cordcordArray);
 		for(i in 0...commandCommands.length){
 
 			mSeismoGraph.graphics.beginFill(mwhereIsThePowerFromArray[i]);//set the color 
@@ -301,8 +300,6 @@ class SeismoGraph extends Sprite{
 	}
 
 	private function setBar(height:Float):Void{
-		trace(height);
-		trace(Lib.stage.stageHeight - height);
 		var tmpHeight = 0.0;
 
 		if(mLastTween > height){
@@ -323,7 +320,9 @@ class SeismoGraph extends Sprite{
 		mLastTween = height;
 
 		tf.text = "Watt nu: " + DataInterface.instance.getTotalCurrentLoad();
+		tf.width = mMeasurmenthalfFactor*15;
 		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
+
 		//Actuate.tween (mbarSprite, 1, { alpha: 1 } );
 	}
 

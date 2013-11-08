@@ -176,10 +176,10 @@ class CoordSystem extends Sprite {
 				//trace("new X==",x);
 				tf.x = (x - (tf.height/2));
 
-				trace(x);
+				
 
-				trace(xHeight);
-			trace(tf.height);
+				
+			
 			tf.rotation = 90;	
 		}
 
