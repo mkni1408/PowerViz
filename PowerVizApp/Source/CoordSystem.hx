@@ -227,13 +227,23 @@ class CoordSystem extends Sprite {
 		public function drawBar(pointXfrom:OnOffData, pointYfrom:Float,pointYto:Float,color:Int){
 			trace(".........");
 			trace(pointXfrom);			trace(".........");
-			this.graphics.lineStyle(1, 0x000000);
-			this.graphics.beginFill(color);
-			this.graphics.drawRect(convertTime(pointXfrom.getStart())+1.5,pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), 			yHeight-10.0);
+			
 			//this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop()), yHeight-10.0);
-
+			draw(convertTime(pointXfrom.getStart())+1.5,pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), yHeight-10.0,color);
 			this.graphics.endFill();
 
+
+		}
+
+		private function draw(from:Float,thickness:Float,to:Float,height:Float,color:Int):Void{
+
+			this.graphics.lineStyle(1, 0x000000);
+			this.graphics.beginFill(color);
+			if(to == 0){
+				to = to+(xWidth/96);
+
+			}
+			this.graphics.drawRect(from,thickness,to,height);
 
 		}
 
@@ -324,8 +334,8 @@ class CoordSystem extends Sprite {
 					var temptimeString = Std.string(cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes());
 					//trace(cordNameArray[i]);
 						if(temptimeString == timeString){
-							trace(cordCordArray[i+1]);
-							return cordCordArray[i+1];
+							trace(cordCordArray[i]);
+							return cordCordArray[i];
 						}
 
 
@@ -520,9 +530,6 @@ class CoordSystem extends Sprite {
 			cordCounter += xSpace;
 
 		}
-
-
-
 
 	}
         

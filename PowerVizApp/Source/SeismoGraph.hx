@@ -296,7 +296,11 @@ class SeismoGraph extends Sprite{
 	//takes a float between 0-1 and calculates the peakheight
 	private function calculatePeakHeight(f:Float):Int{
 
-		var numPixels = (Lib.stage.stageHeight/2)-10;
+		if(f>1.0){
+			f = 1.0;
+		}
+
+		var numPixels = (Lib.stage.stageHeight/2)-40;
 
 		return Math.floor(numPixels * f);
 

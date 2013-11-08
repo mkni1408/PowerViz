@@ -511,7 +511,7 @@ class DataInterface {
                
 
                 var dateArray = createTimeArray(96);
-                trace(tmpToday);
+               
 
                 for(key in tmpToday.keys()) {        
 
@@ -539,12 +539,16 @@ class DataInterface {
                 
                     }
 
-                            
+                           
                     usageToday.set(key, usage);
                     usage = new Array<TimeWatts>();
                     //rvColors.set(key, houseDescriptor.getOutlet(key).outletColor);
                 }
 
+                 
+                 
+                 
+                 
                  
 
                 for(key in usageToday.keys()) {
@@ -557,7 +561,7 @@ class DataInterface {
                         
                         if(u.watts>0) {
                                 if(start==null)
-                                    start = Date.fromTime(u.time.getTime() - (15*60*1000));
+                                    start = Date.fromTime(u.time.getTime());
                                 stop = u.time;
                         }
                         else { //Watts<=0
@@ -582,6 +586,7 @@ class DataInterface {
                     if(start!=null && stop!=null) { //End of data, so close the block if open.
                             //if(stop.getDate()!=start.getDate())
                             //        stop = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 23, 45, 0);
+                            trace(start,stop);
                             onOffMap.get(key).push(new OnOffData(start, stop));
                     }
 
@@ -792,7 +797,6 @@ class DataInterface {
 
             tempArray.reverse();
 
-            //trace(tempArray);
             return tempArray;
 
         }
