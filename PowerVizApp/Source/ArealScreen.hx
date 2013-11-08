@@ -227,18 +227,17 @@ class ArealScreen extends Sprite {
         
         private function onButtonPush(coordSystemType:Int):Void{
 
-                switch( coordSystemType ) {
-                    case 0:
-                mViewMode = VIEWMODE_DAY;
-                    case 1:
-                mViewMode = VIEWMODE_WEEK;
-                case 2:
-                mViewMode = VIEWMODE_MONTH;
-                    default:
-                mViewMode = VIEWMODE_DAY;
-            }
-                
-                redrawEverything(); 
+            switch( coordSystemType ) {
+	            case 0:
+	       			mViewMode = VIEWMODE_DAY; //HOUR
+	            case 1:
+	       			mViewMode = VIEWMODE_WEEK; //DAY
+	        	case 2:
+	        		mViewMode = VIEWMODE_MONTH; //Three days.
+	            default:
+	        		mViewMode = VIEWMODE_DAY; //Defaults to hour.
+        	}
+            redrawEverything(); 
         }
 
         private function redrawEverything():Void{

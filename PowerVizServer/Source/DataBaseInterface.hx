@@ -347,7 +347,7 @@ class DataBaseInterface {
 	public static function getOutletHistoryAllToday(houseId:Int) : Map<Int, Array<TimeWatts> > {
 		
 		var to = getNow();
-		var from = DateTools.delta(to, -(DateTools.hours(23)+DateTools.minutes(45)));
+		var from = DateTools.delta(to, -DateTools.hours(24));
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
