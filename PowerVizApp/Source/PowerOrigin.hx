@@ -23,6 +23,8 @@ class PowerOrigin extends Sprite{
 	private static inline var mSliderToColor:Int = 0xFF0000;
 	private static inline var mSliderPointerColor:Int = 0x0000FF;
 	
+	private var mTimer : PowerTimer;
+	
 	public function new(){
 
 		super();
@@ -41,6 +43,10 @@ class PowerOrigin extends Sprite{
 		positionElements();
 		
 		positionPointerOnSlider(0.5);
+		
+		mTimer = new PowerTimer(3000);
+		mTimer.onTime = onTime;
+		mTimer.start();
 		
 	}
 	
@@ -111,6 +117,10 @@ class PowerOrigin extends Sprite{
 	private function positionPointerOnSlider(value:Float) {
 		mUsagePointer.y = (mSliderBar.y + mSliderBar.height) - (mUsagePointer.height/3);
 		mUsagePointer.x = mSliderBar.x + (mSliderBar.width*value);
+	}
+	
+	private function onTime() {
+		positionPointerOnSlider(DataInterface.instance.powerSourceBadness);
 	}
 
 }

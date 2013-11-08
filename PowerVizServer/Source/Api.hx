@@ -169,6 +169,10 @@ class Api {
 		DataBaseInterface.setMaxWattsSetting(houseId, watts);
 	}
 	
+	public function getPowerSourceBadness() {
+		return DataBaseInterface.getPowerSourceBadness();
+	}
+	
 	
 	//*********************************************
 	//Functions for the simulator:
