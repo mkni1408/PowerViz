@@ -13,6 +13,8 @@ import CoordSystem;
 import Outlet;
 import PowerTimer;
 
+import Enums;
+
 /**
 Screen displaying the Areal diagram.
 Uses the ArealDiagram class for drawing the special diagram.
