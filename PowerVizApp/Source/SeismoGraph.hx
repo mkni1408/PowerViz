@@ -6,6 +6,10 @@ import flash.display.Bitmap;
 import openfl.Assets;
 import DataInterface;
 import PowerTimer;
+import motion.Actuate;
+import flash.text.TextField;
+import FontSupply;
+
 
 
 class SeismoGraph extends Sprite{
@@ -14,20 +18,29 @@ class SeismoGraph extends Sprite{
 	private var mwattMeasurementArray: Array<Int>;
 	private var mwhereIsThePowerFromArray: Array<Int>;
 	//remember that mMeasurmenthalfFactor should be exactly half of mMeasurmentFactor
-	private var mMeasurmentFactor = 20;
-	private var mMeasurmenthalfFactor = 10;
+	private var mMeasurmentFactor = 26;
+	private var mMeasurmenthalfFactor = 13;
 	private var mNumofFieldsWidthScreen:Float;
 	
 	private var mTimer:PowerTimer;
 	private var mTimerSetting:Int = 6000;
+	private var mbarSprite : Sprite;
+	private var mLastTween:Float;
+	private var tf:TextField;
+	private var firstrun:Bool;
 	
 	public function new(){
 
 		super();
 		mwattMeasurementArray= new Array<Int>();
-		mwhereIsThePowerFromArray= new Array<Int>();
-
+		mwhereIsThePowerFromArray= new Array<Int>();	
+		mbarSprite = new Sprite();
 		mSeismoGraph = new Sprite();
+		mLastTween = 0.0;
+		tf = new TextField();
+		tf.text = "Watt nu:";
+		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
+		firstrun = true;//hack to not get the first value
 
 		mNumofFieldsWidthScreen = Lib.stage.stageWidth/mMeasurmenthalfFactor;
 
@@ -36,13 +49,22 @@ class SeismoGraph extends Sprite{
 		addChild(mSeismoGraph);
 		
 		fetchWattConsumption();
+		mbarSprite.y = Lib.stage.stageHeight;
 
-		graphics.lineStyle(2,0x000000);
-		graphics.moveTo(0,(Lib.stage.stageHeight/4)*3);
-		graphics.lineTo(Lib.stage.stageWidth,(Lib.stage.stageHeight/4)*3);
+		mbarSprite.graphics.lineStyle(2,0x000000);
+		mbarSprite.graphics.moveTo(0,Lib.stage.stageHeight);
+		mbarSprite.graphics.lineTo(Lib.stage.stageWidth,Lib.stage.stageHeight);
 
+		
+		addChild(mbarSprite);
+		mbarSprite.addChild(tf);
 
-		redrawSeismoGraphCurve();
+		tf.x = ((mMeasurmenthalfFactor*15)/2)-(tf.textWidth/2);
+		tf.y = Lib.stage.stageHeight-30;
+
+		
+
+		//redrawSeismoGraphCurve();
 
 		mTimer = new PowerTimer(mTimerSetting);
 		mTimer.onTime = function() {
@@ -55,9 +77,9 @@ class SeismoGraph extends Sprite{
 
 	public function initSprite():Void{
 
-		graphics.lineStyle(4,0x000000);
+		mSeismoGraph.graphics.lineStyle(4,0x000000);
 
-		graphics.drawRect(0, Lib.stage.stageHeight/2, Lib.stage.stageWidth, (Lib.stage.stageHeight/2)-4);
+		mSeismoGraph.graphics.drawRect(0, Lib.stage.stageHeight/2, Lib.stage.stageWidth, (Lib.stage.stageHeight/2)-4);
 
 		addChild(mSeismoGraph);
 
@@ -72,7 +94,7 @@ class SeismoGraph extends Sprite{
 
 		//first we see if the array length is larger than the amount of slots on the screen
 		//if so we remove the first element of the array to make room for another
-		if(mwattMeasurementArray.length >= mNumofFieldsWidthScreen){
+		if(mwattMeasurementArray.length >= mNumofFieldsWidthScreen-15){
 			mwattMeasurementArray.reverse();
 			mwhereIsThePowerFromArray.reverse();
 			
@@ -85,16 +107,21 @@ class SeismoGraph extends Sprite{
 			mwhereIsThePowerFromArray.reverse();
 		}	
 
-		var wattMeasure:Float = DataInterface.instance.relativeUsage(); 
-		var origin:Int = testDataInterfaceOrigin(); //TODO!!!
+		if(!firstrun){
+			var wattMeasure:Float = DataInterface.instance.relativeUsage(); 
+			var origin:Int = testDataInterfaceOrigin(); //TODO!!!
 
-        mwattMeasurementArray.push(calculatePeakHeight(wattMeasure));
-        mwhereIsThePowerFromArray.push(origin);
-    	//trace("Pushing measure:",wattMeasure);
-    	//trace("Pushing origin:",origin);
+        	mwattMeasurementArray.push(calculatePeakHeight(wattMeasure));
+        	mwhereIsThePowerFromArray.push(origin);
+    		//trace("Pushing measure:",wattMeasure);
+    		//trace("Pushing origin:",origin);
 
-    	//redraw the curve
-    	redrawSeismoGraphCurve();
+    		//redraw the curve
+    		redrawSeismoGraphCurve();
+    	}
+    	else{
+    		firstrun = false;
+    	}
 
 	}
 
@@ -109,9 +136,7 @@ class SeismoGraph extends Sprite{
 
 		
 		//draw horizontal line
-		graphics.lineStyle(2,0x000000);
-		graphics.moveTo(0,(Lib.stage.stageHeight/4)*3);
-		graphics.lineTo(Lib.stage.stageWidth,(Lib.stage.stageHeight/4)*3);
+		
 
 		var xPosition = Lib.stage.stageWidth - (mwattMeasurementArray.length * mMeasurmentFactor);
 		var yPosition = (Lib.stage.stageHeight/4)*3;
@@ -164,7 +189,7 @@ class SeismoGraph extends Sprite{
 	public function redrawCurve(){
 
 		//clear graphics to redraw seismograph
-		graphics.clear();
+		mSeismoGraph.graphics.clear();
 
 		redrawFrame();
 
@@ -205,6 +230,7 @@ class SeismoGraph extends Sprite{
 			commands.push(2);
 			coords.push(xPosition);
 			coords.push(Lib.stage.stageHeight-wattmeasure);
+			trace("wattmeasure",wattmeasure);
 
 			prevMeasure = wattmeasure;
 
@@ -221,16 +247,20 @@ class SeismoGraph extends Sprite{
 			commands = new Array<Int>();
 			coords = new Array<Float>();
 
-		}
+			
 
+		}
+		trace(cordcordArray);
 		for(i in 0...commandCommands.length){
 
-			graphics.beginFill(mwhereIsThePowerFromArray[i]);//set the color 
-			graphics.lineStyle(0,mwhereIsThePowerFromArray[i]);
-    		graphics.drawPath(commandCommands[i], cordcordArray[i]); 
+			mSeismoGraph.graphics.beginFill(mwhereIsThePowerFromArray[i]);//set the color 
+			mSeismoGraph.graphics.lineStyle(0,mwhereIsThePowerFromArray[i]);
+    		mSeismoGraph.graphics.drawPath(commandCommands[i], cordcordArray[i]); 
 
 
 		}
+
+		setBar(mwattMeasurementArray[mwattMeasurementArray.length-1]);
 
 		
 		
@@ -270,13 +300,46 @@ class SeismoGraph extends Sprite{
 
 	}
 
+	private function setBar(height:Float):Void{
+		trace(height);
+		trace(Lib.stage.stageHeight - height);
+		var tmpHeight = 0.0;
+
+		if(mLastTween > height){
+			tmpHeight = mLastTween - height;
+
+		}
+		else if(mLastTween < height){
+			tmpHeight =  mLastTween - height;
+		}
+		else{
+
+
+		}
+
+		Actuate.tween(mbarSprite, 1, {y:-height});
+		//Actuate.tween(tf, 1, {y:tmpHeight});
+
+		mLastTween = height;
+
+		tf.text = "Watt nu: " + DataInterface.instance.getTotalCurrentLoad();
+		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
+		//Actuate.tween (mbarSprite, 1, { alpha: 1 } );
+	}
+
+	 function finished() {
+        trace ( "tween finished" );
+    }
+
 	//draws the frame around the Sprite
 	private function redrawFrame():Void{
 
-		graphics.lineStyle(4,0x000000);
+		mSeismoGraph.graphics.lineStyle(4,0x000000);
 
 		//redraw frame
-		graphics.drawRect(0, Lib.stage.stageHeight/2, Lib.stage.stageWidth, (Lib.stage.stageHeight/2)-2);
+		mSeismoGraph.graphics.drawRect(0, Lib.stage.stageHeight/2, Lib.stage.stageWidth, (Lib.stage.stageHeight/2)-2);
+		mSeismoGraph.graphics.drawRect(0, Lib.stage.stageHeight/2, mMeasurmenthalfFactor*15, (Lib.stage.stageHeight/2)-2);
+		
 
 	}
 

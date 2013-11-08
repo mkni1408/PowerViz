@@ -418,6 +418,8 @@ class ArealScreen extends Sprite {
                         }
 
                     }
+
+                    trace(_usage);
                 }
                  if(mViewMode==1){//Day
                     if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden hvis tomt
@@ -427,8 +429,9 @@ class ArealScreen extends Sprite {
                         for(t in 0...96){
                                 _ta.push(0);
                             }
-
+                            
                              _usage.push(_ta);
+                            trace(_usage);
 
                     }
                     else{
@@ -455,7 +458,7 @@ class ArealScreen extends Sprite {
                  if(mViewMode==2){//Week
                     if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden
                     _ta = new Array<Float>();
-                        for(t in 0...672){
+                        for(t in 0...288){
                                 _ta.push(0);
                             }
 

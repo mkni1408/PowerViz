@@ -557,6 +557,7 @@ class DataInterface {
         }
         
         public function getArealUsageHour() : ArealDataStruct {
+                
                 return getArealUsage("hour");
         }
         
@@ -571,6 +572,8 @@ class DataInterface {
                 var rvIds = new Array<Int>();
                 var rvUsage = new Map<Int, Array<Float>>();
                 var rvColors = new Map<Int, Int>();
+                var readingArray = new Array<TimeWatts>();
+                var numberofDates = 96;
                 
                 var usage = new Array<Float>();
                 
@@ -578,26 +581,59 @@ class DataInterface {
                 switch(timespan) {
                         case "hour":
                                 source = mOutletDataHourTimed;
+                                numberofDates = 4;
                         case "day":
                                 source = mOutletDataDayTimed;
+                                numberofDates = 96;
+
                         case "week":
                                 source = mOutletDataWeekTimed;
+                                numberofDates = 288;
                         default:
                                 return null;
                 }
 
 
+                trace(source);
+                var dateArray = createTimeArray(numberofDates);
+
                 for(key in source.keys()) {        
 
                         rvIds.push(key);
-                        for(reading in source.get(key)) {
-                                        usage.push(reading.watts);
+
+
+                        for(date in dateArray){
+
+                            var found = false;
+                            source.get(key).reverse();
+
+                            for(reading in source.get(key)) {
+                                //trace("comparing ",reading.time,"and",date);
+                                if(Std.string(reading.time) == Std.string(date)){ //date was found
+                                usage.push(reading.watts);
+                                trace("found");
+                                found = true;
+                                }
+                                        
+                            }
+
+                            if(!found){//we did not find anything
+                            
+                            usage.push(0.0);
+                            }
+                    
+
+
                         }
 
+                                
                                 rvUsage.set(key, usage);
                                 usage = new Array<Float>();
                                 rvColors.set(key, houseDescriptor.getOutlet(key).outletColor);
                 }
+
+                
+
                 
                 return {outletIds:rvIds, watts:rvUsage, colors:rvColors};
                 
@@ -653,6 +689,51 @@ class DataInterface {
         public function relativeMax() : Float {
         	trace(mRelativeMax);
         	return mRelativeMax;
+        }
+
+        public function createTimeArray(numberoffields:Int):Array<Date>{
+
+            var dateNow = Date.now();
+            var hour = dateNow.getHours();
+            var minute = dateNow.getMinutes();
+            var year = dateNow.getFullYear();
+            var month = dateNow.getMonth();
+            var date = dateNow.getDate();
+            var tempArray = new Array<Date>();
+
+
+            if(minute >= 0 && minute < 15){
+                  minute = 0;      
+                                                    
+            }
+            else if(minute >= 15 && minute < 30){
+                            minute = 15; 
+                                                    
+            }
+            else if(minute >= 30 && minute < 45){
+                         minute = 30;    
+            }
+            else if(minute >= 45 && minute < 59){
+                        minute = 45; 
+            }
+
+            var newDate = new Date(year,month,date,hour,minute,00);//initial date
+
+            
+
+
+            for(i in 0...numberoffields)//create an array of dates back in time
+            {
+                tempArray.push(newDate);
+                newDate = DateTools.delta(newDate,-DateTools.minutes(15));
+
+            }
+
+            tempArray.reverse();
+
+            trace(tempArray);
+            return tempArray;
+
         }
 
 }
