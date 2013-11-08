@@ -13,7 +13,7 @@ import OutletBuffer;
 	import neko.vm.Mutex;
 #end
 
-
+//The harvester, getting data from the Zense PC-boks.
 class Harvester {
 
 	public static function main() {
