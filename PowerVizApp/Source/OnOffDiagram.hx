@@ -424,7 +424,7 @@ class OnOffDiagram extends Sprite{
 
                 var tempTime = Std.string(date.getHours());
 
-                for(el in 0...stringAr.length -1 ){//calculate
+                for(el in 0...stringAr.length ){//calculate
 
                     if(stringAr[el] == tempTime)
                     {

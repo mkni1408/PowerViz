@@ -225,8 +225,8 @@ class CoordSystem extends Sprite {
 		//pointXfrom is the time that the contact went on converted to a float pointXto is 
 		//the time the contact was shut off
 		public function drawBar(pointXfrom:OnOffData, pointYfrom:Float,pointYto:Float,color:Int){
-
-			
+			trace(".........");
+			trace(pointXfrom);			trace(".........");
 			this.graphics.lineStyle(1, 0x000000);
 			this.graphics.beginFill(color);
 			this.graphics.drawRect(convertTime(pointXfrom.getStart())+1.5,pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), 			yHeight-10.0);
@@ -324,13 +324,14 @@ class CoordSystem extends Sprite {
 					var temptimeString = Std.string(cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes());
 					//trace(cordNameArray[i]);
 						if(temptimeString == timeString){
-							return cordCordArray[i];
+							trace(cordCordArray[i+1]);
+							return cordCordArray[i+1];
 						}
 
 
 			}
 
-			//trace(cordNameArray);
+			
 			return 0.0;
 
 		}

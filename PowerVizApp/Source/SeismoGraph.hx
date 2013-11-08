@@ -21,6 +21,7 @@ class SeismoGraph extends Sprite{
 	private var mMeasurmentFactor = 26;
 	private var mMeasurmenthalfFactor = 13;
 	private var mNumofFieldsWidthScreen:Float;
+	private var mBadness:Array<Float>;
 	
 	private var mTimer:PowerTimer;
 	private var mTimerSetting:Int = 6000;
@@ -33,7 +34,8 @@ class SeismoGraph extends Sprite{
 
 		super();
 		mwattMeasurementArray= new Array<Int>();
-		mwhereIsThePowerFromArray= new Array<Int>();	
+		mwhereIsThePowerFromArray= new Array<Int>();
+		mBadness = new Array<Float>();	
 		mbarSprite = new Sprite();
 		mSeismoGraph = new Sprite();
 		mLastTween = 0.0;
@@ -110,10 +112,12 @@ class SeismoGraph extends Sprite{
 
 		if(!firstrun){
 			var wattMeasure:Float = DataInterface.instance.relativeUsage(); 
+			var badness:Float = DataInterface.instance.powerSourceBadness;
 			var origin:Int = testDataInterfaceOrigin(); //TODO!!!
 
         	mwattMeasurementArray.push(calculatePeakHeight(wattMeasure));
         	mwhereIsThePowerFromArray.push(origin);
+        	mBadness.push(badness);
     		//trace("Pushing measure:",wattMeasure);
     		//trace("Pushing origin:",origin);
 
@@ -208,7 +212,7 @@ class SeismoGraph extends Sprite{
 		var xPosition = (Lib.stage.stageWidth-2) - (((mwattMeasurementArray.length-1) * mMeasurmenthalfFactor));
 		var yPosition = (Lib.stage.stageHeight/4)*3;
 
-		var prevMeasure = 0;
+		var prevMeasure = 4;
 
 		for(wattmeasure in mwattMeasurementArray){
 
@@ -252,8 +256,8 @@ class SeismoGraph extends Sprite{
 		}
 		for(i in 0...commandCommands.length){
 
-			mSeismoGraph.graphics.beginFill(mwhereIsThePowerFromArray[i]);//set the color 
-			mSeismoGraph.graphics.lineStyle(0,mwhereIsThePowerFromArray[i]);
+			mSeismoGraph.graphics.beginFill(getPowerSourceColor(mBadness[i]));//set the color 
+			mSeismoGraph.graphics.lineStyle(0,getPowerSourceColor(mBadness[i]));
     		mSeismoGraph.graphics.drawPath(commandCommands[i], cordcordArray[i]); 
 
 
@@ -340,6 +344,29 @@ class SeismoGraph extends Sprite{
 		mSeismoGraph.graphics.drawRect(0, Lib.stage.stageHeight/2, mMeasurmenthalfFactor*15, (Lib.stage.stageHeight/2)-2);
 		
 
+	}
+
+	private function getPowerSourceColor(badness:Float):Int{
+
+		if(badness<0.2){
+			return 0x05fa00;
+		}
+		else if(badness >= 0.2 && badness < 0.4){
+			return 0x50af00;
+
+		}
+		else if(badness >= 0.4 && badness < 0.6){
+			return 0x808000;
+		}
+		else if(badness >= 0.6 && badness < 0.8){
+			return 0xb34c00;
+		}
+		else if(badness >= 0.8 && badness < 1.0){
+			return 0xf40b00;
+		}
+		else{
+			return 0x05fa00;
+		}
 	}
 
 

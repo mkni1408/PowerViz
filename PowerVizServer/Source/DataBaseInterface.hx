@@ -64,7 +64,7 @@ class DataBaseInterface {
 	**/
 	public static function setCurrentLoad(houseId:Int, outletId:Int, load:Float, ?_time:Date) {
 
-		var now = _time==null ? getNow() : _time;
+		var now = _time==null ? Date.now() : _time;
 		
 		//Write the current load to the CurrentLoad table (in mem):
 		
@@ -379,7 +379,7 @@ class DataBaseInterface {
 	public static function getOutletHistoryLastQuarter(houseId:Int) : Map<Int, Float> {
 		
 		var r = new Map<Int, Float>();
-		var to = getNow();
+		var to = Date.now();
 		var from = DateTools.delta(to, -DateTools.minutes(15));
 		for(h in LoadHistory.manager.search($houseId==houseId && $time>from && $time<to, {orderBy:time}) ) {
 			r.set(h.outletId, h.load);
@@ -402,28 +402,19 @@ class DataBaseInterface {
 		*/
 	}
 	
-	//Returns the balance between good and bad energy:
-	public static function getPowerSourceBadness() : Float {
-		
+	
+	public static function getPowerSourceGoodness() : Float {
+	
+		return 0; //TEMP!
+	
 		var now = getNow();
 		var element = PowerSource.manager.select($time<=now, {orderBy:-time});
 		if(element==null) {
-			return 0.5;
+			trace("Error getting power source thing. I will now officially fuck up");
+			return 0.0;
 		}
 		
-		//Total all the bad energy:
-		var bad:Float = element.coal;
-		bad += element.nuclear;
-		
-		//Total all the good energy:
-		var good:Float = element.sun;
-		good += element.wind;
-		good += element.water;
-		
-		if(good+bad==0) //Cannot divide with zero.
-			return 0;
-			
-		return bad/(good+bad);
+		//TODO: Finish this thing. Calculate the balance.
 		
 	}
 	
