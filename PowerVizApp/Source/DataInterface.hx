@@ -611,7 +611,7 @@ class DataInterface {
                                 //trace("comparing ",reading.time,"and",date);
                                 if(Std.string(reading.time) == Std.string(date)){ //date was found
                                 usage.push(reading.watts);
-                                trace("found");
+                            
                                 found = true;
                                 }
                                         
