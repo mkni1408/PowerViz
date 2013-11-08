@@ -7,6 +7,13 @@ import Configuration;
 import LayoutData;
 import OutletBuffer;
 
+#if cpp
+	import cpp.vm.Mutex;
+#elseif neko
+	import neko.vm.Mutex;
+#end
+
+
 class Harvester {
 
 	public static function main() {
@@ -29,6 +36,8 @@ class Harvester {
 	private var mTcpSock:Socket;
 	private var mRemote:HttpAsyncConnection; //RemotingConnection.
 	
+	private var mHttpMutex:Mutex;
+	
 	private var mBuffers:Map<String, OutletBuffer>; //Array of buffers that stores usage over time.
 	
 	private function new() {
@@ -36,6 +45,8 @@ class Harvester {
 		mRemote = null;
 		mConfig = new Configuration();
 		mBuffers = new Map<String, OutletBuffer>();
+		
+		mHttpMutex = new Mutex();
 	}
 	
 	private function runMain() {
@@ -78,8 +89,10 @@ class Harvester {
 	private var mAttemptRemotingReconnection:Bool = false; //True if Harvester should try to reconnect the mRemote connection.
 	//Connects to the PowerVizServer using remoting.
 	private function remoteConnect() {
+		mHttpMutex.acquire();
 		mRemote = HttpAsyncConnection.urlConnect(mConfig.serverUrl);
 		if(mRemote==null) {
+			mHttpMutex.release();
 			sendLogData("Could not connect");
 			return;
 		}
@@ -88,6 +101,7 @@ class Harvester {
 	}
 	
 	private function remoteConnectionErrorHandler(err:Dynamic) {
+		mHttpMutex.release();
 		sendLogData("Error: " + Std.string(err));
 		mAttemptRemotingReconnection = true;
 	}
@@ -112,7 +126,8 @@ class Harvester {
 			return;
 		}
 
-		var f = function(v:Dynamic) : Void {};
+		var f = function(v:Dynamic) : Void {mHttpMutex.release();};
+		mHttpMutex.acquire();
 		mRemote.Api.setZenseLayout.call([mConfig.houseId, data],f);
 	}
 
@@ -239,9 +254,10 @@ class Harvester {
 	//Returns an array of all electrical outlets Ids.
 	private function getOutletIds() : Array<String> {
 		Sys.sleep(mConfig.sleepTime);
-
-		if(!connectToBox())
+		
+		if(!connectToBox()) {
 			return null;
+		}
 
 		var r = writeZenseString(">>Get Devices<<");
 		disconnectFromBox();
@@ -271,8 +287,9 @@ class Harvester {
 		Sys.sleep(mConfig.sleepTime);
 		
 		//Connect to the box and get the data:
-		if(!connectToBox())
+		if(!connectToBox()) {
 			return "";
+		}
 			
 		var r = writeZenseString(">>Get " + property + " " + StringTools.trim(id) + "<<");
 		disconnectFromBox();
@@ -300,6 +317,7 @@ class Harvester {
 		}
 		var w:Null<Int> = Std.parseInt(result);
 		return w!=null ? w : -1;
+	
 	}
 	
 	//-------------------------------------------------------
