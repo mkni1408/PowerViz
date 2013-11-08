@@ -7,6 +7,7 @@ import SPODS;
 //Common objects:
 import LayoutData; 
 import HouseDescriptor; 
+import Enums;
 
 typedef TimeWatts = {time:Date, watts:Float}
 
@@ -441,6 +442,16 @@ class DataBaseInterface {
 		d.time = time;
 		d.msg = msg;
 		d.insert();
+	}
+
+	public static function logInteraction(houseId:Int, type:LogType, tag:String, comment:String) {
+		var entry = new DisplayLog();
+		entry.houseId = houseId;
+		entry.time = getNow();
+		entry.tag = tag;
+		entry.type = Std.string(type);
+		entry.comments = comment;
+		entry.insert();
 	}
 
 }

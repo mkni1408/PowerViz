@@ -8,6 +8,8 @@ import HouseDescriptor;
 
 import SPODS;
 
+import Enums; //From PowerVizCommon.
+
 
 /**
 THE server api.
@@ -24,6 +26,11 @@ class Api {
 	//General purpose function to get the current suerver time.
 	public function getTime() : Date {
 		return DataBaseInterface.getNow();
+	}
+	
+	public function logInteraction(houseId:Int, type:LogType, tag:String, comment:String) {
+		//TODO: Enter data into database.
+		DataBaseInterface.logInteraction(houseId, type, tag, comment);
 	}
 	
 	////////////////////////////////////////////////////////

@@ -9,6 +9,8 @@ import Config;
 
 import PowerTimer;
 
+import Enums; //From PowerVizCommon.
+
 //The mutex stuff:
 #if neko
 	import neko.vm.Mutex;
@@ -19,6 +21,7 @@ import PowerTimer;
 typedef TimeWatts = {time:Date, watts:Float}
 typedef ArealDataStruct = {outletIds:Array<Int>, watts:Map<Int, Array<Float>>, colors:Map<Int,Int>}
 
+/*
 enum PowerSource {
         Coal;
         Wind;
@@ -26,6 +29,13 @@ enum PowerSource {
         Sun;
         Nuclear;
 }
+
+enum LogType {
+	ScreenChange;
+	Button;
+	Setting;
+}
+*/
 
 /*
 Class that handles all data comming from the server.
@@ -78,7 +88,7 @@ class DataInterface {
         
         //Layout data:
         public var houseDescriptor(default,null) : HouseDescriptor; //All data describing the house and its outlets.
-        public var currentPowerSource(default,null):PowerSource; //The current power source. See the enum above.
+        //public var currentPowerSource(default,null):PowerSource; //The current power source. See the enum above.
         public var powerSourceBadness(default,null):Float; //How bad is the power? 0 is totally good, 1 is completely bad.
         
         //Usage data now:
@@ -156,6 +166,7 @@ class DataInterface {
         //Called when a connection or server error occurs.
         private function onError(e:String) {
             Sys.println("Connection error: " + e);
+            mConnectionMutex.release();
         }
        
         
@@ -388,6 +399,23 @@ class DataInterface {
         	}
         }
         
+        
+        
+        //***************************************************************************
+        //***************************************************************************
+               
+        
+        //The logging function. Use the defined types above.
+        public function logInteraction(type:LogType, tag:String, ?comment:String) {
+        
+        	mConnectionMutex.acquire(); //Get the mutex to avoid network blocking.
+        	
+			mCnx.Api.logInteraction.call([Config.instance.houseId, type, tag, comment==null ? "" : comment], function(data:Dynamic){
+				mConnectionMutex.release();
+			});
+        }
+        
+         
         //************************************************
         // Functions for delivering the supplied data: (These are the functions that the screens should use).
         //************************************************
@@ -661,6 +689,7 @@ class DataInterface {
                 return u==null ? 0 : u;
         }
         
+        /*
         //Returns the current powersource.
         private function powerSourceStringToEnum(str:String) : PowerSource {
         
@@ -679,6 +708,7 @@ class DataInterface {
                         return PowerSource.Coal;
             }
         }
+        */
         
         public function relativeUsage() : Float {
                 return mRelativeUsageNow; 

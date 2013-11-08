@@ -14,7 +14,8 @@ import flash.ui.Keyboard;
 import flash.Lib;
 
 import PowerTimer;
-
+import Enums; //From PowerVizCommon.
+import DataInterface;
 
 
 /*
@@ -133,16 +134,6 @@ class SwipeMill {
 			
 		return mScreenPos;
 		
-		
-		/*
-		mScreenPos = f;
-		if(mScreenPos<0) {
-			mScreenPos += mObjects.length;
-		}
-		positionObjects();
-		return mScreenPos;
-		*/
-		
 	}
 	
 	/*Internal function. Positions all the DisplayObjects.*/
@@ -156,32 +147,6 @@ class SwipeMill {
 		
 		if(mSwipeDots!=null)
 			mSwipeDots.setActive(mScreenPos);
-		
-	
-		
-		/*
-		if(mScreenPos>=mObjects.length) {
-			mScreenPos -= mObjects.length;
-		}
-		
-		if(mScreenPos < -1) {
-			mScreenPos += mObjects.length;
-		}
-		
-		var i = 0;
-		for(obj in mObjects) {
-			obj.x = (i - mScreenPos)*obj.width;
-			i+=1;
-		}
-		
-		if(mScreenPos>(mObjects.length-1)) {
-			mObjects[0].x = (i - mScreenPos)*mObjects[0].width;
-		}
-		
-		if(mSwipeDots!=null)
-			mSwipeDots.setActive(mScreenPos);
-		*/
-		
 		
 	}
 	
@@ -212,6 +177,7 @@ class SwipeMill {
 	/*Called when the tween effect ends. Purpose unknown.*/
 	private static function onMakeScreenFitDone() {
 		//trace("onMakeScreenFitDone() - " + mScreenPos);
+		DataInterface.instance.logInteraction(LogType.ScreenChange, Std.string(screenPos), "Changed to screen " + screenPos);
 	}
 	
 	private static function setArrowsVisibility() {

@@ -53,8 +53,9 @@ class LoadHistory extends sys.db.Object {
 class DisplayLog extends sys.db.Object {
 	public var houseId : SInt;
 	public var time : SDateTime;
-	public var event : SString<256>;
-	public var eventCategory : SInt;
+	public var tag : SString<256>;
+	public var type : SString<32>;
+	public var comments : SString<256>;
 }
 
 @:id(houseId, outletId)
