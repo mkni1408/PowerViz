@@ -28,6 +28,7 @@ class Api {
 		return DataBaseInterface.getNow();
 	}
 	
+	
 	public function logInteraction(houseId:Int, type:LogType, tag:String, comment:String) {
 		//TODO: Enter data into database.
 		DataBaseInterface.logInteraction(houseId, type, tag, comment);

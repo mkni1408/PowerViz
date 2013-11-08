@@ -56,6 +56,13 @@ class DataBaseInterface {
 		var now = getNow();
 		return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0);
 	}
+	
+	private static function getThisQuarter() : Date {
+		var now = getNow();
+		var quarter = now.getMinutes();
+		quarter = Math.floor(quarter/15) * 15;
+		return new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), quarter, 0);
+	}
 
 	
 	/**
@@ -64,7 +71,7 @@ class DataBaseInterface {
 	**/
 	public static function setCurrentLoad(houseId:Int, outletId:Int, load:Float, ?_time:Date) {
 
-		var now = _time==null ? Date.now() : _time;
+		var now = _time==null ? getNow() : _time;
 		
 		//Write the current load to the CurrentLoad table (in mem):
 		
@@ -327,12 +334,13 @@ class DataBaseInterface {
 		return r;
 	}
 	
-	
+	//Returns the outlet history data that lies within the specified range.
+	//To is included, from is not included.
 	public static function getOutletHistoryAll(houseId:Int, from:Date, to:Date) : Map<Int, Array<TimeWatts> > {
 	
 		var result = new Map<Int, Array<TimeWatts> >();
 
-		var qr = LoadHistory.manager.search($houseId == houseId && $time>=from && $time<=to, {orderBy : time});
+		var qr = LoadHistory.manager.search($houseId == houseId && $time>from && $time<=to, {orderBy : time});
 		for(oh in qr) {
 			if(result.exists(oh.outletId)==false) {
 				result.set(oh.outletId, new Array<TimeWatts>());
@@ -346,31 +354,31 @@ class DataBaseInterface {
 	//Returns the usage data of this outlet in the last 24 hours.
 	public static function getOutletHistoryAllToday(houseId:Int) : Map<Int, Array<TimeWatts> > {
 		
-		var to = getNow();
+		var to = getThisQuarter();
 		var from = DateTools.delta(to, -DateTools.hours(24));
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
 	public static function getOutletHistoryAllHour(houseId:Int) : Map<Int, Array<TimeWatts> > {
-		var to:Date = getNow();
+		var to:Date = getThisQuarter();
 		var from = DateTools.delta(to, -DateTools.hours(1));
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
 	public static function getOutletHistoryAllDay(houseId:Int) : Map<Int, Array<TimeWatts> > {
-		var to:Date = getNow();
+		var to:Date = getThisQuarter();
 		var from = new Date(to.getFullYear(), to.getMonth(), to.getDate(), 0,0,0);
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
 	public static function getOutletHistoryAllWeek(houseId:Int) : Map<Int, Array<TimeWatts> >{
-		var to:Date = getNow();
+		var to:Date = getThisQuarter();
 		var from = DateTools.delta(to, -DateTools.days(7));
 		return getOutletHistoryAll(houseId, from, to);
 	}
 	
 	public static function getOutletHistoryThreeDays(houseId:Int) : Map<Int, Array<TimeWatts> > {
-		var to:Date = getNow();
+		var to:Date = getThisQuarter();
 		var from = DateTools.delta(to, -DateTools.days(3));
 		return getOutletHistoryAll(houseId, from, to);
 	}
@@ -379,7 +387,7 @@ class DataBaseInterface {
 	public static function getOutletHistoryLastQuarter(houseId:Int) : Map<Int, Float> {
 		
 		var r = new Map<Int, Float>();
-		var to = Date.now();
+		var to = getNow();
 		var from = DateTools.delta(to, -DateTools.minutes(15));
 		for(h in LoadHistory.manager.search($houseId==houseId && $time>from && $time<to, {orderBy:time}) ) {
 			r.set(h.outletId, h.load);
@@ -402,19 +410,28 @@ class DataBaseInterface {
 		*/
 	}
 	
-	
-	public static function getPowerSourceGoodness() : Float {
-	
-		return 0; //TEMP!
-	
+	//Returns the balance between good and bad energy:
+	public static function getPowerSourceBadness() : Float {
+		
 		var now = getNow();
 		var element = PowerSource.manager.select($time<=now, {orderBy:-time});
 		if(element==null) {
-			trace("Error getting power source thing. I will now officially fuck up");
-			return 0.0;
+			return 0.5;
 		}
 		
-		//TODO: Finish this thing. Calculate the balance.
+		//Total all the bad energy:
+		var bad:Float = element.coal;
+		bad += element.nuclear;
+		
+		//Total all the good energy:
+		var good:Float = element.sun;
+		good += element.wind;
+		good += element.water;
+		
+		if(good+bad==0) //Cannot divide with zero.
+			return 0;
+			
+		return bad/(good+bad);
 		
 	}
 	
@@ -446,6 +463,5 @@ class DataBaseInterface {
 	}
 
 }
-
 
 

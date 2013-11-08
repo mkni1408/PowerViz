@@ -230,12 +230,16 @@ class ArealScreen extends Sprite {
             switch( coordSystemType ) {
 	            case 0:
 	       			mViewMode = VIEWMODE_DAY; //HOUR
+	       			DataInterface.instance.logInteraction(LogType.Button, "ArealScreenViewHour", "Viewing hour data in Arealscreen");
 	            case 1:
 	       			mViewMode = VIEWMODE_WEEK; //DAY
+	       			DataInterface.instance.logInteraction(LogType.Button, "ArealScreenViewDay", "Viewing day data in Arealscreen");
 	        	case 2:
 	        		mViewMode = VIEWMODE_MONTH; //Three days.
+	        		DataInterface.instance.logInteraction(LogType.Button, "ArealScreenViewThreeDays", "Viewing three days data in Arealscreen");
 	            default:
 	        		mViewMode = VIEWMODE_DAY; //Defaults to hour.
+	        		DataInterface.instance.logInteraction(LogType.Button, "ArealScreenViewHour", "Defaults to viewing hour data in Arealscreen");
         	}
             redrawEverything(); 
         }
