@@ -69,6 +69,7 @@ class HouseOutlets extends sys.db.Object {
 	public var color : SString<8>;
 }
 
+
 @:id(houseId, roomId)
 class HouseRooms extends sys.db.Object {
 	public var houseId : SInt;
@@ -76,7 +77,6 @@ class HouseRooms extends sys.db.Object {
 	public var roomName : SString<128>;
 	public var roomColor : SString<8>;
 }
-
 
 
 @:id(time)

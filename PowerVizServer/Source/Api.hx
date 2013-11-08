@@ -23,7 +23,7 @@ class Api {
 	
 	//General purpose function to get the current suerver time.
 	public function getTime() : Date {
-		return Date.now();
+		return DataBaseInterface.getNow();
 	}
 	
 	////////////////////////////////////////////////////////

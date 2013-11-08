@@ -63,7 +63,7 @@ class DataBaseInterface {
 	**/
 	public static function setCurrentLoad(houseId:Int, outletId:Int, load:Float, ?_time:Date) {
 
-		var now = _time==null ? Date.now() : _time;
+		var now = _time==null ? getNow() : _time;
 		
 		//Write the current load to the CurrentLoad table (in mem):
 		
@@ -378,7 +378,7 @@ class DataBaseInterface {
 	public static function getOutletHistoryLastQuarter(houseId:Int) : Map<Int, Float> {
 		
 		var r = new Map<Int, Float>();
-		var to = Date.now();
+		var to = getNow();
 		var from = DateTools.delta(to, -DateTools.minutes(15));
 		for(h in LoadHistory.manager.search($houseId==houseId && $time>from && $time<to, {orderBy:time}) ) {
 			r.set(h.outletId, h.load);

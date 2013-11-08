@@ -9,6 +9,13 @@ import Config;
 
 import PowerTimer;
 
+//The mutex stuff:
+#if neko
+	import neko.vm.Mutex;
+#elseif cpp
+	import cpp.vm.Mutex;
+#end
+
 typedef TimeWatts = {time:Date, watts:Float}
 typedef ArealDataStruct = {outletIds:Array<Int>, watts:Map<Int, Array<Float>>, colors:Map<Int,Int>}
 
@@ -59,6 +66,8 @@ class DataInterface {
         
         private var mCnx : HttpAsyncConnection; //Remoting connection used for communicating with the server. 
         private var mUrl : String;
+        
+        private var mConnectionMutex:Mutex;
         
         //Timers:
         private var mTimerNow : PowerTimer; //Timer used to get the "now" usage data. 
@@ -113,6 +122,7 @@ class DataInterface {
             initTimers();
         }
         
+        
         private function constructUsageDataContainers() {
 
             mOutletDataNow = new Map<Int, Float>(); //Usage now for each outlet, measured in watts.
@@ -134,10 +144,12 @@ class DataInterface {
              
         }
         
+        
         //Connects to the server, setting up the remoting system.
         public function connect()  {
             mCnx = HttpAsyncConnection.urlConnect(mUrl);
             mCnx.setErrorHandler(onError);
+            mConnectionMutex = new Mutex();
         }
         
         //Called when a connection or server error occurs.
@@ -186,48 +198,48 @@ class DataInterface {
         
         //Get data to start with.
         private function getDataOnCreation() {
-            //trace("Getting data from server....");
+
             houseDescriptor = getHouseDescriptor(); //Get the house layout.
 
             //Call the timers to get data to start with:
             onTimerNow();
-            Sys.sleep(1.0);
             onTimerQuarter();
-            Sys.sleep(1.0);
             onTimerHour();
-            Sys.sleep(1.0);
             onTimerDay();
-            Sys.sleep(1.0);
             onTimerWeek();
-            trace("More or less done getting data.");
         }
         
         
         private function onTimerNow() : Void {  
-            
-        	  
-                mCnx.Api.getCurrentLoadAll.call([Config.instance.houseId], onGetCurrentLoadAll);
+        	mConnectionMutex.acquire();
+        	mCnx.Api.getCurrentLoadAll.call([Config.instance.houseId], onGetCurrentLoadAll);
         }
         
         
         private function onTimerQuarter() : Void {
             
+            	mConnectionMutex.acquire();
                 mCnx.Api.getOutletHistoryLastQuarter.call([Config.instance.houseId], onGetOutletHistoryLastQuarter);
                 //mCnx.Api.getRelativeMax.call([Config.instance.houseId], onGetRelativeMax);
+                mConnectionMutex.acquire();
                 mCnx.Api.getMaxWattsSetting.call([Config.instance.houseId], onGetMaxWatts);
         }
         
         private function onTimerHour() : Void {
                 
+                mConnectionMutex.acquire();
                 mCnx.Api.getOutletHistoryAllHour.call([Config.instance.houseId], onGetOutletHistoryAllHour);
         }
         
         private function onTimerDay() : Void {
-            
+        		
+        		mConnectionMutex.acquire();
                 mCnx.Api.getOutletHistoryAllToday.call([Config.instance.houseId], onGetOutletHistoryAllDay);
         }
         
         private function onTimerWeek() : Void {
+        
+				mConnectionMutex.acquire();
                 mCnx.Api.getOutletHistoryThreeDays.call([Config.instance.houseId], onGetOutletHistoryAllWeek);
         }
         
@@ -250,6 +262,7 @@ class DataInterface {
                 else if(mRelativeUsageNow<0) {
                         mRelativeUsageNow = 0;
                 }
+                mConnectionMutex.release();
         }
         
         private function onGetOutletHistoryLastQuarter(data:Dynamic) : Void {
@@ -259,21 +272,25 @@ class DataInterface {
                 mOutletDataQuarterTotal = 0;
                 for(w in mOutletDataQuarter)
                         mOutletDataQuarterTotal += w;
+                    
+                mConnectionMutex.release();
         }
         
         private function onGetOutletHistoryAllHour(data:Dynamic) : Void {
 
                 onGetOutletHistory(data, "hour");
+                mConnectionMutex.release();
         }
         
         private function onGetOutletHistoryAllDay(data:Dynamic) : Void {
                 
                 onGetOutletHistory(data, "day");
-                
+                mConnectionMutex.release();
         }
         
         private function onGetOutletHistoryAllWeek(data:Dynamic) : Void {
                 onGetOutletHistory(data, "week");
+                mConnectionMutex.release();
         }
         
         private function onGetOutletHistory(data:Dynamic, timespan:String) {
@@ -328,11 +345,12 @@ class DataInterface {
         
         private function onGetRelativeMax(data:Dynamic) : Void {
                 mRelativeMax = data;
+                mConnectionMutex.release();
         }
         
         private function onGetMaxWatts(data:Dynamic) : Void {
-        	trace(data);
         	mRelativeMax = data;
+        	mConnectionMutex.release();
         }
         
         //Function for filling in missing dates in a specified dataset:
@@ -607,20 +625,20 @@ class DataInterface {
         //Returns the current powersource.
         private function powerSourceStringToEnum(str:String) : PowerSource {
         
-                switch(str.toLowerCase()) {
-                        case "coal":
-                                return PowerSource.Coal;
-                        case "wind":
-                                return PowerSource.Wind;
-                        case "water":
-                                return PowerSource.Water;
-                        case "sun":
-                                return PowerSource.Sun;
-                        case "nuclear":
-                                return PowerSource.Nuclear;
-                        default:
-                                return PowerSource.Coal;
-                }
+            switch(str.toLowerCase()) {
+                case "coal":
+                        return PowerSource.Coal;
+                case "wind":
+                        return PowerSource.Wind;
+                case "water":
+                        return PowerSource.Water;
+                case "sun":
+                        return PowerSource.Sun;
+                case "nuclear":
+                        return PowerSource.Nuclear;
+                default:
+                        return PowerSource.Coal;
+            }
         }
         
         public function relativeUsage() : Float {

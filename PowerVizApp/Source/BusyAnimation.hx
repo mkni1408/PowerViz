@@ -2,6 +2,9 @@ package;
 
 import flash.display.Sprite;
 import flash.Lib;
+import flash.text.TextField;
+
+import FontSupply;
 
 class BusyAnimation extends Sprite {
 
@@ -12,17 +15,28 @@ class BusyAnimation extends Sprite {
 		return instance;
 	}
 	
+	private var mTextField : TextField;
+	
 	private function new() {
 		super();
 		draw();
+		setText();
 	}
 	
 	private function draw() {
-		this.graphics.beginFill(0xFF00FF);
+		this.graphics.beginFill(0xFF00FF, 0);
 		this.graphics.drawRect(0,0, 100,100);
 		this.graphics.endFill();
 		this.x = (Lib.stage.stageWidth-this.width) / 2;
 		this.y = (Lib.stage.stageHeight-this.height) / 2;
+	}
+	
+	private function setText() {
+		mTextField = new TextField();
+		mTextField.defaultTextFormat = FontSupply.instance.getTitleFormat();
+		mTextField.text = "Indlæser...  ";
+		mTextField.width = mTextField.textWidth;
+		this.addChild(mTextField);
 	}
 	
 	//Call this when an operation that takes time will start.

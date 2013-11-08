@@ -19,6 +19,10 @@ class PowerOrigin extends Sprite{
 	private var mEnergySource : Sprite; 
 	private var mUsagePointer : Sprite;
 	
+	private static inline var mSliderFromColor:Int = 0x00FF00;
+	private static inline var mSliderToColor:Int = 0xFF0000;
+	private static inline var mSliderPointerColor:Int = 0x0000FF;
+	
 	public function new(){
 
 		super();
@@ -28,22 +32,23 @@ class PowerOrigin extends Sprite{
 		
 		drawFrame();
 		
-		var bitMapEnergySource = new Bitmap (Assets.getBitmapData ("assets/energy_source.png"));
-		mEnergySource = new Sprite();
-		mEnergySource.addChild (bitMapEnergySource);
-		//centerGraphics(mEnergySource, bitMapEnergySource);
-		
-		
-		mFrame.addChild(mEnergySource);
-		
 		mSliderBar = createSliderBar();
 		mFrame.addChild(mSliderBar);
 		
 		mUsagePointer = createUsagePointer();
 		mFrame.addChild(mUsagePointer);
 		
-		mEnergySource.visible = true;
+		positionElements();
 		
+		positionPointerOnSlider(0.5);
+		
+	}
+	
+	private function positionElements() {
+		mSliderBar.width = mFrame.width / 2;
+		mSliderBar.height = mFrame.height / 10;
+		mSliderBar.x = (mFrame.width-mSliderBar.width)/2;
+		mSliderBar.y = (mFrame.height-mSliderBar.height)/2;
 	}
 
 	private function centerGraphics(origin:Sprite, bitmap:Bitmap){
@@ -71,7 +76,7 @@ class PowerOrigin extends Sprite{
 	//Returns a triangleular usage pointer.
 	private function createUsagePointer() : Sprite {
 		var ret = new Sprite();
-		ret.graphics.beginFill(0x0000FF);
+		ret.graphics.beginFill(mSliderPointerColor);
 		ret.graphics.moveTo(0,0);
 		ret.graphics.lineTo(20, 20);
 		ret.graphics.lineTo(-20,20);
@@ -82,7 +87,7 @@ class PowerOrigin extends Sprite{
 	
 	private function createAndPositionFrame() : Sprite {
 		var rv = new Sprite();
-		rv.graphics.beginFill(0xFF00FF, 0);
+		rv.graphics.beginFill(0xFF00FF, 0); 
 		rv.graphics.drawRect(0,0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
 		rv.x = Lib.stage.stageWidth / 2;
 		rv.y = 0;
@@ -91,10 +96,21 @@ class PowerOrigin extends Sprite{
 	
 	private function createSliderBar() : Sprite {
 		var rv = new Sprite();
-		rv.graphics.beginGradientFill(flash.display.GradientType.LINEAR, [0x00FF00, 0xFF0000], [0,1], [0,100]);
+		
+		var matrix = new flash.geom.Matrix();
+		matrix.createGradientBox(200,20);
+		
+		rv.graphics.beginGradientFill(flash.display.GradientType.LINEAR, [mSliderFromColor, mSliderToColor], [1,1], [0,255], matrix);
 		rv.graphics.drawRect(0,0, 200,20);
 		rv.graphics.endFill();
 		return rv;
+	}
+	
+	//Places the triangle slider thing on the slider bar. 
+	//Value should be 0-1.
+	private function positionPointerOnSlider(value:Float) {
+		mUsagePointer.y = (mSliderBar.y + mSliderBar.height) - (mUsagePointer.height/3);
+		mUsagePointer.x = mSliderBar.x + (mSliderBar.width*value);
 	}
 
 }
