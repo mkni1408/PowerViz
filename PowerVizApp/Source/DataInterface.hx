@@ -496,13 +496,57 @@ class DataInterface {
                 var houseId=Config.instance.houseId;
                 
                 //var usageToday:Map<Int, Array<{time:Date, watts:Float}> > = getUsageToday();
+                var tmpToday = new Map<Int, Array<TimeWatts> >();
                 var usageToday = new Map<Int, Array<TimeWatts> >();
+                var rvIds = new Array<Int>();
+                var rvUsage = new Map<Int, Array<Float>>();
+                var usage = new Array<TimeWatts>();
 
-                usageToday = mOutletDataDayTimed;
+                tmpToday = mOutletDataDayTimed;
                 
                 var onOffMap = new Map<Int, Array<OnOffData> >();
                 var start:Date=null;
                 var stop:Date=null;
+
+               
+
+                var dateArray = createTimeArray(96);
+                trace(tmpToday);
+
+                for(key in tmpToday.keys()) {        
+
+                    rvIds.push(key);
+
+
+                    for(date in dateArray){
+
+                        var found = false;
+                        tmpToday.get(key).reverse();
+
+                        for(reading in tmpToday.get(key)) {
+                            //trace("comparing ",reading.time,"and",date);
+                            if(Std.string(reading.time) == Std.string(date)){ //date was found
+                            usage.push(reading);
+                            found = true;
+                            }
+                                    
+                        }
+
+                        if(!found){//we did not find anything
+                        
+                        usage.push({time:date,watts:0});
+                        }
+                
+                    }
+
+                            
+                    usageToday.set(key, usage);
+                    usage = new Array<TimeWatts>();
+                    //rvColors.set(key, houseDescriptor.getOutlet(key).outletColor);
+                }
+
+                 
+
                 for(key in usageToday.keys()) {
 
 	                onOffMap.set(key, new Array<OnOffData>());
@@ -628,7 +672,7 @@ class DataInterface {
                 }
 
 
-                trace(source);
+                
                 var dateArray = createTimeArray(numberofDates);
 
                 for(key in source.keys()) {        
