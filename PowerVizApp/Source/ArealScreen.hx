@@ -209,20 +209,12 @@ class ArealScreen extends Sprite {
         
         private function drawData(outletIds:Array<Int>, usage:Map<Int, Array<Float>>, colors:Map<Int, Int>) : Void {
                 
-                
-
                 var data = prepareArray(outletIds,usage,colors);
-
-                
+            
                 mDiagram.graphics.clear();
 
-                
-
                 mDiagram.generate(data.usage, data.colors, Lib.stage.stageWidth / 1.15,Lib.stage.stageHeight / 1.25);
-
-
-               
-                    
+       
         }
         
       
@@ -285,16 +277,10 @@ class ArealScreen extends Sprite {
                 while(mBack.numChildren > 0)
                     mBack.removeChildAt(0);
 
-
-
-
                 mDiagram = new ArealDiagram();
                 mCoordSys = new CoordSystem();
                 
                 callDrawMethods();
-                
-                
-
                 
         }
 
@@ -352,43 +338,38 @@ class ArealScreen extends Sprite {
                 var _outlets = new Array<Outlet>();
                 var _roomMap = new Array<Int>();
                 
-                
-                    
+                for(room in DataInterface.instance.houseDescriptor.getRoomArray()) {
+                    for(outlet in room.getOutletsArray()) {
+                           
+                    	_outlets.push(new Outlet(0, Std.string(outlet.outletId), outlet.name, 
+                                                            null, room.roomName, 0,
+                                                            room.roomColor, outlet.outletColor));
 
-
-                    for(room in DataInterface.instance.houseDescriptor.getRoomArray()) {
-                        for(outlet in room.getOutletsArray()) {
-                                _outlets.push(new Outlet(0, Std.string(outlet.outletId), outlet.name, 
-                                                                null, room.roomName, 0,
-                                                                room.roomColor, outlet.outletColor));
-
-                                
-                        }
-                    }
-
-
-                    
-                    for(room in mRoomArray){
-                        //trace(DataInterface.instance.houseDescriptor.getRoom(id).roomName);
-                        var tmpArray = new Array<Int>();
-                        for(out in _outlets){
-
-                            //trace("comparing "+Std.parseInt(out.getid())+" with "+id);
-
-                            if(out.getRoom() == room){
-
-                            tmpArray.push(Std.parseInt(out.getid()));
                             
+                    }
+                }
 
-                            }
+
+                    
+                for(room in mRoomArray){
+                    //trace(DataInterface.instance.houseDescriptor.getRoom(id).roomName);
+                    var tmpArray = new Array<Int>();
+                    for(out in _outlets){
+
+                        //trace("comparing "+Std.parseInt(out.getid())+" with "+id);
+
+                        if(out.getRoom() == room){
+
+                        tmpArray.push(Std.parseInt(out.getid()));
+                        
 
                         }
-                        
-                        
-                        _room.push(tmpArray);
-                        
-                                           
+
                     }
+                    
+                    _room.push(tmpArray);
+                                       
+                }
 
 
                
@@ -487,11 +468,8 @@ class ArealScreen extends Sprite {
                             _colors.push(colors.get(id));
 
                         }
-
                     }
                     //trace(_usage);
-
-
                 }
 
 
@@ -507,13 +485,8 @@ class ArealScreen extends Sprite {
                                 _returnColors.push(_colors[i]);
                                 break;
                             }
-
                         }
-
                     }
-
-
-
                 }
 
 
@@ -575,8 +548,6 @@ class ArealScreen extends Sprite {
                     return 2000;
                 }
 
-
-
             }
 
             
@@ -613,8 +584,6 @@ class ArealScreen extends Sprite {
                     }
                 }
 
-
-                
 
                 switch(mViewMode){
                     case 0://Hour
@@ -668,13 +637,6 @@ class ArealScreen extends Sprite {
                         //offset = 2.0;//test
 
 
-                        
-
-                        
-
-                
-
-
                          //trim array an generate the offset and set it
                         tempArray = stringAr.splice(arrEl,stringAr.length);
 
@@ -705,10 +667,6 @@ class ArealScreen extends Sprite {
 
 
                 }
-                 
-
- 
-               
 
                 return tempArray;
 
