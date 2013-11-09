@@ -10,6 +10,7 @@ import FontSupply;
 import TimeChangeButton;
 import CoordSystem;
 import PowerTimer;
+import Enums;
 
 
 class BarScreen extends Sprite {
@@ -131,7 +132,6 @@ class BarScreen extends Sprite {
             	for(t in outlets) {
             	    musageAA.push(DataInterface.instance.getOutletLastHourTotal(t));
             	    colors.push(DataInterface.instance.getOutletColor(t));
-
         		}
             case 1:
             	for(t in outlets) {
@@ -160,29 +160,24 @@ class BarScreen extends Sprite {
 			
 			mColorArray = colors;
 
-		
-		
-	
-
 	}
 		
 
 	//is Called when a button is pushed
 	private function onButtonPush(coordSystemType:Int):Void{
 
-		
-
-
-
 		switch( coordSystemType ) {
     		case 0:
-        	mViewMode = VIEWMODE_DAY;
+				mViewMode = VIEWMODE_DAY;
+				DataInterface.instance.logInteraction(LogType.Button, "BarScreenViewHour");
     		case 1:
-        	mViewMode = VIEWMODE_WEEK;
+				mViewMode = VIEWMODE_WEEK;
+				DataInterface.instance.logInteraction(LogType.Button, "BarScreenViewDay");
         	case 2:
-        	mViewMode = VIEWMODE_MONTH;
+				mViewMode = VIEWMODE_MONTH;
+				DataInterface.instance.logInteraction(LogType.Button, "BarScreenViewThreeDays");
     		default:
-        	mViewMode = VIEWMODE_DAY;
+				mViewMode = VIEWMODE_DAY;
     	}
 
 		
@@ -192,10 +187,6 @@ class BarScreen extends Sprite {
 	}
 
 	private function redrawEverything():Void{
-
-		
-
-		
 
 		if(mViewMode == 0){
 			//hour
@@ -212,7 +203,6 @@ class BarScreen extends Sprite {
 			mTitle.text = "Forbrug denne uge";
 
 		}
-
 
 				
 
