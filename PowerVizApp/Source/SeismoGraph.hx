@@ -23,8 +23,11 @@ class SeismoGraph extends Sprite{
 	private var mNumofFieldsWidthScreen:Float;
 	private var mBadness:Array<Float>;
 	
+	/*
 	private var mTimer:PowerTimer;
 	private var mTimerSetting:Int = 6000;
+	*/
+	private var mCallbackCount:Int; //Counts how many callback are received from DataInterface.
 	private var mbarSprite : Sprite;
 	private var mLastTween:Float;
 	private var tf:TextField;
@@ -68,12 +71,21 @@ class SeismoGraph extends Sprite{
 		
 
 		//redrawSeismoGraphCurve();
-
+		/*
 		mTimer = new PowerTimer(mTimerSetting);
 		mTimer.onTime = function() {
 			fetchWattConsumption();
 		};
 		mTimer.start();
+		*/
+		mCallbackCount = 0;
+		DataInterface.instance.callbackNow.addCallback(function() {
+				mCallbackCount += 1;
+				if(mCallbackCount>1) {
+					fetchWattConsumption();
+					mCallbackCount = 0;
+				}
+			});
 		
 	}
 

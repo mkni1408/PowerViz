@@ -52,9 +52,12 @@ class PowerOrigin extends Sprite{
 		
 		positionPointerOnSlider(0.5);
 		
+		/*
 		mTimer = new PowerTimer(3000);
 		mTimer.onTime = onTime;
 		mTimer.start();
+		*/
+		DataInterface.instance.callbackNow.addCallback(onTime);
 		
 	}
 	
