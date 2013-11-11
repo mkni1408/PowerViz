@@ -262,14 +262,16 @@ class SwipeMill {
 	}
 	
 	private static function onLeftArrow() {
-		Actuate.tween(SwipeMill, 0.75, {screenPos:screenPos-1}).onComplete(makeScreenFit); 
+		Actuate.stop(SwipeMill, "screenPos");
+		Actuate.tween(SwipeMill, 0.75, {screenPos:Math.floor(screenPos-1)}).onComplete(makeScreenFit); 
 		mSwipeDots.showDots();
 		mSwipeDots.hideDots();
 		onScreenTouch();
 	}
 	
 	private static function onRightArrow() {
-		Actuate.tween(SwipeMill, 0.75, {screenPos:screenPos+1}).onComplete(makeScreenFit);
+		Actuate.stop(SwipeMill, "screenPos");
+		Actuate.tween(SwipeMill, 0.75, {screenPos:Math.floor(screenPos+1)}).onComplete(makeScreenFit);
 		mSwipeDots.showDots();
 		mSwipeDots.hideDots();
 		onScreenTouch();
