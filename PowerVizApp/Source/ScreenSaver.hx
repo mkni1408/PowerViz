@@ -24,7 +24,7 @@ class ScreenSaver extends Sprite {
 	//bulbTimerAction: the timer for the update frequency of the bulbs
 	//screenSaverTimerAction: The time until the screensaver becomes visible again
 	private var bulbTimerAction:Int = 5000;
-	private var screenSaverTimerAction:Int = 10000; //Millisecs before the screensaver should become active.
+	private var screenSaverTimerAction:Int = 8000; //Millisecs before the screensaver should become active.
 	private var yourBulbFaderTimerAction:Int = 8000;
 	private var mBackground : Bitmap = null;
 	private var mAlertBitmap : Bitmap = null;

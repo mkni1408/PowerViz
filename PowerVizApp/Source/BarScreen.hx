@@ -87,13 +87,16 @@ class BarScreen extends Sprite {
 
 		this.addChild(mBack);
 
+		/*
 		mTimer = new PowerTimer(mTimerInterval); 
 		mTimer.onTime = onTime;
 		mTimer.start();
+		*/
+		DataInterface.instance.callbackQuarter.addCallback(onTime);
 	}
 
 	private function onTime() {
-        trace("Bar timer running");
+        //trace("Bar timer running");
         redrawEverything();
 	}
 	

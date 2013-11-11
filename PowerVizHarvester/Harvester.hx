@@ -81,7 +81,6 @@ class Harvester {
 				mBuffers.get(outlet.outletId).update(getServerTime(), load);
 			
 			}
-			
 		}
 		
 	}
@@ -111,6 +110,8 @@ class Harvester {
 	
 		if(mRemote!=null)
 			mRemote.setErrorHandler(null);
+			
+		Sys.sleep(5); //To avoid the server thinking that it is being attacked!
 			
 		mRemote = null;
 		mAttemptRemotingReconnection = false;

@@ -1,9 +1,11 @@
 -main Harvester
 #-java Harvester
--cpp Export
+#-cpp Export
+-neko Harvester.n
+-cmd nekotools boot Harvester.n
 -debug
 -cp ../PowerVizCommon
 #-cmd java -jar Harvester/Harvester.jar
--cmd scp Harvester/Harvester.jar pi@172.25.26.39:Harvester.jar
+#-cmd scp Harvester/Harvester.jar pi@172.25.26.39:Harvester.jar
 
 
