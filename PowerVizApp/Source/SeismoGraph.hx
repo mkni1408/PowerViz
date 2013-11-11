@@ -41,9 +41,9 @@ class SeismoGraph extends Sprite{
 		mLastTween = 0.0;
 		tf = new TextField();
 		tf.text = "Watt nu:";
-		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
+		tf.setTextFormat(FontSupply.instance.getSeismographabelFormat());
 		firstrun = true;//hack to not get the first value
-		tf.width = mMeasurmenthalfFactor*15;
+		tf.width = mMeasurmenthalfFactor*12;
 
 		mNumofFieldsWidthScreen = Lib.stage.stageWidth/mMeasurmenthalfFactor;
 
@@ -56,13 +56,13 @@ class SeismoGraph extends Sprite{
 
 		mbarSprite.graphics.lineStyle(2,0x000000);
 		mbarSprite.graphics.moveTo(0,Lib.stage.stageHeight);
-		mbarSprite.graphics.lineTo(Lib.stage.stageWidth,Lib.stage.stageHeight);
+		mbarSprite.graphics.lineTo((Lib.stage.stageWidth+10)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight);
 
 		
 		addChild(mbarSprite);
 		mbarSprite.addChild(tf);
 
-		tf.x = ((mMeasurmenthalfFactor*15)/2)-(tf.textWidth/2);
+		tf.x = (Lib.stage.stageWidth+15)-(mMeasurmenthalfFactor*12);
 		tf.y = Lib.stage.stageHeight-30;
 
 		
@@ -97,7 +97,7 @@ class SeismoGraph extends Sprite{
 
 		//first we see if the array length is larger than the amount of slots on the screen
 		//if so we remove the first element of the array to make room for another
-		if(mwattMeasurementArray.length >= mNumofFieldsWidthScreen-15){
+		if(mwattMeasurementArray.length >= mNumofFieldsWidthScreen-12){
 			mwattMeasurementArray.reverse();
 			mwhereIsThePowerFromArray.reverse();
 			
@@ -209,7 +209,7 @@ class SeismoGraph extends Sprite{
 		//graphics.moveTo(0,(Lib.stage.stageHeight/4)*3);
 		//graphics.lineTo(Lib.stage.stageWidth,(Lib.stage.stageHeight/4)*3);
 
-		var xPosition = (Lib.stage.stageWidth-2) - (((mwattMeasurementArray.length-1) * mMeasurmenthalfFactor));
+		var xPosition = (Lib.stage.stageWidth-(mMeasurmenthalfFactor*12)) - (((mwattMeasurementArray.length-1) * mMeasurmenthalfFactor));
 		var yPosition = (Lib.stage.stageHeight/4)*3;
 
 		var prevMeasure = 4;
@@ -328,8 +328,8 @@ class SeismoGraph extends Sprite{
 		mLastTween = height;
 
 		tf.text = "Watt nu: " + DataInterface.instance.getTotalCurrentLoad();
-		tf.width = mMeasurmenthalfFactor*15;
-		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
+		tf.width = mMeasurmenthalfFactor*12;
+		tf.setTextFormat(FontSupply.instance.getSeismographabelFormat());
 
 		//Actuate.tween (mbarSprite, 1, { alpha: 1 } );
 	}
@@ -341,11 +341,11 @@ class SeismoGraph extends Sprite{
 	//draws the frame around the Sprite
 	private function redrawFrame():Void{
 
-		mSeismoGraph.graphics.lineStyle(4,0x000000);
+		//mSeismoGraph.graphics.lineStyle(4,0x000000);
 
 		//redraw frame
-		mSeismoGraph.graphics.drawRect(0, Lib.stage.stageHeight/2, Lib.stage.stageWidth, (Lib.stage.stageHeight/2)-2);
-		mSeismoGraph.graphics.drawRect(0, Lib.stage.stageHeight/2, mMeasurmenthalfFactor*15, (Lib.stage.stageHeight/2)-2);
+		//mSeismoGraph.graphics.drawRect(0, Lib.stage.stageHeight/2, Lib.stage.stageWidth, (Lib.stage.stageHeight/2)-2);
+		//mSeismoGraph.graphics.drawRect(0, Lib.stage.stageHeight/2, mMeasurmenthalfFactor*15, (Lib.stage.stageHeight/2)-2);
 		
 
 	}
