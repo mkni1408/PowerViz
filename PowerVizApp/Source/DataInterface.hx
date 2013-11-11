@@ -11,6 +11,9 @@ import PowerTimer;
 
 import Enums; //From PowerVizCommon.
 
+import CallbackContainer;
+
+
 //The mutex stuff:
 #if neko
 	import neko.vm.Mutex;
@@ -85,6 +88,13 @@ class DataInterface {
         private var mTimerHour : PowerTimer; //Timer to get data every hour.
         private var mTimerDay : PowerTimer; //Timer to get data once a day.
         private var mTimerWeek : PowerTimer;
+		
+		//Callbacks for the different time events:
+		public var callbackNow:CallbackContainer;
+		public var callbackQuarter:CallbackContainer;
+		public var callbackHour:CallbackContainer;
+		public var callbackDay:CallbackContainer;
+		public var callbackWeek:CallbackContainer;
         
         //Layout data:
         public var houseDescriptor(default,null) : HouseDescriptor; //All data describing the house and its outlets.
@@ -116,7 +126,6 @@ class DataInterface {
         private var mOutletDataWeekTotal : Float = 0; //Total usage for all outlets this week.
         private var mOutletDataWeekTimed : Map<Int, Array<TimeWatts> >; //Usage for this week, timed in 15 minute intervals.
 
-
 		//Operation timer: Used for doing operations that have failed once, but should be attempted again:
 		
         
@@ -129,6 +138,7 @@ class DataInterface {
             #end 
             connect();
             constructUsageDataContainers();
+			constructCallbackContainers();
             getDataOnCreation();
             initTimers();
         }
@@ -154,6 +164,15 @@ class DataInterface {
             mOutletDataWeekTimed = new  Map<Int, Array<TimeWatts> >(); //Usage for this week, timed in 15 minute intervals.
              
         }
+		
+		private function constructCallbackContainers () {
+		
+			callbackNow = new CallbackContainer();
+			callbackQuarter = new CallbackContainer();
+			callbackHour = new CallbackContainer();
+			callbackDay = new CallbackContainer();
+			callbackWeek = new CallbackContainer();
+		}
         
         
         //Connects to the server, setting up the remoting system.
@@ -275,6 +294,7 @@ class DataInterface {
                 	mRelativeUsageNow = 0;
                 }
                 mConnectionMutex.release();
+				callbackNow.invoke();
         }
         
         private function onGetOutletHistoryLastQuarter(data:Dynamic) : Void {
@@ -286,23 +306,27 @@ class DataInterface {
 					mOutletDataQuarterTotal += w;
                     
                 mConnectionMutex.release();
+				callbackQuarter.invoke();
         }
         
         private function onGetOutletHistoryAllHour(data:Dynamic) : Void {
 
                 onGetOutletHistory(data, "hour");
                 mConnectionMutex.release();
+				callbackHour.invoke();
         }
         
         private function onGetOutletHistoryAllDay(data:Dynamic) : Void {
                 
                 onGetOutletHistory(data, "day");
                 mConnectionMutex.release();
+				callbackDay.invoke();
         }
         
         private function onGetOutletHistoryAllWeek(data:Dynamic) : Void {
                 onGetOutletHistory(data, "week");
                 mConnectionMutex.release();
+				callbackWeek.invoke();
         }
         
         private function onGetOutletHistory(data:Dynamic, timespan:String) {
@@ -802,3 +826,8 @@ class DataInterface {
         }
 
 }
+
+
+
+
+

@@ -19,9 +19,6 @@ class Speedometer extends Sprite{
 	private var bitMapSpeedometer : Bitmap;
 	private var arrow: SpeedometerArrow;
 	
-	private var mTimer:PowerTimer;
-	private var mTimerSetting:Int = 3000; //Interval between fetching data.
-	
 	private var mSpeedometerSettings : SpeedometerSettings;
 
 	public function new(){
@@ -51,12 +48,8 @@ class Speedometer extends Sprite{
 		
 		registerEvents();
 
-		mTimer = new PowerTimer(mTimerSetting);
-		mTimer.onTime = function() {
-			fetchWattConsumption();
-		};
-		mTimer.start();
-
+		DataInterface.instance.callbackNow.addCallback(function(){fetchWattConsumption();});
+		
 	}
 	
 	//Registers all events that this class will handle.
@@ -67,7 +60,6 @@ class Speedometer extends Sprite{
 	}
 
 	private function centerGraphics(){
-
 
 		mSpeedometer.width = bitMapSpeedometer.width/4;
 		mSpeedometer.height = bitMapSpeedometer.height/4;	
@@ -86,7 +78,6 @@ class Speedometer extends Sprite{
         arrow.y = centerSpriteY;
 
         arrow.setValue(0.5);			
-			
 
 	}
 	//calculates and returns the amount of degrees the speedometorarrow should turn
@@ -96,7 +87,7 @@ class Speedometer extends Sprite{
 	}
 
 	private function fetchWattConsumption():Void{
-
+	
 		var wattMeasure:Float = DataInterface.instance.relativeUsage();
 		if(wattMeasure>1.0)
 			wattMeasure = 1;

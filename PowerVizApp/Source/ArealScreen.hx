@@ -94,10 +94,12 @@ class ArealScreen extends Sprite {
 
                 callDrawMethods();
 
+				/** Screen timers are not used anymore. Callbacks are used instead.
                 mTimer = new PowerTimer(mTimerInterval); 
                 mTimer.onTime = onTime;
                 mTimer.start();
-                
+                **/
+				DataInterface.instance.callbackQuarter.addCallback(onTime); //Use the DataInterface callback mechanism.
                 
         }
 
