@@ -11,6 +11,7 @@ import SpeedometerArrow;
 import DataInterface;
 import PowerTimer;
 import FontSupply;
+import Enums;
 
 class Speedometer extends Sprite{
 	
@@ -203,6 +204,7 @@ class SpeedometerSettings extends Sprite {
 	function onOkButton(event:MouseEvent) {
 		this.visible = false;
 		onDoneChangingSettings(maxValue);
+		DataInterface.instance.logInteraction(LogType.Button, "SpeedometerSettingsChanged", "Set max watts to " + maxValue);
 	}
 	
 	function onUpButton(event:MouseEvent) {
