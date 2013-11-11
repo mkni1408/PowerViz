@@ -4,13 +4,15 @@ package;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.Lib;
-import Bulb;
 import motion.Actuate;
 import Math;
-import DataInterface;
-import PowerTimer;
 import openfl.Assets;
 import flash.display.Bitmap;
+
+import Enums;
+import Bulb;
+import DataInterface;
+import PowerTimer;
 
 /*
 // Sprite that defines a Screensaver
@@ -22,7 +24,7 @@ class ScreenSaver extends Sprite {
 	//bulbTimerAction: the timer for the update frequency of the bulbs
 	//screenSaverTimerAction: The time until the screensaver becomes visible again
 	private var bulbTimerAction:Int = 5000;
-	private var screenSaverTimerAction:Int = 120000;
+	private var screenSaverTimerAction:Int = 10000; //Millisecs before the screensaver should become active.
 	private var yourBulbFaderTimerAction:Int = 8000;
 	private var mBackground : Bitmap = null;
 	private var mAlertBitmap : Bitmap = null;
@@ -118,8 +120,7 @@ class ScreenSaver extends Sprite {
 	
 	//change the bulbstates man
 	public function calculatBulbStates(f:Float):Void{
-		
-		trace(f);
+
 
 				if(f < 0.1){
 
@@ -230,19 +231,23 @@ class ScreenSaver extends Sprite {
 	public function setScreenSaver():Void{
 		
 			if(this.visible){
-			this.visible = true;
+				this.visible = true; //???? If this is visible, set this to visible? 
 			}
 			else{
-
-			this.alpha = 0.0;
-			this.visible = true;
-			Actuate.tween (this, 5, { alpha: 1 } );
+				this.alpha = 0.0;
+				this.visible = true;
+				Actuate.tween (this, 5, { alpha: 1 } );
+				DataInterface.instance.logInteraction(LogType.ScreenChange, "ScreensaverEnabled");
 			}
 			startBulbActionTimer();
 
 	}
 
 	public function onScreenTouch():Void{
+		
+		if(this.visible==true) {
+			DataInterface.instance.logInteraction(LogType.ScreenChange, "ScreensaverDisabled");
+		}
 
 		this.visible = false;
 		restartScreenSaverTimer();
@@ -346,7 +351,7 @@ class ScreenSaver extends Sprite {
 	}
 
 	private function fadeBulbsWhenInactive():Void{
-		
+		trace("fadeBulbsWhenInactive");
 		for(i in 0...mBulbArray.length){
 
 			mBulbArray[i].bulbFade();
@@ -356,7 +361,7 @@ class ScreenSaver extends Sprite {
 	}
 
 	private function onTime() {
-		trace("called");
+
             if(mAlertBitmap.alpha == 1){
             	Actuate.tween (mAlertBitmap, 1, { alpha: 0 } );
 
