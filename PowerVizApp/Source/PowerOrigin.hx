@@ -97,8 +97,8 @@ class PowerOrigin extends Sprite{
 	
 	//draws the frame around the Sprite
 	private function drawFrame():Void{
-		graphics.lineStyle(4,0x000000);
-		graphics.drawRect(Lib.stage.stageWidth/2, 0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
+		//graphics.lineStyle(4,0x000000);
+		//graphics.drawRect(Lib.stage.stageWidth/2, 0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
 	}
 	
 	//Returns a triangleular usage pointer.

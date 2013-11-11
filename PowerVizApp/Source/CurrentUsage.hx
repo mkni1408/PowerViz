@@ -27,6 +27,11 @@ class CurrentUsage extends Sprite{
 	
 		super();
 
+		this.graphics.lineStyle(6,0x000000);
+
+		//draw frame
+		this.graphics.drawRect(0, 0, Lib.stage.stageWidth, Lib.stage.stageHeight);
+
 		speedometer = new Speedometer();
 		powerOrigin = new PowerOrigin();
 		seismoGraph = new SeismoGraph();

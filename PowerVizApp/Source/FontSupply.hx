@@ -28,6 +28,7 @@ class FontSupply {
 	private var mTitleFont : TextFormat;
 	private var mCoordAxisFont : TextFormat;
 	private var mButtonFont : TextFormat;
+	private var mSeismographFont: TextFormat;
 	
 	
 	private function new() {
@@ -37,6 +38,8 @@ class FontSupply {
 		mCoordAxisFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 17, 0x000000);
 		
 		mButtonFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 10, 0x000000);
+
+		mSeismographFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 20, 0x000000);
 
 	}
 	
@@ -52,4 +55,7 @@ class FontSupply {
 		return mCoordAxisFont;
 	}
 
+	public function getSeismographabelFormat():TextFormat {
+		return mSeismographFont;
+	}
 }
