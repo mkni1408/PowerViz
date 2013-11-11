@@ -1,4 +1,4 @@
-package;
+ package;
 
 import flash.display.Sprite;
 import flash.text.TextField;
@@ -54,6 +54,13 @@ public function new(name:String, color:Int,id:Int,f:Int->Void){
 		//s.graphics.beginFill(color);
 		//s.graphics.drawRect(0,0, 50,50);
 		//s.graphics.endFill();
+
+		mPressedButton.width = 50;
+		mPressedButton.height = 50;
+
+
+		mUnpressedButton.width = 50;
+		mUnpressedButton.height = 50;
 
 		this.addChild(mPressedButton);
 		this.addChild(mUnpressedButton);
