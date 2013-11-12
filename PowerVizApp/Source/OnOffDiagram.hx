@@ -170,9 +170,10 @@ class OnOffDiagram extends Sprite{
 		else{
 			mCoordSystem.x = 100;
 		}
-		mCoordSystem.y = (Lib.stage.stageHeight/1.20);
 		mLegend.x =mCoordSystem.x;
-		mLegend.y = mCoordSystem.y + 30;
+		mLegend.y = Lib.stage.stageHeight - mLegend.height;
+		mCoordSystem.y = mLegend.y - mLegend.height;
+		
 		
 		
 	}
