@@ -160,8 +160,8 @@ class OnOffDiagram extends Sprite{
         mTitle.y = 0;
 		mBack.addChild(mLegend);
 
-		mCoordSystem.generate(mBack.width/1.18, (mBack.height/1.16)-mLegend.height, "X", "Y", 
-								(mBack.width/1.18)/mtimeArray.length,((mBack.height/1.16)-mLegend.height)/mNewIDArray.length,
+		mCoordSystem.generate(mBack.width/1.18, (mBack.height/1.20)-mLegend.height, "X", "Y", 
+								(mBack.width/1.18)/mtimeArray.length,((mBack.height/1.20)-mLegend.height)/mNewIDArray.length,
 								mtimeArray,mNewIDArray,true,true,false,true,mOffset);
 
 		if(mNewIDArray.length<10){//scale at number of elements = lower number of elements equals larger text
@@ -170,7 +170,7 @@ class OnOffDiagram extends Sprite{
 		else{
 			mCoordSystem.x = 100;
 		}
-		mCoordSystem.y = (Lib.stage.stageHeight/1.25)+40;
+		mCoordSystem.y = (Lib.stage.stageHeight/1.20);
 		mLegend.x =mCoordSystem.x;
 		mLegend.y = mCoordSystem.y + 30;
 		
