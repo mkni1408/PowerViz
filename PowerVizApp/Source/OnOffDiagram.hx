@@ -187,7 +187,7 @@ class OnOffDiagram extends Sprite{
 		counterArray.push(counter);
 
 
-		for(i in 0...mMapArray.length-1){
+		for(i in 0...mMapArray.length){
 
 			var tmpMap = mMapArray[i];
 			var arrayTail = tmpMap.length;

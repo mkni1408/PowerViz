@@ -46,13 +46,13 @@ class FontSupply {
 
 		mSeismographFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 20, 0x000000);
 
-		mWattFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 30, 0x000000);
+		mWattFont = new TextFormat(Assets.getFont("assets/fonts/Kaffe-Regular.ttf").fontName, 30, 0x000000);
 
-		mCoordYAxisSMALLFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 15, 0x000000);
+		mCoordYAxisSMALLFont = new TextFormat(Assets.getFont("assets/fonts/Kaffe-Regular.ttf").fontName, 17, 0x000000);
 
-		mCoordYAxisMEDIUMFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 18, 0x000000);
+		mCoordYAxisMEDIUMFont = new TextFormat(Assets.getFont("assets/fonts/Kaffe-Regular.ttf").fontName, 20, 0x000000);
 
-		mCoordYAxisLARGEFont = new TextFormat(Assets.getFont("assets/fonts/Oxygen-Regular.ttf").fontName, 22, 0x000000);
+		mCoordYAxisLARGEFont = new TextFormat(Assets.getFont("assets/fonts/Kaffe-Regular.ttf").fontName, 24, 0x000000);
 
 	}
 	
