@@ -144,7 +144,7 @@ class PowerOrigin extends Sprite{
 	//Places the triangle slider thing on the slider bar. 
 	//Value should be 0-1.
 	private function positionPointerOnSlider(value:Float) {
-		var y : Float = (mSliderBar.y + mSliderBar.height) - (mUsagePointer.height/3);
+		var y : Float = (mSliderBar.y + mSliderBar.height);
 		var x : Float = mSliderBar.x + (mSliderBar.width*value);
 		Actuate.tween(mUsagePointer, 1, {x:x, y:y});
 	}
