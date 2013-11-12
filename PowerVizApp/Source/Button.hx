@@ -55,12 +55,12 @@ public function new(name:String, color:Int,id:Int,f:Int->Void){
 		//s.graphics.drawRect(0,0, 50,50);
 		//s.graphics.endFill();
 
-		mPressedButton.width = 90;
-		mPressedButton.height = 90;
+		mPressedButton.width = 70;
+		mPressedButton.height = 70;
 
 
-		mUnpressedButton.width = 90;
-		mUnpressedButton.height = 90;
+		mUnpressedButton.width = 70;
+		mUnpressedButton.height = 70;
 
 		this.addChild(mPressedButton);
 		this.addChild(mUnpressedButton);
