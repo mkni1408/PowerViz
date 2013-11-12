@@ -156,10 +156,12 @@ class OnOffDiagram extends Sprite{
 		mLegend = new Legend();
 		mLegend.drawLegend(mBack.width/1.18,mBack.height/1.16,mColorArray.length,mNewRoomArray,mColorArray);
 
+		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
+        mTitle.y = 0;
 		mBack.addChild(mLegend);
 
-		mCoordSystem.generate(mBack.width/1.18, (mBack.height/1.16)-mLegend.height, "X", "Y", 
-								(mBack.width/1.18)/mtimeArray.length,((mBack.height/1.16)-mLegend.height)/mNewIDArray.length,
+		mCoordSystem.generate(mBack.width/1.18, (mBack.height/1.20)-mLegend.height, "X", "Y", 
+								(mBack.width/1.18)/mtimeArray.length,((mBack.height/1.20)-mLegend.height)/mNewIDArray.length,
 								mtimeArray,mNewIDArray,true,true,false,true,mOffset);
 
 		if(mNewIDArray.length<10){//scale at number of elements = lower number of elements equals larger text
@@ -168,11 +170,11 @@ class OnOffDiagram extends Sprite{
 		else{
 			mCoordSystem.x = 100;
 		}
-		mCoordSystem.y = (mBack.height/1.25)+40;
 		mLegend.x =mCoordSystem.x;
-		mLegend.y = mCoordSystem.y + 30;
-		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
-        mTitle.y = 0;
+		mLegend.y = Lib.stage.stageHeight - mLegend.height;
+		mCoordSystem.y = mLegend.y - mLegend.height;
+		
+		
 		
 	}
 	
@@ -187,7 +189,7 @@ class OnOffDiagram extends Sprite{
 		counterArray.push(counter);
 
 
-		for(i in 0...mMapArray.length){
+		for(i in 0...mMapArray.length-1){
 
 			var tmpMap = mMapArray[i];
 			var arrayTail = tmpMap.length;
