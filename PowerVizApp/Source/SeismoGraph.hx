@@ -224,19 +224,19 @@ class SeismoGraph extends Sprite{
 		var xPosition = (Lib.stage.stageWidth-(mMeasurmenthalfFactor*12)) - (((mwattMeasurementArray.length-1) * mMeasurmenthalfFactor));
 		var yPosition = (Lib.stage.stageHeight/4)*3;
 
-		var prevMeasure = 4;
+		var prevMeasure = 2;
 
 		for(wattmeasure in mwattMeasurementArray){
 
 			commands.push(1);
 			coords.push(xPosition);
-			coords.push(Lib.stage.stageHeight-4);
+			coords.push(Lib.stage.stageHeight-2);
 
 			xPosition = xPosition-mMeasurmenthalfFactor;
 			
 			commands.push(2);
 			coords.push(xPosition);
-			coords.push(Lib.stage.stageHeight-4);
+			coords.push(Lib.stage.stageHeight-2);
 
 			commands.push(2);
 			coords.push(xPosition);
@@ -252,7 +252,7 @@ class SeismoGraph extends Sprite{
 
 			commands.push(2);
 			coords.push(xPosition);
-			coords.push(Lib.stage.stageHeight-4);
+			coords.push(Lib.stage.stageHeight-2);
 
 			xPosition = xPosition+mMeasurmenthalfFactor;
 
@@ -368,17 +368,17 @@ class SeismoGraph extends Sprite{
 			return 0x05fa00;
 		}
 		else if(badness >= 0.2 && badness < 0.4){
-			return 0x50af00;
+			return 0x00ab00;
 
 		}
 		else if(badness >= 0.4 && badness < 0.6){
-			return 0x808000;
+			return 0x003f00;
 		}
 		else if(badness >= 0.6 && badness < 0.8){
-			return 0xb34c00;
+			return 0x002100;
 		}
 		else if(badness >= 0.8 && badness < 1.0){
-			return 0xf40b00;
+			return 0x003000;
 		}
 		else{
 			return 0x05fa00;

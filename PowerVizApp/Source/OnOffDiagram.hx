@@ -476,13 +476,22 @@ class OnOffDiagram extends Sprite{
                         tempArray = tempArray.concat(stringAr);
                         tempArray.reverse();
                         
-
-                   
+                        //to compensate for every second time
+              var NewtimeArray = new Array<String>();  
                  
+              for(time in 0...tempArray.length){
 
+              	if(time%2 == 0){
+              		NewtimeArray.push(tempArray[time]+":00");
+              	}
+              	else{
+              		NewtimeArray.push(" ");
+              	}
+
+              }
  
 
-                return tempArray;
+                return NewtimeArray;
 
 
             }
