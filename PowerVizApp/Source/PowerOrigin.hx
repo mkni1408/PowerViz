@@ -23,7 +23,8 @@ class PowerOrigin extends Sprite{
 	private var mBadImage : Bitmap;
 	
 	private static inline var mSliderFromColor:Int = 0x00FF00;
-	private static inline var mSliderToColor:Int = 0xFF0000;
+	private static inline var mSliderMiddleColor:Int = 0x004000; //Color on the middle of the PowerSource bar.
+	private static inline var mSliderToColor:Int = 0x000000;
 	private static inline var mSliderPointerColor:Int = 0x0000FF;
 	
 	private var mTimer : PowerTimer;
@@ -78,8 +79,6 @@ class PowerOrigin extends Sprite{
 		mBadImage.y = mGoodImage.y;
 		mBadImage.x = (mFrame.width - mBadImage.width) - mGoodImage.x; 
 		
-		
-		
 	}
 
 	private function centerGraphics(origin:Sprite, bitmap:Bitmap){
@@ -130,7 +129,7 @@ class PowerOrigin extends Sprite{
 		var matrix = new flash.geom.Matrix();
 		matrix.createGradientBox(200,20);
 		
-		rv.graphics.beginGradientFill(flash.display.GradientType.LINEAR, [mSliderFromColor, mSliderToColor], [1,1], [0,255], matrix);
+		rv.graphics.beginGradientFill(flash.display.GradientType.LINEAR, [mSliderFromColor, mSliderMiddleColor, mSliderToColor], [1,1,1], [0, 128, 255], matrix);
 		rv.graphics.drawRect(0,0, 200,20);
 		rv.graphics.endFill();
 		return rv;

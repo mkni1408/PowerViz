@@ -17,10 +17,13 @@ class Speedometer extends Sprite{
 	
 	private var mSpeedometer : Sprite;
 	private var bitMapSpeedometer : Bitmap;
-	private var arrow: SpeedometerArrow;
-	private var settings:Sprite;
+	private var arrow: SpeedometerArrow; //The arrow on the speedometer.
 	
-	private var mSpeedometerSettings : SpeedometerSettings;
+	//Labels on the speedometer:
+	private var mLabels : Array<TextField>; //Labels round the speedometer.
+	
+	private var settings:Sprite; //Button to get to settings.
+	private var mSpeedometerSettings : SpeedometerSettings; //Settings dialog.
 
 	public function new(){
 
@@ -53,7 +56,10 @@ class Speedometer extends Sprite{
 		this.addChild(mSpeedometer);
 		this.addChild(arrow);
 		
+		createLabels();
+		
 		mSpeedometerSettings = new SpeedometerSettings(Std.int(Lib.stage.stageWidth), Std.int(Lib.stage.stageHeight));
+		mSpeedometerSettings.onDoneChangingSettings = onDoneChangingSettings;
 		this.addChild(mSpeedometerSettings);
 		
 		mSpeedometer.mouseEnabled = true; //This is set to true, to enable settings.
@@ -74,8 +80,11 @@ class Speedometer extends Sprite{
 
 	private function centerGraphics(){
 
-		mSpeedometer.width = bitMapSpeedometer.width/4;
-		mSpeedometer.height = bitMapSpeedometer.height/4;	
+		//mSpeedometer.width = bitMapSpeedometer.width/4;
+		//mSpeedometer.height = bitMapSpeedometer.height/4;	
+		
+		mSpeedometer.width = Lib.stage.stageWidth/4.5;
+		mSpeedometer.height = mSpeedometer.width;
 
         var centerBitmapX = mSpeedometer.width/2;
         var centerBitmapY = mSpeedometer.height/2;
@@ -117,7 +126,67 @@ class Speedometer extends Sprite{
 		//graphics.drawRect(0, 0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
 
 	}
+	
+	function createLabels() {
+		mLabels = new Array<TextField>();
+		
+		for(i in 0...5) {
+			mLabels.push(createSingleLabel(Std.string(i), 0,0));
+			this.addChild(mLabels[i]);
+		}
+		setLabels(Std.int(DataInterface.instance.relativeMax()));
+	}
+	
+	function createSingleLabel(val:String, x:Float, y:Float) : TextField {
+		var label = new TextField();
+		label = new TextField();
+		label.text = val;
+		label.setTextFormat(FontSupply.instance.getCoordAxisLabelSMALLFormat());
+		label.x = x;
+		label.y = y;
+		return label;
+	}
+	
+	function setLabels(newMax:Int) {
+		var space = newMax / 4;
+		var val = 0;
+		for(i in 0...5) {
+			mLabels[i].text = Std.string(Std.int(val)) + " watt ";
+			mLabels[i].setTextFormat(FontSupply.instance.getCoordAxisLabelSMALLFormat());
+			val += Std.int(newMax/4);
+			if(i == 4)
+				val = newMax;
+		}
+		positionLabels();
+	}
 
+	function positionLabels() {
+		for(label in mLabels) {
+			label.width = label.textWidth;
+		}
+		
+		mLabels[0].x = Lib.stage.stageWidth/7.2 - (mLabels[0].width); 
+		mLabels[0].y = Lib.stage.stageHeight/3.1;
+		
+		mLabels[1].x = (Lib.stage.stageWidth / 6.9) - (mLabels[1].width);
+		mLabels[1].y = Lib.stage.stageHeight/8; 
+		
+		mLabels[2].x = (Lib.stage.stageWidth / 4) - (mLabels[2].width/2);
+		mLabels[2].y = 3; 
+		
+		mLabels[3].x = Lib.stage.stageWidth / 2.85;
+		mLabels[3].y = Lib.stage.stageHeight/8; 
+		
+		mLabels[4].x = Lib.stage.stageWidth/2.8; 
+		mLabels[4].y = Lib.stage.stageHeight/3.1;
+
+	}
+	
+	//Substitute this function to be notified when changing speedometer settings is done!
+	public function onDoneChangingSettings(newMax:Float) {
+		DataInterface.instance.setMaxWatts(newMax);
+		setLabels(Std.int(newMax));
+	}
 }
 
 
