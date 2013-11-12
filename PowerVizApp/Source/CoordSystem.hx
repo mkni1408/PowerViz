@@ -4,6 +4,9 @@ import flash.display.Sprite;
 import flash.text.TextField;
 import FontSupply;
 import OnOffData;
+import flash.display.BitmapData;
+import flash.display.Bitmap;
+import flash.text.TextFormat;
 
 /*
 Coordinate System class.
@@ -21,6 +24,8 @@ class CoordSystem extends Sprite {
 	private var VerticalBars: Sprite;
 	private var cordCordArray:Array<Float>;
 	private var cordNameArray:Array<Date>;
+	private var yFont:TextFormat;
+	private var xFont:TextFormat;
 
 	public function new() {
 		super();
@@ -39,8 +44,11 @@ class CoordSystem extends Sprite {
 	**/
 	public function generate(width:Float, height:Float, xLabel:String, yLabel:String, xSpace:Float, ySpace:Float,
 							?xLabelStrings:Array<String>, ?yLabelStrings:Array<String>, ?xLabelsBetween:Bool, ?yLabelsBetween:Bool, ?xLabelVertical:Bool, ?offset:Bool, ?xOffset:Float) {
-	
 		
+		
+		yFont = setFontSize(yLabelStrings.length);
+		xFont = setFontSize(xLabelStrings.length);
+
 		var counterArray = new Array<Int>();
 		this.graphics.clear();
 		
@@ -79,7 +87,7 @@ class CoordSystem extends Sprite {
 			if(yLabelStrings!=null) {
 				labelText = (yLabelStrings.length<=labelIndex ? "" : yLabelStrings[labelIndex]);
 				if(labelText!="")
-					addTextField(0, (betweenY ? y + (ySpace/2) : y), labelText, true,false);
+					addTextField(0, (betweenY ? y + (ySpace/2) : y), labelText, true,false,yFont);
 					//add the ycoordinate
 					
 			}
@@ -115,11 +123,11 @@ class CoordSystem extends Sprite {
 
 					//condition to handle vertical textfields
 					if(xVertical){
-					addTextField(x-(xSpace/2),0, labelText, false,xVertical);
+					addTextField(x-(xSpace/2),0, labelText, false,xVertical,xFont);
 					//add the xcoordinate
 					}
 					else{
-						addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false,false);
+						addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false,false,xFont);
 					}
 				}
 			
@@ -133,8 +141,30 @@ class CoordSystem extends Sprite {
 		
 	
 	}
+
+	private function setFontSize(number:Int):TextFormat{
+
+		if(number < 10){
+
+			
+			return FontSupply.instance.getCoordAxisLabelLARGEFormat();
+		}
+		else if(number <= 10 && number <= 20){
+
+			return FontSupply.instance.getCoordAxisLabelMEDIUMFormat();
+		}
+		else if(number > 20){
+
+			return FontSupply.instance.getCoordAxisLabelSMALLFormat();
+			
+		}
+		else{
+			return FontSupply.instance.getCoordAxisLabelSMALLFormat();
+		}
+
+	}
 	
-	private function addTextField(x:Float, y:Float, text:String, between:Bool, vertical:Bool) {
+	private function addTextField(x:Float, y:Float, text:String, between:Bool, vertical:Bool, font:TextFormat) {
 
 			
 		var tf = new TextField();
@@ -146,33 +176,33 @@ class CoordSystem extends Sprite {
 			tf.text = txt;
 		}
 		else{	
-			tf.text = txt.substr(0,7);
+			tf.text = txt.substr(0,7)+"...";
+
 		}
 		
-		tf.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
+		tf.setTextFormat(font);
 
-		this.addChild(tf);
+		
 		tf.width = (tf.textWidth*1.1)+2;
 		tf.height = (tf.textHeight * 1.1);
 
 		tf.x = x - (tf.width / 2);
-			tf.y = y - (tf.height/2);
+		tf.y = y - (tf.height/2);
+		
 		if(between) {
 			tf.x = x - (tf.width + 3);
 			tf.y = y - (tf.height/2);
-			if(vertical)
-			{
-			//tf.rotation = 90;
+			if(vertical){
+				//tf.rotation = 90;
 
-		}
+			}
 		}
 		else{
 
 			tf.x = (x - (tf.height/2))+(xHeight/2);
 			tf.y = y + 3;
 			
-			if(vertical)
-			{
+			if(vertical){
 				//trace("new X==",x);
 				tf.x = (x - (tf.height/2));
 
@@ -180,11 +210,31 @@ class CoordSystem extends Sprite {
 
 				
 			
-			tf.rotation = 90;	
-		}
+				tf.rotation = 75;	
+			}
 
 		}
-		//trace("tf",tf.x);
+		if(!vertical){
+		this.addChild(tf);
+		}
+		else{
+
+			var bmd:BitmapData = new BitmapData(80,80,true, 0x00ffffff);
+			
+			bmd.draw(tf);
+
+			var bmp = new Bitmap(bmd);
+
+
+			//bmp.addChild(bmd);
+
+			bmp.x = x+10;
+			bmp.y = tf.y-5;
+
+			this.addChild(bmp);
+			bmp.rotation = 45;		}
+
+		//trace("tf",tf.x);*/
 	}
 
 	private function addXcoordinate(x:Float):Void{
@@ -269,7 +319,7 @@ class CoordSystem extends Sprite {
 
 			var half = (yPoint - yPointbef)/2;
 
-			addTextField(xWidth+100, yPointbef+half, roomLabel, true, false);
+			addTextField(xWidth+100, yPointbef+half, roomLabel, true, false, yFont);
 
 		}
 		

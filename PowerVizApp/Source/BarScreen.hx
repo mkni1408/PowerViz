@@ -110,7 +110,7 @@ class BarScreen extends Sprite {
 		mTimeButton.y = 0;
 		
 		mCoordSys.generate(mBack.width/1.20, mBack.height/1.30, "X", "Y", (mBack.width/1.20)/mNewIDArray.length, (mBack.height/1.30)/mKwhArray.length, mNewIDArray, mKwhArray, true, false,true);
-		mCoordSys.x = (Lib.stage.stageWidth- mCoordSys.width);
+		mCoordSys.x = 100;
 		mCoordSys.y = (Lib.stage.stageHeight/1.30)+50;
 
 		mTitle.width = mTitle.textWidth+5;	

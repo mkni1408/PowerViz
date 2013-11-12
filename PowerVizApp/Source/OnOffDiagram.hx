@@ -154,15 +154,20 @@ class OnOffDiagram extends Sprite{
 		
 		//legend = legend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mNewRoomArray,mColorArray);
 		mLegend = new Legend();
-		mLegend.drawLegend(mBack.width/1.20,mBack.height/1.20,mColorArray.length,mNewRoomArray,mColorArray);
+		mLegend.drawLegend(mBack.width/1.18,mBack.height/1.16,mColorArray.length,mNewRoomArray,mColorArray);
 
 		mBack.addChild(mLegend);
 
-		mCoordSystem.generate(mBack.width/1.20, (mBack.height/1.20)-mLegend.height, "X", "Y", 
-								(mBack.width/1.20)/mtimeArray.length,((mBack.height/1.20)-mLegend.height)/mNewIDArray.length,
+		mCoordSystem.generate(mBack.width/1.18, (mBack.height/1.16)-mLegend.height, "X", "Y", 
+								(mBack.width/1.18)/mtimeArray.length,((mBack.height/1.16)-mLegend.height)/mNewIDArray.length,
 								mtimeArray,mNewIDArray,true,true,false,true,mOffset);
 
-		mCoordSystem.x = (mBack.width- mCoordSystem.width);
+		if(mNewIDArray.length<10){//scale at number of elements = lower number of elements equals larger text
+			mCoordSystem.x = 130;
+		}
+		else{
+			mCoordSystem.x = 100;
+		}
 		mCoordSystem.y = (mBack.height/1.25)+40;
 		mLegend.x =mCoordSystem.x;
 		mLegend.y = mCoordSystem.y + 30;

@@ -141,13 +141,13 @@ class ArealScreen extends Sprite {
                 mCoordSys.generate(Lib.stage.stageWidth/1.15, (Lib.stage.stageHeight/1.25)-mLegend.height, "X", "Y", 
                     (Lib.stage.stageWidth/1.15)/mTimeArray.length, ((Lib.stage.stageHeight/1.25)-mLegend.height)/mUsageArray.length, 
                                                                                                         mTimeArray, mUsageArray, true, false,false,true,mOffset);
-                mCoordSys.x = 70;
+                mCoordSys.x = 100;
                 mCoordSys.y = (Lib.stage.stageHeight/1.25)+40;
 
                 mLegend.x = mCoordSys.x;
                 mLegend.y = mCoordSys.y + 30;
 
-                mDiagram.x = 70;
+                mDiagram.x = mCoordSys.x;
                 mDiagram.y = mCoordSys.y;        
                 
 
@@ -245,7 +245,7 @@ class ArealScreen extends Sprite {
                 var date = Date.now();
                 if(mViewMode == 0){
                         //hour
-                        mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
+                        mUsageArray = ["0,1 kWt", "0,2 kWt", "0,3 kWt","0,4 kWt","0,5 kWt", "0,6 kWt","0,7 kWt", "0,8 kWt","0,9 kWt","  1 kWt"];
 
                         mTimeArray = generateTimeArrayandCalcOffset();
 
@@ -254,7 +254,7 @@ class ArealScreen extends Sprite {
                 }
                 if(mViewMode == 1){
                         //day
-                        mUsageArray = ["1kWt  ", "2kWt  ", "3kWt  ","4kWt  ","5kWt  ", "6kWt  ","7kWt  ", "8kWt  ","9kWt  ","10kWt  "];
+                        mUsageArray = [" 1kWt  ", " 2kWt  ", "3kWt  ","4kWt  ","5kWt  ", "6kWt  ","7kWt  ", "8kWt  ","9kWt  ","10kWt  "];
 
                         mTimeArray = generateTimeArrayandCalcOffset();
 
@@ -267,7 +267,7 @@ class ArealScreen extends Sprite {
                         ///week
                         mUsageArray = ["10kWt ", "20kWt ", "30kWt ","40kWt ","50kWt ", "60kWt ","70kWt ", "80kWt ","90kWt ","100kWt "];
                         //mTimeArray = ["Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"];
-                        mTitle.text = "3 dages forbrug ";
+                        mTitle.text = "Seneste 3 dages forbrug ";
 
                 }
                 
@@ -506,47 +506,47 @@ class ArealScreen extends Sprite {
 
                 if(maxValue <= 100){
 
-                    mUsageArray = ["10W ", "20W ", "30W ","40W ","50W ", "60W ","70W ", "80W ","90W ","100W "];
+                    mUsageArray = ["0,01 kW", "0,02 kW", "0,03 kW","0,04 kW","0,05 kW", "0,06 kW","0,07 kW", "0,08 kW","0,09 kW","0,1 kW"];
                     return 10;
                 }
                 else if(maxValue > 100 && maxValue <= 500){
 
-                    mUsageArray = ["50W ", "100W ", "150W ","200W ","250W ", "300W ","350W ", "400W ","450W ","500W "];
+                    mUsageArray = ["0,05 kW", "0,1 kW", "0,15 kW","0,2 kW","0,25 kW", "0,3 kW","0,35 kW", "0,4 kW","0,45 kW","0,5 kW"];
                     return 50;
                 }
                 else if(maxValue > 500 && maxValue <= 600){
 
-                    mUsageArray = ["60W ", "120W ", "180W ","240W ","300W ", "360W ","420W ", "480W ","540W ","600W "];
+                    mUsageArray = ["0,6 kW", "0,12 kW", "0,18 kW","0,24 kW","0,3 kW", "0,36 kW","0,42 kW", "0,48 kW","0,54 kW","0,6 kW"];
                     return 61;
                 }
                 else if(maxValue > 600 && maxValue <= 750){
 
-                    mUsageArray = ["75W ", "150W ", "225W ","300W ","375W ", "450W ","525W ", "600W ","675W ","750W "];
+                    mUsageArray = ["0,75 kW", "0,15 kW", "0,225 kW","0,3 kW","0,375 kW", "0,450 kW","0,525 kW", "0,6 kW","0,675kW ","0,75 kW "];
                     return 75;
                 }
                 else if(maxValue > 750 && maxValue <= 1000){
 
-                    mUsageArray = ["100W ", "200W ", "300W ","400W ","500W ", "600W ","700W ", "800W ","900W ","1000W "];
+                    mUsageArray = ["0,1 kW ", "0,2 kW ", "0,3 kW ","0,4 kW ","0,5 kW ", "0,6 kW ","0,7 kW ", "0,8 kW ","0,9 kW "," 1 kW "];
                     return 100;
                 }
                 else if(maxValue > 1000 && maxValue <= 2000){
 
-                    mUsageArray = ["200W ", "400W ", "600W ","800W ","1000W ", "1200W ","1400W ", "1600W ","1800W ","2000W "];
+                    mUsageArray = ["0,2 kW ", "0,4 kW ", "0,6 kW ","0,8 kW "," 1 kW ", "1,2 kW "," 1,4 kW ", " 1,6 kW "," 1,8 kW "," 2 kW "];
                     return 200;
                 }
                 else if(maxValue > 2000 && maxValue <= 3000){
 
-                    mUsageArray = ["300W ", "600W ", "900W ","1200W ","1500W ", "1800W ","2100W ", "2400W ","2700W ","3000W "];
+                    mUsageArray = [" 0,3 kW ", " 0,6 kW ", " 0,9 kW ","1,2 kW ","1,5 kW ", " 1,8 kW ","2,1 kW ", "2,4 kW ","2,7 kW "," 3 kW "];
                     return 300;
                 }
                 else if(maxValue > 2000 && maxValue <= 4000){
 
-                    mUsageArray = ["400W ", "800W ", "1200W ","1600W ","2000W ", "2400W ","2800W ", "3200W ","3600W ","4000W "];
+                    mUsageArray = [" 0,4 kW", "0,8 kW ", "1,2 kW ","1,6 kW ","2 kW ", "2,4 kW ","2,8 kW ", "3,2 kW ","3,6 kW ","4 kW "];
                     return 400;
                 }
                 else{//defaulter til denne her hvis forbruget overstiger 20kw(meget!)
 
-                    mUsageArray = ["2kW ", "4kW ", "6kW ","8kW ","10kW ", "12kW ","14kW ", "16kW ","18kW ","20kW "];
+                    mUsageArray = ["2 kW ", "4 kW ", "6 kW ","8 kW ","10 kW", "12 kW","14 kW ", "16 kW ","18 kW ","20 kW "];
                     return 2000;
                 }
 
@@ -657,7 +657,7 @@ class ArealScreen extends Sprite {
                             tempArray.push(getWeekDay(dateCount));
                             dateCount -= 1;
                             if(dateCount == -1){
-                                dateCount = 3;
+                                dateCount = 6;//start from saturday
 
                             }
 

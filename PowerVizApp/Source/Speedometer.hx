@@ -53,7 +53,7 @@ class Speedometer extends Sprite{
 		this.addChild(mSpeedometer);
 		this.addChild(arrow);
 		
-		mSpeedometerSettings = new SpeedometerSettings(Std.int(Lib.stage.stageWidth/2), Std.int(Lib.stage.stageHeight/2));
+		mSpeedometerSettings = new SpeedometerSettings(Std.int(Lib.stage.stageWidth), Std.int(Lib.stage.stageHeight));
 		this.addChild(mSpeedometerSettings);
 		
 		mSpeedometer.mouseEnabled = true; //This is set to true, to enable settings.
@@ -151,7 +151,7 @@ class SpeedometerSettings extends Sprite {
 		mBack.graphics.beginFill(0x808080);
 		mBack.graphics.drawRect(0,0, w, h);
 		mBack.graphics.endFill();
-		mBack.alpha = 0.90;
+		mBack.alpha = 0.95;
 		
 		this.addChild(mBack);
 		this.mouseEnabled = true;
@@ -160,8 +160,10 @@ class SpeedometerSettings extends Sprite {
 		mLabel = new TextField();
 		mBack.addChild(mLabel);
 		mLabel.text = "Husstandens max watt-forbrug:";
-		mLabel.width = mLabel.textWidth+100;
+		mLabel.width = mLabel.textWidth+200;
 		mLabel.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
+		mLabel.x = 25;
+		mLabel.y = 25;
 		mLabel.scaleX = 1.5;
 		mLabel.scaleY = 1.5;
 		mLabel.x = mBack.width/10;
@@ -169,16 +171,18 @@ class SpeedometerSettings extends Sprite {
 		mMaxEditable = new TextField();
 		mBack.addChild(mMaxEditable);
 		mMaxEditable.text = Std.string(maxValue) + " watt";
-		mMaxEditable.setTextFormat(FontSupply.instance.getCoordAxisLabelFormat());
+		mMaxEditable.setTextFormat(FontSupply.instance.getWattLabelFormat());
 		mMaxEditable.scaleX = 1.4;
 		mMaxEditable.scaleY = 1.4;
-		mMaxEditable.x = mBack.width/4;
+		mMaxEditable.width = mLabel.textWidth+150;
+		mMaxEditable.height = mLabel.textHeight + 10;
+		mMaxEditable.x = mBack.width/3;
 		mMaxEditable.y = mBack.height/2;
 		
 		mOkButton = createButton("assets/okbutton.png");
 		mBack.addChild(mOkButton);
-		mOkButton.width = mBack.width/10;
-		mOkButton.height = mOkButton.width;
+		mOkButton.width = 80;
+		mOkButton.height = 80;
 		mOkButton.x = (mBack.width - mOkButton.width)-(mOkButton.width/2);
 		mOkButton.y = (mBack.height - mOkButton.height)-(mOkButton.height/2);
 		mOkButton.addEventListener(flash.events.MouseEvent.MOUSE_UP, onOkButton);
@@ -187,8 +191,8 @@ class SpeedometerSettings extends Sprite {
 		mBack.addChild(mUpButton);
 		mUpButton.width = mBack.width/10;
 		mUpButton.height = mUpButton.width;
-		mUpButton.x = mMaxEditable.x+150;
-		mUpButton.y = mMaxEditable.y - 50;
+		mUpButton.x = mMaxEditable.x+200;
+		mUpButton.y = mMaxEditable.y-(mMaxEditable.height/2) - 80;
 		mUpButton.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onUpButton);
 		
 		mDownButton = createButton("assets/button_down.png");
@@ -196,7 +200,7 @@ class SpeedometerSettings extends Sprite {
 		mDownButton.width = mUpButton.width;
 		mDownButton.height = mUpButton.height;
 		mDownButton.x = mUpButton.x;
-		mDownButton.y = mMaxEditable.y  + 40;
+		mDownButton.y = mMaxEditable.y-(mMaxEditable.height/2)  + 80;
 		mDownButton.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, onDownButton);
 	}
 	
