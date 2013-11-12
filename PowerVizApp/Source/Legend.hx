@@ -62,7 +62,7 @@ class Legend extends Sprite{
 					tf.text = text;
 				}
 				else{	
-					tf.text = text.substr(0,8);
+					tf.text = text.substr(0,8)+".";
 				}
 				
 				//trace(tf.text);

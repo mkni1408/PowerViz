@@ -37,9 +37,10 @@ class CurrentUsage extends Sprite{
 		seismoGraph = new SeismoGraph();
 
 
-		addChild(speedometer);
+		
 		addChild(powerOrigin);
 		addChild(seismoGraph);
+		addChild(speedometer);//SHOULD BE LAST FOR THE SETTINGSVIEW TO WORK PROPERLY
 
 		graphics.beginFill(0xFFFFFF,0.0);
 		graphics.drawRect(0,0,Lib.stage.stageWidth,Lib.stage.stageHeight);

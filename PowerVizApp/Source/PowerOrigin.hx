@@ -107,12 +107,11 @@ class PowerOrigin extends Sprite{
 	//Returns a triangleular usage pointer.
 	private function createUsagePointer() : Sprite {
 		var ret = new Sprite();
-		ret.graphics.beginFill(mSliderPointerColor);
-		ret.graphics.moveTo(0,0);
-		ret.graphics.lineTo(20, 20);
-		ret.graphics.lineTo(-20,20);
-		ret.graphics.lineTo(0,0);
-		ret.graphics.endFill();
+		var bitmaparrow = new Bitmap (Assets.getBitmapData ("assets/originArrow.png"));
+		bitmaparrow.width = 30;
+		bitmaparrow.height = 40;
+		ret.addChild(bitmaparrow);
+		
 		return ret;
 	}
 	
