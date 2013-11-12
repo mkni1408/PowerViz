@@ -186,6 +186,7 @@ class Speedometer extends Sprite{
 	public function onDoneChangingSettings(newMax:Float) {
 		DataInterface.instance.setMaxWatts(newMax);
 		setLabels(Std.int(newMax));
+		DataInterface.instance.logInteraction(LogType.Setting, Std.string(newMax), "MaxWatts set to " + Std.string(newMax));
 	}
 }
 
@@ -211,7 +212,7 @@ class SpeedometerSettings extends Sprite {
 	
 	//Substitute this function to be notified when changing speedometer settings is done!
 	dynamic public function onDoneChangingSettings(newMax:Float) {
-		DataInterface.instance.setMaxWatts(newMax);
+		trace("This should be replaced at runtime");
 	}
 	
 	private function createScreen(w:Int, h:Int) {
