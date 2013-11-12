@@ -36,8 +36,6 @@ class Harvester {
 	private var mTcpSock:Socket;
 	private var mRemote:HttpAsyncConnection; //RemotingConnection.
 	
-	private var mHttpMutex:Mutex;
-	
 	private var mBuffers:Map<String, OutletBuffer>; //Array of buffers that stores usage over time.
 	
 	private function new() {
@@ -46,7 +44,6 @@ class Harvester {
 		mConfig = new Configuration();
 		mBuffers = new Map<String, OutletBuffer>();
 		
-		mHttpMutex = new Mutex();
 	}
 	
 	private function runMain() {
@@ -79,7 +76,6 @@ class Harvester {
 				load = getOutletWNow(outlet.outletId);
 				sendLoad(Std.parseInt(outlet.outletId), load);
 				mBuffers.get(outlet.outletId).update(getServerTime(), load);
-			
 			}
 		}
 		
@@ -88,10 +84,8 @@ class Harvester {
 	private var mAttemptRemotingReconnection:Bool = false; //True if Harvester should try to reconnect the mRemote connection.
 	//Connects to the PowerVizServer using remoting.
 	private function remoteConnect() {
-		mHttpMutex.acquire();
 		mRemote = HttpAsyncConnection.urlConnect(mConfig.serverUrl);
 		if(mRemote==null) {
-			mHttpMutex.release();
 			sendLogData("Could not connect");
 			return;
 		}
@@ -100,8 +94,8 @@ class Harvester {
 	}
 	
 	private function remoteConnectionErrorHandler(err:Dynamic) {
-		mHttpMutex.release();
 		sendLogData("Error: " + Std.string(err));
+		Sys.exit(2); //
 		mAttemptRemotingReconnection = true;
 	}
 	
@@ -127,8 +121,7 @@ class Harvester {
 			return;
 		}
 
-		var f = function(v:Dynamic) : Void {mHttpMutex.release();};
-		mHttpMutex.acquire();
+		var f = function(v:Dynamic) : Void {};
 		mRemote.Api.setZenseLayout.call([mConfig.houseId, data],f);
 	}
 
@@ -144,7 +137,7 @@ class Harvester {
 	
 	//Sends log data to the server, if connected.
 	private function sendLogData(msg:String, ?pi:haxe.PosInfos) {
-		var str = Std.string(pi.fileName) + " - " + Std.string(pi.lineNumber) +": " + msg;
+		var str = Std.string(Date.now()) + " " + Std.string(pi.fileName) + " - " + Std.string(pi.lineNumber) +": " + msg;
 		Sys.println(str);
 		
 		if(mRemote==null)
@@ -163,7 +156,7 @@ class Harvester {
 			done = true;
 		});
 		while(done==false)
-			Sys.sleep(0.05);
+			Sys.sleep(0.1);
 			
 		return time;
 	}
@@ -179,6 +172,7 @@ class Harvester {
 		}
 		catch(e:Dynamic) {
 			sendLogData("Error connecting to box (socket error): " + Std.string(e));
+			Sys.exit(1);
 			return false;
 		}
 		

@@ -27,9 +27,16 @@ class Configuration {
 	
 	//Reads the houseId from the file HOUSE.ID on disk.
 	public function readHouseId() {
+		/*
 		var file = File.read("HOUSE.ID", false);
 		var line = file.readLine();
 		houseId = Std.parseInt(line);
+		*/
+		if(Sys.args()[0] == null) {
+			Sys.println("No houseID passed!");
+			Sys.exit(2);
+		}
+		houseId = Std.parseInt(Sys.args()[0]);
 		Sys.println("HouseId: " + houseId);
 	}
 	

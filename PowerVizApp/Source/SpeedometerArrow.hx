@@ -30,12 +30,24 @@ class SpeedometerArrow extends Sprite
 
 		}
 
-		public function setValue(v:Float) {
+		public function setValue(v:Float, ?jitter:Bool) {
 
 			Actuate.tween (this, 2, { rotation: (v * 237)-30 } );
 			//this.rotation = (v * 237)-30;
+			
+			if(jitter != null && jitter==true)
+				setJitterMode();
+			else
+				disableJitterMode();
 
-
+		}
+		
+		function setJitterMode() {
+			//TODO: Set jittering using Actuate.
+		}
+		
+		function disableJitterMode() {
+			//TODO: Disable the jitter and go back to normal behaviour.
 		}
 
 }

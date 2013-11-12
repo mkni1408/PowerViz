@@ -102,10 +102,12 @@ class Speedometer extends Sprite{
 	private function fetchWattConsumption():Void{
 	
 		var wattMeasure:Float = DataInterface.instance.relativeUsage();
-		if(wattMeasure>1.0)
+		var jitter = false;
+		if(wattMeasure>1.0) {
 			wattMeasure = 1;
-
-		arrow.setValue(wattMeasure);
+			jitter = true;
+		}
+		arrow.setValue(wattMeasure, jitter);
 	}
 
 	//draws the frame around the Sprite
