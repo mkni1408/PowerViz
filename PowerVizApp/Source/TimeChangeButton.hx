@@ -74,7 +74,7 @@ class TimeChangeButton extends Sprite {
 		var x:Float = 0;
 		for(b in mButtons) {
 			b.x = x;
-			x += b.width + 10;
+			x += b.width+10;
 		}
 	}
 	
