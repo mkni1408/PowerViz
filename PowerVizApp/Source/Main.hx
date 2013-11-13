@@ -16,6 +16,8 @@ import CoinScreen;
 import OnOffDiagram;
 import BusyAnimation;
 
+import ScreenSaver2;
+
 
 //Main class which extends a sprite(sprite as in a display object) 
 class Main extends Sprite {
@@ -23,6 +25,7 @@ class Main extends Sprite {
 	private var mBackground : Bitmap = null;
 
 	private var mScreenSaver : ScreenSaver = null;
+	private var mScreenSaver2 : ScreenSaver2 = null;
 	private var mArealScreen : ArealScreen = null;
 	private var mBarScreen : BarScreen = null;
 	private var mCurrentUsage : CurrentUsage = null;
@@ -57,10 +60,14 @@ class Main extends Sprite {
 		prepareScreens();
 
 		//add screensaver to the main sprite
-		mScreenSaver = new ScreenSaver();
-		addChild(mScreenSaver);
+		//mScreenSaver = new ScreenSaver();
+		//addChild(mScreenSaver);
+		
+		mScreenSaver2 = new ScreenSaver2();
+		addChild(mScreenSaver2);
+		SwipeMill.onScreenTouch = mScreenSaver2.onScreenTouch;
 
-		SwipeMill.onScreenTouch = mScreenSaver.onScreenTouch;
+		//SwipeMill.onScreenTouch = mScreenSaver.onScreenTouch;
 
 	}
 	

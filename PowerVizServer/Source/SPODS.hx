@@ -13,6 +13,7 @@ class BoxConfig extends sys.db.Object {
 	public var sleepTime : SInt;
 	public var historyTime : SInt;
 	public var maxWatts : SInt; //Maximum watts set inside the PowerViz app.
+	public var bulbWatts : SInt; //Number of watts that a single bulb represents.
 }
 
 @:id(houseId, time, msg)

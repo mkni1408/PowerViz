@@ -99,14 +99,16 @@ class DataInterface {
         //Layout data:
         public var houseDescriptor(default,null) : HouseDescriptor; //All data describing the house and its outlets.
         //public var currentPowerSource(default,null):PowerSource; //The current power source. See the enum above.
-        public var powerSourceBadness(default,null):Float; //How bad is the power? 0 is totally good, 1 is completely bad.
+        public var powerSourceBadness(default,null):Float=0.5; //How bad is the power? 0 is totally good, 1 is completely bad.
         
+		public var bulbWatts(default, null):Int=50; //Watts used per bulb on screensaver.
+		
         //Usage data now:
         private var mOutletDataNow : Map<Int, Float>; //Usage now for each outlet, measured in watts.
         private var mOutletDataNowTotal : Float = 0; //Total usage data now for all outlets, measured in watts.
         private var mRelativeUsageNow : Float = 0; //Relative usage. From 0.0 to 1.0.
         private var mRelativeMax : Float = 0; //Max usage value, used for calculating the relative value. Set using the speedometer.
-        
+		
         //Usage data quarter:
         private var mOutletDataQuarter : Map<Int, Float>; //Usage data for the last 15 minutes, for each outlet, measured in watts/15min.
         private var mOutletDataQuarterTotal : Float = 0; //Total usage for last outlets in the last 15 minutes.
@@ -257,6 +259,9 @@ class DataInterface {
                 //mCnx.Api.getRelativeMax.call([Config.instance.houseId], onGetRelativeMax);
                 mConnectionMutex.acquire();
                 mCnx.Api.getMaxWattsSetting.call([Config.instance.houseId], onGetMaxWatts);
+				
+				mConnectionMutex.acquire();
+				mCnx.Api.getBulbWatts.call([Config.instance.houseId], onGetBulbWatts);
         }
         
         private function onTimerHour() : Void {
@@ -388,6 +393,11 @@ class DataInterface {
         	mRelativeMax = data;
         	mConnectionMutex.release();
         }
+		
+		private function onGetBulbWatts(data:Dynamic) : Void {
+			bulbWatts = data;
+			mConnectionMutex.release();
+		}
         
         private function onGetPowerSourceBadness(data:Dynamic) : Void {
         	powerSourceBadness = data;

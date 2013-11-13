@@ -74,6 +74,13 @@ class Api {
 	public function setOutletColor(houseId:Int, outletId:Int, color:String) {
 		DataBaseInterface.setOutletColor(houseId, outletId, color);
 	}
+	
+	public function getBulbWatts(houseId:Int) : Int {
+		var elm = BoxConfig.manager.select($houseId == houseId);
+		if(elm==null)
+			return 50; //Nothing found, so return default.
+		return elm.bulbWatts;
+	}
 		
 	///////////////////////////////////////////////////////
 	//Functions for setting the current data state.
