@@ -23,31 +23,33 @@ public function new(name:String, color:Int,id:Int,f:Int->Void){
 		mPressedButton = new Sprite();
 		//var s = new Sprite();
 		
-		if(id == 0) {
-			var unpressed = new Bitmap (Assets.getBitmapData ("assets/hour_unpressed.png"));
-			var pressed = new Bitmap (Assets.getBitmapData ("assets/hour_pressed.png"));
-			
-			mPressedButton.addChild(pressed);
-			mUnpressedButton.addChild(unpressed);
-		} else if (id == 1) {
-			var unpressed = new Bitmap (Assets.getBitmapData ("assets/day_unpressed.png"));
-			var pressed = new Bitmap (Assets.getBitmapData ("assets/day_pressed.png"));
-			
-			mPressedButton.addChild(pressed);
-			mUnpressedButton.addChild(unpressed);
-		} else if (id == 2) {
-			var unpressed = new Bitmap (Assets.getBitmapData ("assets/week_unpressed.png"));
-			var pressed = new Bitmap (Assets.getBitmapData ("assets/week_pressed.png"));
-			
-			mPressedButton.addChild(pressed);
-			mUnpressedButton.addChild(unpressed);
-		} else {
-			var unpressed = new Bitmap (Assets.getBitmapData ("assets/button_unpressed.png"));
-			var pressed = new Bitmap (Assets.getBitmapData ("assets/button_pressed.png"));
-			
-			mPressedButton.addChild(pressed);
-			mUnpressedButton.addChild(unpressed);
+		var pressed : Bitmap = null;
+		var unpressed : Bitmap = null;
+		
+		
+		switch(id) {
+			case 0:
+				unpressed = new Bitmap (Assets.getBitmapData ("assets/hour_unpressed.png"));
+				pressed = new Bitmap (Assets.getBitmapData ("assets/hour_pressed.png"));
+				
+			case 1:
+				unpressed = new Bitmap (Assets.getBitmapData ("assets/day_unpressed.png"));
+				pressed = new Bitmap (Assets.getBitmapData ("assets/day_pressed.png"));
+				
+			case 2:
+				unpressed = new Bitmap (Assets.getBitmapData ("assets/week_unpressed.png"));
+				pressed = new Bitmap (Assets.getBitmapData ("assets/week_pressed.png"));
+				
+			default:
+				unpressed = new Bitmap (Assets.getBitmapData ("assets/button_unpressed.png"));
+				pressed = new Bitmap (Assets.getBitmapData ("assets/button_pressed.png"));
 		}
+		
+		pressed.smoothing = true; //Smooth if scaled.
+		unpressed.smoothing = true;
+		
+		mPressedButton.addChild(pressed);
+		mUnpressedButton.addChild(unpressed);
 		
 		//var unpressed = new Bitmap (Assets.getBitmapData ("assets/button_unpressed.png"));
 		//var pressed = new Bitmap (Assets.getBitmapData ("assets/button_pressed.png"));
@@ -55,12 +57,12 @@ public function new(name:String, color:Int,id:Int,f:Int->Void){
 		//s.graphics.drawRect(0,0, 50,50);
 		//s.graphics.endFill();
 
-		mPressedButton.width = 70;
-		mPressedButton.height = 70;
+		mPressedButton.width = 72;
+		mPressedButton.height = 72;
 
 
-		mUnpressedButton.width = 70;
-		mUnpressedButton.height = 70;
+		mUnpressedButton.width = 72;
+		mUnpressedButton.height = 72;
 
 		this.addChild(mPressedButton);
 		this.addChild(mUnpressedButton);
