@@ -172,11 +172,11 @@ class CoordSystem extends Sprite {
 		tf.mouseEnabled = false;
 		tf.selectable = false;
 		//maximizing input to 7 chars
-		if(txt.length <= 7){
+		if(txt.length <= 8){
 			tf.text = txt;
 		}
 		else{	
-			tf.text = txt.substr(0,7)+"...";
+			tf.text = txt.substr(0,8)+"...";
 
 		}
 		

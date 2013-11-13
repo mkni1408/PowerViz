@@ -59,14 +59,18 @@ class SeismoGraph extends Sprite{
 
 		mbarSprite.graphics.lineStyle(2,0x000000);
 		mbarSprite.graphics.moveTo(0,Lib.stage.stageHeight);
-		mbarSprite.graphics.lineTo((Lib.stage.stageWidth+10)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight);
+		mbarSprite.graphics.lineTo((Lib.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight);
+		mbarSprite.graphics.beginFill(0x000000,1);
+		mbarSprite.graphics.lineTo((Lib.stage.stageWidth+10)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight-10);
+		mbarSprite.graphics.lineTo((Lib.stage.stageWidth+10)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight+10);
+		mbarSprite.graphics.lineTo((Lib.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight);
+		mbarSprite.graphics.endFill();
 
-		
 		addChild(mbarSprite);
 		mbarSprite.addChild(tf);
 
 		tf.x = (Lib.stage.stageWidth+15)-(mMeasurmenthalfFactor*12);
-		tf.y = Lib.stage.stageHeight-30;
+		tf.y = Lib.stage.stageHeight-20;
 
 		
 

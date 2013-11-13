@@ -165,7 +165,7 @@ class OnOffDiagram extends Sprite{
 								mtimeArray,mNewIDArray,true,true,false,true,mOffset);
 
 		if(mNewIDArray.length<10){//scale at number of elements = lower number of elements equals larger text
-			mCoordSystem.x = 130;
+			mCoordSystem.x = 115;
 		}
 		else{
 			mCoordSystem.x = 100;

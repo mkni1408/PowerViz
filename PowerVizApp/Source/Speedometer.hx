@@ -40,7 +40,7 @@ class Speedometer extends Sprite{
 		settings.height = 70;
 
 		settings.x = 10;
-		settings.y = 10;
+		settings.y = -30;
 
         
 		mSpeedometer = new Sprite();

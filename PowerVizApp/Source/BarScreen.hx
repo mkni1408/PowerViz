@@ -218,42 +218,42 @@ class BarScreen extends Sprite {
 
 		if(mWattMax <= 100){
 
-                    mKwhArray = ["10Wt  ", "20Wt  ", "30Wt  ","40Wt  ","50Wt  ", "60Wt  ","70Wt  ", "80Wt  ","90Wt  ","100Wt "];
+                    mKwhArray = ["0,01 kWt", "0,02 kWt", "0,03 kWt","0,04 kWt","0,05 kWt", "0,06 kWt","0,07 kWt", "0,08 kWt","0,09 kWt","0,1 kWt"];
                     mBarScale = 10;
                 }
                 else if(mWattMax > 100 && mWattMax <= 500){
 
-                    mKwhArray = ["50Wt  ", "100Wt ", "150Wt ","200Wt ","250Wt ", "300Wt ","350Wt ", "400Wt","450Wt ","500Wt "];
+                    mKwhArray = ["0,05 kWt", "0,1 kWt", "0,15 kWt","0,2 kWt ","0,25 kWt", "0,3 kWt","0,35 kWt", "0,4 kWt","0,45 kWt","0,5 kWt"];
                     mBarScale =  50;
                 }
                 else if(mWattMax > 500 && mWattMax <= 1000){
 
-                    mKwhArray = ["100Wt ", "200Wt ", "300Wt ","400Wt ","500Wt ", "600Wt ","700Wt ", "800Wt ","900Wt ","1000Wt"];
+                    mKwhArray = ["0,1 kWt ", "0,2 kWt", "0,3 kWt","0,4 kWt","0,5 kWt", "0,6 kWt","0,7 kWt", "0,8 kWt","0,9 kWt","1 kWt "];
                     mBarScale =  100;
                 }
                 else if(mWattMax > 1000 && mWattMax <= 2000){
 
-                    mKwhArray = ["200Wt ", "400Wt ", "600Wt ","800Wt ","1000Wt", "1200Wt","1400Wt ", "1600Wt","1800Wt","2000Wt"];
+                    mKwhArray = ["0,2 kWt ", "0,4 kWt", "0,6 kWt","0,8 kWt","1 kWt ", "1,2 kWt","1,4 kWt", "1,6 kWt","1,8 kWt","2 kWt"];
                     mBarScale =  200;
                 }
                 else if(mWattMax > 2000 && mWattMax <= 3000){
 
-                    mKwhArray = ["0,3kWt ", "0,6kWt ", "0,9kWt ","1,2kWt ","1,5kWt ", "1,8kWt ","2,1kWt ", "2,4kWt","2,7kWt","3kWt"];
+                    mKwhArray = ["0,3 kWt ", "0,6 kWt ", "0,9 kWt ","1,2 kWt ","1,5 kWt ", "1,8 kWt ","2,1 kWt ", "2,4 kWt","2,7 kWt","3 kWt "];
                     mBarScale =  300;
                 }
                 else if(mWattMax > 2000 && mWattMax <= 4000){
 
-                    mKwhArray = ["0,4Wt ", "0,8Wt ", "1,2kWt","1,6kWt","2kWt  ", "2,4kWt ","2,8kWt", "3,2kWt","3,6kWt","4kWt  "];
+                    mKwhArray = ["0,4 kWt ", "0,8 kWt ", "1,2 kWt","1,6 kWt","2 kWt ", "2,4 kWt","2,8 kWt", "3,2 kWt","3,6 kWt","4 kWt"];
                     mBarScale =  400;
                 }
                 else if(mWattMax > 2000 && mWattMax <= 20000){
 
-                    mKwhArray = ["2kWt  ", "4kWt  ", "6kWt  ","8kWt  ","10kWt  ", "12kWt  ","14kWt  ", "16kWt ","18kWt ","20kWt "];
+                    mKwhArray = ["2 kWt ", "4 kWt ", "6 kWt ","8 kWt ","10 kWt ", "12 kWt ","14 kWt ", "16 kWt ","18 kWt ","20 kWt "];
                     mBarScale =  2000;
                 }
                 else{//defaulter til denne her hvis forbruget overstiger 20kw(meget!)
 
-                    mKwhArray = ["4kWt ", "8kWt ", "12kWt ","16kWt ","20kWt ", "24kWt ","28kWt ", "32kWt ","36kWt ","40kWt "];
+                    mKwhArray = ["4 kWt", "8 kWt ", "12 kWt ","16 kWt ","20 kWt ", "24 kWt ","28 kWt ", "32 kWt ","36 kWt ","40 kWt "];
                     mBarScale = 4000;
                 }
 		layout();
