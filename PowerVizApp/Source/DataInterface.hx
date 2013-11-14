@@ -15,11 +15,8 @@ import CallbackContainer;
 
 
 //The mutex stuff:
-#if neko
-	import neko.vm.Mutex;
-#elseif cpp
-	import cpp.vm.Mutex;
-#end
+import PowerMutex;
+
 
 typedef TimeWatts = {time:Date, watts:Float}
 typedef ArealDataStruct = {outletIds:Array<Int>, watts:Map<Int, Array<Float>>, colors:Map<Int,Int>}
@@ -80,7 +77,7 @@ class DataInterface {
         private var mCnx : HttpAsyncConnection; //Remoting connection used for communicating with the server. 
         private var mUrl : String;
         
-        private var mConnectionMutex:Mutex;
+        private var mConnectionMutex:PowerMutex;
         
         //Timers:
         private var mTimerNow : PowerTimer; //Timer used to get the "now" usage data. 
@@ -181,7 +178,7 @@ class DataInterface {
         public function connect()  {
             mCnx = HttpAsyncConnection.urlConnect(mUrl);
             mCnx.setErrorHandler(onError);
-            mConnectionMutex = new Mutex();
+            mConnectionMutex = new PowerMutex();
         }
         
         //Called when a connection or server error occurs.
@@ -442,11 +439,15 @@ class DataInterface {
         //The logging function. Use the defined types above.
         public function logInteraction(type:LogType, tag:String, ?comment:String) {
         
+		#if !anon //Ommit of compiled as anonymous
         	mConnectionMutex.acquire(); //Get the mutex to avoid network blocking.
         	
 			mCnx.Api.logInteraction.call([Config.instance.houseId, type, tag, comment==null ? "" : comment], function(data:Dynamic){
 				mConnectionMutex.release();
 			});
+		#else
+			Sys.println("Running in anonymous mode. No data logged");
+		#end
         }
         
          
@@ -683,7 +684,7 @@ class DataInterface {
         }
         
         private function getArealUsage(timespan:String) : ArealDataStruct {
-        
+        trace("--");
                 var r:ArealDataStruct = {outletIds:new Array<Int>(), watts:new Map<Int, Array<Float>>(), colors:new Map<Int,Int>()};
                 
                 var rvIds = new Array<Int>();
@@ -691,9 +692,9 @@ class DataInterface {
                 var rvColors = new Map<Int, Int>();
                 var readingArray = new Array<TimeWatts>();
                 var numberofDates = 96;
-                
+                trace("--");
                 var usage = new Array<Float>();
-                
+                trace("--");
                 var source:Map<Int, Array<TimeWatts>>;
                 switch(timespan) {
                         case "hour":
@@ -709,7 +710,7 @@ class DataInterface {
                         default:
                                 return null;
                 }
-
+trace("--");
 
                 
                 var dateArray = createTimeArray(numberofDates);
@@ -717,13 +718,13 @@ class DataInterface {
                 for(key in source.keys()) {        
 
                     rvIds.push(key);
-
+trace("--");
 
                     for(date in dateArray){
 
                         var found = false;
                         source.get(key).reverse();
-
+trace("--");
                         for(reading in source.get(key)) {
                             //trace("comparing ",reading.time,"and",date);
                             if(Std.string(reading.time) == Std.string(date)){ //date was found
@@ -739,14 +740,14 @@ class DataInterface {
                         }
                 
                     }
-
-                            
+trace("--");
+					trace(key);
                     rvUsage.set(key, usage);
                     usage = new Array<Float>();
                     rvColors.set(key, houseDescriptor.getOutlet(key).outletColor);
                 }
 
-                
+     trace("--");           
 
                 
                 return {outletIds:rvIds, watts:rvUsage, colors:rvColors};

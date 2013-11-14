@@ -28,7 +28,9 @@ class OutletDescriptor {
 		var str = "houseId: " + houseId + "\n";
 		str += "outletId: " + outletId + "\n";
 		str += "outletName: " + name + "\n";
-		//TODO... the last lines...
+		str += "zenseName: " + zenseName + "\n";
+		str += "zenseRoom: " + zenseRoom + "\n";
+		str += "zenseFloor: " + zenseFloor + "\n";
 		return str;
 	}
 

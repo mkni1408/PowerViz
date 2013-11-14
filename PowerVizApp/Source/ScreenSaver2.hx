@@ -11,13 +11,14 @@ import motion.Actuate;
 
 import PowerTimer;
 import DataInterface;
+import Enums;
 
 
 class ScreenSaver2 extends Sprite {
 	
 	private static inline var mRemoveInterval:Int = 10000; //Millisecs before unused bulb removal
 	private static inline var mShuffleInterval:Int = 60000*10; //Millisecs between bulb shuffles. 10 minutes.
-	private static inline var mScreenSaverSecs : Int = 5; //Seconds before the screensaver will start.
+	private static inline var mScreenSaverSecs : Int = 120; //Seconds before the screensaver will start.
 	
 	private var mBackdrop : Bitmap;
 	
@@ -33,12 +34,12 @@ class ScreenSaver2 extends Sprite {
 	public function new() {
 		super();
 		this.graphics.beginFill(0xFF00FF,0);
-		this.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageHeight); //Draw frame area, to receive inputs from.
+		this.graphics.drawRect(0,0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight); //Draw frame area, to receive inputs from.
 		this.graphics.endFill();
 		
 		mBackdrop = new Bitmap(Assets.getBitmapData("assets/background3.png"));
-		mBackdrop.width = Lib.stage.stageWidth;
-		mBackdrop.height = Lib.stage.stageHeight;
+		mBackdrop.width = Lib.current.stage.stageWidth;
+		mBackdrop.height = Lib.current.stage.stageHeight;
 		this.addChild(mBackdrop);
 		
 		mBulbs = new Array<Bulb2>();
@@ -72,7 +73,6 @@ class ScreenSaver2 extends Sprite {
 	
 	//Update function invoked once a second.
 	function update() {
-		trace("Update");
 		if(DateTools.delta(mLastTouchTime, DateTools.seconds(mScreenSaverSecs)).getTime() < Date.now().getTime()) {
 			enableScreensaver();
 		}
@@ -94,9 +94,8 @@ class ScreenSaver2 extends Sprite {
 	function enableScreensaver() {
 		if(this.visible == true) //Already enabled.
 			return; 
-		
+		DataInterface.instance.logInteraction(LogType.ScreenChange, "ScreenSaverEnabled");
 		this.visible = true;
-		
 		this.alpha=0;
 		Actuate.tween(this, 5, {alpha:1});
 		
@@ -105,6 +104,7 @@ class ScreenSaver2 extends Sprite {
 	function disableScreensaver() {
 		if(this.visible == false) //Already disabled.
 			return;
+		DataInterface.instance.logInteraction(LogType.ScreenChange, "ScreenSaverDisabled");
 		this.visible = false;
 	}
 	
@@ -115,8 +115,6 @@ class ScreenSaver2 extends Sprite {
 	function setBulbs() {
 		var watts:Int = Std.int(DataInterface.instance.getTotalCurrentLoad());
 		var bulbWatts = DataInterface.instance.bulbWatts;
-		trace(watts);
-		trace(bulbWatts);
 		var count:Int = Std.int(watts/bulbWatts);
 		if(count>mBulbs.length){ //Bulbs are missing, so create more.
 			var newBulb : Bulb2;
@@ -128,7 +126,6 @@ class ScreenSaver2 extends Sprite {
 				}
 			}
 		}
-		trace(mBulbs);
 		var wattCount = 0;
 		for(b in mBulbs) {
 			if(b!=null) {
@@ -209,8 +206,8 @@ class Bulb2 extends Sprite {
 	//Translates a grid index into a 2D point.
 	public static function indexToPoint(index:Int) : Point {
 		
-		var hspace = Lib.stage.stageWidth / (smGridWidth+2);
-		var vspace = Lib.stage.stageHeight / (smGridHeight+2);
+		var hspace = Lib.current.stage.stageWidth / (smGridWidth+2);
+		var vspace = Lib.current.stage.stageHeight / (smGridHeight+2);
 		
 		return new Point(((index % smGridWidth)*hspace)+hspace,(Math.floor(index/smGridWidth)*vspace)+vspace);
 	}
@@ -277,7 +274,7 @@ class Bulb2 extends Sprite {
 	
 	function setSize() {
 		var aspect = mBitmapOn.width / mBitmapOn.height;
-		mBitmapOn.width = Lib.stage.stageWidth / 18;
+		mBitmapOn.width = Lib.current.stage.stageWidth / 18;
 		mBitmapOn.height = mBitmapOn.width / aspect;
 		mBitmapOff.width = mBitmapOn.width;
 		mBitmapOff.height = mBitmapOn.height;

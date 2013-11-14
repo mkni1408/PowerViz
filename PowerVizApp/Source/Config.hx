@@ -21,6 +21,7 @@ class Config {
 		houseId = 43; //TODO! Make this real!!!!
 	}
 	
+	//Hmm... never made this work.
 	private function readFromFile() {
 	}
 }

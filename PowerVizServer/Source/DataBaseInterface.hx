@@ -12,7 +12,6 @@ import Enums;
 typedef TimeWatts = {time:Date, watts:Float}
 
 
-
 /**
 Interface the the database.
 This class supplies data reading/writing functions to the rest of theadmin server.

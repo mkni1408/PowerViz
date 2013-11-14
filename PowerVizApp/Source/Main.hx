@@ -74,8 +74,8 @@ class Main extends Sprite {
 	public function setBackground() {
 	
 		mBackground = new Bitmap(openfl.Assets.getBitmapData("assets/background2.png"));
-		mBackground.width = Lib.stage.stageWidth;
-		mBackground.height = Lib.stage.stageHeight;
+		mBackground.width = Lib.current.stage.stageWidth;
+		mBackground.height = Lib.current.stage.stageHeight;
 		this.addChild(mBackground);
 		//mBackground.mouseEnabled = false;
 	
@@ -85,19 +85,19 @@ class Main extends Sprite {
 	public function prepareScreens() {
 	
 		BusyAnimation.instance.busy();
-		
+		trace("--");
 		mArealScreen = new ArealScreen();
 		SwipeMill.add(mArealScreen);
-		
+		trace("--");
 		mBarScreen = new BarScreen();
 		SwipeMill.add(mBarScreen);
-		
+		trace("--");
 		mOnOff = new OnOffDiagram();
 		SwipeMill.add(mOnOff);
-
+trace("--");
 		mCurrentUsage = new CurrentUsage();
 		SwipeMill.add(mCurrentUsage);
-		
+		trace("--");
 		//mCoinScreen = new CoinScreen();
 		//SwipeMill.add(mCoinScreen);
 		
@@ -109,8 +109,8 @@ class Main extends Sprite {
 	//add image to swipemill  
 	private function addImageToSwipeTest(img:String) {
 		var image = new Bitmap(Assets.getBitmapData(img));
-		image.width = Lib.stage.stageWidth;
-		image.height = Lib.stage.stageHeight;
+		image.width = Lib.current.stage.stageWidth;
+		image.height = Lib.current.stage.stageHeight;
 		//this.addChild(image);
 		SwipeMill.add(image);
 	}

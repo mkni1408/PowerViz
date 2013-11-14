@@ -118,8 +118,8 @@ class ArealDiagram extends Sprite {
 				#end
 			}
 			
-			var triangles = new Array<Float>();
-			var indices = new Array<Int>();
+			var triangles = new flash.Vector<Float>();
+			var indices = new flash.Vector<Int>();
 			var first:Int = 0; //First index used inside the loop.
 			
 			var x:Float = 0;
@@ -148,6 +148,8 @@ class ArealDiagram extends Sprite {
 				//trace("X",x);
 				x += hspace; //Move to next drawing position.
 			}
+			
+				
 			gfx.beginFill(color);
 			gfx.drawTriangles(triangles, indices); //Draw generated triangles.
 			gfx.endFill();

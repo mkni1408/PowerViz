@@ -57,21 +57,21 @@ class ArealScreen extends Sprite {
                 mRoomArray = new Array<String>();
                 mColorArray = new Array<Int>();
 
-               
+				trace("..");
 
                 getColorAndRoomData();
-
+				trace("..");
                 mViewMode = VIEWMODE_WEEK; //Daymode by default.
                 
                 mBack = new Sprite();
-
+				trace("..");
                 mBack.graphics.beginFill(0xFFFFFF,0);
-                mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
+                mBack.graphics.drawRect(0,0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
                 mBack.graphics.endFill();
                 this.addChild(mBack);
-
+				trace("..");
                 mTimeArray = generateTimeArrayandCalcOffset();
-
+				trace("..");
 
                 mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", 
                                                         "800Wt","900Wt","1000Wt"];
@@ -79,20 +79,20 @@ class ArealScreen extends Sprite {
                 
                 mDiagram = new ArealDiagram();
                 mDiagram.mouseEnabled=false;
-                
+                trace("..");
                 mTitle = new TextField();
                 mTitle.mouseEnabled=false;
                 mTitle.text = "Forbrug i dag ";
                 mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
                 mTitle.selectable = false;
-                
+                trace("..");
                 mTimeButton = new TimeChangeButton([VIEWMODE_DAY, VIEWMODE_WEEK,VIEWMODE_MONTH,],mViewMode,onButtonPush); //Day, week, month.
-                
                 
                 mCoordSys = new CoordSystem();
 
-
+				trace("..");
                 callDrawMethods();
+				trace("..");
 
 				/** Screen timers are not used anymore. Callbacks are used instead.
                 mTimer = new PowerTimer(mTimerInterval); 
@@ -100,7 +100,7 @@ class ArealScreen extends Sprite {
                 mTimer.start();
                 **/
 				DataInterface.instance.callbackQuarter.addCallback(onTime); //Use the DataInterface callback mechanism.
-                
+
         }
 
         private function onTime() {
@@ -121,7 +121,7 @@ class ArealScreen extends Sprite {
         private function doLayout() {
 
                 mTitle.width = mTitle.textWidth;        
-                mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
+                mTitle.x = (Lib.current.stage.stageWidth - mTitle.textWidth) / 2;
                 mTitle.y = 0;
 
                 //mBack.addChild(mTitle);
@@ -135,14 +135,14 @@ class ArealScreen extends Sprite {
                 var devider = generateUsageArray(mDiagram.maxValue);
 
                 
-                mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
+                mTimeButton.x = Lib.current.stage.stageWidth - mTimeButton.width;
                 mTimeButton.y = 0;
 
-                mCoordSys.generate(Lib.stage.stageWidth/1.15, (Lib.stage.stageHeight/1.25)-mLegend.height, "X", "Y", 
-                    (Lib.stage.stageWidth/1.15)/mTimeArray.length, ((Lib.stage.stageHeight/1.25)-mLegend.height)/mUsageArray.length, 
+                mCoordSys.generate(Lib.current.stage.stageWidth/1.15, (Lib.current.stage.stageHeight/1.25)-mLegend.height, "X", "Y", 
+                    (Lib.current.stage.stageWidth/1.15)/mTimeArray.length, ((Lib.current.stage.stageHeight/1.25)-mLegend.height)/mUsageArray.length, 
                                                                                                         mTimeArray, mUsageArray, true, false,false,true,mOffset);
                 mCoordSys.x = 100;
-                mCoordSys.y = (Lib.stage.stageHeight/1.25)+40;
+                mCoordSys.y = (Lib.current.stage.stageHeight/1.25)+40;
 
                 mLegend.x = mCoordSys.x;
                 mLegend.y = mCoordSys.y + 30;
@@ -153,16 +153,16 @@ class ArealScreen extends Sprite {
 
                  switch( mViewMode ) {
                     case 0:
-                        mDiagram.width = Lib.stage.stageWidth/1.15;
+                        mDiagram.width = Lib.current.stage.stageWidth/1.15;
                         mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
                     case 1:
-                        mDiagram.width = Lib.stage.stageWidth/1.15;
+                        mDiagram.width = Lib.current.stage.stageWidth/1.15;
                         mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
                     case 2:
-                        mDiagram.width = Lib.stage.stageWidth/1.15;
+                        mDiagram.width = Lib.current.stage.stageWidth/1.15;
                         mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
                     default:
-                        mDiagram.width = Lib.stage.stageWidth/1.15;
+                        mDiagram.width = Lib.current.stage.stageWidth/1.15;
                         mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
             }
                 //mBack.addChild(mCoordSys);
@@ -184,8 +184,8 @@ class ArealScreen extends Sprite {
                 //        colors.push(DataInterface.instance.getOutletColor(t));
                 //}*/
                 var r:ArealDataStruct = {outletIds:new Array<Int>(), watts:new Map<Int, Array<Float>>(), colors:new Map<Int,Int>()};
-        
-
+				
+				
                 if(mViewMode==0){//hour
                     r = DataInterface.instance.getArealUsageHour();
                 }
@@ -207,6 +207,7 @@ class ArealScreen extends Sprite {
                 rvColors = r.colors;
 
                 drawData(rvIds,rvUsage,rvColors);
+				
         }        
         
         private function drawData(outletIds:Array<Int>, usage:Map<Int, Array<Float>>, colors:Map<Int, Int>) : Void {
@@ -215,7 +216,7 @@ class ArealScreen extends Sprite {
             
                 mDiagram.graphics.clear();
 
-                mDiagram.generate(data.usage, data.colors, Lib.stage.stageWidth / 1.15,Lib.stage.stageHeight / 1.25);
+                mDiagram.generate(data.usage, data.colors, Lib.current.stage.stageWidth / 1.15,Lib.current.stage.stageHeight / 1.25);
        
         }
         
@@ -287,9 +288,13 @@ class ArealScreen extends Sprite {
         }
 
         private function callDrawMethods():Void{
+			
                 getColorAndRoomData();
+				
                 fillWithData();
+				
                 doLayout();
+				
                 addChildrenToBack();
         }
 
@@ -407,7 +412,7 @@ class ArealScreen extends Sprite {
 
                     }
 
-                    trace(_usage);
+                    
                 }
                  if(mViewMode==1){//Day
                     if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden hvis tomt
@@ -419,7 +424,7 @@ class ArealScreen extends Sprite {
                             }
                             
                              _usage.push(_ta);
-                            trace(_usage);
+                            
 
                     }
                     else{
@@ -635,7 +640,7 @@ class ArealScreen extends Sprite {
                             offset= 0.75;
                         }
                         //should be the length of the coordsystem
-                        mOffset = ((Lib.stage.stageWidth/1.15)/stringAr.length)*offset;
+                        mOffset = ((Lib.current.stage.stageWidth/1.15)/stringAr.length)*offset;
                         //offset = 2.0;//test
 
 
@@ -679,7 +684,7 @@ class ArealScreen extends Sprite {
                         }
                         tempArray.reverse();
 
-                        mOffset = (((Lib.stage.stageWidth/1.15)/tempArray.length)/24)*offset;
+                        mOffset = (((Lib.current.stage.stageWidth/1.15)/tempArray.length)/24)*offset;
 
 
 
