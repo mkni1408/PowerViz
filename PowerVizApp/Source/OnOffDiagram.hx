@@ -152,19 +152,13 @@ class OnOffDiagram extends Sprite{
 		//add the bars
 		var outletCounter = 0;
 
-		for(i in 0...mMapArray.length){
-			
-			var outArray = mMapArray[i];
-			
-
-
-			
-			for(count in 0...outArray.length){
-				fetchOnOffData(mNewOutletArray[outArray[count]],mColorArray[i]);
+		
+			for(count in 0...mSubOutletArray.length){
+				fetchOnOffData(mSubOutletArray[count],mSubColorArray[count]);
 				
 			}
 
-		}
+		
 		
 		//add to parent sprite	
 		testSprite.addChild(mCoordSystem);
@@ -227,6 +221,7 @@ class OnOffDiagram extends Sprite{
 		var tmpmap2 = new Array<Int>();
 		var tmpcolorMap = new Array<Int>();
 		var tmpRoomMap = new Array<String>();
+		var tmpOutletArray = new Array<Outlet>();
 
 		if(Index == 0){
 			tmpmap1 = mMapArray[0];
@@ -250,9 +245,11 @@ class OnOffDiagram extends Sprite{
 		mSubIdArray = new Array<String>();
 		mSubRoomArray = new Array<String>();
 		mSubColorArray = new Array<Int>();
+		mSubOutletArray = new Array<Outlet>();
 
 		mSubRoomArray = tmpRoomMap;
 		mSubColorArray = tmpcolorMap;
+
 
 		if(tmpmap1==null)
 		{
@@ -272,6 +269,17 @@ class OnOffDiagram extends Sprite{
 				mSubIdArray.push(mNewIDArray[tmpmap2[i]]);
 			}
 		}
+
+		for(id in tmpmap1){
+
+			tmpOutletArray.push(mNewOutletArray[id]);
+		}
+		for(id in tmpmap2){
+
+			tmpOutletArray.push(mNewOutletArray[id]);
+		}
+
+		mSubOutletArray = tmpOutletArray;
 
 		trace(mSubIdArray);
 		trace(tmpcolorMap);
@@ -696,7 +704,7 @@ class OnOffDiagram extends Sprite{
 
             		changeTextfieldIndex(mIndex,calculateNumEntries(mMapArray));
 
-            		updateData();
+            		drawDiagram();
             	}
 
             }
