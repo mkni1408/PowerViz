@@ -121,6 +121,7 @@ class OnOffDiagram extends Sprite{
 		mBack.addChild(mTitle);
 		mBack.addChild(monOffBar);
 		this.addChild(mBack);
+		trace("--");
 	}
 	
 	
@@ -333,7 +334,7 @@ class OnOffDiagram extends Sprite{
 		mMapArray = new Array<Array<Int>>();
 		
 		var tempOutlet = data; //DataInterface.instance.getOnOffData();//fetch the outlets
-		trace(tempOutlet);
+		
 		
 		mMapArray=rearrangeData(tempOutlet);//rearrange the data
 
@@ -695,7 +696,7 @@ class OnOffDiagram extends Sprite{
 
             		changeTextfieldIndex(mIndex,calculateNumEntries(mMapArray));
 
-            		drawDiagram();
+            		updateData();
             	}
 
             }
