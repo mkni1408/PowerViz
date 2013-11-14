@@ -83,14 +83,14 @@ class PowerOrigin extends Sprite{
 
 	private function centerGraphics(origin:Sprite, bitmap:Bitmap){
 	
-		origin.width = Lib.stage.stageWidth/2;
-		origin.height = Lib.stage.stageHeight/2;
+		origin.width = Lib.current.stage.stageWidth/2;
+		origin.height = Lib.current.stage.stageHeight/2;
 
 		var centerBitmapX = origin.width/2;
 		var centerBitmapY = origin.height/2;
 
-		var centerSpriteX = (Lib.stage.stageWidth / 4)*3;
-		var centerSpriteY = (Lib.stage.stageHeight / 4);
+		var centerSpriteX = (Lib.current.stage.stageWidth / 4)*3;
+		var centerSpriteY = (Lib.current.stage.stageHeight / 4);
 
 		origin.x = centerSpriteX - centerBitmapX;
 		origin.y = centerSpriteY - centerBitmapY;
@@ -100,7 +100,7 @@ class PowerOrigin extends Sprite{
 	//draws the frame around the Sprite
 	private function drawFrame():Void{
 		//graphics.lineStyle(4,0x000000);
-		//graphics.drawRect(Lib.stage.stageWidth/2, 0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
+		//graphics.drawRect(Lib.current.stage.stageWidth/2, 0, Lib.current.stage.stageWidth/2, Lib.current.stage.stageHeight/2);
 	}
 	
 	//Returns a triangleular usage pointer.
@@ -117,8 +117,8 @@ class PowerOrigin extends Sprite{
 	private function createAndPositionFrame() : Sprite {
 		var rv = new Sprite();
 		rv.graphics.beginFill(0xFF00FF, 0); 
-		rv.graphics.drawRect(0,0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
-		rv.x = Lib.stage.stageWidth / 2;
+		rv.graphics.drawRect(0,0, Lib.current.stage.stageWidth/2, Lib.current.stage.stageHeight/2);
+		rv.x = Lib.current.stage.stageWidth / 2;
 		rv.y = 0;
 		return rv;
 	}

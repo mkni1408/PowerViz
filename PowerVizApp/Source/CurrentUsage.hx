@@ -32,7 +32,7 @@ class CurrentUsage extends Sprite{
 		//this.graphics.lineStyle(6,0x000000);
 
 		//draw frame
-		this.graphics.drawRect(0, 0, Lib.stage.stageWidth, Lib.stage.stageHeight);
+		this.graphics.drawRect(0, 0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
 
 		speedometer = new Speedometer();
 		powerOrigin = new PowerOrigin();
@@ -44,8 +44,8 @@ class CurrentUsage extends Sprite{
         mTitle.selectable = false;
 
         this.graphics.lineStyle(2,0x000000);
-		this.graphics.moveTo(0,(Lib.stage.stageHeight/2)+15);
-		this.graphics.lineTo((Lib.stage.stageWidth),(Lib.stage.stageHeight/2)+15);
+		this.graphics.moveTo(0,(Lib.current.stage.stageHeight/2)+15);
+		this.graphics.lineTo((Lib.current.stage.stageWidth),(Lib.current.stage.stageHeight/2)+15);
 		this.graphics.beginFill(0x000000,1);
 
 		addChild(mTitle);
@@ -55,13 +55,13 @@ class CurrentUsage extends Sprite{
 		mTitle.width = 200;
 
 		mTitle.y = 0;
-		mTitle.x = (Lib.stage.stageWidth/2)-(mTitle.width/2);
+		mTitle.x = (Lib.current.stage.stageWidth/2)-(mTitle.width/2);
 
 		powerOrigin.y = 40;
 		speedometer.y = 40;
 
 		graphics.beginFill(0xFFFFFF,0.0);
-		graphics.drawRect(0,0,Lib.stage.stageWidth,Lib.stage.stageHeight);
+		graphics.drawRect(0,0,Lib.current.stage.stageWidth,Lib.current.stage.stageHeight);
 		graphics.endFill();
 		this.mouseEnabled = false;
 		this.powerOrigin.mouseEnabled = false;

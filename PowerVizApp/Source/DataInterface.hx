@@ -183,7 +183,9 @@ class DataInterface {
         
         //Called when a connection or server error occurs.
         private function onError(e:String) {
+			#if(!flash && !html5)
             Sys.println("Connection error: " + e);
+			#end
             mConnectionMutex.release();
         }
        
@@ -445,7 +447,7 @@ class DataInterface {
 			mCnx.Api.logInteraction.call([Config.instance.houseId, type, tag, comment==null ? "" : comment], function(data:Dynamic){
 				mConnectionMutex.release();
 			});
-		#else
+		#elseif !flash
 			Sys.println("Running in anonymous mode. No data logged");
 		#end
         }
@@ -519,8 +521,11 @@ class DataInterface {
                                 hD = v;
                                 done=true;
                 });
-                while(done==false)
-                        Sys.sleep(0.1);
+                while(done==false) {
+						#if !flash
+							Sys.sleep(0.1);
+						#end
+				}
                         
                 return hD;
         }

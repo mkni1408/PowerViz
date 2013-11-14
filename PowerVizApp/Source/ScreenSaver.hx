@@ -74,18 +74,18 @@ class ScreenSaver extends Sprite {
 
 		//add background fill color
 		//this.graphics.beginFill(0xFFFFFF);
-		//this.graphics.drawRect(0,0,Lib.stage.stageWidth,Lib.stage.stageHeight);
+		//this.graphics.drawRect(0,0,Lib.current.stage.stageWidth,Lib.current.stage.stageHeight);
 		//this.graphics.endFill();
 		mBackground = new Bitmap(openfl.Assets.getBitmapData("assets/background3.png"));
-		mBackground.width = Lib.stage.stageWidth;
-		mBackground.height = Lib.stage.stageHeight;
+		mBackground.width = Lib.current.stage.stageWidth;
+		mBackground.height = Lib.current.stage.stageHeight;
 		this.addChild(mBackground);
 
 		mAlertBitmap = new Bitmap(openfl.Assets.getBitmapData("assets/alert.png"));
 		mAlertBitmap.width = 75;
 		mAlertBitmap.height = 75;
-		mAlertBitmap.x = (Lib.stage.stageWidth-mAlertBitmap.width)-10;
-		mAlertBitmap.y = (Lib.stage.stageHeight-mAlertBitmap.height)-10;
+		mAlertBitmap.x = (Lib.current.stage.stageWidth-mAlertBitmap.width)-10;
+		mAlertBitmap.y = (Lib.current.stage.stageHeight-mAlertBitmap.height)-10;
 		this.addChild(mAlertBitmap);
 		mAlertBitmap.alpha = 0;
 		//add bulbobjects to main sprite
@@ -186,7 +186,7 @@ class ScreenSaver extends Sprite {
 	public function placeBulbs(){
 
 
-		var positionHorisontal = (Lib.stage.stageWidth/10);
+		var positionHorisontal = (Lib.current.stage.stageWidth/10);
 		var positionVertical = 0+40;
 		var positionVerticaloffset = 65;
 
@@ -208,20 +208,20 @@ class ScreenSaver extends Sprite {
 
 
 		fifthBulb.x = (positionHorisontal+positionVerticaloffset)-10;
-		fifthBulb.y = (Lib.stage.stageHeight/2)+30;
+		fifthBulb.y = (Lib.current.stage.stageHeight/2)+30;
 
 
 		sixthBulb.x = ((positionHorisontal*3)+positionVerticaloffset)-30;
-		sixthBulb.y = (Lib.stage.stageHeight/2);
+		sixthBulb.y = (Lib.current.stage.stageHeight/2);
 
 		seventhBulb.x = ((positionHorisontal*5)+positionVerticaloffset)-30;
-		seventhBulb.y = (Lib.stage.stageHeight/2);
+		seventhBulb.y = (Lib.current.stage.stageHeight/2);
 
 		eightBulb.x = (positionHorisontal*9)-30;
 		eightBulb.y = positionVertical+35;
 
 		ninthBulb.x = ((positionHorisontal*7)+positionVerticaloffset)-30;
-		ninthBulb.y = (Lib.stage.stageHeight/2);
+		ninthBulb.y = (Lib.current.stage.stageHeight/2);
 
 
 	}

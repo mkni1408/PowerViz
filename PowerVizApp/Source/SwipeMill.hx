@@ -78,7 +78,7 @@ class SwipeMill {
 	private static function createVisualElements(parent:Sprite) {
 		mTouchReceiver = new Sprite();
 		mTouchReceiver.graphics.beginFill(0xFF00FF, 0);
-		mTouchReceiver.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
+		mTouchReceiver.graphics.drawRect(0,0, Lib.current.stage.stageWidth, Lib.current.stage.stageWidth);
 		mTouchReceiver.graphics.endFill();
 		
 		
@@ -90,8 +90,8 @@ class SwipeMill {
 		mArrows.onRightClick = onRightArrow;
 		
 		mSwipeDots = new SwipeDots();
-		mSwipeDots.x = Lib.stage.stageWidth / 2;
-		mSwipeDots.y = Lib.stage.stageHeight / 2;
+		mSwipeDots.x = Lib.current.stage.stageWidth / 2;
+		mSwipeDots.y = Lib.current.stage.stageHeight / 2;
 		parent.addChild(mSwipeDots);
 	}
 	
@@ -244,7 +244,7 @@ class SwipeMill {
 	private static function onTMMove(x:Float) {
 		if(mFingerDown) {
 			mDeltaX = Std.int(x - mStartX);
-			screenPos = mStartScreenPos - (mDeltaX / Lib.stage.stageWidth);
+			screenPos = mStartScreenPos - (mDeltaX / Lib.current.stage.stageWidth);
 		}
 	}
 	
@@ -297,15 +297,15 @@ class SwipeArrows extends Sprite {
 	
 	private function draw() {
 		mLeftArrow = new Sprite();
-		drawArrow(mLeftArrow.graphics, Lib.stage.stageWidth/20, Lib.stage.stageHeight/4);
+		drawArrow(mLeftArrow.graphics, Lib.current.stage.stageWidth/20, Lib.current.stage.stageHeight/4);
 		mLeftArrow.alpha=0.1;
-		mLeftArrow.y = Lib.stage.stageHeight/2;
+		mLeftArrow.y = Lib.current.stage.stageHeight/2;
 		mRightArrow = new Sprite();
-		drawArrow(mRightArrow.graphics, Lib.stage.stageWidth/20, Lib.stage.stageHeight/4);
+		drawArrow(mRightArrow.graphics, Lib.current.stage.stageWidth/20, Lib.current.stage.stageHeight/4);
 		mRightArrow.rotation = 180;
 		mRightArrow.alpha=0.1;
-		mRightArrow.x = Lib.stage.stageWidth;
-		mRightArrow.y = Lib.stage.stageHeight/2;
+		mRightArrow.x = Lib.current.stage.stageWidth;
+		mRightArrow.y = Lib.current.stage.stageHeight/2;
 		this.addChild(mLeftArrow);
 		this.addChild(mRightArrow);
 	}
@@ -384,10 +384,10 @@ class SwipeDots extends Sprite {
 		var dot = new Sprite();
 		dot.graphics.beginFill(0x0000A0);
 		/*
-		dot.graphics.drawCircle(0,0, Lib.stage.stageWidth/100);
+		dot.graphics.drawCircle(0,0, Lib.current.stage.stageWidth/100);
 		*/
-		var w:Float = Lib.stage.stageWidth/20;
-		var h:Float = Lib.stage.stageHeight/20;
+		var w:Float = Lib.current.stage.stageWidth/20;
+		var h:Float = Lib.current.stage.stageHeight/20;
 		dot.graphics.drawRect(w/2, h/2, w,h);
 		dot.graphics.endFill();
 		dot.mouseEnabled = false;

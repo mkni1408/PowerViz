@@ -27,8 +27,8 @@ class BusyAnimation extends Sprite {
 		this.graphics.beginFill(0xFF00FF, 0);
 		this.graphics.drawRect(0,0, 100,100);
 		this.graphics.endFill();
-		this.x = (Lib.stage.stageWidth-this.width) / 2;
-		this.y = (Lib.stage.stageHeight-this.height) / 2;
+		this.x = (Lib.current.stage.stageWidth-this.width) / 2;
+		this.y = (Lib.current.stage.stageHeight-this.height) / 2;
 	}
 	
 	private function setText() {

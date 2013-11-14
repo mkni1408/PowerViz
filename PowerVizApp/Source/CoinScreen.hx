@@ -33,7 +33,7 @@ class CoinScreen extends Sprite {
 		
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF);
-		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageWidth);
+		mBack.graphics.drawRect(0,0, Lib.current.stage.stageWidth, Lib.current.stage.stageWidth);
 		mBack.graphics.endFill();
 		this.addChild(mBack);
 		mViewMode = VIEWMODE_DAY;
@@ -67,18 +67,18 @@ class CoinScreen extends Sprite {
 	private function layout() {
 	
 		mTitle.width = mTitle.textWidth;	
-		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
+		mTitle.x = (Lib.current.stage.stageWidth - mTitle.textWidth) / 2;
 		mTitle.y = 20;
 	
 	
-		mCoinGraph.width = Lib.stage.stageWidth / 1.15;
-		mCoinGraph.height = Lib.stage.stageHeight / 1.25;
-		mCoinGraph.x = (Lib.stage.stageWidth - mCoinGraph.width) / 2;
-		mCoinGraph.y = Lib.stage.stageHeight - ((Lib.stage.stageHeight - mCoinGraph.height)/2);	
+		mCoinGraph.width = Lib.current.stage.stageWidth / 1.15;
+		mCoinGraph.height = Lib.current.stage.stageHeight / 1.25;
+		mCoinGraph.x = (Lib.current.stage.stageWidth - mCoinGraph.width) / 2;
+		mCoinGraph.y = Lib.current.stage.stageHeight - ((Lib.current.stage.stageHeight - mCoinGraph.height)/2);	
 		
 		
-		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
-		mTimeButton.y = Lib.stage.stageHeight - mTimeButton.height;
+		mTimeButton.x = Lib.current.stage.stageWidth - mTimeButton.width;
+		mTimeButton.y = Lib.current.stage.stageHeight - mTimeButton.height;
 		
 		mCoordSys.generate(mCoinGraph.width, mCoinGraph.height, "X", "Y", mCoinGraph.width/9, mCoinGraph.height/5);
 		mCoordSys.x = mCoinGraph.x;

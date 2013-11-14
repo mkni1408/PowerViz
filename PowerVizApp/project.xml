@@ -4,6 +4,8 @@
 	<meta title="PowerViz" package="com.example.powerviz" version="1.0.0" company="i902e13" />
 	<app main="Main" path="Export" file="PowerViz" />
 	
+	<app swf-version="11.4" if="flash"/>
+	
 	<source path="Source" />
 	<source path="../PowerVizCommon" />
 	

@@ -48,30 +48,30 @@ class SeismoGraph extends Sprite{
 		firstrun = true;//hack to not get the first value
 		tf.width = mMeasurmenthalfFactor*12;
 
-		mNumofFieldsWidthScreen = Lib.stage.stageWidth/mMeasurmenthalfFactor;
+		mNumofFieldsWidthScreen = Lib.current.stage.stageWidth/mMeasurmenthalfFactor;
 
 		redrawFrame();
 
 		addChild(mSeismoGraph);
 		
 		fetchWattConsumption();
-		mbarSprite.y = Lib.stage.stageHeight;
+		mbarSprite.y = Lib.current.stage.stageHeight;
 
 		//mbarSprite.graphics.lineStyle(2,0x000000);
-		//mbarSprite.graphics.moveTo(0,Lib.stage.stageHeight);
-		//mbarSprite.graphics.lineTo((Lib.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight);
+		//mbarSprite.graphics.moveTo(0,Lib.current.stage.stageHeight);
+		//mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.current.stage.stageHeight);
 		mbarSprite.graphics.beginFill(0x000000,1);
-		mbarSprite.graphics.moveTo((Lib.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight);
-		mbarSprite.graphics.lineTo((Lib.stage.stageWidth+10)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight-10);
-		mbarSprite.graphics.lineTo((Lib.stage.stageWidth+10)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight+10);
-		mbarSprite.graphics.lineTo((Lib.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight);
+		mbarSprite.graphics.moveTo((Lib.current.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.current.stage.stageHeight);
+		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth+10)-(mMeasurmenthalfFactor*12),Lib.current.stage.stageHeight-10);
+		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth+10)-(mMeasurmenthalfFactor*12),Lib.current.stage.stageHeight+10);
+		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.current.stage.stageHeight);
 		mbarSprite.graphics.endFill();
 
 		addChild(mbarSprite);
 		mbarSprite.addChild(tf);
 
-		tf.x = (Lib.stage.stageWidth+15)-(mMeasurmenthalfFactor*12);
-		tf.y = Lib.stage.stageHeight-20;
+		tf.x = (Lib.current.stage.stageWidth+15)-(mMeasurmenthalfFactor*12);
+		tf.y = Lib.current.stage.stageHeight-20;
 
 		
 
@@ -99,7 +99,7 @@ class SeismoGraph extends Sprite{
 
 		mSeismoGraph.graphics.lineStyle(4,0x000000);
 
-		mSeismoGraph.graphics.drawRect(0, Lib.stage.stageHeight/2, Lib.stage.stageWidth, (Lib.stage.stageHeight/2)-4);
+		mSeismoGraph.graphics.drawRect(0, Lib.current.stage.stageHeight/2, Lib.current.stage.stageWidth, (Lib.current.stage.stageHeight/2)-4);
 
 		addChild(mSeismoGraph);
 
@@ -160,8 +160,8 @@ class SeismoGraph extends Sprite{
 		//draw horizontal line
 		
 
-		var xPosition = Lib.stage.stageWidth - (mwattMeasurementArray.length * mMeasurmentFactor);
-		var yPosition = (Lib.stage.stageHeight/4)*3;
+		var xPosition = Lib.current.stage.stageWidth - (mwattMeasurementArray.length * mMeasurmentFactor);
+		var yPosition = (Lib.current.stage.stageHeight/4)*3;
 
 		//graphics.lineStyle(2,0x000000);
 		graphics.moveTo(xPosition,yPosition);
@@ -215,19 +215,19 @@ class SeismoGraph extends Sprite{
 
 		redrawFrame();
 
-		var commands = new Array<Int>();
-		var coords = new Array<Float>();
+		var commands = new flash.Vector<Int>();
+		var coords = new flash.Vector<Float>();
 		var origin = new Array<Int>();
-		var commandCommands = new Array<Array<Int>>();
-		var cordcordArray = new Array<Array<Float>>();
+		var commandCommands = new Array<flash.Vector<Int>>();
+		var cordcordArray = new Array<flash.Vector<Float>>();
 
 		//draw horizontal line
 		//graphics.lineStyle(2,0x000000);
-		//graphics.moveTo(0,(Lib.stage.stageHeight/4)*3);
-		//graphics.lineTo(Lib.stage.stageWidth,(Lib.stage.stageHeight/4)*3);
+		//graphics.moveTo(0,(Lib.current.stage.stageHeight/4)*3);
+		//graphics.lineTo(Lib.current.stage.stageWidth,(Lib.current.stage.stageHeight/4)*3);
 
-		var xPosition = (Lib.stage.stageWidth-(mMeasurmenthalfFactor*12)) - (((mwattMeasurementArray.length-1) * mMeasurmenthalfFactor));
-		var yPosition = (Lib.stage.stageHeight/4)*3;
+		var xPosition = (Lib.current.stage.stageWidth-(mMeasurmenthalfFactor*12)) - (((mwattMeasurementArray.length-1) * mMeasurmenthalfFactor));
+		var yPosition = (Lib.current.stage.stageHeight/4)*3;
 
 		var prevMeasure = 2;
 
@@ -235,29 +235,29 @@ class SeismoGraph extends Sprite{
 
 			commands.push(1);
 			coords.push(xPosition);
-			coords.push(Lib.stage.stageHeight-2);
+			coords.push(Lib.current.stage.stageHeight-2);
 
 			xPosition = xPosition-mMeasurmenthalfFactor;
 			
 			commands.push(2);
 			coords.push(xPosition);
-			coords.push(Lib.stage.stageHeight-2);
+			coords.push(Lib.current.stage.stageHeight-2);
 
 			commands.push(2);
 			coords.push(xPosition);
-			coords.push(Lib.stage.stageHeight-prevMeasure);
+			coords.push(Lib.current.stage.stageHeight-prevMeasure);
 			
 			xPosition = xPosition+mMeasurmenthalfFactor;
 
 			commands.push(2);
 			coords.push(xPosition);
-			coords.push(Lib.stage.stageHeight-wattmeasure);
+			coords.push(Lib.current.stage.stageHeight-wattmeasure);
 			
 			prevMeasure = wattmeasure;
 
 			commands.push(2);
 			coords.push(xPosition);
-			coords.push(Lib.stage.stageHeight-2);
+			coords.push(Lib.current.stage.stageHeight-2);
 
 			xPosition = xPosition+mMeasurmenthalfFactor;
 
@@ -265,8 +265,8 @@ class SeismoGraph extends Sprite{
 			cordcordArray.push(coords);
 			
 
-			commands = new Array<Int>();
-			coords = new Array<Float>();
+			commands = new flash.Vector<Int>();
+			coords = new flash.Vector<Float>();
 
 			
 
@@ -276,8 +276,6 @@ class SeismoGraph extends Sprite{
 			mSeismoGraph.graphics.beginFill(getPowerSourceColor(mBadness[i]));//set the color 
 			mSeismoGraph.graphics.lineStyle(0,getPowerSourceColor(mBadness[i]));
     		mSeismoGraph.graphics.drawPath(commandCommands[i], cordcordArray[i]); 
-
-
 		}
 
 		setBar(mwattMeasurementArray[mwattMeasurementArray.length-1]);
@@ -317,7 +315,7 @@ class SeismoGraph extends Sprite{
 			f = 1.0;
 		}
 
-		var numPixels = (Lib.stage.stageHeight/2)-40;
+		var numPixels = (Lib.current.stage.stageHeight/2)-40;
 
 		return Math.floor(numPixels * f);
 
@@ -361,8 +359,8 @@ class SeismoGraph extends Sprite{
 		//mSeismoGraph.graphics.lineStyle(4,0x000000);
 
 		//redraw frame
-		//mSeismoGraph.graphics.drawRect(0, Lib.stage.stageHeight/2, Lib.stage.stageWidth, (Lib.stage.stageHeight/2)-2);
-		//mSeismoGraph.graphics.drawRect(0, Lib.stage.stageHeight/2, mMeasurmenthalfFactor*15, (Lib.stage.stageHeight/2)-2);
+		//mSeismoGraph.graphics.drawRect(0, Lib.current.stage.stageHeight/2, Lib.current.stage.stageWidth, (Lib.current.stage.stageHeight/2)-2);
+		//mSeismoGraph.graphics.drawRect(0, Lib.current.stage.stageHeight/2, mMeasurmenthalfFactor*15, (Lib.current.stage.stageHeight/2)-2);
 		
 
 	}

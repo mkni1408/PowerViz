@@ -60,7 +60,7 @@ class BarScreen extends Sprite {
 		mKwhArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", "800Wt","900Wt","1000Wt"];
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF, 0);
-		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageHeight);
+		mBack.graphics.drawRect(0,0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
 		mBack.graphics.endFill();
 		this.addChild(mBack);
 		
@@ -103,18 +103,18 @@ class BarScreen extends Sprite {
 	private function layout() {
 	
 			
-		mBarGraph.y = Lib.stage.stageHeight - ((Lib.stage.stageHeight - mBarGraph.height)/2);	
+		mBarGraph.y = Lib.current.stage.stageHeight - ((Lib.current.stage.stageHeight - mBarGraph.height)/2);	
 		
-		mTimeButton.x = Lib.stage.stageWidth - mTimeButton.width;
+		mTimeButton.x = Lib.current.stage.stageWidth - mTimeButton.width;
 
 		mTimeButton.y = 0;
 		
 		mCoordSys.generate(mBack.width/1.20, mBack.height/1.30, "X", "Y", (mBack.width/1.20)/mNewIDArray.length, (mBack.height/1.30)/mKwhArray.length, mNewIDArray, mKwhArray, true, false,true);
 		mCoordSys.x = 100;
-		mCoordSys.y = (Lib.stage.stageHeight/1.30)+50;
+		mCoordSys.y = (Lib.current.stage.stageHeight/1.30)+50;
 
 		mTitle.width = mTitle.textWidth+5;	
-		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
+		mTitle.x = (Lib.current.stage.stageWidth - mTitle.textWidth) / 2;
 		mTitle.y = 0;
 
 		//trace("Coordinate",(mCoordSys.y - mCoordSys.height));

@@ -109,7 +109,7 @@ class ArealDiagram extends Sprite {
 			
 		
 			for(i in 0...bottoms.length) {
-				#if cpp
+				#if(cpp || flash)
 					topLine[i] = bottoms[i] - (values[i]*vmult);
 					//trace("c++");
 				#else
@@ -169,7 +169,7 @@ class ArealDiagram extends Sprite {
 		for(a in values) { //Accumulate the values.
 			i = 0;
 			for(v in a) {
-				#if cpp
+				#if(cpp || flash)
 					totals[i] = totals[i] + v;
 				#else
 					totals[i] = (totals[i]==null ? v : totals[i] + v); //The heart of the accumulation.

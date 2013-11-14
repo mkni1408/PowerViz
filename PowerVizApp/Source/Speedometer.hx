@@ -58,7 +58,7 @@ class Speedometer extends Sprite{
 		
 		createLabels();
 		
-		mSpeedometerSettings = new SpeedometerSettings(Std.int(Lib.stage.stageWidth), Std.int(Lib.stage.stageHeight));
+		mSpeedometerSettings = new SpeedometerSettings(Std.int(Lib.current.stage.stageWidth), Std.int(Lib.current.stage.stageHeight));
 		mSpeedometerSettings.onDoneChangingSettings = onDoneChangingSettings;
 		this.addChild(mSpeedometerSettings);
 		
@@ -83,14 +83,14 @@ class Speedometer extends Sprite{
 		//mSpeedometer.width = bitMapSpeedometer.width/4;
 		//mSpeedometer.height = bitMapSpeedometer.height/4;	
 		
-		mSpeedometer.width = Lib.stage.stageWidth/4.5;
+		mSpeedometer.width = Lib.current.stage.stageWidth/4.5;
 		mSpeedometer.height = mSpeedometer.width;
 
         var centerBitmapX = mSpeedometer.width/2;
         var centerBitmapY = mSpeedometer.height/2;
 
-        var centerSpriteX = Lib.stage.stageWidth / 4;
-        var centerSpriteY = Lib.stage.stageHeight / 4;
+        var centerSpriteX = Lib.current.stage.stageWidth / 4;
+        var centerSpriteY = Lib.current.stage.stageHeight / 4;
 
 
         mSpeedometer.x = centerSpriteX - centerBitmapX;
@@ -123,7 +123,7 @@ class Speedometer extends Sprite{
 	private function drawFrame():Void{
 
 		//graphics.lineStyle(4,0x000000);
-		//graphics.drawRect(0, 0, Lib.stage.stageWidth/2, Lib.stage.stageHeight/2);
+		//graphics.drawRect(0, 0, Lib.current.stage.stageWidth/2, Lib.current.stage.stageHeight/2);
 
 	}
 	
@@ -165,20 +165,20 @@ class Speedometer extends Sprite{
 			label.width = label.textWidth;
 		}
 		
-		mLabels[0].x = Lib.stage.stageWidth/7.2 - (mLabels[0].width); 
-		mLabels[0].y = Lib.stage.stageHeight/3.1;
+		mLabels[0].x = Lib.current.stage.stageWidth/7.2 - (mLabels[0].width); 
+		mLabels[0].y = Lib.current.stage.stageHeight/3.1;
 		
-		mLabels[1].x = (Lib.stage.stageWidth / 6.9) - (mLabels[1].width);
-		mLabels[1].y = Lib.stage.stageHeight/8; 
+		mLabels[1].x = (Lib.current.stage.stageWidth / 6.9) - (mLabels[1].width);
+		mLabels[1].y = Lib.current.stage.stageHeight/8; 
 		
-		mLabels[2].x = (Lib.stage.stageWidth / 4) - (mLabels[2].width/2);
+		mLabels[2].x = (Lib.current.stage.stageWidth / 4) - (mLabels[2].width/2);
 		mLabels[2].y = 3; 
 		
-		mLabels[3].x = Lib.stage.stageWidth / 2.85;
-		mLabels[3].y = Lib.stage.stageHeight/8; 
+		mLabels[3].x = Lib.current.stage.stageWidth / 2.85;
+		mLabels[3].y = Lib.current.stage.stageHeight/8; 
 		
-		mLabels[4].x = Lib.stage.stageWidth/2.8; 
-		mLabels[4].y = Lib.stage.stageHeight/3.1;
+		mLabels[4].x = Lib.current.stage.stageWidth/2.8; 
+		mLabels[4].y = Lib.current.stage.stageHeight/3.1;
 
 	}
 	

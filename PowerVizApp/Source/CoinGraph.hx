@@ -33,7 +33,7 @@ class CoinGraph extends Sprite {
 		this.graphics.endFill();
 		
 		//barWidth is used to ensure that every bar has the same width.
-		var barWidth:Float = Lib.stage.stageWidth/colors.length;
+		var barWidth:Float = Lib.current.stage.stageWidth/colors.length;
 		
 		//This variable is used as the starting point on the x-axis
 		var xCoord:Float =(barWidth*0.50);

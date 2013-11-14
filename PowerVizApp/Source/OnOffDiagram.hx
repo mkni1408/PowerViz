@@ -86,7 +86,7 @@ class OnOffDiagram extends Sprite{
 
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF, 0);
-		mBack.graphics.drawRect(0,0, Lib.stage.stageWidth, Lib.stage.stageHeight);
+		mBack.graphics.drawRect(0,0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
 		mBack.graphics.endFill();
 		
 		mTitle = new TextField();
@@ -141,7 +141,7 @@ class OnOffDiagram extends Sprite{
 		
 		//set textlabel position
 		mTitle.width = mTitle.textWidth+2;	
-		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
+		mTitle.x = (Lib.current.stage.stageWidth - mTitle.textWidth) / 2;
 		mTitle.y = 0;
 		
 
@@ -183,7 +183,7 @@ class OnOffDiagram extends Sprite{
 		drawLegend();
 
 
-		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
+		mTitle.x = (Lib.current.stage.stageWidth - mTitle.textWidth) / 2;
         mTitle.y = 0;
 
         trace("Num of entries"+calculateNumEntries(mMapArray));
@@ -201,7 +201,7 @@ class OnOffDiagram extends Sprite{
 		
 		mCoordSystem.x = 120;
 		
-		mCoordSystem.y = Lib.stage.stageHeight - 100;
+		mCoordSystem.y = Lib.current.stage.stageHeight - 100;
 		mLegend.x =mCoordSystem.x + 50;
 		mLegend.y = mCoordSystem.y+50;
 
@@ -557,7 +557,7 @@ class OnOffDiagram extends Sprite{
                             minutesString = "45"; 
                             offset= 0.75;
                         }
-                        mOffset = ((Lib.stage.stageWidth/1.20)/stringAr.length)*offset;
+                        mOffset = ((Lib.current.stage.stageWidth/1.20)/stringAr.length)*offset;
                         //offset = 2.0;//test
 
 
