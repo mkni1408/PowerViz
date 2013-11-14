@@ -85,19 +85,19 @@ class Main extends Sprite {
 	public function prepareScreens() {
 	
 		BusyAnimation.instance.busy();
-		trace("--");
-		mArealScreen = new ArealScreen();
-		SwipeMill.add(mArealScreen);
-		trace("--");
-		mBarScreen = new BarScreen();
-		SwipeMill.add(mBarScreen);
-		trace("--");
+
 		mOnOff = new OnOffDiagram();
 		SwipeMill.add(mOnOff);
-trace("--");
+		
+		mArealScreen = new ArealScreen();
+		SwipeMill.add(mArealScreen);
+
+		mBarScreen = new BarScreen();
+		SwipeMill.add(mBarScreen);
+
 		mCurrentUsage = new CurrentUsage();
 		SwipeMill.add(mCurrentUsage);
-		trace("--");
+
 		//mCoinScreen = new CoinScreen();
 		//SwipeMill.add(mCoinScreen);
 		

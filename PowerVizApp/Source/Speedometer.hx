@@ -219,7 +219,7 @@ class SpeedometerSettings extends Sprite {
 		
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0x808080);
-		mBack.graphics.drawRect(0,0, w, h);
+		mBack.graphics.drawRect(0,-40, w, h);
 		mBack.graphics.endFill();
 		mBack.alpha = 0.95;
 		

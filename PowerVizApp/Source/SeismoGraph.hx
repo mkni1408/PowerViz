@@ -57,10 +57,11 @@ class SeismoGraph extends Sprite{
 		fetchWattConsumption();
 		mbarSprite.y = Lib.stage.stageHeight;
 
-		mbarSprite.graphics.lineStyle(2,0x000000);
-		mbarSprite.graphics.moveTo(0,Lib.stage.stageHeight);
-		mbarSprite.graphics.lineTo((Lib.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight);
+		//mbarSprite.graphics.lineStyle(2,0x000000);
+		//mbarSprite.graphics.moveTo(0,Lib.stage.stageHeight);
+		//mbarSprite.graphics.lineTo((Lib.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight);
 		mbarSprite.graphics.beginFill(0x000000,1);
+		mbarSprite.graphics.moveTo((Lib.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight);
 		mbarSprite.graphics.lineTo((Lib.stage.stageWidth+10)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight-10);
 		mbarSprite.graphics.lineTo((Lib.stage.stageWidth+10)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight+10);
 		mbarSprite.graphics.lineTo((Lib.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.stage.stageHeight);

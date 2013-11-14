@@ -2,6 +2,8 @@ package;
 
 import flash.display.Sprite;
 import flash.Lib;
+import flash.display.Bitmap;
+import openfl.Assets;
 
 import CoordSystem;
 import OnOffBar;
@@ -13,6 +15,7 @@ import FontSupply;
 import OnOffData;
 import Legend;
 import PowerTimer;
+import flash.events.MouseEvent;
 
 /*
 
@@ -40,6 +43,19 @@ class OnOffDiagram extends Sprite{
 	private var mLegend:Legend;
 	private var mOffset = 1.0;
 
+
+	////////
+	private var mSubIdArray: Array<String>;
+
+	private var mSubRoomArray: Array<String>;
+	private var mSubOutletArray: Array<Outlet>;
+	private var mIndex:Int;
+	private var mChangeIndexSprite:Sprite;
+	private var mIndexTextfield : TextField;
+	private var mSubColorArray:Array<Int>;
+
+	//////
+
 	private var mTimer:PowerTimer;
 	#if demo
 		private var mTimerInterval:Int = 60*1000; //Once a minute in demo mode.
@@ -51,6 +67,7 @@ class OnOffDiagram extends Sprite{
 
 		super();
 
+		mIndex = 1;
 
 		mNewIDArray = new Array<String>();
 		mNewRoomArray = new Array<String>();
@@ -59,8 +76,13 @@ class OnOffDiagram extends Sprite{
 		mMapArray = new Array<Array<Int>>();
 		mColorArray = new Array<Int>();
 		mLegend = new Legend();
+		mChangeIndexSprite = new Sprite();
+		mIndexTextfield = new TextField();
+		
+		mSubColorArray =new Array<Int>();
+		mSubIdArray = new Array<String>();
+		mSubRoomArray = new Array<String>();
 
-		//mtimeArray = generateTimeArrayandCalcOffset();
 
 		mBack = new Sprite();
 		mBack.graphics.beginFill(0xFFFFFF, 0);
@@ -114,6 +136,8 @@ class OnOffDiagram extends Sprite{
 		//Draw coordinatesystem, legend and lines
 		calculateandDrawCoordSystem();
 		calculateandDrawLines();
+
+		
 		
 		//set textlabel position
 		mTitle.width = mTitle.textWidth+2;	
@@ -154,29 +178,103 @@ class OnOffDiagram extends Sprite{
 		
 		//legend = legend.drawLegend(mBack.width/1.25,mBack.height/1.25,mColorArray.length,mNewRoomArray,mColorArray);
 		mLegend = new Legend();
-		mLegend.drawLegend(mBack.width/1.18,mBack.height/1.16,mColorArray.length,mNewRoomArray,mColorArray);
+		
+		getSubArrays(mIndex-1);
+		drawLegend();
+
 
 		mTitle.x = (Lib.stage.stageWidth - mTitle.textWidth) / 2;
         mTitle.y = 0;
+
+        trace("Num of entries"+calculateNumEntries(mMapArray));
+
+
+        mChangeIndexSprite = new Sprite();
+        drawChangeIndexSprite(calculateNumEntries(mMapArray));
+
 		mBack.addChild(mLegend);
 
-		mCoordSystem.generate(mBack.width/1.18, (mBack.height/1.20)-mLegend.height, "X", "Y", 
-								(mBack.width/1.18)/mtimeArray.length,((mBack.height/1.20)-mLegend.height)/mNewIDArray.length,
-								mtimeArray,mNewIDArray,true,true,false,true,mOffset);
+		mCoordSystem.generate(mBack.width/1.18, (mBack.height/1.28)-mLegend.height, "X", "Y", 
+								(mBack.width/1.18)/mtimeArray.length,((mBack.height/1.28)-mLegend.height)/mSubIdArray.length,
+								mtimeArray,mSubIdArray,true,true,false,true,mOffset);
 
-		if(mNewIDArray.length<10){//scale at number of elements = lower number of elements equals larger text
-			mCoordSystem.x = 115;
-		}
-		else{
-			mCoordSystem.x = 100;
-		}
-		mLegend.x =mCoordSystem.x;
-		mLegend.y = Lib.stage.stageHeight - mLegend.height;
-		mCoordSystem.y = mLegend.y - mLegend.height;
+		
+		mCoordSystem.x = 120;
+		
+		mCoordSystem.y = Lib.stage.stageHeight - 100;
+		mLegend.x =mCoordSystem.x + 50;
+		mLegend.y = mCoordSystem.y+50;
+
+		mChangeIndexSprite.x = mBack.width-mChangeIndexSprite.width -75;
+		mChangeIndexSprite.y = mCoordSystem.y+30;
+
 		
 		
 		
 	}
+
+	private function drawLegend(){
+
+		mLegend.drawSmallLegend(mBack.width/2,200,mSubColorArray.length,mSubRoomArray,mSubColorArray);
+	}
+
+	private function getSubArrays(Index:Int):Void{
+		var tmpmap1 = new Array<Int>();
+		var tmpmap2 = new Array<Int>();
+		var tmpcolorMap = new Array<Int>();
+		var tmpRoomMap = new Array<String>();
+
+		if(Index == 0){
+			tmpmap1 = mMapArray[0];
+			tmpmap2 = mMapArray[1];
+			tmpcolorMap.push(mColorArray[0]);
+			tmpcolorMap.push(mColorArray[1]);
+			tmpRoomMap.push(mNewRoomArray[0]);
+			tmpRoomMap.push(mNewRoomArray[1]);
+		}
+		else{
+			tmpmap1 = mMapArray[Index*2];
+			tmpmap2 = mMapArray[(Index*2)+1];
+			tmpcolorMap.push(mColorArray[Index*2]);
+			tmpcolorMap.push(mColorArray[(Index*2)+1]);
+			tmpRoomMap.push(mNewRoomArray[Index*2]);
+			tmpRoomMap.push(mNewRoomArray[(Index*2)+1]);
+		}
+		
+
+		mSubIdArray = new Array<String>();
+		mSubRoomArray = new Array<String>();
+		mSubColorArray = new Array<Int>();
+
+		mSubRoomArray = tmpRoomMap;
+		mSubColorArray = tmpcolorMap;
+
+		if(tmpmap1==null)
+		{
+
+		}
+		else{//push the map
+			for(i in 0...tmpmap1.length){
+				mSubIdArray.push(mNewIDArray[tmpmap1[i]]);
+			}
+		}
+		if(tmpmap2==null)
+		{
+			
+		}
+		else {//push the map
+			for(i in 0...tmpmap2.length){
+				mSubIdArray.push(mNewIDArray[tmpmap2[i]]);
+			}
+		}
+
+		trace(mSubIdArray);
+		trace(tmpcolorMap);
+		trace(tmpRoomMap);
+
+	}
+
+	
 	
 	
 	//draws seperatorlines
@@ -195,7 +293,7 @@ class OnOffDiagram extends Sprite{
 			var arrayTail = tmpMap.length;
 			counter=(counter+mMapArray[i].length);
 			
-			mCoordSystem.generateSeperatorLines(counter,counterArray[beforeCounter],mNewRoomArray[i]);
+			//mCoordSystem.generateSeperatorLines(counter,counterArray[beforeCounter],mNewRoomArray[i]);
 			
 			counterArray.push(counter);
 			beforeCounter += 1;
@@ -231,7 +329,7 @@ class OnOffDiagram extends Sprite{
 		mMapArray = new Array<Array<Int>>();
 		
 		var tempOutlet = data; //DataInterface.instance.getOnOffData();//fetch the outlets
-
+		trace(tempOutlet);
 		
 		mMapArray=rearrangeData(tempOutlet);//rearrange the data
 
@@ -493,6 +591,117 @@ class OnOffDiagram extends Sprite{
 
                 return NewtimeArray;
 
+
+            }
+
+            private function calculateNumEntries(maparray:Array<Array<Int>>):Int{
+
+            	if(maparray.length == 0){
+
+            		return -1;//nothing in array
+            	}
+
+            	else if(maparray.length == 1){
+
+            		return 0;//length of one, cannot be one because 2/1 is equal to one(see calculation beneeth)
+            	}
+            	else{
+            		return Math.ceil(maparray.length/2);
+            	}
+
+
+            }
+
+            private function drawChangeIndexSprite(NumOfIndexes:Int):Void{
+
+
+
+            	var backbutton = new Sprite();
+            	var forwardbutton = new Sprite();
+
+            	var bitMapforward = new Bitmap (Assets.getBitmapData ("assets/buttonnext.png")); 
+            	var bitMapback = new Bitmap (Assets.getBitmapData ("assets/buttonprevious.png")); 
+
+            	bitMapforward.width = 45;
+            	bitMapforward.height = 90;
+            	bitMapback.width = 45;
+            	bitMapback.height = 90;
+
+            	backbutton.addChild(bitMapback);
+            	forwardbutton.addChild(bitMapforward);
+
+            	backbutton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent) {
+				changeIndex(-1);
+				});
+
+				forwardbutton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent) {
+				changeIndex(1);
+				});
+
+				mChangeIndexSprite.addChild(backbutton);
+				mChangeIndexSprite.addChild(forwardbutton);
+
+				backbutton.x = 0;
+				forwardbutton.x = 180;
+
+				mChangeIndexSprite.width=250;
+				mChangeIndexSprite.height=60;
+
+				mIndexTextfield.mouseEnabled=false;
+				mIndexTextfield.text = mIndex + " ud af" + NumOfIndexes;
+				mIndexTextfield.setTextFormat(FontSupply.instance.getTitleFormat());
+				mIndexTextfield.selectable = false;
+				mIndexTextfield.height = 80; 
+				mChangeIndexSprite.addChild(mIndexTextfield);
+
+				mTitle = new TextField();
+				mTitle.mouseEnabled=false;
+				mTitle.text = "Tænd/sluk i dag";
+				mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
+				mTitle.selectable = false;
+
+				mIndexTextfield.height = mIndexTextfield.textHeight; 
+
+
+				mIndexTextfield.x = (mChangeIndexSprite.width/2)-(mIndexTextfield.width/2);
+				mIndexTextfield.y = (mChangeIndexSprite.height/2)-10;
+
+
+
+				
+				mBack.addChild(mTitle);
+				if(NumOfIndexes != 0){
+				mBack.addChild(mChangeIndexSprite);
+				}	
+				
+
+            }
+
+            private function changeIndex(Index:Int):Void{
+
+            	if(mIndex == 1 && Index == -1){
+
+            	}
+            	else if(mIndex == calculateNumEntries(mMapArray) && Index == 1){
+
+            	}
+            	else{
+
+            		mIndex = mIndex + Index;
+
+            		changeTextfieldIndex(mIndex,calculateNumEntries(mMapArray));
+
+            		drawDiagram();
+            	}
+
+            }
+
+             private function changeTextfieldIndex(Index:Int,NumOfIndexes:Int):Void{
+
+              	mIndexTextfield.mouseEnabled=false;
+				mIndexTextfield.text = Index + "ud af" + NumOfIndexes;
+				mIndexTextfield.setTextFormat(FontSupply.instance.getTitleFormat());
+				mIndexTextfield.selectable = false;
 
             }
 
