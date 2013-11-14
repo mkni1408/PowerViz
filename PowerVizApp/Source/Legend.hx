@@ -110,7 +110,7 @@ class Legend extends Sprite{
 
 		this.height = rowHeight * numOfRows;
 
-
+		trace("- - - -");
 		var legendSpace = 160;
 
 		var legendWidth = 20;
