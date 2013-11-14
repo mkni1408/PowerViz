@@ -652,7 +652,7 @@ class OnOffDiagram extends Sprite{
 				forwardbutton.x = 180;
 
 				mChangeIndexSprite.width=250;
-				mChangeIndexSprite.height=60;
+				mChangeIndexSprite.height=50;
 
 				mIndexTextfield.mouseEnabled=false;
 				mIndexTextfield.text = mIndex + " ud af" + NumOfIndexes;
