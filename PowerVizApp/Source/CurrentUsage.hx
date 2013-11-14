@@ -29,7 +29,7 @@ class CurrentUsage extends Sprite{
 	
 		super();
 
-		this.graphics.lineStyle(6,0x000000);
+		//this.graphics.lineStyle(6,0x000000);
 
 		//draw frame
 		this.graphics.drawRect(0, 0, Lib.stage.stageWidth, Lib.stage.stageHeight);
@@ -42,6 +42,11 @@ class CurrentUsage extends Sprite{
         mTitle.text = "Forbrug nu ";
         mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
         mTitle.selectable = false;
+
+        this.graphics.lineStyle(2,0x000000);
+		this.graphics.moveTo(0,(Lib.stage.stageHeight/2)+15);
+		this.graphics.lineTo((Lib.stage.stageWidth),(Lib.stage.stageHeight/2)+15);
+		this.graphics.beginFill(0x000000,1);
 
 		addChild(mTitle);
 		addChild(powerOrigin);

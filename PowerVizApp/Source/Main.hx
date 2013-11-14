@@ -85,15 +85,15 @@ class Main extends Sprite {
 	public function prepareScreens() {
 	
 		BusyAnimation.instance.busy();
+
+		mOnOff = new OnOffDiagram();
+		SwipeMill.add(mOnOff);
 		
 		mArealScreen = new ArealScreen();
 		SwipeMill.add(mArealScreen);
 		
 		mBarScreen = new BarScreen();
 		SwipeMill.add(mBarScreen);
-		
-		mOnOff = new OnOffDiagram();
-		SwipeMill.add(mOnOff);
 
 		mCurrentUsage = new CurrentUsage();
 		SwipeMill.add(mCurrentUsage);
