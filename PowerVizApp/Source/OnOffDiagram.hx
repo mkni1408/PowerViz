@@ -230,19 +230,16 @@ class OnOffDiagram extends Sprite{
 		if(Index == 0){
 			tmpmap1 = mMapArray[0];
 			tmpmap2 = mMapArray[1];
-			if(mColorArray[0] != null){tmpcolorMap.push(mColorArray[0]);};
-			if(mColorArray[1] != null){tmpcolorMap.push(mColorArray[1]);};
-			if(mNewRoomArray[0] != null){tmpRoomMap.push(mNewRoomArray[0]);};
-			if(mNewRoomArray[1] != null){tmpRoomMap.push(mNewRoomArray[1]);};
+			if(tmpmap1 != null){tmpcolorMap.push(mColorArray[0]); tmpRoomMap.push(mNewRoomArray[0]);};
+			if(tmpmap2 != null){tmpcolorMap.push(mColorArray[1]); tmpRoomMap.push(mNewRoomArray[1]);};
 			
 		}
 		else{
 			tmpmap1 = mMapArray[Index*2];
 			tmpmap2 = mMapArray[(Index*2)+1];
-			if(mColorArray[Index*2] != null){tmpcolorMap.push(mColorArray[Index*2]);};
-			if(mColorArray[(Index*2)+1] != null){tmpcolorMap.push(mColorArray[(Index*2)+1]);};
-			if(mNewRoomArray[Index*2] != null){tmpRoomMap.push(mNewRoomArray[Index*2]);};
-			if(mNewRoomArray[(Index*2)+1] != null){tmpRoomMap.push(mNewRoomArray[(Index*2)+1]);};
+			if(tmpmap1 != null){tmpcolorMap.push(mColorArray[Index*2]); tmpRoomMap.push(mNewRoomArray[Index*2]);};
+			if(tmpmap2 != null){tmpcolorMap.push(mColorArray[(Index*2)+1]); tmpRoomMap.push(mNewRoomArray[(Index*2)+1]);};
+			
 			
 
 			
