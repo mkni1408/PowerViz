@@ -202,11 +202,12 @@ class OnOffDiagram extends Sprite{
 		mCoordSystem.x = 120;
 		
 		mCoordSystem.y = Lib.stage.stageHeight - 100;
-		mLegend.x =0;
+		mLegend.x =mCoordSystem.x + 50;
 		mLegend.y = mCoordSystem.y+50;
 
-		mChangeIndexSprite.x = mBack.width/2;
-		mChangeIndexSprite.y = mCoordSystem.y+25;
+		mChangeIndexSprite.x = mBack.width-mChangeIndexSprite.width -75;
+		mChangeIndexSprite.y = mCoordSystem.y+30;
+
 		
 		
 		
@@ -621,10 +622,10 @@ class OnOffDiagram extends Sprite{
             	var bitMapforward = new Bitmap (Assets.getBitmapData ("assets/buttonnext.png")); 
             	var bitMapback = new Bitmap (Assets.getBitmapData ("assets/buttonprevious.png")); 
 
-            	bitMapforward.width = 30;
-            	bitMapforward.height = 60;
-            	bitMapback.width = 30;
-            	bitMapback.height = 60;
+            	bitMapforward.width = 45;
+            	bitMapforward.height = 90;
+            	bitMapback.width = 45;
+            	bitMapback.height = 90;
 
             	backbutton.addChild(bitMapback);
             	forwardbutton.addChild(bitMapforward);
@@ -641,15 +642,16 @@ class OnOffDiagram extends Sprite{
 				mChangeIndexSprite.addChild(forwardbutton);
 
 				backbutton.x = 0;
-				forwardbutton.x = 200;
+				forwardbutton.x = 180;
 
 				mChangeIndexSprite.width=250;
-				mChangeIndexSprite.height=50;
+				mChangeIndexSprite.height=60;
 
 				mIndexTextfield.mouseEnabled=false;
-				mIndexTextfield.text = mIndex + "ud af" + NumOfIndexes;
+				mIndexTextfield.text = mIndex + " ud af" + NumOfIndexes;
 				mIndexTextfield.setTextFormat(FontSupply.instance.getTitleFormat());
 				mIndexTextfield.selectable = false;
+				mIndexTextfield.height = 80; 
 				mChangeIndexSprite.addChild(mIndexTextfield);
 
 				mTitle = new TextField();
@@ -658,9 +660,11 @@ class OnOffDiagram extends Sprite{
 				mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 				mTitle.selectable = false;
 
+				mIndexTextfield.height = mIndexTextfield.textHeight; 
+
 
 				mIndexTextfield.x = (mChangeIndexSprite.width/2)-(mIndexTextfield.width/2);
-
+				mIndexTextfield.y = (mChangeIndexSprite.height/2)-10;
 
 
 

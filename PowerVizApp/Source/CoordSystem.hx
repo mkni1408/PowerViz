@@ -151,15 +151,15 @@ class CoordSystem extends Sprite {
 		}
 		else if(number <= 10 && number <= 20){
 
-			return FontSupply.instance.getCoordAxisLabelMEDIUMFormat();
+			return FontSupply.instance.getCoordAxisLabelLARGEFormat();
 		}
 		else if(number > 20){
 
-			return FontSupply.instance.getCoordAxisLabelSMALLFormat();
+			return FontSupply.instance.getCoordAxisLabelLARGEFormat();
 			
 		}
 		else{
-			return FontSupply.instance.getCoordAxisLabelSMALLFormat();
+			return FontSupply.instance.getCoordAxisLabelLARGEFormat();
 		}
 
 	}

@@ -111,7 +111,7 @@ class Legend extends Sprite{
 		this.height = rowHeight * numOfRows;
 
 
-		var legendSpace = 150;
+		var legendSpace = 160;
 
 		var legendWidth = 20;
 		var legendHeight = 20;
@@ -174,7 +174,7 @@ class Legend extends Sprite{
 
 		this.addChild(legendSprite);
 
-		legendSprite.x = (xWidth - legendSprite.width)/2;
+		//legendSprite.x = (xWidth - legendSprite.width)/2;
 
 		return this;
 
