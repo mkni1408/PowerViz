@@ -58,7 +58,7 @@ class CoordSystem extends Sprite {
 			this.removeChildAt(0);
 
 		xWidth = width;
-		generateCordArray(xWidth,xSpace);
+		
 
 		this.graphics.lineStyle(3, 0x000000);
 		this.graphics.moveTo(0,0);
@@ -141,7 +141,7 @@ class CoordSystem extends Sprite {
 		this.mouseEnabled = false;	
 
 
-
+		generateCordArray(xWidth,xSpace);
 		
 
 		
