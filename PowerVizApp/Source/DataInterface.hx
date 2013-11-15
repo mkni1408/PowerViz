@@ -715,7 +715,7 @@ class DataInterface {
                         default:
                                 return null;
                 }
-trace("--");
+
 
                 
                 var dateArray = createTimeArray(numberofDates);
@@ -723,13 +723,13 @@ trace("--");
                 for(key in source.keys()) {        
 
                     rvIds.push(key);
-trace("--");
+
 
                     for(date in dateArray){
 
                         var found = false;
                         source.get(key).reverse();
-trace("--");
+
                         for(reading in source.get(key)) {
                             //trace("comparing ",reading.time,"and",date);
                             if(Std.string(reading.time) == Std.string(date)){ //date was found
@@ -745,14 +745,14 @@ trace("--");
                         }
                 
                     }
-trace("--");
-					trace(key);
+
+					//trace(key);
                     rvUsage.set(key, usage);
                     usage = new Array<Float>();
                     rvColors.set(key, houseDescriptor.getOutlet(key).outletColor);
                 }
 
-     trace("--");           
+              
 
                 
                 return {outletIds:rvIds, watts:rvUsage, colors:rvColors};

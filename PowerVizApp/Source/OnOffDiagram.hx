@@ -48,7 +48,7 @@ class OnOffDiagram extends Sprite{
 	private var mSubIdArray: Array<String>;
 
 	private var mSubRoomArray: Array<String>;
-	private var mSubOutletArray: Array<Outlet>;
+	private var mSubOutletArray: Array<Array<Outlet>>;
 	private var mIndex:Int;
 	private var mChangeIndexSprite:Sprite;
 	private var mIndexTextfield : TextField;
@@ -121,8 +121,17 @@ class OnOffDiagram extends Sprite{
 		mBack.addChild(mTitle);
 		mBack.addChild(monOffBar);
 		this.addChild(mBack);
+	}
+
+	private function indexChanged() {
+		drawDiagram();
+		mBack.addChild(mTitle);
+		mBack.addChild(monOffBar);
+		this.addChild(mBack);
 		trace("--");
 	}
+
+
 	
 	
 	private function drawDiagram() {
@@ -134,11 +143,13 @@ class OnOffDiagram extends Sprite{
 		while(mBack.numChildren > 0)
 			mBack.removeChildAt(0);
 		
+
+
 		//Draw coordinatesystem, legend and lines
 		calculateandDrawCoordSystem();
-		calculateandDrawLines();
+		//calculateandDrawLines();
 
-		
+		trace("--");
 		
 		//set textlabel position
 		mTitle.width = mTitle.textWidth+2;	
@@ -148,18 +159,22 @@ class OnOffDiagram extends Sprite{
 
 		var testSprite = new Sprite();
 		monOffBar = new OnOffBar();
-
+		trace("--");
 		//add the bars
 		var outletCounter = 0;
 
-		
-			for(count in 0...mSubOutletArray.length){
-				fetchOnOffData(mSubOutletArray[count],mSubColorArray[count]);
+		for(id in 0...mSubColorArray.length){
+
+			var tmpsub = mSubOutletArray[id];
+			trace(tmpsub);
+			for(count in 0...tmpsub.length){
+
+				fetchOnOffData(tmpsub[count],mSubColorArray[id]);
 				
 			}
-
+		}
 		
-		
+		trace("--");
 		//add to parent sprite	
 		testSprite.addChild(mCoordSystem);
 
@@ -191,10 +206,16 @@ class OnOffDiagram extends Sprite{
 
 		mBack.addChild(mLegend);
 
+
+		trace("--");
+		trace(mtimeArray);
+		trace(mSubIdArray);
+		trace(mSubOutletArray);
+		trace(mSubRoomArray);
 		mCoordSystem.generate(mBack.width/1.18, (mBack.height/1.28)-mLegend.height, "X", "Y", 
 								(mBack.width/1.18)/mtimeArray.length,((mBack.height/1.28)-mLegend.height)/mSubIdArray.length,
 								mtimeArray,mSubIdArray,true,true,false,true,mOffset);
-
+		trace("--");
 		
 		mCoordSystem.x = 120;
 		
@@ -206,7 +227,7 @@ class OnOffDiagram extends Sprite{
 		mChangeIndexSprite.y = mCoordSystem.y+30;
 
 		
-		
+		trace("--");
 		
 	}
 
@@ -217,11 +238,13 @@ class OnOffDiagram extends Sprite{
 	}
 
 	private function getSubArrays(Index:Int):Void{
+		trace(Index);
 		var tmpmap1 = new Array<Int>();
 		var tmpmap2 = new Array<Int>();
 		var tmpcolorMap = new Array<Int>();
 		var tmpRoomMap = new Array<String>();
-		var tmpOutletArray = new Array<Outlet>();
+		var tmpOutletArray = new Array<Array<Outlet>>();
+
 
 		if(Index == 0){
 			tmpmap1 = mMapArray[0];
@@ -245,17 +268,21 @@ class OnOffDiagram extends Sprite{
 		mSubIdArray = new Array<String>();
 		mSubRoomArray = new Array<String>();
 		mSubColorArray = new Array<Int>();
-		mSubOutletArray = new Array<Outlet>();
+		mSubOutletArray = new Array<Array<Outlet>>();
 
 		mSubRoomArray = tmpRoomMap;
 		mSubColorArray = tmpcolorMap;
 
+		trace(tmpmap1);
+
+		trace(tmpmap2);
 
 		if(tmpmap1==null)
 		{
 
 		}
 		else{//push the map
+
 			for(i in 0...tmpmap1.length){
 				mSubIdArray.push(mNewIDArray[tmpmap1[i]]);
 			}
@@ -269,21 +296,35 @@ class OnOffDiagram extends Sprite{
 				mSubIdArray.push(mNewIDArray[tmpmap2[i]]);
 			}
 		}
-
+		var tmpoutlet = new Array<Outlet>();
 		for(id in tmpmap1){
 
-			tmpOutletArray.push(mNewOutletArray[id]);
+			tmpoutlet.push(mNewOutletArray[id]);
 		}
+		if(tmpoutlet.length > 0){
+			tmpOutletArray.push(tmpoutlet);
+
+		}
+
+		
+
+		var tmpoutlet = new Array<Outlet>();
+		trace("--");
+		if(tmpmap2 != null){
 		for(id in tmpmap2){
 
-			tmpOutletArray.push(mNewOutletArray[id]);
+			tmpoutlet.push(mNewOutletArray[id]);
 		}
+		
+		
+			tmpOutletArray.push(tmpoutlet);
+
+		}
+		
 
 		mSubOutletArray = tmpOutletArray;
 
-		trace(mSubIdArray);
-		trace(tmpcolorMap);
-		trace(tmpRoomMap);
+		
 
 	}
 
@@ -609,6 +650,8 @@ class OnOffDiagram extends Sprite{
 
             private function calculateNumEntries(maparray:Array<Array<Int>>):Int{
 
+
+
             	if(maparray.length == 0){
 
             		return -1;//nothing in array
@@ -704,7 +747,7 @@ class OnOffDiagram extends Sprite{
 
             		changeTextfieldIndex(mIndex,calculateNumEntries(mMapArray));
 
-            		drawDiagram();
+            		indexChanged();
             	}
 
             }
