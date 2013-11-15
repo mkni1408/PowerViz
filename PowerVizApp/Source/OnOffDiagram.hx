@@ -162,13 +162,26 @@ class OnOffDiagram extends Sprite{
 		trace("--");
 		//add the bars
 		var outletCounter = 0;
+		var count = 0;
+
+		for(id in 0...mSubOutletArray.length){
+			var tmpArr = mSubOutletArray[id];
+
+			for(i in 0...mSubOutletArray[id].length){
+				tmpArr[i].setArrayID(count);
+				count++;
+			}
+
+			mSubOutletArray[id] = tmpArr;
+		}
+
 
 		for(id in 0...mSubColorArray.length){
 
 			var tmpsub = mSubOutletArray[id];
-			trace(tmpsub);
+			
 			for(count in 0...tmpsub.length){
-
+				
 				fetchOnOffData(tmpsub[count],mSubColorArray[id]);
 				
 			}
@@ -324,6 +337,10 @@ class OnOffDiagram extends Sprite{
 
 		mSubOutletArray = tmpOutletArray;
 
+
+
+		
+
 		
 
 	}
@@ -406,6 +423,8 @@ class OnOffDiagram extends Sprite{
 
 			mNewOutletArray[i].setArrayID(i);	
 		}
+
+
 
 		
 		//adds all the outlets in order to the outlet array
