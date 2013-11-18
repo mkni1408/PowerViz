@@ -7,10 +7,14 @@ class OutletDescriptor {
 
 	public var houseId(default,default):Int; //Identifying the house that this outlet is installed in.
 	public var outletId(default,default):Int; //The ID of the outlet.
-	public var name(default,default):String; //Name of the outlet, as displayed on the screen.
-	public var zenseName(default,default):String; //Name from the zense box.
-	public var zenseRoom(default,default):String; //Room name from the zense box.
-	public var zenseFloor(default, default):String; //Floor name from the zense box.
+	public var name(get,set):String; //Name of the outlet, as displayed on the screen.
+	var _name:String;
+	public var zenseName(get,set):String; //Name from the zense box.
+	var _zenseName:String;
+	public var zenseRoom(get,set):String; //Room name from the zense box.
+	var _zenseRoom:String;
+	public var zenseFloor(get, set):String; //Floor name from the zense box.
+	var _zenseFloor:String;
 	public var outletColor(default,default):Int; //Color, translated to OpenFL color format.
 	
 	public function new(?_houseId:Int, ?_outletId:Int, ?_name:String, ?_zenseName:String, ?_zenseRoom:String, ?_zenseFloor:String, ?_color:String) {
@@ -34,6 +38,18 @@ class OutletDescriptor {
 		return str;
 	}
 
+	function get_zenseName() : String { return _zenseName;}
+	function set_zenseName(n:String) : String { _zenseName = haxe.Utf8.encode(n); return _zenseName;}
+	
+	function get_zenseRoom() : String { return _zenseRoom;}
+	function set_zenseRoom(n:String) : String { _zenseRoom = haxe.Utf8.encode(n); return _zenseRoom;}
+	
+	function get_zenseFloor() : String { return _zenseFloor;}
+	function set_zenseFloor(n:String) : String { _zenseFloor = haxe.Utf8.encode(n); return _zenseFloor;}
+	
+	function get_name() : String { return _name; }
+	function set_name(s:String) : String { _name = haxe.Utf8.encode(s); return _name;}
+
 }
 
 
@@ -41,7 +57,9 @@ class RoomDescriptor {
 
 	public var houseId(default,default):Int; //Identifying the house.
 	public var roomId(default,default):Int; //ID of the room, which should match the outlets.
-	public var roomName(default,default):String;
+	public var roomName(get,set):String;
+	var _roomName:String;
+	
 	public var roomColor(default,default):Int; //Color of the room.
 	
 	private var mOutlets:Map<Int, OutletDescriptor>;
@@ -54,6 +72,9 @@ class RoomDescriptor {
 		roomColor =  Std.parseInt(colorString);
 		mOutlets = new Map<Int, OutletDescriptor>();
 	}
+	
+	function get_roomName() : String { return _roomName; }
+	function set_roomName(s:String) : String { _roomName = haxe.Utf8.encode(s); return _roomName; }
 	
 	public function addOutlet(outlet:OutletDescriptor) {
 		mOutlets.set(outlet.outletId, outlet);

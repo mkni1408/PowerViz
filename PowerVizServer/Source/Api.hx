@@ -30,7 +30,6 @@ class Api {
 	
 	
 	public function logInteraction(houseId:Int, type:LogType, tag:String, comment:String) {
-		//TODO: Enter data into database.
 		DataBaseInterface.logInteraction(houseId, type, tag, comment);
 	}
 	
@@ -67,8 +66,16 @@ class Api {
 			return DataBaseInterface.getHouseDescriptor(houseId);
 	}
 	
+	public function addNewRoom(houseId:Int, roomName:String) {
+		DataBaseInterface.addNewRoom(houseId, roomName);
+	}
+	
 	public function setRoomColor(houseId:Int, roomId:Int, color:String) {
 		DataBaseInterface.setRoomColor(houseId, roomId, color);
+	}
+	
+	public function setRoomName(houseId:Int, roomId:Int, name:String) {
+		DataBaseInterface.setRoomName(houseId, roomId, name);
 	}
 	
 	public function setOutletColor(houseId:Int, outletId:Int, color:String) {

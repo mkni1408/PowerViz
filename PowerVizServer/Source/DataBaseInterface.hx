@@ -176,6 +176,13 @@ class DataBaseInterface {
 		return r;
 	}
 	
+	public static function setRoomName(houseId:Int, roomId:Int, name:String) {
+		var room = HouseRooms.manager.select($houseId==houseId && $roomId==roomId);
+		if(room==null)
+			return;
+		room.roomName = haxe.Utf8.decode(name);
+		room.update();
+	}
 	   
     public static function setRoomColor(houseId:Int, roomId:Int, color:String) : Void {
             var room = HouseRooms.manager.select($houseId==houseId && $roomId==roomId);
@@ -192,6 +199,21 @@ class DataBaseInterface {
             outlet.color = color;
             outlet.update();
     }
+	
+	//Adds a new room to the array of rooms.
+	public static function addNewRoom(houseId:Int, name:String) {
+		var highestRoomIdElm = HouseRooms.manager.select($houseId==houseId, {orderBy : -roomId});
+		var hrid:Int=0; //Highest room ID.
+		if(highestRoomIdElm!=null)
+			hrid = highestRoomIdElm.roomId;
+		
+		var room = new HouseRooms();
+		room.houseId = houseId;
+		room.roomId = hrid +1;
+		room.roomName = name;
+		room.roomColor = "0xFF00FF";
+		room.insert(); 
+	}
 	
 	
 	/**
