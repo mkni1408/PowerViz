@@ -29,10 +29,9 @@ class CoordSystem extends Sprite {
 
 	public function new() {
 		super();
-		xCoordinates = new Array<Float>();
-		yCoordinates = new Array<Float>();
-		VerticalBars = new Sprite();
-		this.addChild(VerticalBars);
+		
+		//VerticalBars = new Sprite();
+		//this.addChild(VerticalBars);
 	}
 	
 	/**
@@ -44,7 +43,9 @@ class CoordSystem extends Sprite {
 	**/
 	public function generate(width:Float, height:Float, xLabel:String, yLabel:String, xSpace:Float, ySpace:Float,
 							?xLabelStrings:Array<String>, ?yLabelStrings:Array<String>, ?xLabelsBetween:Bool, ?yLabelsBetween:Bool, ?xLabelVertical:Bool, ?offset:Bool, ?xOffset:Float) {
-		
+		xCoordinates = new Array<Float>();
+		yCoordinates = new Array<Float>();
+		//VerticalBars = new Sprite();
 		
 		yFont = setFontSize(yLabelStrings.length);
 		xFont = setFontSize(xLabelStrings.length);
@@ -56,6 +57,8 @@ class CoordSystem extends Sprite {
 		while(this.numChildren > 0)
 			this.removeChildAt(0);
 
+		xWidth = width;
+		
 
 		this.graphics.lineStyle(3, 0x000000);
 		this.graphics.moveTo(0,0);
@@ -96,7 +99,7 @@ class CoordSystem extends Sprite {
 		
 		
 		var numLinesX:Int = Std.int(width/xSpace);
-		xWidth = width;
+		
 		xHeight = xSpace;
 		var x:Float=0;
 
@@ -134,9 +137,12 @@ class CoordSystem extends Sprite {
 			labelIndex += 1;
 		}
 	
+		
 		this.mouseEnabled = false;	
 
+
 		generateCordArray(xWidth,xSpace);
+		
 
 		
 	
@@ -275,25 +281,36 @@ class CoordSystem extends Sprite {
 		//pointXfrom is the time that the contact went on converted to a float pointXto is 
 		//the time the contact was shut off
 		public function drawBar(pointXfrom:OnOffData, pointYfrom:Float,pointYto:Float,color:Int){
-			trace(".........");
-			trace(pointXfrom);			trace(".........");
-			
+			//convertXTime(pointXfrom.getStart());
+			//trace(convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()));
 			//this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop()), yHeight-10.0);
+			trace(convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()));
 			draw(convertTime(pointXfrom.getStart())+1.5,pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), yHeight-10.0,color);
 			this.graphics.endFill();
+		
 
 
 		}
 
 		private function draw(from:Float,thickness:Float,to:Float,height:Float,color:Int):Void{
 
-			this.graphics.lineStyle(1, 0x000000);
-			this.graphics.beginFill(color);
+			var barSprite = new Sprite();
+
+			
+			barSprite.width = this.width;
+			barSprite.height = this.height;
+
+			barSprite.graphics.lineStyle(1, 0x000000);
+			barSprite.graphics.beginFill(color);
 			if(to == 0){
 				to = to+(xWidth/96);
 
 			}
-			this.graphics.drawRect(from,thickness,to,height);
+			barSprite.graphics.drawRect(from,thickness,to,height);
+
+			this.addChild(barSprite);
+			barSprite.x = 0;
+			barSprite.y = 0;
 
 		}
 
@@ -383,8 +400,35 @@ class CoordSystem extends Sprite {
 			for(i in 0...cordNameArray.length){
 					var temptimeString = Std.string(cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes());
 					//trace(cordNameArray[i]);
+					trace("Comparing: "+temptimeString+ " and "+ timeString );
+					//trace(cordNameArray);
 						if(temptimeString == timeString){
-							trace(cordCordArray[i]);
+							//trace(cordNameArray);
+							//trace(cordCordArray);
+							//trace(cordCordArray[i]);
+							trace("-------------FOUND-------------");
+							return cordCordArray[i];
+						}
+
+
+			}
+
+			trace("-------------NOTHING FOUND-------------");
+			return 0.0;
+
+		}
+
+		private function convertXTime(time:Date):Float{
+			
+
+			var timeString = Std.string(time.getHours()+":"+time.getMinutes());
+
+			
+
+			for(i in 0...cordNameArray.length){
+					var temptimeString = Std.string(cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes());
+					//trace(cordNameArray[i]);
+						if(temptimeString == timeString){
 							return cordCordArray[i];
 						}
 
