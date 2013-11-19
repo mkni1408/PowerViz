@@ -290,29 +290,25 @@ class OnOffDiagram extends Sprite{
 
 		trace(tmpmap2);
 
-		if(tmpmap1==null)
-		{
-
-		}
-		else{//push the map
+		
+		if(tmpmap1!=null) {//push the map
 
 			for(i in 0...tmpmap1.length){
 				mSubIdArray.push(mNewIDArray[tmpmap1[i]]);
 			}
 		}
-		if(tmpmap2==null)
-		{
-			
-		}
-		else {//push the map
+
+		if(tmpmap2!=null) {//push the map
 			for(i in 0...tmpmap2.length){
 				mSubIdArray.push(mNewIDArray[tmpmap2[i]]);
 			}
 		}
 		var tmpoutlet = new Array<Outlet>();
-		for(id in tmpmap1){
+		if(tmpmap1!=null) {
+			for(id in tmpmap1){
 
-			tmpoutlet.push(mNewOutletArray[id]);
+				tmpoutlet.push(mNewOutletArray[id]);
+			}
 		}
 		if(tmpoutlet.length > 0){
 			tmpOutletArray.push(tmpoutlet);
@@ -324,22 +320,15 @@ class OnOffDiagram extends Sprite{
 		var tmpoutlet = new Array<Outlet>();
 		trace("--");
 		if(tmpmap2 != null){
-		for(id in tmpmap2){
+			for(id in tmpmap2){
 
-			tmpoutlet.push(mNewOutletArray[id]);
-		}
-		
-		
+				tmpoutlet.push(mNewOutletArray[id]);
+			}
 			tmpOutletArray.push(tmpoutlet);
-
 		}
 		
 
 		mSubOutletArray = tmpOutletArray;
-
-
-
-		
 
 		
 

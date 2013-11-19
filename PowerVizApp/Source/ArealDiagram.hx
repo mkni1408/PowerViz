@@ -16,7 +16,7 @@ class ArealDiagram extends Sprite {
 	colors: An array of colors used for visualizing/painting the different areas. 
 	This function assumes, that all arrays in 'values' are of equal length.
 	*/
-	public function generate(values:Array< Array<Float> >, colors:Array<Int>, width:Float, height:Float):Void {
+	public function generate(values:Array< Array<Float> >, colors:Array<Int>, width:Float, height:Float, ?LOD:Null<Int>):Void {
 		//remove children
 		//trace(values);
 
@@ -30,18 +30,22 @@ class ArealDiagram extends Sprite {
 	
 		var bottoms = new Array<Float>(); //Bottom values of the previous row.
 		
-		bottoms[values[0].length-1] = 0;//hack MEGAHACK <- Og Tue lavede det!
-		/*
 		for(i in values[0]) 
 			bottoms.push(0); //Start out by setting the bottom line to the bottom.
-		*/
+			
+		if(LOD!=null && LOD>0) {
+			for(i in 0...LOD) {
+				bottoms = lowerDataDetail(bottoms);
+			}
+		}
+
 			
 		//For each array, draw a polygon, where the bottom line is the bottoms line, and the top line is bottom+value.
 		var i:Int=0;
 		for(a in values) {
 			//trace("width",width);
 			//bottoms = drawArea(bottoms, a, this.graphics, colors[i], width/values[0].length, 1); //Draw each area, getting the new bottom line.
-			bottoms = drawArea2(bottoms, a, this.graphics, colors[i], 30, 1);
+			bottoms = drawArea2(bottoms, a, this.graphics, colors[i], 30, 1, LOD);
 			
 			i += 1;
 		}
@@ -102,11 +106,24 @@ class ArealDiagram extends Sprite {
 	This function draws using triangles in stead of the complex polygons used above.
 	The result is perfect triangulation.
 	*/
-	private function drawArea2(bottoms:Array<Float>, values:Array<Float>, 
-								gfx:flash.display.Graphics, color:Int, hspace:Float, vmult:Float) : Array<Float> {
+	private function drawArea2(bottoms:Array<Float>, _values:Array<Float>, 
+								gfx:flash.display.Graphics, color:Int, _hspace:Float, vmult:Float, ?LOD:Null<Int>) : Array<Float> {
 								
 			var topLine = new Array<Float>();
+
+			var values:Array<Float> = _values;
 			
+			var hspace:Float = _hspace;
+			
+			if(LOD!=null && LOD>0) {
+				for(i in 0...LOD) {
+					values = lowerDataDetail(values);
+				}
+				
+				for(i in 0...LOD)
+					hspace *= 2;
+			}
+				
 		
 			for(i in 0...bottoms.length) {
 				#if(cpp || flash)
@@ -191,11 +208,11 @@ class ArealDiagram extends Sprite {
 	}
 	
 	//Cuts all data in half, using max().
-	private function lowerDataDetail(data:Array<Float>, lod:Int) : Array<Float> {
+	private function lowerDataDetail(data:Array<Float>) : Array<Float> {
 		
 		var output = new Array<Float>();
-		var i=0;
-		while(i < 0...data.length) {
+		var i:Int = 0;
+		while(i < data.length) {
 		
 			if(i+1 < data.length)
 				output.push(Math.max(data[i], data[i+1]));

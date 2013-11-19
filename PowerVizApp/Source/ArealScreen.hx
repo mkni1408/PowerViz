@@ -24,9 +24,9 @@ This class obtains data from the DataInterface singleton class.
 
 class ArealScreen extends Sprite {
         //should be changed to Hour,day,month
-        private static inline var VIEWMODE_DAY:Int = 0;
-        private static inline var VIEWMODE_WEEK:Int = 1;
-        private static inline var VIEWMODE_MONTH:Int = 2;
+        private static inline var VIEWMODE_HOUR:Int = 0;
+        private static inline var VIEWMODE_DAY:Int = 1;
+        private static inline var VIEWMODE_THREEDAYS:Int = 2;
 
         private var mBack : Sprite;
         private var mDiagram : ArealDiagram;
@@ -61,7 +61,7 @@ class ArealScreen extends Sprite {
 
                 getColorAndRoomData();
 				trace("..");
-                mViewMode = VIEWMODE_WEEK; //Daymode by default.
+                mViewMode = VIEWMODE_DAY; //Daymode by default.
                 
                 mBack = new Sprite();
 				trace("..");
@@ -86,7 +86,7 @@ class ArealScreen extends Sprite {
                 mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
                 mTitle.selectable = false;
                 trace("..");
-                mTimeButton = new TimeChangeButton([VIEWMODE_DAY, VIEWMODE_WEEK,VIEWMODE_MONTH,],mViewMode,onButtonPush); //Day, week, month.
+                mTimeButton = new TimeChangeButton([VIEWMODE_HOUR, VIEWMODE_DAY,VIEWMODE_THREEDAYS,],mViewMode,onButtonPush); //Day, week, month.
                 
                 mCoordSys = new CoordSystem();
 
@@ -150,21 +150,25 @@ class ArealScreen extends Sprite {
                 mDiagram.x = mCoordSys.x;
                 mDiagram.y = mCoordSys.y;        
                 
-
+                mDiagram.width = Lib.current.stage.stageWidth/1.15;
+                mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
+                
+/*
                  switch( mViewMode ) {
-                    case 0:
+                    case VIEWMODE_HOUR:
                         mDiagram.width = Lib.current.stage.stageWidth/1.15;
                         mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
-                    case 1:
+                    case VIEWMODE_DAY:
                         mDiagram.width = Lib.current.stage.stageWidth/1.15;
                         mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
-                    case 2:
+                    case VIEWMODE_THREEDAYS:
                         mDiagram.width = Lib.current.stage.stageWidth/1.15;
                         mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
                     default:
                         mDiagram.width = Lib.current.stage.stageWidth/1.15;
                         mDiagram.height = (mCoordSys.getHeight()/devider)*mDiagram.maxValue;
-            }
+                        
+            }*/
                 //mBack.addChild(mCoordSys);
 
         }
@@ -186,13 +190,13 @@ class ArealScreen extends Sprite {
                 var r:ArealDataStruct = {outletIds:new Array<Int>(), watts:new Map<Int, Array<Float>>(), colors:new Map<Int,Int>()};
 				
 				
-                if(mViewMode==0){//hour
+                if(mViewMode==VIEWMODE_HOUR){//hour
                     r = DataInterface.instance.getArealUsageHour();
                 }
-                 if(mViewMode==1){//Day
+                 if(mViewMode==VIEWMODE_DAY){//Day
                     r = DataInterface.instance.getArealUsageToday();
                 }
-                 if(mViewMode==2){//Week
+                 if(mViewMode==VIEWMODE_THREEDAYS){//Week
                     r = DataInterface.instance.getArealUsageWeek();
                 }
 
@@ -215,8 +219,14 @@ class ArealScreen extends Sprite {
                 var data = prepareArray(outletIds,usage,colors);
             
                 mDiagram.graphics.clear();
+                
+                var LOD:Int = 0; //Default
+                if(mViewMode == VIEWMODE_THREEDAYS)
+                	LOD = 1;
+                if(mViewMode == VIEWMODE_DAY)
+                	LOD = 0; 
 
-                mDiagram.generate(data.usage, data.colors, Lib.current.stage.stageWidth / 1.15,Lib.current.stage.stageHeight / 1.25);
+                mDiagram.generate(data.usage, data.colors, Lib.current.stage.stageWidth / 1.15,Lib.current.stage.stageHeight / 1.25, LOD);
        
         }
         
@@ -226,13 +236,13 @@ class ArealScreen extends Sprite {
 
             switch( coordSystemType ) {
 	            case 0:
-	       			mViewMode = VIEWMODE_DAY; //HOUR
+	       			mViewMode = VIEWMODE_HOUR; //HOUR
 	       			DataInterface.instance.logInteraction(LogType.Button, "ArealScreenViewHour", "Viewing hour data in Arealscreen");
 	            case 1:
-	       			mViewMode = VIEWMODE_WEEK; //DAY
+	       			mViewMode = VIEWMODE_DAY; //DAY
 	       			DataInterface.instance.logInteraction(LogType.Button, "ArealScreenViewDay", "Viewing day data in Arealscreen");
 	        	case 2:
-	        		mViewMode = VIEWMODE_MONTH; //Three days.
+	        		mViewMode = VIEWMODE_THREEDAYS; //Three days.
 	        		DataInterface.instance.logInteraction(LogType.Button, "ArealScreenViewThreeDays", "Viewing three days data in Arealscreen");
 	            default:
 	        		mViewMode = VIEWMODE_DAY; //Defaults to hour.
@@ -287,7 +297,7 @@ class ArealScreen extends Sprite {
                 
         }
 
-        private function callDrawMethods():Void{
+        private function callDrawMethods():Void {
 			
                 getColorAndRoomData();
 				
@@ -300,7 +310,7 @@ class ArealScreen extends Sprite {
 
 
 
-        private function getColorAndRoomData():Void{
+        private function getColorAndRoomData():Void {
                         
                 mRoomArray = new Array<String>();
                 mColorArray = new Array<Int>();
@@ -311,7 +321,7 @@ class ArealScreen extends Sprite {
                 
         }
 
-        private function getWeekDay(day:Int):String{
+        private function getWeekDay(day:Int):String {
 
              switch( day ) {
                 case 0:
@@ -381,7 +391,7 @@ class ArealScreen extends Sprite {
 
                
 
-                if(mViewMode==0){//hour
+                if(mViewMode==VIEWMODE_HOUR){//hour
                     
                     if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden
                     _ta = new Array<Float>();
@@ -414,7 +424,7 @@ class ArealScreen extends Sprite {
 
                     
                 }
-                 if(mViewMode==1){//Day
+                 if(mViewMode==VIEWMODE_DAY){//Day
                     if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden hvis tomt
                     _ta = new Array<Float>();
 
@@ -448,7 +458,7 @@ class ArealScreen extends Sprite {
 
                     }
                 }
-                 if(mViewMode==2){//Week
+                 if(mViewMode==VIEWMODE_THREEDAYS){//Week
                     if(outletIds.length == 0){//hack, ellers forsvinder diagrammet ud af siden
                     _ta = new Array<Float>();
                         for(t in 0...288){
@@ -593,7 +603,7 @@ class ArealScreen extends Sprite {
 
 
                 switch(mViewMode){
-                    case 0://Hour
+                    case VIEWMODE_HOUR://Hour
                         mOffset = 0;
       
                         for(i in 0...44){//pushing minutes into array, needs to be reversed
@@ -622,7 +632,7 @@ class ArealScreen extends Sprite {
 
                         tempArray.reverse();
 
-                    case 1://day
+                    case VIEWMODE_DAY://day
                         if(date.getMinutes() >= 0 && date.getMinutes() < 15){
                            minutesString = "00"; 
                            offset= 0.0;
@@ -666,7 +676,7 @@ class ArealScreen extends Sprite {
                        tempArray  =NewtimeArray;
                         
 
-                    case 2://3 days
+                    case VIEWMODE_THREEDAYS://3 days
                         offset = date.getHours();
 
                         var dateCount = date.getDay();
