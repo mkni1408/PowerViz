@@ -190,6 +190,25 @@ class ArealDiagram extends Sprite {
 		
 	}
 	
+	//Cuts all data in half, using max().
+	private function lowerDataDetail(data:Array<Float>, lod:Int) : Array<Float> {
+		
+		var output = new Array<Float>();
+		var i=0;
+		while(i < 0...data.length) {
+		
+			if(i+1 < data.length)
+				output.push(Math.max(data[i], data[i+1]));
+			else
+				output.push(data[i]);
+		
+			i += 2;
+		}
+		
+		return output;
+	
+	}
+	
 }
 
 
