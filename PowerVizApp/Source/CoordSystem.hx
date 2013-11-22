@@ -282,7 +282,7 @@ class CoordSystem extends Sprite {
 		//the time the contact was shut off
 		public function drawBar(pointXfrom:OnOffData, pointYfrom:Float,pointYto:Float,color:Int){
 			//convertXTime(pointXfrom.getStart());
-			//trace(convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()));
+		trace(pointXfrom);
 			//this.graphics.drawRect(convertTime(pointXfrom.getStart()),pointYfrom+5.0, convertTime(pointXfrom.getStop()), yHeight-10.0);
 			trace(convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()));
 			draw(convertTime(pointXfrom.getStart())+1.5,pointYfrom+5.0, convertTime(pointXfrom.getStop())-convertTime(pointXfrom.getStart()), yHeight-10.0,color);
@@ -400,7 +400,6 @@ class CoordSystem extends Sprite {
 			for(i in 0...cordNameArray.length){
 					var temptimeString = Std.string(cordNameArray[i].getHours() + ":" + cordNameArray[i].getMinutes());
 					//trace(cordNameArray[i]);
-					trace("Comparing: "+temptimeString+ " and "+ timeString );
 					//trace(cordNameArray);
 						if(temptimeString == timeString){
 							//trace(cordNameArray);
@@ -413,7 +412,6 @@ class CoordSystem extends Sprite {
 
 			}
 
-			trace("-------------NOTHING FOUND-------------");
 			return 0.0;
 
 		}

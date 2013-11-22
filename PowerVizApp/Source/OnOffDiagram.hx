@@ -124,6 +124,7 @@ class OnOffDiagram extends Sprite{
 	}
 
 	private function indexChanged() {
+		mtimeArray = generateTimeArrayandCalcOffset();
 		drawDiagram();
 		mBack.addChild(mTitle);
 		mBack.addChild(monOffBar);
