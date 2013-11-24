@@ -166,6 +166,38 @@ class BarScreen extends Sprite {
 	}
 		
 
+
+	private function sortArray(watts:Array<Float>,ids:Array<String>,colors:Array<Int>):Void{
+
+
+		var wattArray = watts;
+		var idArray = ids;
+		var colorArray = colors;
+
+		var newWattArray = Array<Float>;
+		var newIdArray = Array<String>;
+		var newColorArray = Array<Int>;
+
+		var index = 0;
+
+		while(newWattArray.length < wattArray.length){ //run until the array is as large as the other
+			for(i in 0...wattArray.length){	//for each in array
+
+				if(wattArray[index] < wattArray[i]){ //find the largest
+
+					index = i;
+
+				}
+
+			}
+			newWattArray.push(wattArray[index]); //push the largest to new array
+			index = 0;	//reset
+		}
+
+
+
+	}	
+
 	//is Called when a button is pushed
 	private function onButtonPush(coordSystemType:Int):Void{
 
