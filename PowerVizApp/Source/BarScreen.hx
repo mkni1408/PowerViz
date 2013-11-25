@@ -129,6 +129,7 @@ class BarScreen extends Sprite {
         var colors = new Array<Int>();
         musageAA = new Array<Float>();
         mWattMax = 0;
+        mNewIDArray = DataInterface.instance.getAllOutletNames();
 
         switch(mViewMode) {
             case 0:
@@ -163,6 +164,7 @@ class BarScreen extends Sprite {
 			
 			mColorArray = colors;
 
+			
 	}
 		
 
@@ -174,25 +176,57 @@ class BarScreen extends Sprite {
 		var idArray = ids;
 		var colorArray = colors;
 
-		var newWattArray = Array<Float>;
-		var newIdArray = Array<String>;
-		var newColorArray = Array<Int>;
+		var newWattArray = new Array<Float>();
+		var newIdArray = new Array<String>();
+		var newColorArray = new Array<Int>();
 
 		var index = 0;
+		var max = 0.0;
 
-		while(newWattArray.length < wattArray.length){ //run until the array is as large as the other
-			for(i in 0...wattArray.length){	//for each in array
-
-				if(wattArray[index] < wattArray[i]){ //find the largest
-
-					index = i;
-
-				}
-
+		for(i in 0...musageAA.length){ //find largest number
+			if(musageAA[i] > max){
+				max = musageAA[i];
 			}
-			newWattArray.push(wattArray[index]); //push the largest to new array
-			index = 0;	//reset
+
 		}
+		newWattArray.push(max);
+
+
+		
+		
+
+
+   		for(i in 0...musageAA.length)
+   		{
+   			var min = i;
+
+   			for(j in i+1...musageAA.length){
+   				if(musageAA[j]<musageAA[min]){
+   					min = j;
+   				}
+   				var temp = musageAA[i];
+   				var idtemp = mNewIDArray[i];
+   				var colortemp = mColorArray[i];
+
+   				musageAA[i] = musageAA[min];
+   				musageAA[min] = temp;
+
+   				mNewIDArray[i] = mNewIDArray[min];
+   				mNewIDArray[min] = idtemp;
+
+   				mColorArray[i] = mColorArray[min];
+   				mColorArray[min] = colortemp;
+
+   			}
+
+
+   		}
+   		musageAA.reverse();
+   		mNewIDArray.reverse();
+   		mColorArray.reverse();
+		trace(musageAA);
+		trace(mNewIDArray);
+		trace(mColorArray);
 
 
 
@@ -288,7 +322,10 @@ class BarScreen extends Sprite {
                     mKwhArray = ["4 kWt", "8 kWt ", "12 kWt ","16 kWt ","20 kWt ", "24 kWt ","28 kWt ", "32 kWt ","36 kWt ","40 kWt "];
                     mBarScale = 4000;
                 }
+		sortArray(musageAA,mNewIDArray,mColorArray);//sort it from heighest to lowest
 		layout();
+
+		
 		mCoordSys.drawVerticalBar(mColorArray, musageAA,mBarScale);
 	}
 
