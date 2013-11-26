@@ -1,8 +1,12 @@
+package;
 
 import haxe.remoting.HttpAsyncConnection;
 
+
 import DateUtil;
 import Harvester;
+import BufferedData;
+
 
 /**
 The OutletBuffer.
@@ -11,40 +15,70 @@ Each X minutes (read from the Configuration) the buffer sends usage data (LoadHi
 **/
 class OutletBuffer {
 
+	private static var mSqlite:sys.db.Connection;
+
 	private var mCnx:HttpAsyncConnection;
 	private var mInterval:Int;
 
 	private var mHouseId:Int;
 	private var mOutletId:Int;
-	
+
+	/*	
 	private var mLastUpdate:Date;	
 	private var mWattAccum:Float; //Accumulated watts.
 	private var mTimeAccum:Int; //Accumulated time (in Date.getTime() format).
+	*/
 	
 	public function new(houseId:Int, outletId:Int, cnx:HttpAsyncConnection, interval:Int) {
-		mWattAccum = 0;
-		mTimeAccum = 0;
-		mLastUpdate = Harvester.instance.getServerTime();
+		//mWattAccum = 0;
+		//mTimeAccum = 0;
+		//mLastUpdate = Harvester.instance.getServerTime();
 		mHouseId = houseId;
 		mOutletId = outletId;
 		mCnx = cnx;
 		mInterval = interval;
 	}
 	
+	public static function initSQLite() {
+		mSqlite = sys.db.Sqlite.open("DataBuffer.db");
+		sys.db.Manager.cnx = mSqlite;
+		sys.db.Manager.initialize();
+		if(!sys.db.TableCreate.exists(BufferedData.manager)) {
+			sys.db.TableCreate.create(BufferedData.manager);
+		}
+	}
+	
 	//Updates the buffer. Should be called every time data is received from the box.
 	public function update(now:Date, load:Float) {
 		
-		var delta:Float = now.getTime() - mLastUpdate.getTime();
-		mTimeAccum += Std.int(delta); //Add time delta.
-		mWattAccum += load * delta;
+		var delta:Float = 0; //= now.getTime() - mLastUpdate.getTime();
 		
-		if(DateUtil.isInSameInterval(mLastUpdate, now, mInterval)==false) { //Time to send history data:
-			sendHistoryData(mCnx, mWattAccum/mTimeAccum, DateUtil.intervalStart(now, mInterval));
-			mTimeAccum = 0;
-			mWattAccum = 0;
+		//Get the data from the SQLite database:
+		var dbe = BufferedData.manager.select($houseId == mHouseId && $outletId == mOutletId);
+		if(dbe != null) {
+			delta = now.getTime() - dbe.lastUpdate.getTime();
+			dbe.timeAccum += Std.int(delta); //Add time delta.
+			dbe.wattAccum += load * delta; //Accumulate the watts.
+			
+			if(DateUtil.isInSameInterval(dbe.lastUpdate, now, mInterval)==false) { //It is time to send history data.
+				sendHistoryData(mCnx, dbe.wattAccum/dbe.timeAccum, DateUtil.intervalStart(now, mInterval));
+				dbe.timeAccum = 0;
+				dbe.wattAccum = 0;
+			}
+			
+			dbe.lastUpdate = now;
+			dbe.update();
+		}
+		else {
+			dbe = new BufferedData();
+			dbe.houseId = mHouseId;
+			dbe.outletId = mOutletId;
+			dbe.timeAccum = 0;
+			dbe.wattAccum = 0;
+			dbe.lastUpdate = now;
+			dbe.insert();
 		}
 		
-		mLastUpdate = now;
 	}
 	
 	
@@ -55,5 +89,6 @@ class OutletBuffer {
 	}
 
 }
+
 
 

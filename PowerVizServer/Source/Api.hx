@@ -82,6 +82,15 @@ class Api {
 		DataBaseInterface.setOutletColor(houseId, outletId, color);
 	}
 	
+	public function setOutletName(houseId:Int, outletId:Int, name:String) {
+		DataBaseInterface.setOutletName(houseId, outletId, name);
+	}
+	
+	public function setOutletRoom(houseId:Int, outletId:Int, roomId:Int) {
+		DataBaseInterface.setOutletRoom(houseId, outletId, roomId);
+	}
+	
+	
 	public function getBulbWatts(houseId:Int) : Int {
 		var elm = BoxConfig.manager.select($houseId == houseId);
 		if(elm==null)

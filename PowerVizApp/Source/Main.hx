@@ -1,6 +1,7 @@
 package;
 
 import openfl.Assets;
+import flash.events.Event;
 import flash.display.Sprite;
 import flash.display.Bitmap;
 import flash.Lib;
@@ -43,6 +44,9 @@ class Main extends Sprite {
 		this.addChild(BusyAnimation.instance);
 		BusyAnimation.instance.busy();
 		
+		SwipeMill.init(this);	
+		SwipeMill.onScreenChange = this.onScreenChange;
+		
 		//Make a very short delay, so that this function
 		//can return and the graphics be displayed, before the huge chunk
 		//of startup work is done.
@@ -53,9 +57,7 @@ class Main extends Sprite {
 	//This is called slightly later than 
 	private function initAndLoadScreens() {
                     
-        trace("Loading screens");
-		SwipeMill.init(this);	
-		SwipeMill.onScreenChange = this.onScreenChange;
+		trace("Loading screens");
 	
 		prepareScreens();
 
@@ -68,8 +70,31 @@ class Main extends Sprite {
 		SwipeMill.onScreenTouch = mScreenSaver2.onScreenTouch;
 
 		//SwipeMill.onScreenTouch = mScreenSaver.onScreenTouch;
+		
+		registerEventHandlers();
 
 	}
+	
+	private function registerEventHandlers() {
+		Lib.current.stage.addEventListener(Event.ACTIVATE, onActivate);
+	}
+	
+	private function onActivate(event:Event) {
+		trace("onActivate");
+		BusyAnimation.instance.busy();
+		Actuate.timer(0.1).onComplete(
+			function(d:Dynamic){
+				DataInterface.instance.getDataOnCreation();
+				SwipeMill.clear();
+				prepareScreens();
+			});
+		
+	}
+	
+	private function onDeactivate(event:Event) {
+		trace("onDeactivate");
+	}
+
 	
 	public function setBackground() {
 	

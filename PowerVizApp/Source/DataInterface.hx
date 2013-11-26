@@ -229,7 +229,7 @@ class DataInterface {
         }
         
         //Get data to start with.
-        private function getDataOnCreation() {
+        public function getDataOnCreation() {
 
             houseDescriptor = getHouseDescriptor(); //Get the house layout.
 

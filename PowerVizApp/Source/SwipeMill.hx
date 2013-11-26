@@ -73,6 +73,15 @@ class SwipeMill {
 		mSwipeDots.addDot();
 	}	
 	
+	/**Removes all screens from the SwipeMill.**/
+	public static function clear() {
+		for(s in mObjects) {
+			mTouchReceiver.removeChild(s);
+			mSwipeDots.clear();
+		}
+		mObjects = new Array<DisplayObject>();
+	}
+	
 	
 	//Internal function. Create the sprite elements used for receiving touch/mouse events.
 	private static function createVisualElements(parent:Sprite) {
@@ -351,6 +360,13 @@ class SwipeDots extends Sprite {
 		arrangeDots();
 		setActive(mActive);
 		
+	}
+	
+	public function clear() {
+		for(d in mDots) {
+			this.removeChild(d);
+		}
+		mDots = new Array<Sprite>();
 	}
 	
 	public function setActive(curScreen:Float) {

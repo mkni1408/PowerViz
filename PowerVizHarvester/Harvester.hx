@@ -48,6 +48,8 @@ class Harvester {
 	
 	private function runMain() {
 	
+		OutletBuffer.initSQLite();
+	
 		remoteConnect();
 		mConfig.readHouseId();
 		mConfig.read(mRemote);

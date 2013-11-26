@@ -199,6 +199,24 @@ class DataBaseInterface {
             outlet.color = color;
             outlet.update();
     }
+    
+    public static function setOutletName(houseId:Int, outletId:Int, name:String) {
+    	var outlet = HouseOutlets.manager.select($houseId == houseId && $outletId == outletId);
+    	if(outlet==null)
+    		return;
+    	outlet.outletName = name;
+    	outlet.update();
+    }
+    
+    public static function setOutletRoom(houseId:Int, outletId:Int, roomId:Int) {
+    	var outlet = HouseOutlets.manager.select($houseId == houseId && $outletId == outletId);
+    	if(outlet==null)
+    		return;
+    	outlet.roomId = roomId;
+    	outlet.update();
+    }
+    
+    
 	
 	//Adds a new room to the array of rooms.
 	public static function addNewRoom(houseId:Int, name:String) {
