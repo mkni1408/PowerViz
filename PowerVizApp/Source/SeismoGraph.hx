@@ -31,6 +31,7 @@ class SeismoGraph extends Sprite{
 	private var mbarSprite : Sprite;
 	private var mLastTween:Float;
 	private var tf:TextField;
+	private var tfmoney:TextField;
 	private var firstrun:Bool;
 	
 	public function new(){
@@ -46,7 +47,14 @@ class SeismoGraph extends Sprite{
 		tf.text = "Watt nu:";
 		tf.setTextFormat(FontSupply.instance.getSeismographabelFormat());
 		firstrun = true;//hack to not get the first value
-		tf.width = mMeasurmenthalfFactor*12;
+		tf.width = mMeasurmenthalfFactor*18;
+
+
+		tfmoney = new TextField();
+		tfmoney.text = "Kr. den næste time: ";
+		tfmoney.setTextFormat(FontSupply.instance.getSeismographabelFormat());
+		
+		tfmoney.width = mMeasurmenthalfFactor*18;
 
 		mNumofFieldsWidthScreen = Lib.current.stage.stageWidth/mMeasurmenthalfFactor;
 
@@ -57,21 +65,29 @@ class SeismoGraph extends Sprite{
 		fetchWattConsumption();
 		mbarSprite.y = Lib.current.stage.stageHeight;
 
-		//mbarSprite.graphics.lineStyle(2,0x000000);
-		//mbarSprite.graphics.moveTo(0,Lib.current.stage.stageHeight);
-		//mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.current.stage.stageHeight);
+		this.graphics.lineStyle(2,0x000000);
+		this.graphics.moveTo((Lib.current.stage.stageWidth)-((mMeasurmenthalfFactor*18)-10),Lib.current.stage.stageHeight);
+		this.graphics.lineTo((Lib.current.stage.stageWidth)-((mMeasurmenthalfFactor*18)-10),(Lib.current.stage.stageHeight/2)+15);
+		
 		mbarSprite.graphics.beginFill(0x000000,1);
-		mbarSprite.graphics.moveTo((Lib.current.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.current.stage.stageHeight);
-		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth+10)-(mMeasurmenthalfFactor*12),Lib.current.stage.stageHeight-10);
-		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth+10)-(mMeasurmenthalfFactor*12),Lib.current.stage.stageHeight+10);
-		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth)-(mMeasurmenthalfFactor*12),Lib.current.stage.stageHeight);
+		mbarSprite.graphics.moveTo((Lib.current.stage.stageWidth)-(mMeasurmenthalfFactor*18),Lib.current.stage.stageHeight);
+		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth+10)-(mMeasurmenthalfFactor*18),Lib.current.stage.stageHeight-10);
+		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth+10)-(mMeasurmenthalfFactor*18),Lib.current.stage.stageHeight+10);
+		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth)-(mMeasurmenthalfFactor*18),Lib.current.stage.stageHeight);
+		
 		mbarSprite.graphics.endFill();
 
-		addChild(mbarSprite);
-		mbarSprite.addChild(tf);
+		
 
-		tf.x = (Lib.current.stage.stageWidth+15)-(mMeasurmenthalfFactor*12);
-		tf.y = Lib.current.stage.stageHeight-20;
+		addChild(mbarSprite);
+		this.addChild(tf);
+		this.addChild(tfmoney);
+
+		tf.x = (Lib.current.stage.stageWidth+15)-(mMeasurmenthalfFactor*18);
+		tf.y = Lib.current.stage.stageHeight/2 + 50;
+
+		tfmoney.x = (Lib.current.stage.stageWidth+15)-(mMeasurmenthalfFactor*18);
+		tfmoney.y = Lib.current.stage.stageHeight/2 + 100;
 
 		
 
@@ -226,7 +242,7 @@ class SeismoGraph extends Sprite{
 		//graphics.moveTo(0,(Lib.current.stage.stageHeight/4)*3);
 		//graphics.lineTo(Lib.current.stage.stageWidth,(Lib.current.stage.stageHeight/4)*3);
 
-		var xPosition = (Lib.current.stage.stageWidth-(mMeasurmenthalfFactor*12)) - (((mwattMeasurementArray.length-1) * mMeasurmenthalfFactor));
+		var xPosition = (Lib.current.stage.stageWidth-(mMeasurmenthalfFactor*18)) - (((mwattMeasurementArray.length-1) * mMeasurmenthalfFactor));
 		var yPosition = (Lib.current.stage.stageHeight/4)*3;
 
 		var prevMeasure = 2;
@@ -343,9 +359,13 @@ class SeismoGraph extends Sprite{
 		mLastTween = height;
 
 		tf.text = "Watt nu: " + DataInterface.instance.getTotalCurrentLoad();
-		tf.width = mMeasurmenthalfFactor*12;
+		tf.width = mMeasurmenthalfFactor*18;
 		tf.setTextFormat(FontSupply.instance.getSeismographabelFormat());
 
+
+		tfmoney.text = "Kr. den næste time: " + DataInterface.instance.getTotalCurrentLoad();
+		tfmoney.width = mMeasurmenthalfFactor*18;
+		tfmoney.setTextFormat(FontSupply.instance.getSeismographabelFormat());
 		//Actuate.tween (mbarSprite, 1, { alpha: 1 } );
 	}
 
