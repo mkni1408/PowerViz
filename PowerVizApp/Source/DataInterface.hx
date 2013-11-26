@@ -812,6 +812,10 @@ class DataInterface {
         	trace(mRelativeMax);
         	return mRelativeMax;
         }
+        
+        public function getKWattPrice() : Float {
+        	return 1.5; //TEMP.
+        }
 
         public function createTimeArray(numberoffields:Int):Array<Date>{
         
