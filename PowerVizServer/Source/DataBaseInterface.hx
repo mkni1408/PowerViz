@@ -342,6 +342,13 @@ class DataBaseInterface {
             }
             return max;
     }
+    
+    public static function getKWattPrice(houseId:Int) {
+    	var elm = BoxConfig.manager.select($houseId == houseId);
+    	if(elm==null)
+    		return 1.5; //Default.
+    	return elm.kwattPrice;
+    }
 	
 	//Returns the current load on all outlets in the house.
 	public static function getCurrentLoadAll(houseId:Int) : Map<Int, Float> {

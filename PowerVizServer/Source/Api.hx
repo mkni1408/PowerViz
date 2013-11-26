@@ -90,6 +90,10 @@ class Api {
 		DataBaseInterface.setOutletRoom(houseId, outletId, roomId);
 	}
 	
+	public function getKWattPrice(houseId:Int) : Float {
+		return DataBaseInterface.getKWattPrice(houseId);
+	}
+	
 	
 	public function getBulbWatts(houseId:Int) : Int {
 		var elm = BoxConfig.manager.select($houseId == houseId);

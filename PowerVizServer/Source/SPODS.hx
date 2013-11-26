@@ -14,6 +14,7 @@ class BoxConfig extends sys.db.Object {
 	public var historyTime : SInt;
 	public var maxWatts : SInt; //Maximum watts set inside the PowerViz app.
 	public var bulbWatts : SInt; //Number of watts that a single bulb represents.
+	public var kwattPrice : SFloat; //Price of kwatt/hour in kroner.
 }
 
 @:id(houseId, time, msg)

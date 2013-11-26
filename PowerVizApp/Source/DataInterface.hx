@@ -100,6 +100,8 @@ class DataInterface {
         
 		public var bulbWatts(default, null):Int=50; //Watts used per bulb on screensaver.
 		
+		private var mKWattPrice : Float;
+		
         //Usage data now:
         private var mOutletDataNow : Map<Int, Float>; //Usage now for each outlet, measured in watts.
         private var mOutletDataNowTotal : Float = 0; //Total usage data now for all outlets, measured in watts.
@@ -261,6 +263,10 @@ class DataInterface {
 				
 				mConnectionMutex.acquire();
 				mCnx.Api.getBulbWatts.call([Config.instance.houseId], onGetBulbWatts);
+				
+				mConnectionMutex.acquire();
+				mCnx.Api.getKWattPrice.call([Config.instance.houseId], onGetKWattPrice);
+				
         }
         
         private function onTimerHour() : Void {
@@ -400,6 +406,11 @@ class DataInterface {
         
         private function onGetPowerSourceBadness(data:Dynamic) : Void {
         	powerSourceBadness = data;
+        	mConnectionMutex.release();
+        }
+        
+        private function onGetKWattPrice(data:Dynamic) : Void {
+        	mKWattPrice = data;
         	mConnectionMutex.release();
         }
         
