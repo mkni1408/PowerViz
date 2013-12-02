@@ -11,6 +11,10 @@ import TimeChangeButton;
 import CoordSystem;
 import PowerTimer;
 import Enums;
+import openfl.Assets;
+import flash.text.TextField;
+import flash.events.MouseEvent;
+import flash.display.Bitmap;
 
 
 class BarScreen extends Sprite {
@@ -31,6 +35,17 @@ class BarScreen extends Sprite {
 	private var mWattMax: Float = 0;
 	private var musageAA: Array<Float>;
 	private var mBarScale: Int;
+
+	///////////Is used for the indexshifting
+	private var subIdArray: Array<String>;
+	private var subSubUsage: Array<Float>;
+	private var subColors: Array<Int>;
+	private var mIndex: Int;
+	private var mChangeIndexSprite:Sprite;
+	private var mIndexTextfield : TextField;
+	/////////
+
+
 
 	//is used to determine which coordinate system type it is e.g week, day, month
 	private var mViewMode:Int;
@@ -53,6 +68,16 @@ class BarScreen extends Sprite {
 		mRoomArray = new Array<String>();
 		mColorArray = new Array<Int>();
 		musageAA = new Array<Float>();
+
+
+		subIdArray = new Array<String>();
+		subSubUsage = new Array<Float>();
+		subColors = new Array<Int>();
+		mIndex = 0;
+		mChangeIndexSprite = new Sprite();
+		mIndexTextfield = new TextField();
+
+
 		mBarScale = 0;
 		mViewModes = [VIEWMODE_DAY,VIEWMODE_WEEK,VIEWMODE_MONTH];
 		
@@ -85,7 +110,7 @@ class BarScreen extends Sprite {
 		
 		redrawEverything();
 
-		this.addChild(mBack);
+		//this.addChild(mBack);
 
 		/*
 		mTimer = new PowerTimer(mTimerInterval); 
@@ -99,9 +124,23 @@ class BarScreen extends Sprite {
         //trace("Bar timer running");
         redrawEverything();
 	}
+
+	private function addchildrenToBack(){
+
+
+		
+		
+		mBack.addChild(mTitle);
+		mBack.addChild(mCoordSys);
+		mBack.addChild(mTimeButton);
+		
+		trace("--");
+	
+	}
 	
 	private function layout() {
 	
+
 			
 		mBarGraph.y = Lib.current.stage.stageHeight - ((Lib.current.stage.stageHeight - mBarGraph.height)/2);	
 		
@@ -109,13 +148,16 @@ class BarScreen extends Sprite {
 
 		mTimeButton.y = 0;
 		
-		mCoordSys.generate(mBack.width/1.20, mBack.height/1.30, "X", "Y", (mBack.width/1.20)/mNewIDArray.length, (mBack.height/1.30)/mKwhArray.length, mNewIDArray, mKwhArray, true, false,true);
+		mCoordSys.generate(mBack.width/1.20, mBack.height/1.30, "X", "Y", (mBack.width/1.20)/subIdArray.length, (mBack.height/1.30)/mKwhArray.length, subIdArray, mKwhArray, false, true,false);
 		mCoordSys.x = 100;
 		mCoordSys.y = (Lib.current.stage.stageHeight/1.30)+50;
 
 		mTitle.width = mTitle.textWidth+5;	
 		mTitle.x = (Lib.current.stage.stageWidth - mTitle.textWidth) / 2;
 		mTitle.y = 0;
+
+		mChangeIndexSprite.x = mBack.width-mChangeIndexSprite.width -75;
+		mChangeIndexSprite.y = mCoordSys.y+30;
 
 		//trace("Coordinate",(mCoordSys.y - mCoordSys.height));
 
@@ -255,27 +297,18 @@ class BarScreen extends Sprite {
 
 	}
 
+
+
 	private function redrawEverything():Void{
 
-		if(mViewMode == 0){
-			//hour
-			mTitle.text = "Forbrug denne time";
+		mTimeButton.changeButtonState(mViewMode);
 
-		}
-		if(mViewMode == 1){
-			//day
-			mTitle.text = "Forbrug i dag";
 
-		}
-		if(mViewMode == 2){
-			///week
-			mTitle.text = "Forbrug denne uge";
-
-		}
-
+		while(mBack.numChildren > 0)
+			mBack.removeChildAt(0);
 				
 
-		mTimeButton.changeButtonState(mViewMode);
+		
 		mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 
 		
@@ -323,11 +356,154 @@ class BarScreen extends Sprite {
                     mBarScale = 4000;
                 }
 		sortArray(musageAA,mNewIDArray,mColorArray);//sort it from heighest to lowest
+		drawChangeIndexSprite(calcnumberofsubarrays(mNewIDArray));
+
+		var max = calcnumberofsubarrays(mNewIDArray);
+		subIdArray = new Array<String>();
+		subSubUsage = new Array<Float>();
+		subColors = new Array<Int>();
+
+		for(i in mIndex*8...(mIndex*8)+8){
+
+			var id = mNewIDArray[i];
+			if(id != null){
+			subIdArray.push(id);
+			subSubUsage.push(musageAA[i]);
+			subColors.push(mColorArray[i]);
+			}
+
+		}
+
+		trace(mIndex);
 		layout();
+		addchildrenToBack();
 
 		
-		mCoordSys.drawVerticalBar(mColorArray, musageAA,mBarScale);
+		mCoordSys.drawVerticalBar(subColors, subSubUsage,mBarScale);
 	}
+
+	private function calcnumberofsubarrays(idarray:Array<String>):Int{
+
+		return Math.ceil(idarray.length/8);
+
+	}
+
+	private function drawChangeIndexSprite(NumOfIndexes:Int):Void{
+
+
+
+            	var backbutton = new Sprite();
+            	var forwardbutton = new Sprite();
+
+            	var bitMapforward = new Bitmap (Assets.getBitmapData ("assets/buttonnext.png")); 
+            	var bitMapback = new Bitmap (Assets.getBitmapData ("assets/buttonprevious.png")); 
+
+            	bitMapforward.width = 45;
+            	bitMapforward.height = 90;
+            	bitMapback.width = 45;
+            	bitMapback.height = 90;
+
+            	backbutton.addChild(bitMapback);
+            	forwardbutton.addChild(bitMapforward);
+
+            	backbutton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent) {
+				changeIndex(-1);
+				});
+
+				forwardbutton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent) {
+				changeIndex(1);
+				});
+
+				mChangeIndexSprite.addChild(backbutton);
+				mChangeIndexSprite.addChild(forwardbutton);
+
+				backbutton.x = 0;
+				forwardbutton.x = 180;
+
+				mChangeIndexSprite.width=250;
+				mChangeIndexSprite.height=50;
+
+				mIndexTextfield.mouseEnabled=false;
+				mIndexTextfield.text = (mIndex+1) + " ud af" + (NumOfIndexes);
+				mIndexTextfield.setTextFormat(FontSupply.instance.getTitleFormat());
+				mIndexTextfield.selectable = false;
+				mIndexTextfield.height = 80; 
+				mChangeIndexSprite.addChild(mIndexTextfield);
+
+
+				mTitle.mouseEnabled=false;
+				
+				mTitle.selectable = false;
+				if(mViewMode == 0){
+			//hour
+					mTitle.text = "Forbrug denne time";
+
+				}
+				if(mViewMode == 1){
+				//day
+					mTitle.text = "Forbrug i dag";
+
+				}
+				if(mViewMode == 2){
+				///week
+					mTitle.text = "Forbrug denne uge";
+
+				}
+				mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
+				//mTitle = new TextField();
+				//mTitle.mouseEnabled=false;
+				//mTitle.text = "Tænd/sluk i dag";
+				//mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
+				//mTitle.selectable = false;
+
+				mIndexTextfield.height = mIndexTextfield.textHeight; 
+
+
+				mIndexTextfield.x = (mChangeIndexSprite.width/2)-(mIndexTextfield.width/2);
+				mIndexTextfield.y = (mChangeIndexSprite.height/2)-10;
+
+
+
+				
+				mBack.addChild(mTitle);
+				if(NumOfIndexes != 0){
+				mBack.addChild(mChangeIndexSprite);
+				}	
+				
+
+            }
+
+            private function changeIndex(Index:Int):Void{
+
+            	if(mIndex == 0 && Index == -1){
+
+            	}
+            	else if(mIndex == calcnumberofsubarrays(mNewIDArray)-1 && Index == 1){
+
+            	}
+            	else{
+
+            		mIndex = mIndex + Index;
+
+            		changeTextfieldIndex(mIndex,calcnumberofsubarrays(mNewIDArray));
+            		redrawEverything();
+            		
+
+            		}
+
+            }
+
+             private function changeTextfieldIndex(Index:Int,NumOfIndexes:Int):Void{
+
+              	mIndexTextfield.mouseEnabled=false;
+				mIndexTextfield.text = (Index +1) + "ud af" + (NumOfIndexes);
+				mIndexTextfield.setTextFormat(FontSupply.instance.getTitleFormat());
+				mIndexTextfield.selectable = false;
+
+            }
+
+
+
 
 }
 

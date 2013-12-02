@@ -32,6 +32,7 @@ class SeismoGraph extends Sprite{
 	private var mLastTween:Float;
 	private var tf:TextField;
 	private var tfmoney:TextField;
+	private var tfmonth:TextField;
 	private var firstrun:Bool;
 	
 	public function new(){
@@ -47,14 +48,22 @@ class SeismoGraph extends Sprite{
 		tf.text = "Watt nu:";
 		tf.setTextFormat(FontSupply.instance.getSeismographabelFormat());
 		firstrun = true;//hack to not get the first value
-		tf.width = mMeasurmenthalfFactor*18;
+		tf.width = mMeasurmenthalfFactor*20;
 
 
 		tfmoney = new TextField();
 		tfmoney.text = "Kr. den næste time: ";
 		tfmoney.setTextFormat(FontSupply.instance.getSeismographabelFormat());
 		
-		tfmoney.width = mMeasurmenthalfFactor*18;
+		tfmoney.width = mMeasurmenthalfFactor*20;
+
+		tfmonth = new TextField();
+
+		tfmoney.text = "Kr. den næste måned: ";
+		tfmoney.setTextFormat(FontSupply.instance.getSeismographabelFormat());
+		
+		tfmoney.width = mMeasurmenthalfFactor*20;
+
 
 		mNumofFieldsWidthScreen = Lib.current.stage.stageWidth/mMeasurmenthalfFactor;
 
@@ -66,14 +75,14 @@ class SeismoGraph extends Sprite{
 		mbarSprite.y = Lib.current.stage.stageHeight;
 
 		this.graphics.lineStyle(2,0x000000);
-		this.graphics.moveTo((Lib.current.stage.stageWidth)-((mMeasurmenthalfFactor*18)-10),Lib.current.stage.stageHeight);
-		this.graphics.lineTo((Lib.current.stage.stageWidth)-((mMeasurmenthalfFactor*18)-10),(Lib.current.stage.stageHeight/2)+15);
+		this.graphics.moveTo((Lib.current.stage.stageWidth)-((mMeasurmenthalfFactor*20)-10),Lib.current.stage.stageHeight);
+		this.graphics.lineTo((Lib.current.stage.stageWidth)-((mMeasurmenthalfFactor*20)-10),(Lib.current.stage.stageHeight/2)+15);
 		
 		mbarSprite.graphics.beginFill(0x000000,1);
-		mbarSprite.graphics.moveTo((Lib.current.stage.stageWidth)-(mMeasurmenthalfFactor*18),Lib.current.stage.stageHeight);
-		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth+10)-(mMeasurmenthalfFactor*18),Lib.current.stage.stageHeight-10);
-		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth+10)-(mMeasurmenthalfFactor*18),Lib.current.stage.stageHeight+10);
-		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth)-(mMeasurmenthalfFactor*18),Lib.current.stage.stageHeight);
+		mbarSprite.graphics.moveTo((Lib.current.stage.stageWidth)-(mMeasurmenthalfFactor*20),Lib.current.stage.stageHeight);
+		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth+10)-(mMeasurmenthalfFactor*20),Lib.current.stage.stageHeight-10);
+		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth+10)-(mMeasurmenthalfFactor*20),Lib.current.stage.stageHeight+10);
+		mbarSprite.graphics.lineTo((Lib.current.stage.stageWidth)-(mMeasurmenthalfFactor*20),Lib.current.stage.stageHeight);
 		
 		mbarSprite.graphics.endFill();
 
@@ -82,12 +91,16 @@ class SeismoGraph extends Sprite{
 		addChild(mbarSprite);
 		this.addChild(tf);
 		this.addChild(tfmoney);
+		this.addChild(tfmonth);
 
-		tf.x = (Lib.current.stage.stageWidth+15)-(mMeasurmenthalfFactor*18);
-		tf.y = Lib.current.stage.stageHeight/2 + 50;
+		tf.x = (Lib.current.stage.stageWidth+15)-(mMeasurmenthalfFactor*20);
+		tf.y = Lib.current.stage.stageHeight/2 + 100;
 
-		tfmoney.x = (Lib.current.stage.stageWidth+15)-(mMeasurmenthalfFactor*18);
-		tfmoney.y = Lib.current.stage.stageHeight/2 + 100;
+		tfmoney.x = (Lib.current.stage.stageWidth+15)-(mMeasurmenthalfFactor*20);
+		tfmoney.y = Lib.current.stage.stageHeight/2 + 150;
+
+		tfmonth.x = (Lib.current.stage.stageWidth+15)-(mMeasurmenthalfFactor*20);
+		tfmonth.y = Lib.current.stage.stageHeight/2 + 200;
 
 		
 
@@ -242,7 +255,7 @@ class SeismoGraph extends Sprite{
 		//graphics.moveTo(0,(Lib.current.stage.stageHeight/4)*3);
 		//graphics.lineTo(Lib.current.stage.stageWidth,(Lib.current.stage.stageHeight/4)*3);
 
-		var xPosition = (Lib.current.stage.stageWidth-(mMeasurmenthalfFactor*18)) - (((mwattMeasurementArray.length-1) * mMeasurmenthalfFactor));
+		var xPosition = (Lib.current.stage.stageWidth-(mMeasurmenthalfFactor*20)) - (((mwattMeasurementArray.length-1) * mMeasurmenthalfFactor));
 		var yPosition = (Lib.current.stage.stageHeight/4)*3;
 
 		var prevMeasure = 2;
@@ -358,14 +371,32 @@ class SeismoGraph extends Sprite{
 
 		mLastTween = height;
 
-		tf.text = "Watt nu: " + DataInterface.instance.getTotalCurrentLoad();
-		tf.width = mMeasurmenthalfFactor*18;
+		var currentload = DataInterface.instance.getTotalCurrentLoad();
+
+		tf.text = "Nu: " + currentload+" watt";
+		tf.width = mMeasurmenthalfFactor*20;
 		tf.setTextFormat(FontSupply.instance.getSeismographabelFormat());
 
+		var currentprice = Std.string((currentload/1000)*DataInterface.instance.getKWattPrice());
 
-		tfmoney.text = "Kr. den næste time: " + DataInterface.instance.getTotalCurrentLoad();
-		tfmoney.width = mMeasurmenthalfFactor*18;
+		if(currentprice.length > 4){
+			currentprice = currentprice.substr(0,4);
+		}
+
+
+		tfmoney.text =  currentprice+" Kr. I timen";
+		tfmoney.width = mMeasurmenthalfFactor*20;
 		tfmoney.setTextFormat(FontSupply.instance.getSeismographabelFormat());
+
+		var monthlyprice = Std.string(((currentload/1000)*DataInterface.instance.getKWattPrice())*31);
+
+		if(monthlyprice.length > 5){
+			monthlyprice = monthlyprice.substr(0,5);
+		}
+
+		tfmonth.text =  monthlyprice+" Kr. Om måneden";
+		tfmonth.width = mMeasurmenthalfFactor*20;
+		tfmonth.setTextFormat(FontSupply.instance.getSeismographabelFormat());
 		//Actuate.tween (mbarSprite, 1, { alpha: 1 } );
 	}
 
