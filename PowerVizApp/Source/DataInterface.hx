@@ -410,7 +410,7 @@ class DataInterface {
         }
         
         private function onGetKWattPrice(data:Dynamic) : Void {
-        	mKWattPrice = data;
+        	mKWattPrice = data == null ? 1.5 : data;
         	mConnectionMutex.release();
         }
         
@@ -825,7 +825,7 @@ class DataInterface {
         }
         
         public function getKWattPrice() : Float {
-        	return 1.5; //TEMP.
+        	return mKWattPrice; 
         }
 
         public function createTimeArray(numberoffields:Int):Array<Date>{

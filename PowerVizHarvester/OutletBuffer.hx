@@ -52,15 +52,17 @@ class OutletBuffer {
 	public function update(now:Date, load:Float) {
 		
 		var delta:Float = 0; //= now.getTime() - mLastUpdate.getTime();
+		var lastUpdate:Date;
 		
 		//Get the data from the SQLite database:
 		var dbe = BufferedData.manager.select($houseId == mHouseId && $outletId == mOutletId);
 		if(dbe != null) {
-			delta = now.getTime() - dbe.lastUpdate.getTime();
+			lastUpdate = Date.fromString(Std.string(dbe.lastUpdate)); //This is to make sure that the data is correctly handled as a Date.
+			delta = now.getTime() - lastUpdate.getTime(); 
 			dbe.timeAccum += Std.int(delta); //Add time delta.
 			dbe.wattAccum += load * delta; //Accumulate the watts.
 			
-			if(DateUtil.isInSameInterval(dbe.lastUpdate, now, mInterval)==false) { //It is time to send history data.
+			if(DateUtil.isInSameInterval(lastUpdate, now, mInterval)==false) { //It is time to send history data.
 				sendHistoryData(mCnx, dbe.wattAccum/dbe.timeAccum, DateUtil.intervalStart(now, mInterval));
 				dbe.timeAccum = 0;
 				dbe.wattAccum = 0;
