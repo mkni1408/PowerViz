@@ -129,8 +129,11 @@ class CoordSystem extends Sprite {
 					addTextField(x-(xSpace/2),0, labelText, false,xVertical,xFont);
 					//add the xcoordinate
 					}
-					else{
+					else if(!xVertical && betweenX){
 						addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false,false,xFont);
+					}
+					else if(!xVertical && !betweenX){
+						addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, true,false,xFont);
 					}
 				}
 			
@@ -181,6 +184,13 @@ class CoordSystem extends Sprite {
 		if(txt.length <= 8){
 			tf.text = txt;
 		}
+		else if(txt.length <= 8){
+			var num = 8-txt.length;
+			for(i in 0...num){
+				txt = txt + " ";
+			}
+
+		}
 		else{	
 			tf.text = txt.substr(0,8)+"...";
 
@@ -197,7 +207,7 @@ class CoordSystem extends Sprite {
 		
 		if(between) {
 			tf.x = x - (tf.width + 3);
-			tf.y = y - (tf.height/2);
+			tf.y = y + 3;
 			if(vertical){
 				//tf.rotation = 90;
 
@@ -503,8 +513,14 @@ class CoordSystem extends Sprite {
 
 		var barWidth:Float = xHeight;
 		var totalpoints = yHeight/conversionType;
+		
 
 		//trace("barwidth:"+barWidth +" totalpoints"+totalpoints);
+
+		var currentprice = DataInterface.instance.getKWattPrice();
+
+		
+		
 		
 		
 		var i:Int = 0;
@@ -514,6 +530,23 @@ class CoordSystem extends Sprite {
 			this.graphics.beginFill(colors[i]);
 			this.graphics.drawRect(xCoordinates[i]+((barWidth/2)-((barWidth*0.90)/2)), 0, barWidth*0.80, -height[i]*totalpoints);			
 			this.graphics.endFill();
+
+			var mTitle = new TextField();
+			mTitle.mouseEnabled=false;
+
+			var txt = Std.string((height[i]/1000)*currentprice);
+			if(txt.length > 4){
+			txt = txt.substr(0,4);
+			}
+			mTitle.text = txt+"Kr.";
+
+			mTitle.setTextFormat(FontSupply.instance.getSeismographabelFormat());
+			mTitle.width = mTitle.textWidth+3;
+			mTitle.selectable = false;
+
+			this.addChild(mTitle);
+			mTitle.x = (xCoordinates[i]+barWidth/2)-mTitle.width/2;
+			mTitle.y = (-height[i]*totalpoints) - 40;
 			
 			//Increment with barWidth and not barWidth*0.90 (as in drawRect()) is to make a space between each bar.
 			

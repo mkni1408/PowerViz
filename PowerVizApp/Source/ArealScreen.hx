@@ -57,21 +57,21 @@ class ArealScreen extends Sprite {
                 mRoomArray = new Array<String>();
                 mColorArray = new Array<Int>();
 
-				trace("..");
+				
 
                 getColorAndRoomData();
-				trace("..");
+				
                 mViewMode = VIEWMODE_DAY; //Daymode by default.
                 
                 mBack = new Sprite();
-				trace("..");
+				
                 mBack.graphics.beginFill(0xFFFFFF,0);
                 mBack.graphics.drawRect(0,0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
                 mBack.graphics.endFill();
                 this.addChild(mBack);
-				trace("..");
+				
                 mTimeArray = generateTimeArrayandCalcOffset();
-				trace("..");
+				
 
                 mUsageArray = ["100Wt", "200Wt", "300wt","400Wt","500Wt", "600Wt","700Wt", 
                                                         "800Wt","900Wt","1000Wt"];
@@ -79,20 +79,20 @@ class ArealScreen extends Sprite {
                 
                 mDiagram = new ArealDiagram();
                 mDiagram.mouseEnabled=false;
-                trace("..");
+                
                 mTitle = new TextField();
                 mTitle.mouseEnabled=false;
                 mTitle.text = "Forbrug i dag ";
                 mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
                 mTitle.selectable = false;
-                trace("..");
+                
                 mTimeButton = new TimeChangeButton([VIEWMODE_HOUR, VIEWMODE_DAY,VIEWMODE_THREEDAYS,],mViewMode,onButtonPush); //Day, week, month.
                 
                 mCoordSys = new CoordSystem();
 
-				trace("..");
+				
                 callDrawMethods();
-				trace("..");
+				
 
 				/** Screen timers are not used anymore. Callbacks are used instead.
                 mTimer = new PowerTimer(mTimerInterval); 
@@ -253,6 +253,8 @@ class ArealScreen extends Sprite {
 
         private function redrawEverything():Void{
 
+
+                 mTimeButton.changeButtonState(mViewMode);
                 var date = Date.now();
                 if(mViewMode == 0){
                         //hour
@@ -284,7 +286,7 @@ class ArealScreen extends Sprite {
                 
                 
 
-                mTimeButton.changeButtonState(mViewMode);
+               
                 mTitle.setTextFormat(FontSupply.instance.getTitleFormat());
 
                 while(mBack.numChildren > 0)
