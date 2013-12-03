@@ -204,7 +204,7 @@ class DataBaseInterface {
     	var outlet = HouseOutlets.manager.select($houseId == houseId && $outletId == outletId);
     	if(outlet==null)
     		return;
-    	outlet.outletName = name;
+    	outlet.outletName = haxe.Utf8.decode(name);
     	outlet.update();
     }
     

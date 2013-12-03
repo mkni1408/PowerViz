@@ -18,7 +18,7 @@ class Config {
 	
 	public function new() {
 		readFromFile();
-		houseId = 2; //TODO! Make this real!!!!
+		houseId = 3; //TODO! Make this real!!!!
 	}
 	
 	//Hmm... never made this work.
