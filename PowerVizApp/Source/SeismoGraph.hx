@@ -388,7 +388,7 @@ class SeismoGraph extends Sprite{
 		tfmoney.width = mMeasurmenthalfFactor*20;
 		tfmoney.setTextFormat(FontSupply.instance.getSeismographabelFormat());
 
-		var monthlyprice = Std.string(((currentload/1000)*DataInterface.instance.getKWattPrice())*31);
+		var monthlyprice = Std.string((((currentload/1000)*24)*DataInterface.instance.getKWattPrice())*31);
 
 		if(monthlyprice.length > 5){
 			monthlyprice = monthlyprice.substr(0,5);
