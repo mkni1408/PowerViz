@@ -211,7 +211,7 @@ class CoordSystem extends Sprite {
 		if(between) {
 			//should go between the lines
 			tf.x = x - (tf.width + 3);
-			tf.y = y + (yHeight/ 2);
+			tf.y = y + (yHeight/ 2) - (tf.height - 5);
 			//should go on the line
 			if(betweenY){
 				tf.y = y - (yHeight);
