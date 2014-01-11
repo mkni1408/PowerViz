@@ -178,6 +178,8 @@ class CoordSystem extends Sprite {
 			
 		var tf = new TextField();
 		//var txt = haxe.Utf8.encode(text); //Encode into utf8, since that is the only format that the textFormat accepts in C++.
+		var txt = text;
+
 		tf.mouseEnabled = false;
 		tf.selectable = false;
 		//maximizing input to 7 chars
