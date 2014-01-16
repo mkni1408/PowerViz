@@ -110,6 +110,10 @@ class Main extends Sprite {
 	public function prepareScreens() {
 	
 		BusyAnimation.instance.busy();
+		
+		//VERY IMPORTANT NOTICE: 
+		//DO NOT ALTER THE ORDER OF THE SCREENS. THAT WILL MAKE THE LOGGED DATA IN THE DATABASE USELESS!!!
+		//SO: DO NOT ALTER THE ORDER OF THE SCREENS.
 
 		mOnOff = new OnOffDiagram();
 		SwipeMill.add(mOnOff);

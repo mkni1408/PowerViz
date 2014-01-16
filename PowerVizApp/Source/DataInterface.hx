@@ -452,12 +452,17 @@ class DataInterface {
         //The logging function. Use the defined types above.
         public function logInteraction(type:LogType, tag:String, ?comment:String) {
         
-		#if !anon //Ommit of compiled as anonymous
+		#if !anon //Ommit if compiled as anonymous
         	mConnectionMutex.acquire(); //Get the mutex to avoid network blocking.
         	
 			mCnx.Api.logInteraction.call([Config.instance.houseId, type, tag, comment==null ? "" : comment], function(data:Dynamic){
 				mConnectionMutex.release();
 			});
+			
+			#if debug
+				trace(type, tag, comment);
+			#end
+			
 		#elseif !flash
 			Sys.println("Running in anonymous mode. No data logged");
 		#end
