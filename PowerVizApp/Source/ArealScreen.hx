@@ -140,9 +140,9 @@ class ArealScreen extends Sprite {
 
                 mCoordSys.generate(Lib.current.stage.stageWidth/1.15, (Lib.current.stage.stageHeight/1.25)-mLegend.height, "X", "Y", 
                     (Lib.current.stage.stageWidth/1.15)/mTimeArray.length, ((Lib.current.stage.stageHeight/1.25)-mLegend.height)/mUsageArray.length, 
-                                                                                                        mTimeArray, mUsageArray, true, false,false,true,mOffset);
+                                                                                                        mTimeArray, mUsageArray, false,true,false,true,mOffset);
                 mCoordSys.x = 100;
-                mCoordSys.y = (Lib.current.stage.stageHeight/1.25)+40;
+                mCoordSys.y = (Lib.current.stage.stageHeight/1.25);
 
                 mLegend.x = mCoordSys.x;
                 mLegend.y = mCoordSys.y + 30;

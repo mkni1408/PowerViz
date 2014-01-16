@@ -228,7 +228,7 @@ class OnOffDiagram extends Sprite{
 		trace(mSubRoomArray);
 		mCoordSystem.generate(mBack.width/1.18, (mBack.height/1.28)-mLegend.height, "X", "Y", 
 								(mBack.width/1.18)/mtimeArray.length,((mBack.height/1.28)-mLegend.height)/mSubIdArray.length,
-								mtimeArray,mSubIdArray,true,true,false,true,mOffset);
+								mtimeArray,mSubIdArray,false,false,false,true,mOffset);
 		trace("--");
 		
 		mCoordSystem.x = 120;

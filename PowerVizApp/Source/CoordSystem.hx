@@ -90,7 +90,7 @@ class CoordSystem extends Sprite {
 			if(yLabelStrings!=null) {
 				labelText = (yLabelStrings.length<=labelIndex ? "" : yLabelStrings[labelIndex]);
 				if(labelText!="")
-					addTextField(0, (betweenY ? y + (ySpace/2) : y), labelText, true,false,yFont);
+					addTextField(0, (betweenY ? y + (ySpace/2) : y), labelText, true,false,yFont,betweenY);
 					//add the ycoordinate
 					
 			}
@@ -126,14 +126,14 @@ class CoordSystem extends Sprite {
 
 					//condition to handle vertical textfields
 					if(xVertical){
-					addTextField(x-(xSpace/2),0, labelText, false,xVertical,xFont);
+					addTextField(x-(xSpace/2),0, labelText, false,xVertical,xFont,false);
 					//add the xcoordinate
 					}
 					else if(!xVertical && betweenX){
-						addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false,false,xFont);
+						addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false,false,xFont,false);
 					}
 					else if(!xVertical && !betweenX){
-						addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, true,false,xFont);
+						addTextField((betweenX ? x - (xSpace/2) : x), 0, labelText, false,false,xFont,false);
 					}
 				}
 			
@@ -173,11 +173,13 @@ class CoordSystem extends Sprite {
 
 	}
 	
-	private function addTextField(x:Float, y:Float, text:String, between:Bool, vertical:Bool, font:TextFormat) {
+	private function addTextField(x:Float, y:Float, text:String, between:Bool, vertical:Bool, font:TextFormat, betweenY:Bool) {
 
 			
 		var tf = new TextField();
-		var txt = haxe.Utf8.encode(text); //Encode into utf8, since that is the only format that the textFormat accepts in C++.
+		//var txt = haxe.Utf8.encode(text); //Encode into utf8, since that is the only format that the textFormat accepts in C++.
+		var txt = text;
+
 		tf.mouseEnabled = false;
 		tf.selectable = false;
 		//maximizing input to 7 chars
@@ -205,22 +207,26 @@ class CoordSystem extends Sprite {
 		tf.x = x - (tf.width / 2);
 		tf.y = y - (tf.height/2);
 		
+		//the y axis
 		if(between) {
+			//should go between the lines
 			tf.x = x - (tf.width + 3);
-			tf.y = y + 3;
-			if(vertical){
-				//tf.rotation = 90;
+			tf.y = y + (yHeight/ 2) - (tf.height/2);
+			//should go on the line
+			if(betweenY){
+				tf.y = y - (yHeight);
 
 			}
 		}
+		//the x axis
 		else{
 
-			tf.x = (x - (tf.height/2))+(xHeight/2);
+			tf.x = (x - (tf.width/2));
 			tf.y = y + 3;
 			
 			if(vertical){
 				//trace("new X==",x);
-				tf.x = (x - (tf.height/2));
+				tf.x = (x - (tf.width/2));
 
 				
 
@@ -346,7 +352,7 @@ class CoordSystem extends Sprite {
 
 			var half = (yPoint - yPointbef)/2;
 
-			addTextField(xWidth+100, yPointbef+half, roomLabel, true, false, yFont);
+			addTextField(xWidth+100, yPointbef+half, roomLabel, true, false, yFont,false);
 
 		}
 		

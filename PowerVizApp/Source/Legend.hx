@@ -55,7 +55,7 @@ class Legend extends Sprite{
 				var tf = new TextField();
 				tf.mouseEnabled = false;
 				tf.selectable = false;
-				var text = haxe.Utf8.encode(arrayOfLabelStrings[counter]);
+				var text = arrayOfLabelStrings[counter];
 				
 
 				if(text.length <= 8){
@@ -137,7 +137,7 @@ class Legend extends Sprite{
 				var tf = new TextField();
 				tf.mouseEnabled = false;
 				tf.selectable = false;
-				var text = haxe.Utf8.encode(arrayOfLabelStrings[counter]);
+				var text = arrayOfLabelStrings[counter];
 				
 
 				if(text.length <= 8){
